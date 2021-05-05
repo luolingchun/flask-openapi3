@@ -16,13 +16,40 @@ class Reference(BaseModel):
 
 
 class Schema(BaseModel):
-    type_: Optional[str] = Field(None, alias="type")
-    minimum: Optional[float] = None
-    maximum: Optional[float] = None
-    minLength: Optional[int] = Field(None, gte=0)
-    maxLength: Optional[int] = Field(None, gte=0)
-    enum: Optional[List[Any]] = None
     ref: Optional[str] = Field(None, alias="$ref")
+    title: Optional[str] = None
+    multipleOf: Optional[float] = None
+    maximum: Optional[float] = None
+    exclusiveMaximum: Optional[float] = None
+    minimum: Optional[float] = None
+    exclusiveMinimum: Optional[float] = None
+    maxLength: Optional[int] = Field(None, gte=0)
+    minLength: Optional[int] = Field(None, gte=0)
+    pattern: Optional[str] = None
+    maxItems: Optional[int] = Field(None, gte=0)
+    minItems: Optional[int] = Field(None, gte=0)
+    uniqueItems: Optional[bool] = None
+    maxProperties: Optional[int] = Field(None, gte=0)
+    minProperties: Optional[int] = Field(None, gte=0)
+    required: Optional[List[str]] = None
+    enum: Optional[List[Any]] = None
+    type: Optional[str] = None
+    allOf: Optional[List[Any]] = None
+    oneOf: Optional[List[Any]] = None
+    anyOf: Optional[List[Any]] = None
+    not_: Optional[Any] = Field(None, alias="not")
+    items: Optional[Any] = None
+    properties: Optional[Dict[str, Any]] = None
+    additionalProperties: Optional[Union[Dict[str, Any], bool]] = None
+    description: Optional[str] = None
+    format: Optional[str] = None
+    default: Optional[Any] = None
+    nullable: Optional[bool] = None
+    readOnly: Optional[bool] = None
+    writeOnly: Optional[bool] = None
+    externalDocs: Optional[ExternalDocumentation] = None
+    example: Optional[Any] = None
+    deprecated: Optional[bool] = None
 
 
 class MediaType(BaseModel):
