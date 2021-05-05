@@ -4,11 +4,12 @@
 from enum import Enum
 from typing import Optional, Union
 
-from .common import Schema, Reference
 from pydantic import BaseModel, Field
 
+from .common import Schema, Reference
 
-class ParameterInType(Enum):
+
+class ParameterInType(str, Enum):
     query = "query"
     header = "header"
     path = "path"

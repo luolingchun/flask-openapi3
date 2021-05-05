@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Union
 
 from pydantic import BaseModel, Field
 
+from .tag import Tag
 from .common import Reference, MediaType, Response
 from .parameter import Parameter
 
@@ -19,9 +20,9 @@ class Operation(BaseModel):
     tags: Optional[List[str]] = None
     summary: Optional[str] = None
     description: Optional[str] = None
-    parameters: Optional[Union[Parameter, Reference]] = None
+    parameters: Optional[List[Union[Parameter, Reference]]] = None
     requestBody: Optional[Union[RequestBody, Reference]] = None
-    responses: Dict[str, Response]
+    responses: Dict[str, Response] = None
     security: Optional[List[Dict[str, List[str]]]] = None
 
 

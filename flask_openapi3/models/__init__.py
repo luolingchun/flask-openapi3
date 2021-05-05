@@ -13,7 +13,7 @@ from .server import Server
 from .tag import Tag
 
 
-class APIDoc(BaseModel):
+class APISpec(BaseModel):
     openapi: str
     info: Info
     servers: Optional[List[Server]] = None
@@ -22,3 +22,6 @@ class APIDoc(BaseModel):
     security: Optional[List[Dict[str, List[str]]]] = None
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
+
+
+openapi3_ref_template = '#/components/schemas/{model}'
