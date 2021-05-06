@@ -5,7 +5,6 @@ from typing import Optional, List, Dict, Union
 
 from pydantic import BaseModel, Field
 
-from .tag import Tag
 from .common import Reference, MediaType, Response
 from .parameter import Parameter
 

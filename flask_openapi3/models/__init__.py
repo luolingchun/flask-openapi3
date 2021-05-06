@@ -12,6 +12,8 @@ from .path import PathItem
 from .server import Server
 from .tag import Tag
 
+OPENAPI3_REF_TEMPLATE = '#/components/schemas/{model}'
+
 
 class APISpec(BaseModel):
     openapi: str
@@ -22,6 +24,3 @@ class APISpec(BaseModel):
     security: Optional[List[Dict[str, List[str]]]] = None
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
-
-
-openapi3_ref_template = '#/components/schemas/{model}'
