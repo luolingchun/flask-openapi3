@@ -57,5 +57,5 @@ class MediaType(BaseModel):
 
 
 class Response(BaseModel):
-    description: str
+    description: Optional[str]
     content: Optional[Dict[str, MediaType]] = None

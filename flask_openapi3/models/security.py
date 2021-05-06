@@ -7,7 +7,7 @@ from typing import Union, Optional, Dict
 from pydantic import BaseModel, Field
 
 
-class SecuritySchemeType(Enum):
+class SecuritySchemeType(str, Enum):
     apiKey = "apiKey"
     http = "http"
     oauth2 = "oauth2"
@@ -26,13 +26,13 @@ class APIKeyIn(Enum):
 
 
 class APIKey(SecurityBase):
-    type_ = Field(SecuritySchemeType.apiKey, alias="type")
+    type_ = Field(default=SecuritySchemeType.apiKey, alias="type")
     in_: APIKeyIn = Field(..., alias="in")
     name: str
 
 
 class HTTPBase(SecurityBase):
-    type_ = Field(SecuritySchemeType.http, alias="type")
+    type_ = Field(default=SecuritySchemeType.http, alias="type")
     scheme: str
 
 

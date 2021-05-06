@@ -22,7 +22,7 @@ setup(
     license='GPLv3',
     packages=['flask_openapi3'],
     include_package_data=True,
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     zip_safe=False,
     platforms='any',
     install_requires=['PyQt5', 'QScintilla']

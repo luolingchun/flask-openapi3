@@ -6,9 +6,10 @@ import inspect
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
-from flask_openapi3.models import openapi3_ref_template
-from flask_openapi3.models.common import Schema
+from flask_openapi3.models import OPENAPI3_REF_TEMPLATE, Tag
+from flask_openapi3.models.common import Schema, Response, MediaType
 from flask_openapi3.models.parameter import ParameterInType, Parameter
+from flask_openapi3.models.path import Operation
 
 SCHEMA_TYPES = {
     "default": "string",
@@ -22,6 +23,7 @@ SCHEMA_TYPES = {
 
 
 def _parse_rule(rule):
+    """parse route"""
     uri = ''
     for converter, args, variable in parse_rule(str(rule)):
         # print(converter, args, variable)
@@ -32,19 +34,35 @@ def _parse_rule(rule):
     return uri
 
 
-def get_func_parameters(func):
+def get_operation(func, tags=None):
+    if tags is None:
+        tags = []
+    # get func documents
+    doc = inspect.getdoc(func) or ''
+    operation = Operation(
+        tags=[tag.name if isinstance(tag, Tag) else tag for tag in tags],
+        summary=doc.split('\n')[0],
+        description=doc.split('\n')[-1]
+    )
+
+    return operation
+
+
+def get_func_parameters(func, arg_name='path'):
+    """get func parameters"""
     signature = inspect.signature(func)
-    return signature.parameters
+    return signature.parameters.get(arg_name)
 
 
-def _get_schema(obj):
+def get_schema(obj):
     obj = obj.annotation
-    assert issubclass(obj, BaseModel)
-    return obj.schema(ref_template=openapi3_ref_template)
+    assert issubclass(obj, BaseModel), "invalid `pedantic.BaseModel`"
+    return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
-def _parse_path(path):
-    schema = _get_schema(path)
+def parse_path(path):
+    """parse args(path)"""
+    schema = get_schema(path)
     parameters = []
     properties = schema.get('properties')
 
@@ -62,8 +80,8 @@ def _parse_path(path):
     return parameters
 
 
-def _parse_query(query):
-    schema = _get_schema(query)
+def parse_query(query):
+    schema = get_schema(query)
     parameters = []
     schemas = dict()
     properties = schema.get('properties')
@@ -83,3 +101,35 @@ def _parse_query(query):
         for name, value in definitions.items():
             schemas[name] = Schema(**value)
     return parameters, schemas
+
+
+def get_responses(response):
+    responses = []
+    schemas = {}
+    if response:
+        assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
+        schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+        responses = {
+            "200": Response(
+                description="Success",
+                content={
+                    "application/json": MediaType(
+                        **{
+                            "schema": Schema(
+                                **{
+                                    "$ref": f"#/components/schemas/{response.__name__}"
+                                }
+                            )
+                        }
+                    )
+                }
+            ),
+            "422": Response(description="Validation error"),
+            "500": Response(description='Server error')}
+        schemas[response.__name__] = Schema(**schema)
+        definitions = schema.get('definitions')
+        if definitions:
+            for name, value in definitions.items():
+                schemas[name] = Schema(**value)
+
+    return responses, schemas
