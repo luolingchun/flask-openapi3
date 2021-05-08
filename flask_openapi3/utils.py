@@ -6,7 +6,7 @@ import inspect
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
-from flask_openapi3.models import OPENAPI3_REF_TEMPLATE
+from flask_openapi3.models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
 from flask_openapi3.models.common import Schema, Response, MediaType
 from flask_openapi3.models.parameter import ParameterInType, Parameter
 from flask_openapi3.models.path import Operation
@@ -155,7 +155,7 @@ def parse_form(form):
                 **{
                     "schema": Schema(
                         **{
-                            "$ref": f"#/components/schemas/{title}"
+                            "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                         }
                     )
                 }
@@ -182,7 +182,7 @@ def parse_json(json):
                 **{
                     "schema": Schema(
                         **{
-                            "$ref": f"#/components/schemas/{title}"
+                            "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                         }
                     )
                 }
@@ -195,28 +195,26 @@ def parse_json(json):
 
 
 def get_responses(response):
-    responses = []
+    responses = {"422": Response(description="Validation error"),
+                 "500": Response(description='Server error')}
     schemas = {}
     if response:
         assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
         schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
-        responses = {
-            "200": Response(
-                description="Success",
-                content={
-                    "application/json": MediaType(
-                        **{
-                            "schema": Schema(
-                                **{
-                                    "$ref": f"#/components/schemas/{response.__name__}"
-                                }
-                            )
-                        }
-                    )
-                }
-            ),
-            "422": Response(description="Validation error"),
-            "500": Response(description='Server error')}
+        responses["200"] = Response(
+            description="Success",
+            content={
+                "application/json": MediaType(
+                    **{
+                        "schema": Schema(
+                            **{
+                                "$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"
+                            }
+                        )
+                    }
+                )
+            }
+        )
         schemas[response.__name__] = Schema(**schema)
         definitions = schema.get('definitions')
         if definitions:
