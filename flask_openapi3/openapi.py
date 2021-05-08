@@ -67,8 +67,8 @@ class OpenAPI(Flask):
         self.components_schemas = dict()
         self.components = Components()
         self.tags = []
-        self.name = 'openapi'
-        self.api_doc_url = f"/{self.name}.json"
+        self.api_name = 'openapi'
+        self.api_doc_url = f"/{self.api_name}.json"
 
         self.init_doc()
 
@@ -78,19 +78,19 @@ class OpenAPI(Flask):
         static_folder = os.path.join(template_folder, 'static')
 
         blueprint = Blueprint(
-            self.name,
+            self.api_name,
             __name__,
-            url_prefix=f'/{self.name}',
+            url_prefix=f'/{self.api_name}',
             template_folder=template_folder,
             static_folder=static_folder
         )
-        blueprint.add_url_rule(rule=self.api_doc_url, endpoint=self.name, view_func=lambda: self.api_doc)
+        blueprint.add_url_rule(rule=self.api_doc_url, endpoint=self.api_name, view_func=lambda: self.api_doc)
         blueprint.add_url_rule(rule='/redoc', endpoint='redoc',
-                               view_func=lambda: render_template("redoc.html", api_doc_url=f'{self.name}.json'))
+                               view_func=lambda: render_template("redoc.html", api_doc_url=f'{self.api_name}.json'))
         blueprint.add_url_rule(rule='/swagger', endpoint='swagger',
-                               view_func=lambda: render_template("swagger.html", api_doc_url=f'{self.name}.json'))
+                               view_func=lambda: render_template("swagger.html", api_doc_url=f'{self.api_name}.json'))
         blueprint.add_url_rule(rule='/', endpoint='index',
-                               view_func=lambda: render_template("index.html", api_doc_url=f'{self.name}.json'))
+                               view_func=lambda: render_template("index.html"))
         self.register_blueprint(blueprint)
 
     @property
@@ -106,6 +106,7 @@ class OpenAPI(Flask):
     def _do_decorator(self, rule, func, tags, response, security, method='get'):
         # store tags
         self.tags.extend(tags)
+        # todo: tags去重
         operation = get_operation(func)
         operation.tags = *[tag.name if isinstance(tag, Tag) else str(tag) for tag in tags],
         # start parse parameters

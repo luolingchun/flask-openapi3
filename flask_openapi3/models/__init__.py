@@ -12,7 +12,8 @@ from .path import PathItem
 from .server import Server
 from .tag import Tag
 
-OPENAPI3_REF_TEMPLATE = '#/components/schemas/{model}'
+OPENAPI3_REF_PREFIX = '#/components/schemas'
+OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + '/{model}'
 
 
 class APISpec(BaseModel):
