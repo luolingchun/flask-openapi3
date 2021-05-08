@@ -6,7 +6,7 @@ import inspect
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
-from flask_openapi3.models import OPENAPI3_REF_TEMPLATE, Tag
+from flask_openapi3.models import OPENAPI3_REF_TEMPLATE
 from flask_openapi3.models.common import Schema, Response, MediaType
 from flask_openapi3.models.parameter import ParameterInType, Parameter
 from flask_openapi3.models.path import Operation
@@ -34,13 +34,10 @@ def _parse_rule(rule):
     return uri
 
 
-def get_operation(func, tags=None):
-    if tags is None:
-        tags = []
+def get_operation(func):
     # get func documents
     doc = inspect.getdoc(func) or ''
     operation = Operation(
-        tags=[tag.name if isinstance(tag, Tag) else tag for tag in tags],
         summary=doc.split('\n')[0],
         description=doc.split('\n')[-1]
     )
@@ -58,6 +55,46 @@ def get_schema(obj):
     obj = obj.annotation
     assert issubclass(obj, BaseModel), "invalid `pedantic.BaseModel`"
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+
+
+def parse_header(header):
+    """parse args(header)"""
+    schema = get_schema(header)
+    parameters = []
+    properties = schema.get('properties')
+
+    if properties:
+        for name, value in properties.items():
+            data = {
+                "name": name,
+                "in": ParameterInType.header,
+                "description": value.get("description"),
+                "required": name in schema.get("required", []),
+                "schema": Schema(**value)
+            }
+            parameters.append(Parameter(**data))
+
+    return parameters
+
+
+def parse_cookie(cookie):
+    """parse args(cookie)"""
+    schema = get_schema(cookie)
+    parameters = []
+    properties = schema.get('properties')
+
+    if properties:
+        for name, value in properties.items():
+            data = {
+                "name": name,
+                "in": ParameterInType.cookie,
+                "description": value.get("description"),
+                "required": name in schema.get("required", []),
+                "schema": Schema(**value)
+            }
+            parameters.append(Parameter(**data))
+
+    return parameters
 
 
 def parse_path(path):
@@ -83,7 +120,7 @@ def parse_path(path):
 def parse_query(query):
     schema = get_schema(query)
     parameters = []
-    schemas = dict()
+    components_schemas = dict()
     properties = schema.get('properties')
     definitions = schema.get('definitions')
 
@@ -99,8 +136,62 @@ def parse_query(query):
             parameters.append(Parameter(**data))
     if definitions:
         for name, value in definitions.items():
-            schemas[name] = Schema(**value)
-    return parameters, schemas
+            components_schemas[name] = Schema(**value)
+    return parameters, components_schemas
+
+
+def parse_form(form):
+    schema = get_schema(form)
+    content = None
+    components_schemas = dict()
+    properties = schema.get('properties')
+    definitions = schema.get('definitions')
+
+    if properties:
+        title = schema.get('title')
+        components_schemas[title] = Schema(**schema)
+        content = {
+            "multipart/form-data": MediaType(
+                **{
+                    "schema": Schema(
+                        **{
+                            "$ref": f"#/components/schemas/{title}"
+                        }
+                    )
+                }
+            )
+        }
+    if definitions:
+        for name, value in definitions.items():
+            components_schemas[name] = Schema(**value)
+    return content, components_schemas
+
+
+def parse_json(json):
+    schema = get_schema(json)
+    content = None
+    components_schemas = dict()
+    properties = schema.get('properties')
+    definitions = schema.get('definitions')
+
+    if properties:
+        title = schema.get('title')
+        components_schemas[title] = Schema(**schema)
+        content = {
+            "application/json": MediaType(
+                **{
+                    "schema": Schema(
+                        **{
+                            "$ref": f"#/components/schemas/{title}"
+                        }
+                    )
+                }
+            )
+        }
+    if definitions:
+        for name, value in definitions.items():
+            components_schemas[name] = Schema(**value)
+    return content, components_schemas
 
 
 def get_responses(response):
