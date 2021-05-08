@@ -23,27 +23,33 @@ class Path(BaseModel):
     bid: int = Field(..., description='图书id')
 
 
-class Query(BaseModel):
-    age: Optional[int] = Field(None, ge=2, le=4, description='年龄')
+class BookData(BaseModel):
+    age: Optional[int] = Field(..., ge=2, le=4, description='年龄')
     author: str = Field(None, min_length=2, max_length=4, description='作者')
 
 
-class BookData(BaseModel):
+class BookDataWithID(BaseModel):
     bid: int = Field(..., description='图书id')
     age: Optional[int] = Field(None, ge=2, le=4, description='年龄')
     author: str = Field(None, min_length=2, max_length=4, description='作者')
 
 
 class BookResponse(JsonResponse):
-    data: BookData
+    data: BookDataWithID
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], response=BookResponse, security=security)
-def get_book(path: Path, query: Query):
+def get_book(path: Path, query: BookData):
     """获取图书
     根据图书id获取图书
     """
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+
+
+@app.post('/book', tags=[book_tag])
+def create_book(form: BookData):
+    print(form)
+    return {"code": 0, "message": "ok"}
 
 
 if __name__ == '__main__':
