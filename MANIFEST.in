@@ -1,0 +1,2 @@
+recursive-include flask_openapi3/templates *
+recursive-include examples *
