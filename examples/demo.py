@@ -8,7 +8,6 @@ from pydantic import BaseModel, Field
 from flask_openapi3 import OpenAPI
 from flask_openapi3.models import Info, Tag
 from flask_openapi3.models.security import HTTPBearer
-from flask_openapi3.response import JsonResponse
 
 info = Info(title='book API', version='1.0.0')
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
@@ -34,16 +33,18 @@ class BookDataWithID(BaseModel):
     author: str = Field(None, min_length=2, max_length=4, description='作者')
 
 
-class BookResponse(JsonResponse):
+class BookResponse(BaseModel):
+    code: int = Field(0, description="状态码")
+    message: str = Field("ok", description="异常信息")
     data: BookDataWithID
 
 
-@app.get('/book/<int:bid>', tags=[book_tag], response=BookResponse, security=security)
+@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
 def get_book(path: Path, query: BookData):
     """获取图书
     根据图书id获取图书
     """
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}, 522
 
 
 @app.post('/book', tags=[book_tag])

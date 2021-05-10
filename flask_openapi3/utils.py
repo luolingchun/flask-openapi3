@@ -10,6 +10,7 @@ from flask_openapi3.models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
 from flask_openapi3.models.common import Schema, Response, MediaType
 from flask_openapi3.models.parameter import ParameterInType, Parameter
 from flask_openapi3.models.path import Operation
+from flask_openapi3.models.validation_error import HTTPValidationError
 
 SCHEMA_TYPES = {
     "default": "string",
@@ -194,14 +195,32 @@ def parse_json(json):
     return content, components_schemas
 
 
-def get_responses(response):
-    responses = {"422": Response(description="Validation error"),
-                 "500": Response(description='Server error')}
-    schemas = {}
-    if response:
+def get_responses(responses: dict):
+    _responses = {}
+    _schemas = {}
+    if not responses.get("422"):
+        _responses["422"] = Response(
+            description="HTTP Validation error",
+            content={
+                "application/json": MediaType(
+                    **{
+                        "schema": Schema(
+                            **{
+                                "type": "array",
+                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{HTTPValidationError.__name__}"}
+                            }
+                        )
+                    }
+                )
+            }
+        )
+        _schemas[HTTPValidationError.__name__] = Schema(**HTTPValidationError.schema())
+    if not responses.get("500"):
+        _responses["500"] = Response(description='Server error')
+    for key, response in responses.items():
         assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
         schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
-        responses["200"] = Response(
+        _responses[key] = Response(
             description="Success",
             content={
                 "application/json": MediaType(
@@ -215,10 +234,10 @@ def get_responses(response):
                 )
             }
         )
-        schemas[response.__name__] = Schema(**schema)
+        _schemas[response.__name__] = Schema(**schema)
         definitions = schema.get('definitions')
         if definitions:
             for name, value in definitions.items():
-                schemas[name] = Schema(**value)
+                _schemas[name] = Schema(**value)
 
-    return responses, schemas
+    return _responses, _schemas
