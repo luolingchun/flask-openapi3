@@ -6,7 +6,7 @@ from functools import wraps
 from typing import Optional, List, Dict, Union
 
 from flask import Flask, Blueprint, render_template, request
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel
 
 from flask_openapi3.models import Info, APISpec, Tag, PathItem, Components
 from flask_openapi3.models.common import Reference
@@ -16,7 +16,10 @@ from flask_openapi3.utils import _parse_rule, get_func_parameters, parse_path, p
     get_responses, parse_header, parse_cookie, parse_form, parse_json
 
 
-def _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs):
+def _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs):
+    if responses is None:
+        responses = {}
+    assert isinstance(responses, dict), "invalid `dict`"
     # validate header, cookie, path and query
     kwargs_ = dict()
     try:
@@ -40,15 +43,20 @@ def _do_wrapper(func, response, header, cookie, path, query, form, json, **kwarg
             kwargs_.update({"json": json_})
     except ValidationError as e:
         return e.json(), 422
-    # validate response
+    # validate response(only validate 200)
     resp = func(**kwargs_)
-    if response:
-        try:
-            if isinstance(resp, tuple):
-                resp = resp[0]
-            response(**resp)
-        except ValidationError as e:
-            return e.json(), 500
+    if validate_resp:
+        for key, response in responses.items():
+            if key != "200":
+                continue
+            assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
+            try:
+                _resp = resp
+                if isinstance(resp, tuple):  # noqa
+                    _resp = resp[0]
+                response(**_resp)
+            except ValidationError as e:
+                return e.json(), 500
 
     return resp
 
@@ -57,16 +65,17 @@ class OpenAPI(Flask):
     def __init__(self, import_name, info, securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
                  **kwargs):
         super(OpenAPI, self).__init__(import_name, **kwargs)
+
         self.openapi_version = "3.0.3"
 
-        if not isinstance(info, Info):
-            raise TypeError(f"Info is required (got type {type(info)})")
+        assert isinstance(info, Info), f"Info is required (got type {type(info)})"
         self.info = info
         self.securitySchemes = securitySchemes
         self.paths = dict()
         self.components_schemas = dict()
         self.components = Components()
         self.tags = []
+        self.tag_names = []
         self.api_name = 'openapi'
         self.api_doc_url = f"/{self.api_name}.json"
 
@@ -103,12 +112,17 @@ class OpenAPI(Flask):
         spec.components = self.components
         return spec.dict(by_alias=True, exclude_none=True)
 
-    def _do_decorator(self, rule, func, tags, response, security, method='get'):
+    def _do_decorator(self, rule, func, tags, responses, security, method='get'):
+        if responses is None:
+            responses = {}
+        assert isinstance(responses, dict), "invalid `dict`"
         # store tags
-        self.tags.extend(tags)
-        # todo: tags去重
+        for tag in tags:
+            if tag.name not in self.tag_names:
+                self.tag_names.append(tag.name)
+                self.tags.extend(tags)
         operation = get_operation(func)
-        operation.tags = *[tag.name if isinstance(tag, Tag) else str(tag) for tag in tags],
+        operation.tags = *[tag.name for tag in tags],
         # start parse parameters
         parameters = []
         header = get_func_parameters(func, 'header')
@@ -149,8 +163,8 @@ class OpenAPI(Flask):
         operation.parameters = parameters
         # end parse parameters
         # start parse response
-        responses, _schemas = get_responses(response)
-        operation.responses = responses
+        _responses, _schemas = get_responses(responses)
+        operation.responses = _responses
         self.components_schemas.update(**_schemas)
         # end parse response
         # add security
@@ -169,13 +183,13 @@ class OpenAPI(Flask):
 
         return header, cookie, path, query, form, json
 
-    def get(self, rule, tags: Optional[List[Tag]] = None, response=None, security=None):
+    def get(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
         def decorator(func):
-            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, response, security)
+            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, responses, security)
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs)
                 return resp
 
             options = {"methods": ["GET"]}
@@ -185,13 +199,13 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def post(self, rule, tags: Optional[List[Tag]] = None, response=None, security=None):
+    def post(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
         def decorator(func):
-            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, response, security, "post")
+            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, responses, security, "post")
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs)
                 return resp
 
             options = {"methods": ["POST"]}
@@ -201,13 +215,13 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def put(self, rule, tags: Optional[List[Tag]] = None, response=None, security=None):
+    def put(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
         def decorator(func):
-            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, response, security, "put")
+            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, responses, security, "put")
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs)
                 return resp
 
             options = {"methods": ["PUT"]}
@@ -217,13 +231,14 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def delete(self, rule, tags: Optional[List[Tag]] = None, response=None, security=None):
+    def delete(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
         def decorator(func):
-            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, response, security, "delete")
+            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, responses, security,
+                                                                         "delete")
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs)
                 return resp
 
             options = {"methods": ["DELETE"]}
@@ -233,13 +248,13 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def patch(self, rule, tags: Optional[List[Tag]] = None, response=None, security=None):
+    def patch(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
         def decorator(func):
-            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, response, security, "patch")
+            header, cookie, path, query, form, json = self._do_decorator(rule, func, tags, responses, security, "patch")
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, response, header, cookie, path, query, form, json, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, json, validate_resp, **kwargs)
                 return resp
 
             options = {"methods": ["PATCH"]}
