@@ -5,6 +5,7 @@
 __version__ = '0.0.2'
 
 from .openapi import OpenAPI
+from .models.file import FileStorage
 
 print(r"""
   __ _           _                                             _  _____

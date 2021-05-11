@@ -48,11 +48,11 @@ if __name__ == '__main__':
 
 ## API docs
 
-Run the [simple example](./examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
+Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
 
 You will see the document: [Swagger UI](https://github.com/swagger-api/swagger-ui) and [Redoc](https://github.com/Redocly/redoc).
 
-![openapi](./docs/images/openapi.png)
-![openapi-swagger](./docs/images/openapi-swagger.png)
-![openapi-redoc](./docs/images/openapi-redoc.png)
+![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
+![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
+![openapi-redoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-redoc.png)
 
