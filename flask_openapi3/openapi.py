@@ -33,10 +33,12 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
             path_ = path.annotation(**kwargs)
             kwargs_.update({"path": path_})
         if query:
-            query_ = query.annotation(**request.args)
+            query_ = query.annotation(**request.args.to_dict())
             kwargs_.update({"query": query_})
         if form:
-            form_ = form.annotation(**request.form)
+            req_form = request.form.to_dict()
+            req_form.update(**request.files.to_dict())
+            form_ = form.annotation(**req_form)
             kwargs_.update({"form": form_})
         if json:
             json_ = json.annotation(**request.get_json(silent=True))
@@ -62,12 +64,16 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
 
 
 class OpenAPI(Flask):
-    def __init__(self, import_name, info, securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+    def __init__(self,
+                 import_name,
+                 info=None,
+                 securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
                  **kwargs):
         super(OpenAPI, self).__init__(import_name, **kwargs)
 
         self.openapi_version = "3.0.3"
-
+        if info is None:
+            info = Info(title='OpenAPI', version='1.0.0')
         assert isinstance(info, Info), f"Info is required (got type {type(info)})"
         self.info = info
         self.securitySchemes = securitySchemes
@@ -113,6 +119,8 @@ class OpenAPI(Flask):
         return spec.dict(by_alias=True, exclude_none=True)
 
     def _do_decorator(self, rule, func, tags, responses, security, method='get'):
+        if tags is None:
+            tags = []
         if responses is None:
             responses = {}
         assert isinstance(responses, dict), "invalid `dict`"
@@ -171,15 +179,30 @@ class OpenAPI(Flask):
         operation.security = security
         uri = _parse_rule(rule)
         if method == 'get':
-            self.paths[uri] = PathItem(get=operation)
+            if not self.paths.get(uri):
+                self.paths[uri] = PathItem(get=operation)
+            else:
+                self.paths[uri].get = operation
         elif method == 'post':
-            self.paths[uri] = PathItem(post=operation)
+            if not self.paths.get(uri):
+                self.paths[uri] = PathItem(post=operation)
+            else:
+                self.paths[uri].post = operation
         elif method == 'put':
-            self.paths[uri] = PathItem(put=operation)
+            if not self.paths.get(uri):
+                self.paths[uri] = PathItem(put=operation)
+            else:
+                self.paths[uri].put = operation
         elif method == 'patch':
-            self.paths[uri] = PathItem(patch=operation)
+            if not self.paths.get(uri):
+                self.paths[uri] = PathItem(patch=operation)
+            else:
+                self.paths[uri].patch = operation
         elif method == 'delete':
-            self.paths[uri] = PathItem(delete=operation)
+            if not self.paths.get(uri):
+                self.paths[uri] = PathItem(delete=operation)
+            else:
+                self.paths[uri].delete = operation
 
         return header, cookie, path, query, form, json
 

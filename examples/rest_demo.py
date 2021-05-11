@@ -47,11 +47,39 @@ def get_book(path: Path, query: BookData):
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}, 522
 
 
+@app.get('/book', tags=[book_tag])
+def get_books(query: BookData):
+    """get books
+    get all books
+    """
+    return {
+        "code": 0,
+        "message": "ok",
+        "data": [
+            {"bid": 1, "age": query.age, "author": query.author},
+            {"bid": 2, "age": query.age, "author": query.author}
+        ]
+    }
+
+
 @app.post('/book', tags=[book_tag])
-def create_book(form: BookData):
-    print(form)
+def create_book(json: BookData):
+    print(json)
+    return {"code": 0, "message": "ok"}
+
+
+@app.put('/book/<int:bid>', tags=[book_tag])
+def update_book(path: Path, json: BookData):
+    print(path)
+    print(json)
+    return {"code": 0, "message": "ok"}
+
+
+@app.delete('/book/<int:bid>', tags=[book_tag])
+def delete_book(path: Path):
+    print(path)
     return {"code": 0, "message": "ok"}
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=2021, debug=True)
+    app.run(debug=True)
