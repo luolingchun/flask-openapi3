@@ -2,10 +2,10 @@
 # @Author  : llc
 # @Time    : 2021/4/30 10:14
 
-__version__ = '0.0.2'
 
-from .openapi import OpenAPI
 from .models.file import FileStorage
+from .openapi import APIBlueprint
+from .openapi import OpenAPI
 
 print(r"""
   __ _           _                                             _  _____
