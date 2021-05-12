@@ -6,21 +6,11 @@ import inspect
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
-from flask_openapi3.models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
-from flask_openapi3.models.common import Schema, Response, MediaType
-from flask_openapi3.models.parameter import ParameterInType, Parameter
-from flask_openapi3.models.path import Operation
-from flask_openapi3.models.validation_error import HTTPValidationError
-
-SCHEMA_TYPES = {
-    "default": "string",
-    "string": "string",
-    "any": "string",
-    "path": "string",
-    "int": "integer",
-    "float": "number",
-    "uuid": "string",
-}
+from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
+from .models.common import Schema, Response, MediaType
+from .models.parameter import ParameterInType, Parameter
+from .models.path import Operation
+from .models.validation_error import UnprocessableEntity
 
 
 def _parse_rule(rule):
@@ -207,14 +197,14 @@ def get_responses(responses: dict):
                         "schema": Schema(
                             **{
                                 "type": "array",
-                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{HTTPValidationError.__name__}"}
+                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{UnprocessableEntity.__name__}"}
                             }
                         )
                     }
                 )
             }
         )
-        _schemas[HTTPValidationError.__name__] = Schema(**HTTPValidationError.schema())
+        _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
     if not responses.get("500"):
         _responses["500"] = Response(description='Server error')
     for key, response in responses.items():
