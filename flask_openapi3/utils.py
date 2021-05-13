@@ -44,7 +44,8 @@ def get_func_parameters(func, arg_name='path'):
 
 def get_schema(obj):
     obj = obj.annotation
-    assert issubclass(obj, BaseModel), "invalid `pedantic.BaseModel`"
+    assert inspect.isclass(obj) and \
+           issubclass(obj, BaseModel), f"{obj} is invalid `pedantic.BaseModel`"
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
@@ -208,7 +209,8 @@ def get_responses(responses: dict):
     if not responses.get("500"):
         _responses["500"] = Response(description='Server error')
     for key, response in responses.items():
-        assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
+        assert inspect.isclass(response) and \
+               issubclass(response, BaseModel), f" {response} is invalid `pedantic.BaseModel`"
         schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
         _responses[key] = Response(
             description="Success",
