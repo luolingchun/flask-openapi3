@@ -1,2 +1,2 @@
 Flask>=1.0.0
-pydantic>=1.0.0
+pydantic>=1.2
