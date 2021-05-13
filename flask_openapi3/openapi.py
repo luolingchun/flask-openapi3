@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/30 14:25
+import inspect
 import os
 from functools import wraps
 from typing import Optional, List, Dict, Union
@@ -65,7 +66,8 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
         for key, response in responses.items():
             if key != "200":
                 continue
-            assert issubclass(response, BaseModel), "invalid `pedantic.BaseModel`"
+            assert inspect.isclass(response) and \
+                   issubclass(response, BaseModel), f"{response.__name__} is invalid `pedantic.BaseModel`"
             try:
                 _resp = resp
                 if isinstance(resp, tuple):  # noqa
