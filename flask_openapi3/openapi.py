@@ -68,13 +68,10 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
                 continue
             assert inspect.isclass(response) and \
                    issubclass(response, BaseModel), f"{response} is invalid `pydantic.BaseModel`"
-            try:
-                _resp = resp
-                if isinstance(resp, tuple):  # noqa
-                    _resp = resp[0]
-                response(**_resp)
-            except ValidationError as e:
-                return e.json(), 500
+            _resp = resp
+            if isinstance(resp, tuple):  # noqa
+                _resp = resp[0]
+            response(**_resp)
 
     return resp
 
