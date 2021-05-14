@@ -67,7 +67,7 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
             if key != "200":
                 continue
             assert inspect.isclass(response) and \
-                   issubclass(response, BaseModel), f"{response.__name__} is invalid `pedantic.BaseModel`"
+                   issubclass(response, BaseModel), f"{response} is invalid `pydantic.BaseModel`"
             try:
                 _resp = resp
                 if isinstance(resp, tuple):  # noqa
