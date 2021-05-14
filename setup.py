@@ -7,6 +7,7 @@ from setuptools import setup, find_packages
 __version__ = '0.9.0'
 
 long_description = open('README.md', 'r').read()
+requirements = [r.strip() for r in open('requirements.txt', 'r').readlines()]
 
 setup(
     name="flask-openapi3",
@@ -24,7 +25,7 @@ setup(
     python_requires=">=3.6",
     zip_safe=False,
     platforms='any',
-    install_requires=['Flask>=1.0.0', 'pydantic>=1.0.0'],
+    install_requires=requirements,
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',
