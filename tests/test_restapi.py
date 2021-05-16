@@ -61,14 +61,14 @@ def create_book(body: BookData):
 
 @app.put('/book/<int:bid>', tags=[book_tag])
 def update_book(path: Path, body: BookData):
-    print(path)
-    print(body)
+    assert path.bid == 1
+    assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
 @app.delete('/book/<int:bid>', tags=[book_tag])
 def delete_book(path: Path):
-    print(path)
+    assert path.bid == 1
     return {"code": 0, "message": "ok"}
 
 
@@ -80,4 +80,19 @@ def test_openapi(client):
 
 def test_get(client):
     resp = client.get("/book?age=3&author=joy")
+    assert resp.status_code == 200
+
+
+def test_post(client):
+    resp = client.post("/book", json={"age": 3})
+    assert resp.status_code == 200
+
+
+def test_put(client):
+    resp = client.put("/book/1", json={"age": 3})
+    assert resp.status_code == 200
+
+
+def test_delete(client):
+    resp = client.delete("/book/1")
     assert resp.status_code == 200
