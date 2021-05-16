@@ -159,8 +159,8 @@ def parse_form(form):
     return content, components_schemas
 
 
-def parse_json(json):
-    schema = get_schema(json)
+def parse_body(body):
+    schema = get_schema(body)
     content = None
     components_schemas = dict()
     properties = schema.get('properties')

@@ -63,15 +63,15 @@ def get_books(query: BookData):
 
 
 @app.post('/book', tags=[book_tag])
-def create_book(json: BookData):
-    print(json)
+def create_book(body: BookData):
+    print(body)
     return {"code": 0, "message": "ok"}
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])
-def update_book(path: Path, json: BookData):
+def update_book(path: Path, body: BookData):
     print(path)
-    print(json)
+    print(body)
     return {"code": 0, "message": "ok"}
 
 

@@ -54,15 +54,15 @@ def get_books(query: BookData):
 
 
 @app.post('/book', tags=[book_tag])
-def create_book(json: BookData):
-    print(json)
+def create_book(body: BookData):
+    assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])
-def update_book(path: Path, json: BookData):
+def update_book(path: Path, body: BookData):
     print(path)
-    print(json)
+    print(body)
     return {"code": 0, "message": "ok"}
 
 
@@ -79,6 +79,5 @@ def test_openapi(client):
 
 
 def test_get(client):
-    resp = client.get("/book", data={"age": 3, "author": "joy"})
-    print(resp.get_json())
+    resp = client.get("/book?age=3&author=joy")
     assert resp.status_code == 200
