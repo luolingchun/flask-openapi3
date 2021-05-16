@@ -6,7 +6,7 @@ import os
 from functools import wraps
 from typing import Optional, List, Dict, Union
 
-from flask import Flask, Blueprint, render_template, request
+from flask import Flask, Blueprint, render_template, request, make_response
 from pydantic import ValidationError, BaseModel
 
 from .models import Info, APISpec, Tag, PathItem, Components
@@ -59,7 +59,10 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, json, valida
             json_ = json.annotation(**request.get_json(silent=True))
             kwargs_.update({"json": json_})
     except ValidationError as e:
-        return e.json(), 422
+        resp = make_response(e.json())
+        resp.headers['Content-Type'] = 'application/json'
+        resp.status_code = 422
+        return resp
     # validate response(only validate 200)
     resp = func(**kwargs_)
     if validate_resp:
