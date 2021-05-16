@@ -39,24 +39,25 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
     kwargs_ = dict()
     try:
         if header:
-            header_ = header.annotation(**request.headers)
+            header_ = header.annotation(**request.headers if request.headers is not None else {})
             kwargs_.update({"header": header_})
         if cookie:
-            cookie_ = cookie.annotation(**request.cookies)
+            cookie_ = cookie.annotation(**request.cookies if request.cookies is not None else {})
             kwargs_.update({"cookie": cookie_})
         if path:
             path_ = path.annotation(**kwargs)
             kwargs_.update({"path": path_})
         if query:
-            query_ = query.annotation(**request.args.to_dict())
+            query_ = query.annotation(**request.args.to_dict() if request.args.to_dict() is not None else {})
             kwargs_.update({"query": query_})
         if form:
             req_form = request.form.to_dict()
-            req_form.update(**request.files.to_dict())
-            form_ = form.annotation(**req_form)
+            req_form.update(**request.files.to_dict() if request.files.to_dict() is not None else {})
+            form_ = form.annotation(**req_form if req_form is not None else {})
             kwargs_.update({"form": form_})
         if body:
-            body_ = body.annotation(**request.get_json(silent=True))
+            body_ = body.annotation(
+                **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
             kwargs_.update({"body": body_})
     except ValidationError as e:
         resp = make_response(e.json())
