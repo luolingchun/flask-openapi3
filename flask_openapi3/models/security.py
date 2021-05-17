@@ -19,7 +19,7 @@ class SecurityBase(BaseModel):
     description: Optional[str] = None
 
 
-class APIKeyIn(Enum):
+class APIKeyIn(str, Enum):
     query = "query"
     header = "header"
     cookie = "cookie"

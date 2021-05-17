@@ -56,7 +56,7 @@ app.register_api(api)
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
-    assert json.loads(json.dumps(resp.json)) == json.loads(json.dumps(app.api_doc))
+    assert resp.json == app.api_doc
 
 
 def test_post(client):
