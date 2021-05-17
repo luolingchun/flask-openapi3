@@ -278,12 +278,14 @@ class OpenAPI(Flask):
                  import_name,
                  info: Info = None,
                  securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+                 doc_ui: bool = True,
                  **kwargs):
         """
         Based Flask, provide REST api, swagger-ui and redoc.
         :param import_name: just flask import_name
         :param info: see https://spec.openapis.org/oas/v3.0.3#info-object
         :param securitySchemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
+        :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param kwargs:
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -301,8 +303,8 @@ class OpenAPI(Flask):
         self.tag_names = []
         self.api_name = 'openapi'
         self.api_doc_url = f"/{self.api_name}.json"
-
-        self.init_doc()
+        if doc_ui:
+            self.init_doc()
 
     def init_doc(self):
         """
