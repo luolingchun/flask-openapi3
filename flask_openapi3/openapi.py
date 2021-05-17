@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/30 14:25
-import inspect
+import json
 import os
 from functools import wraps
 from typing import Optional, List, Dict, Union
 
 from flask import Flask, Blueprint, render_template, request, make_response
-from pydantic import ValidationError, BaseModel
+from pydantic import ValidationError
 
-from .models import Info, APISpec, Tag, PathItem, Components
+from .models import Info, APISpec, Tag, Components
 from .models.common import Reference
-from .models.path import RequestBody
 from .models.security import SecurityScheme
-from .utils import _parse_rule, get_func_parameters, parse_path, parse_query, get_operation, \
-    get_responses, parse_header, parse_cookie, parse_form, parse_body
+from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
+    validate_responses, parse_method, validate_response
 
 
 def _do_wrapper(func, responses, header, cookie, path, query, form, body, validate_resp, **kwargs):
@@ -32,9 +31,7 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
     :param kwargs: path args
     :return:
     """
-    if responses is None:
-        responses = {}
-    assert isinstance(responses, dict), "invalid `dict`"
+    validate_responses(responses)
     # validate header, cookie, path and query
     kwargs_ = dict()
     try:
@@ -64,18 +61,10 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
         resp.headers['Content-Type'] = 'application/json'
         resp.status_code = 422
         return resp
-    # validate response(only validate 200)
+    # handle request
     resp = func(**kwargs_)
     if validate_resp:
-        for key, response in responses.items():
-            if key != "200":
-                continue
-            assert inspect.isclass(response) and \
-                   issubclass(response, BaseModel), f"{response} is invalid `pydantic.BaseModel`"
-            _resp = resp
-            if isinstance(resp, tuple):  # noqa
-                _resp = resp[0]
-            response(**_resp)
+        validate_response(resp, responses)
 
     return resp
 
@@ -100,95 +89,24 @@ class APIBlueprint(Blueprint):
         :param method: api method
         :return:
         """
-        if tags is None:
-            tags = []
-        if responses is None:
-            responses = {}
-        assert isinstance(responses, dict), "invalid `dict`"
-        # store tags
-        for tag in tags:
-            if tag.name not in self.tag_names:
-                self.tag_names.append(tag.name)
-                self.tags.extend(tags)
+        responses = validate_responses(responses)
+        # create operation
         operation = get_operation(func)
-        operation.tags = *[tag.name for tag in tags],
-        # start parse parameters
-        parameters = []
-        header = get_func_parameters(func, 'header')
-        cookie = get_func_parameters(func, 'cookie')
-        path = get_func_parameters(func, 'path')
-        query = get_func_parameters(func, 'query')
-        form = get_func_parameters(func, 'form')
-        body = get_func_parameters(func, 'body')
-        if header:
-            _parameters = parse_header(header)
-            parameters.extend(_parameters)
-        if cookie:
-            _parameters = parse_cookie(cookie)
-            parameters.extend(_parameters)
-        if path:
-            # get args from route path
-            _parameters = parse_path(path)
-            parameters.extend(_parameters)
-        if query:
-            # get args from route query
-            _parameters, components_schemas = parse_query(query)
-            parameters.extend(_parameters)
-            self.components_schemas.update(**components_schemas)
-        if form:
-            content, components_schemas = parse_form(form)
-            self.components_schemas.update(**components_schemas)
-            requestBody = RequestBody(**{
-                "content": content,
-            })
-            operation.requestBody = requestBody
-        if body:
-            content, components_schemas = parse_body(body)
-            self.components_schemas.update(**components_schemas)
-            requestBody = RequestBody(**{
-                "content": content,
-            })
-            operation.requestBody = requestBody
-        operation.parameters = parameters if parameters else None
-        # end parse parameters
-        # start parse response
-        _responses, _schemas = get_responses(responses)
-        operation.responses = _responses
-        self.components_schemas.update(**_schemas)
-        # end parse response
         # add security
         operation.security = security
+        # store tags
+        parse_and_store_tags(tags, self.tags, self.tag_names, operation)
+        # parse parameters
+        header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
+        # parse response
+        get_responses(responses, self.components_schemas, operation)
         uri = _parse_rule(rule)
         # merge url_prefix and uri
         uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
         # strip the right slash
         uri = uri.rstrip('/')
-        if method == 'get':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(get=operation)
-            else:
-                self.paths[uri].get = operation
-        elif method == 'post':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(post=operation)
-            else:
-                self.paths[uri].post = operation
-        elif method == 'put':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(put=operation)
-            else:
-                self.paths[uri].put = operation
-        elif method == 'patch':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(patch=operation)
-            else:
-                self.paths[uri].patch = operation
-        elif method == 'delete':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(delete=operation)
-            else:
-                self.paths[uri].delete = operation
-
+        # parse method
+        parse_method(uri, method, self.paths, operation)
         return header, cookie, path, query, form, body
 
     def get(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
@@ -340,7 +258,7 @@ class OpenAPI(Flask):
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.securitySchemes
         spec.components = self.components
-        return spec.dict(by_alias=True, exclude_none=True)
+        return json.loads(spec.json(by_alias=True, exclude_none=True))
 
     def register_api(self, api: APIBlueprint):
         """register APIBlueprint"""
@@ -360,91 +278,20 @@ class OpenAPI(Flask):
         :param method: api method
         :return:
         """
-        if tags is None:
-            tags = []
-        if responses is None:
-            responses = {}
-        assert isinstance(responses, dict), "invalid `dict`"
-        # store tags
-        for tag in tags:
-            if tag.name not in self.tag_names:
-                self.tag_names.append(tag.name)
-                self.tags.extend(tags)
+        responses = validate_responses(responses)
+        # create operation
         operation = get_operation(func)
-        operation.tags = *[tag.name for tag in tags],
-        # start parse parameters
-        parameters = []
-        header = get_func_parameters(func, 'header')
-        cookie = get_func_parameters(func, 'cookie')
-        path = get_func_parameters(func, 'path')
-        query = get_func_parameters(func, 'query')
-        form = get_func_parameters(func, 'form')
-        body = get_func_parameters(func, 'body')
-        if header:
-            _parameters = parse_header(header)
-            parameters.extend(_parameters)
-        if cookie:
-            _parameters = parse_cookie(cookie)
-            parameters.extend(_parameters)
-        if path:
-            # get args from route path
-            _parameters = parse_path(path)
-            parameters.extend(_parameters)
-        if query:
-            # get args from route query
-            _parameters, components_schemas = parse_query(query)
-            parameters.extend(_parameters)
-            self.components_schemas.update(**components_schemas)
-        if form:
-            content, components_schemas = parse_form(form)
-            self.components_schemas.update(**components_schemas)
-            requestBody = RequestBody(**{
-                "content": content,
-            })
-            operation.requestBody = requestBody
-        if body:
-            content, components_schemas = parse_body(body)
-            self.components_schemas.update(**components_schemas)
-            requestBody = RequestBody(**{
-                "content": content,
-            })
-            operation.requestBody = requestBody
-        operation.parameters = parameters if parameters else None
-        # end parse parameters
-        # start parse response
-        _responses, _schemas = get_responses(responses)
-        operation.responses = _responses
-        self.components_schemas.update(**_schemas)
-        # end parse response
         # add security
         operation.security = security
+        # store tags
+        parse_and_store_tags(tags, self.tags, self.tag_names, operation)
+        # parse parameters
+        header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
+        # parse response
+        get_responses(responses, self.components_schemas, operation)
         uri = _parse_rule(rule)
-        if method == 'get':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(get=operation)
-            else:
-                self.paths[uri].get = operation
-        elif method == 'post':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(post=operation)
-            else:
-                self.paths[uri].post = operation
-        elif method == 'put':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(put=operation)
-            else:
-                self.paths[uri].put = operation
-        elif method == 'patch':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(patch=operation)
-            else:
-                self.paths[uri].patch = operation
-        elif method == 'delete':
-            if not self.paths.get(uri):
-                self.paths[uri] = PathItem(delete=operation)
-            else:
-                self.paths[uri].delete = operation
-
+        # parse method
+        parse_method(uri, method, self.paths, operation)
         return header, cookie, path, query, form, body
 
     def get(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):

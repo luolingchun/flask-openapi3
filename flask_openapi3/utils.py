@@ -9,7 +9,7 @@ from werkzeug.routing import parse_rule
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
 from .models.common import Schema, Response, MediaType
 from .models.parameter import ParameterInType, Parameter
-from .models.path import Operation
+from .models.path import Operation, RequestBody, PathItem
 from .models.validation_error import UnprocessableEntity
 
 
@@ -17,7 +17,6 @@ def _parse_rule(rule):
     """parse route"""
     uri = ''
     for converter, args, variable in parse_rule(str(rule)):
-        # print(converter, args, variable)
         if converter is None:
             uri += variable
             continue
@@ -186,7 +185,12 @@ def parse_body(body):
     return content, components_schemas
 
 
-def get_responses(responses: dict):
+def get_responses(responses: dict, components_schemas, operation):
+    """
+    :param responses: Dict[str, BaseModel]
+    :param components_schemas: `models.component.py` Components.schemas
+    :param operation: `models.path.py` Operation
+    """
     _responses = {}
     _schemas = {}
     if not responses.get("422"):
@@ -232,4 +236,125 @@ def get_responses(responses: dict):
             for name, value in definitions.items():
                 _schemas[name] = Schema(**value)
 
-    return _responses, _schemas
+    components_schemas.update(**_schemas)
+    operation.responses = _responses
+
+
+def validate_responses(responses):
+    if responses is None:
+        responses = {}
+    assert isinstance(responses, dict), "invalid `dict`"
+
+    return responses
+
+
+def validate_response(resp, responses):
+    """validate response(only validate 200)"""
+    if responses is None:
+        responses = {}
+    for key, response in responses.items():
+        if key != "200":
+            continue
+        assert inspect.isclass(response) and \
+               issubclass(response, BaseModel), f"{response} is invalid `pydantic.BaseModel`"
+        _resp = resp
+        if isinstance(resp, tuple):  # noqa
+            _resp = resp[0]
+        response(**_resp)
+
+
+def parse_and_store_tags(new_tags, old_tags, old_tag_names, operation):
+    """store tags
+    :param new_tags: api tag
+    :param old_tags: openapi doc tags
+    :param old_tag_names: openapi doc tag names
+    :param operation: `models.path.py` Operation
+    """
+    if new_tags is None:
+        new_tags = []
+    for tag in new_tags:
+        if tag.name not in old_tag_names:
+            old_tag_names.append(tag.name)
+            old_tags.append(tag)
+    operation.tags = set(list([tag.name for tag in new_tags]))
+
+
+def parse_parameters(func, components_schemas, operation):
+    """
+    :param func: flask view func
+    :param components_schemas: `models.component.py` Components.schemas
+    :param operation: `models.path.py` Operation
+    """
+    parameters = []
+    header = get_func_parameters(func, 'header')
+    cookie = get_func_parameters(func, 'cookie')
+    path = get_func_parameters(func, 'path')
+    query = get_func_parameters(func, 'query')
+    form = get_func_parameters(func, 'form')
+    body = get_func_parameters(func, 'body')
+    if header:
+        _parameters = parse_header(header)
+        parameters.extend(_parameters)
+    if cookie:
+        _parameters = parse_cookie(cookie)
+        parameters.extend(_parameters)
+    if path:
+        # get args from route path
+        _parameters = parse_path(path)
+        parameters.extend(_parameters)
+    if query:
+        # get args from route query
+        _parameters, _components_schemas = parse_query(query)
+        parameters.extend(_parameters)
+        components_schemas.update(**_components_schemas)
+    if form:
+        _content, _components_schemas = parse_form(form)
+        components_schemas.update(**_components_schemas)
+        requestBody = RequestBody(**{
+            "content": _content,
+        })
+        operation.requestBody = requestBody
+    if body:
+        _content, _components_schemas = parse_body(body)
+        components_schemas.update(**_components_schemas)
+        requestBody = RequestBody(**{
+            "content": _content,
+        })
+        operation.requestBody = requestBody
+    operation.parameters = parameters if parameters else None
+
+    return header, cookie, path, query, form, body
+
+
+def parse_method(uri, method, paths, operation):
+    """
+    :param uri: api route path
+    :param method: get post put delete patch
+    :param paths: openapi doc paths
+    :param operation: `models.path.py` Operation
+    """
+    if method == 'get':
+        if not paths.get(uri):
+            paths[uri] = PathItem(get=operation)
+        else:
+            paths[uri].get = operation
+    elif method == 'post':
+        if not paths.get(uri):
+            paths[uri] = PathItem(post=operation)
+        else:
+            paths[uri].post = operation
+    elif method == 'put':
+        if not paths.get(uri):
+            paths[uri] = PathItem(put=operation)
+        else:
+            paths[uri].put = operation
+    elif method == 'patch':
+        if not paths.get(uri):
+            paths[uri] = PathItem(patch=operation)
+        else:
+            paths[uri].patch = operation
+    elif method == 'delete':
+        if not paths.get(uri):
+            paths[uri] = PathItem(delete=operation)
+        else:
+            paths[uri].delete = operation
