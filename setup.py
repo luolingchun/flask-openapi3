@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-__version__ = '0.9.1'
+__version__ = '0.9.2'
 
 long_description = open('README.md', 'r').read()
 requirements = [r.strip() for r in open('requirements.txt', 'r').readlines()]
