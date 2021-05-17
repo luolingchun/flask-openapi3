@@ -1,3 +1,8 @@
+## v0.9.2 2021-05-17
+
+- fix: _do_decorator
+- add doc_ui args. support close swagger UI and redoc
+
 ## v0.9.1 2021-05-16
 
 - fix：request data is None 
