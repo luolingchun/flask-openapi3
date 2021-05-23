@@ -10,7 +10,7 @@ $ pip install -U flask-openapi3
 
 ## A Simple Example
 
-Here's a simple example, further go to the [Wiki](https://github.com/luolingchun/flask-openapi3/wiki)
+Here's a simple example, further go to the [docs](https://luolingchun.github.io/flask-openapi3/)
 
 ```python
 from pydantic import BaseModel
