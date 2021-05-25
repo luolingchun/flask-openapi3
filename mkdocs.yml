@@ -4,7 +4,7 @@ site_description: Generate RESTful API and OpenAPI document for your Flask proje
 site_author: llc
 
 repo_url: https://github.com/luolingchun/flask-openapi3
-repo_name: 'Github'
+repo_name: 'GitHub'
 
 markdown_extensions:
   - admonition
@@ -31,6 +31,7 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tasklist
   - pymdownx.tilde
+  - pymdownx.snippets
 
 
 theme:
@@ -41,7 +42,7 @@ theme:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       toggle:
-        icon: material/weather-sunny 
+        icon: material/weather-sunny
         name: Switch to dark
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
@@ -52,10 +53,17 @@ theme:
     - navigation.tracking
     - navigation.top
     - navigation.expand
+    - search.suggest
+    - search.highlight
+    - search.share
 
 plugins:
-    - search
+  - search
 
 nav:
-  - RESTful-api: RESTful-api.md
-  - FIleUpload: FIleUpload.md
+  - Home: index.md
+  - Quickstart: Quickstart.md
+  - OpenAPI: OpenAPI.md
+  - Example: Example.md
+  - Changelog: Changelog.md
+
