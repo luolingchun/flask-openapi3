@@ -60,6 +60,9 @@ theme:
 plugins:
   - search
 
+extra_css:
+  - stylesheets/img.css
+
 nav:
   - Home: index.md
   - Quickstart: Quickstart.md
