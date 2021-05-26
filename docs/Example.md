@@ -200,3 +200,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+## A complete project
+
+see [flask-api-demo](https://github.com/luolingchun/flask-api-demo)
