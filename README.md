@@ -2,6 +2,15 @@
 
 Generate RESTful API and OpenAPI document for your Flask project.
 
+## Requirements
+
+Python 3.6+
+
+flask-openapi3 be dependent on the following libraries:
+
+- [Flask](https://github.com/pallets/flask) for the web app.
+- [Pydantic](https://github.com/samuelcolvin/pydantic) for the data validation.
+
 ## Installation
 
 ```bash
@@ -21,7 +30,7 @@ from flask_openapi3.models import Info, Tag
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
 
-book_tag = Tag(name='book', description='图书')
+book_tag = Tag(name='book', description='Book')
 
 
 class BookData(BaseModel):

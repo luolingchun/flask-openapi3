@@ -2,7 +2,7 @@
 
 ## Info
 
-You must import **`Info`** from **`flask-openapi3.models.info`**, it needs some paramters: **`title`**, **`version`** ... , more information see the [OpenAPI Specification info-object](https://spec.openapis.org/oas/v3.0.3#info-object).
+You must import **`Info`** from **`flask-openapi3.models.info`**, it needs some parameters: **`title`**, **`version`** ... , more information see the [OpenAPI Specification info-object](https://spec.openapis.org/oas/v3.0.3#info-object).
 
 ```python
 from flask_openapi3 import OpenAPI
@@ -29,7 +29,7 @@ You can also specify tag for apis, like this:
 ```python
 ...
 
-book_tag = Tag(name='book', description='图书')
+book_tag = Tag(name='book', description='Book')
 
 
 @api.get('/book', tags=[book_tag])
@@ -66,7 +66,111 @@ result:
 
 ![image-20210525165350520](./assets/image-20210525165350520.png)
 
-todo:
+## Request validate
 
-- validate
-- openapi.json
+First, you need to import `BaseModel` from `pydantic`:
+
+```python
+from pydantic import BaseModel
+```
+
+### path
+
+Request parameter in rules，**`@app.get('/book/<int:bid>')`**.
+
+You have to declare path model as a class that inherits from  **`BaseModel`**:
+
+```python
+class Path(BaseModel):
+    bid: int = Field(..., description='book id')
+        
+@app.get('/book/<int:bid>', tags=[book_tag], security=security)
+def get_book(path: Path):
+    ...
+```
+
+### query
+
+Receive flask **`resuqet.args`**.
+
+like path, you need pass **`query`** to view function.
+
+```python
+class BookData(BaseModel):
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
+
+@app.get('/book/<int:bid>', tags=[book_tag], security=security)
+def get_book(path: Path, query: BookData):
+    ...
+```
+
+### form 
+
+Receive flask **`resuqet.form`** and **`request.files`**.
+
+```python
+class UploadFile(BaseModel):
+    file: FileStorage # request.files["file"]
+    file_type: str = Field(None, description="File type")
+
+
+@app.post('/upload')
+def upload_file(form: UploadFile):
+    ...
+```
+
+### body
+
+Receive flask **`resuqet.json`**.
+
+```python
+class BookData(BaseModel):
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
+
+@app.post('/book', tags=[book_tag])
+def create_book(body: BookData):
+    ...
+```
+
+### header
+
+Receive flask **`resuqet.headers`**.
+
+### cookies
+
+Receive flask **`resuqet.cookies`**.
+
+## Response validate
+
+If you want to validate response and generate **Schemas**, pass the **`responses`**.
+
+```python
+class BookDataWithID(BaseModel):
+    bid: int = Field(..., description='book id')
+    age: Optional[int] = Field(None, ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
+
+
+class BookResponse(BaseModel):
+    code: int = Field(0, description="status code")
+    message: str = Field("ok", description="exception information")
+    data: BookDataWithID
+
+@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+def get_book(path: Path, query: BookData):
+    """get book
+    get book by id, age or author
+    """
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+```
+
+default :**`validate_resp=True`**, you can set **`validate_resp=False`** to only  generate **Schemas** in swagger-ui.
+
+![image-20210526104627124](./assets/image-20210526104627124.png)
+
+## OpenAPI spec
+
+If you need the complete spec(json) , go to http://127.0.0.1:5000/openapi/openapi.json
+
