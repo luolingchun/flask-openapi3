@@ -68,5 +68,6 @@ nav:
   - Quickstart: Quickstart.md
   - OpenAPI: OpenAPI.md
   - Example: Example.md
+  - LICENSE: LICENSE.md
   - Changelog: Changelog.md
 
