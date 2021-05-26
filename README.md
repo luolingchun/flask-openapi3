@@ -1,5 +1,10 @@
 # flask-openapi3
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test)](https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/flask-openapi3)](https://pypi.org/project/flask-openapi3/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/flask-openapi3)](https://pypistats.org/packages/flask-openapi3)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flask-openapi3)](https://pypi.org/project/flask-openapi3/)
+
 Generate RESTful API and OpenAPI document for your Flask project.
 
 ## Requirements
