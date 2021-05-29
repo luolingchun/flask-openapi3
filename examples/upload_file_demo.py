@@ -11,7 +11,7 @@ app = OpenAPI(__name__)
 
 class UploadFile(BaseModel):
     file: FileStorage
-    file_type: str = Field(None, description="文件类型")
+    file_type: str = Field(None, description="File Type")
 
 
 @app.post('/upload')
