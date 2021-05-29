@@ -174,3 +174,9 @@ default :**`validate_resp=True`**, you can set **`validate_resp=False`** to only
 
 If you need the complete spec(json) , go to http://127.0.0.1:5000/openapi/openapi.json
 
+You can pass `doc_ui=False` to disable the `OpenAPI spec` when init `OpenAPI `.
+
+```python
+app = OpenAPI(__name__, info=info, doc_ui=False)
+```
+
