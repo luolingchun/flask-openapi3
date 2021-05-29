@@ -14,35 +14,35 @@ securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 
 app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
 
-book_tag = Tag(name='book', description='图书')
+book_tag = Tag(name='book', description='Some Book')
 security = [{"jwt": []}]
 
 
 class Path(BaseModel):
-    bid: int = Field(..., description='图书id')
+    bid: int = Field(..., description='book id')
 
 
 class BookData(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='年龄')
-    author: str = Field(None, min_length=2, max_length=4, description='作者')
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
 class BookDataWithID(BaseModel):
-    bid: int = Field(..., description='图书id')
-    age: Optional[int] = Field(None, ge=2, le=4, description='年龄')
-    author: str = Field(None, min_length=2, max_length=4, description='作者')
+    bid: int = Field(..., description='book id')
+    age: Optional[int] = Field(None, ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
 class BookResponse(BaseModel):
-    code: int = Field(0, description="状态码")
-    message: str = Field("ok", description="异常信息")
+    code: int = Field(0, description="Status Code")
+    message: str = Field("ok", description="Exception Information")
     data: BookDataWithID
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
 def get_book(path: Path, query: BookData):
-    """获取图书
-    根据图书id获取图书
+    """Get book
+    Get some book by id
     """
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}, 522
 
