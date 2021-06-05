@@ -42,7 +42,8 @@ class BookResponse(BaseModel):
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
 def get_book(path: Path, query: BookData):
     """Get book
-    Get some book by id
+    Get some book by id, like:
+    http://localhost:5000/book/3
     """
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}, 522
 
