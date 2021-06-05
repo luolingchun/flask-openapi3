@@ -29,7 +29,7 @@ You can also specify tag for apis, like this:
 ```python
 ...
 
-book_tag = Tag(name='book', description='Book')
+book_tag = Tag(name='book', description='Some Book')
 
 
 @api.get('/book', tags=[book_tag])
@@ -169,6 +169,22 @@ def get_book(path: Path, query: BookData):
 default :**`validate_resp=True`**, you can set **`validate_resp=False`** to only  generate **Schemas** in swagger-ui.
 
 ![image-20210526104627124](./assets/image-20210526104627124.png)
+
+## summary and description
+
+You need add docs to the view-func. The first line is the summary, and the rest is the description. like this:
+
+```python hl_lines="3 4 5 6"
+@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+def get_book(path: Path, query: BookData):
+    """Get book
+    Get some book by id, like:
+    http://localhost:5000/book/3
+    """
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+```
+
+![image-20210605115557426](./assets/image-20210605115557426.png)
 
 ## OpenAPI spec
 
