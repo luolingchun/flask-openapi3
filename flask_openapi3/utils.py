@@ -27,9 +27,11 @@ def _parse_rule(rule):
 def get_operation(func):
     # get func documents
     doc = inspect.getdoc(func) or ''
+    doc = doc.strip()
+    lines = doc.split('\n')
     operation = Operation(
-        summary=doc.split('\n')[0],
-        description=doc.split('\n')[-1]
+        summary=lines[0],
+        description=lines[0] if len(lines) == 0 else '</br>'.join(lines[1:])
     )
 
     return operation
