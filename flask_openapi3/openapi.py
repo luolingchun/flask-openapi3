@@ -70,13 +70,22 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
 
 
 class APIBlueprint(Blueprint):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, abp_security: List[Dict[str, List[str]]] = None, **kwargs):
+        """
+
+        :param args: Flask Blueprint args
+        :param abp_security: APIBlueprint security
+        :param kwargs: Flask Blueprint kwargs
+        """
         super(APIBlueprint, self).__init__(*args, **kwargs)
         self.paths = dict()
         self.components_schemas = dict()
         self.components = Components()
         self.tags = []
         self.tag_names = []
+        self.abp_security = abp_security
+        if self.abp_security is None:
+            self.abp_security = []
 
     def _do_decorator(self, rule, func, tags, responses, security, method='get'):
         """
@@ -93,7 +102,9 @@ class APIBlueprint(Blueprint):
         # create operation
         operation = get_operation(func)
         # add security
-        operation.security = security
+        if security is None:
+            security = []
+        operation.security = security + self.abp_security or None
         # store tags
         parse_and_store_tags(tags, self.tags, self.tag_names, operation)
         # parse parameters

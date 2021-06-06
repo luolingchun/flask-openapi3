@@ -126,9 +126,8 @@ if __name__ == '__main__':
 ## APIBlueprint
 
 ```python
-rom typing import Optional
+from typing import Optional
 
-import pytest
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
