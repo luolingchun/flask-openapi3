@@ -30,8 +30,8 @@ def get_operation(func):
     doc = doc.strip()
     lines = doc.split('\n')
     operation = Operation(
-        summary=lines[0],
-        description=lines[0] if len(lines) == 0 else '</br>'.join(lines[1:])
+        summary=lines[0] or None,
+        description=lines[0] if len(lines) == 0 else '</br>'.join(lines[1:]) or None
     )
 
     return operation
