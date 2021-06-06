@@ -262,7 +262,9 @@ class OpenAPI(Flask):
 
     def register_api(self, api: APIBlueprint):
         """register APIBlueprint"""
-        self.tags.extend(api.tags)
+        for tag in api.tags:
+            if tag.name not in self.tag_names:
+                self.tags.append(tag)
         self.paths.update(**api.paths)
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
