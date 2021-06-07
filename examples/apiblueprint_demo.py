@@ -18,16 +18,16 @@ app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
 security = [{"jwt": []}]
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_security=security)
 
-tag = Tag(name='book', description="图书")
+tag = Tag(name='book', description="Some Book")
 
 
 class BookData(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='年龄')
-    author: str = Field(None, min_length=2, max_length=4, description='作者')
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
 class Path(BaseModel):
-    bid: int = Field(..., description='图书id')
+    bid: int = Field(..., description='book id')
 
 
 @api.post('/book', tags=[tag])
