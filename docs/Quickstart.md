@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
 APIBlueprint based on [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint), you should use **`app.register_api`** instead of  **`app.register_blueprint`**.
 
-```python
+```python hl_lines="14"
 from flask_openapi3 import OpenAPI
 
 app = OpenAPI(__name__)
