@@ -1,3 +1,9 @@
+## v0.9.3 2021-06-08
+
+- APIBlueprint add abp_tags and abp_security
+- fix: tags de-duplication
+- fix: operation summary and description
+
 ## v0.9.2 2021-05-17
 
 - fix: _do_decorator
