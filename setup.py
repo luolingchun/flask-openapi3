@@ -4,9 +4,9 @@
 
 from setuptools import setup, find_packages
 
-__version__ = '0.9.2'
+__version__ = '0.9.3'
 
-long_description = open('README.md', 'r').read()
+long_description = open('README.md', 'r', encoding='utf-8').read()
 
 setup(
     name="flask-openapi3",
