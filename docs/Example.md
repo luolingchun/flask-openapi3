@@ -135,13 +135,13 @@ from flask_openapi3 import APIBlueprint, OpenAPI
 from flask_openapi3.models import Tag, Info
 
 info = Info(title='book API', version='1.0.0')
+securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 
-app = OpenAPI(__name__, info=info)
-
-api = APIBlueprint('/book', __name__, url_prefix='/api')
+app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
 
 tag = Tag(name='book', description="Some Book")
-
+security = [{"jwt": []}]
+api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
 
 
 class BookData(BaseModel):
@@ -153,13 +153,13 @@ class Path(BaseModel):
     bid: int = Field(..., description='book id')
 
 
-@api.post('/book', tags=[tag])
+@api.post('/book')
 def create_book(body: BookData):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@app.put('/book/<int:bid>', tags=[tag])
+@app.put('/book/<int:bid>')
 def update_book(path: Path, body: BookData):
     assert path.bid == 1
     assert body.age == 3
