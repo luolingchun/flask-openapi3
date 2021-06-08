@@ -70,19 +70,32 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
 
 
 class APIBlueprint(Blueprint):
-    def __init__(self, *args, abp_security: List[Dict[str, List[str]]] = None, **kwargs):
+    def __init__(
+            self,
+            name: str,
+            import_name: str,
+            abp_tags: List[Tag] = None,
+            abp_security: List[Dict[str, List[str]]] = None,
+            **kwargs
+    ):
         """
-
+        Based on Flask Blueprint
         :param args: Flask Blueprint args
-        :param abp_security: APIBlueprint security
+        :param abp_tags: APIBlueprint tags for every api
+        :param abp_security: APIBlueprint security for every api
         :param kwargs: Flask Blueprint kwargs
         """
-        super(APIBlueprint, self).__init__(*args, **kwargs)
+        super(APIBlueprint, self).__init__(name, import_name, **kwargs)
         self.paths = dict()
         self.components_schemas = dict()
         self.components = Components()
         self.tags = []
         self.tag_names = []
+
+        self.abp_tags = abp_tags
+        if self.abp_tags is None:
+            self.abp_tags = []
+
         self.abp_security = abp_security
         if self.abp_security is None:
             self.abp_security = []
@@ -106,6 +119,7 @@ class APIBlueprint(Blueprint):
             security = []
         operation.security = security + self.abp_security or None
         # store tags
+        tags = tags + self.abp_tags if tags else self.abp_tags
         parse_and_store_tags(tags, self.tags, self.tag_names, operation)
         # parse parameters
         header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
@@ -264,7 +278,7 @@ class OpenAPI(Flask):
     def api_doc(self):
         """generate spec json"""
         spec = APISpec(openapi=self.openapi_version, info=self.info)
-        spec.tags = self.tags
+        spec.tags = self.tags or None
         spec.paths = self.paths
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.securitySchemes

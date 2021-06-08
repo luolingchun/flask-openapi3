@@ -43,6 +43,22 @@ and then you will get the magic.
 
 ![image-20210525160744617](./assets/image-20210525160744617.png)
 
+### abp_tags
+
+*New in v0.9.3*
+
+You don't need specify tag for every api.
+
+```python
+tag = Tag(name='book', description="Some Book")
+
+api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag])
+
+@api.post('/book')
+def create_book(body: BookData):
+    ...
+```
+
 ## securitySchemes
 
 like [Info](#info), import **`HTTPBearer`** from **`flask-openapi3.models.flask_openapi3.models.security`**, more features see the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
@@ -52,12 +68,14 @@ First, you need define the **securitySchemes**  and **security** variable:
 ```python
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 security = [{"jwt": []}]
+
+app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
 ```
 
 Second, add pass the **security** to your api, like this:
 
 ```python
-@api.get('/book/<int:bid>', tags=[book_tag], security=security)
+@app.get('/book/<int:bid>', tags=[book_tag], security=security)
 def get_book(path: Path, query: BookData):
     ...
 ```
@@ -65,6 +83,22 @@ def get_book(path: Path, query: BookData):
 result:
 
 ![image-20210525165350520](./assets/image-20210525165350520.png)
+
+### abp_security
+
+*New in v0.9.3*
+
+You don't need specify security for every api.
+
+```python
+tag = Tag(name='book', description="Some Book")
+security = [{"jwt": []}]
+api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
+
+@api.post('/book')
+def create_book(body: BookData):
+    ...
+```
 
 ## Request validate
 

@@ -278,7 +278,7 @@ def parse_and_store_tags(new_tags, old_tags, old_tag_names, operation):
         if tag.name not in old_tag_names:
             old_tag_names.append(tag.name)
             old_tags.append(tag)
-    operation.tags = set(list([tag.name for tag in new_tags]))
+    operation.tags = list(set([tag.name for tag in new_tags])) or None
 
 
 def parse_parameters(func, components_schemas, operation):
