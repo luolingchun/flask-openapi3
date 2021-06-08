@@ -2,18 +2,19 @@
 # @Author  : llc
 # @Time    : 2021/5/1 21:34
 import inspect
+from typing import Dict, Type, Callable, List, Tuple, Any
 
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
-from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX
+from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, Response, MediaType
 from .models.parameter import ParameterInType, Parameter
 from .models.path import Operation, RequestBody, PathItem
 from .models.validation_error import UnprocessableEntity
 
 
-def _parse_rule(rule):
+def _parse_rule(rule: str) -> str:
     """parse route"""
     uri = ''
     for converter, args, variable in parse_rule(str(rule)):
@@ -24,7 +25,7 @@ def _parse_rule(rule):
     return uri
 
 
-def get_operation(func):
+def get_operation(func: Callable) -> Operation:
     # get func documents
     doc = inspect.getdoc(func) or ''
     doc = doc.strip()
@@ -37,20 +38,20 @@ def get_operation(func):
     return operation
 
 
-def get_func_parameters(func, arg_name='path'):
+def get_func_parameter(func: Callable, arg_name='path') -> Type[BaseModel]:
     """get func parameters"""
     signature = inspect.signature(func)
-    return signature.parameters.get(arg_name)
+    p = signature.parameters.get(arg_name)
+    return p.annotation if p else None
 
 
-def get_schema(obj):
-    obj = obj.annotation
+def get_schema(obj: Type[BaseModel]) -> dict:
     assert inspect.isclass(obj) and \
            issubclass(obj, BaseModel), f"{obj} is invalid `pydantic.BaseModel`"
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
-def parse_header(header):
+def parse_header(header: Type[BaseModel]) -> List[Parameter]:
     """parse args(header)"""
     schema = get_schema(header)
     parameters = []
@@ -70,7 +71,7 @@ def parse_header(header):
     return parameters
 
 
-def parse_cookie(cookie):
+def parse_cookie(cookie: Type[BaseModel]) -> List[Parameter]:
     """parse args(cookie)"""
     schema = get_schema(cookie)
     parameters = []
@@ -90,7 +91,7 @@ def parse_cookie(cookie):
     return parameters
 
 
-def parse_path(path):
+def parse_path(path: Type[BaseModel]) -> List[Parameter]:
     """parse args(path)"""
     schema = get_schema(path)
     parameters = []
@@ -110,7 +111,7 @@ def parse_path(path):
     return parameters
 
 
-def parse_query(query):
+def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(query)
     parameters = []
     components_schemas = dict()
@@ -133,7 +134,7 @@ def parse_query(query):
     return parameters, components_schemas
 
 
-def parse_form(form):
+def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     schema = get_schema(form)
     content = None
     components_schemas = dict()
@@ -160,7 +161,7 @@ def parse_form(form):
     return content, components_schemas
 
 
-def parse_body(body):
+def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     schema = get_schema(body)
     content = None
     components_schemas = dict()
@@ -187,12 +188,14 @@ def parse_body(body):
     return content, components_schemas
 
 
-def get_responses(responses: dict, components_schemas, operation):
+def get_responses(responses: dict, components_schemas: dict, operation: Operation) -> None:
     """
     :param responses: Dict[str, BaseModel]
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     """
+    if responses is None:
+        responses = {}
     _responses = {}
     _schemas = {}
     if not responses.get("422"):
@@ -242,15 +245,13 @@ def get_responses(responses: dict, components_schemas, operation):
     operation.responses = _responses
 
 
-def validate_responses(responses):
+def validate_responses(responses: Dict[str, Type[BaseModel]]) -> None:
     if responses is None:
         responses = {}
     assert isinstance(responses, dict), "invalid `dict`"
 
-    return responses
 
-
-def validate_response(resp, responses):
+def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """validate response(only validate 200)"""
     if responses is None:
         responses = {}
@@ -265,7 +266,12 @@ def validate_response(resp, responses):
         response(**_resp)
 
 
-def parse_and_store_tags(new_tags, old_tags, old_tag_names, operation):
+def parse_and_store_tags(
+        new_tags: List[Tag] = None,
+        old_tags: List[Tag] = None,
+        old_tag_names: List[str] = None,
+        operation: Operation = None
+) -> None:
     """store tags
     :param new_tags: api tag
     :param old_tags: openapi doc tags
@@ -281,19 +287,23 @@ def parse_and_store_tags(new_tags, old_tags, old_tag_names, operation):
     operation.tags = list(set([tag.name for tag in new_tags])) or None
 
 
-def parse_parameters(func, components_schemas, operation):
+def parse_parameters(
+        func: Callable,
+        components_schemas: dict,
+        operation: Operation
+) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     """
     parameters = []
-    header = get_func_parameters(func, 'header')
-    cookie = get_func_parameters(func, 'cookie')
-    path = get_func_parameters(func, 'path')
-    query = get_func_parameters(func, 'query')
-    form = get_func_parameters(func, 'form')
-    body = get_func_parameters(func, 'body')
+    header = get_func_parameter(func, 'header')
+    cookie = get_func_parameter(func, 'cookie')
+    path = get_func_parameter(func, 'path')
+    query = get_func_parameter(func, 'query')
+    form = get_func_parameter(func, 'form')
+    body = get_func_parameter(func, 'body')
     if header:
         _parameters = parse_header(header)
         parameters.extend(_parameters)
@@ -328,7 +338,7 @@ def parse_parameters(func, components_schemas, operation):
     return header, cookie, path, query, form, body
 
 
-def parse_method(uri, method, paths, operation):
+def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:
     """
     :param uri: api route path
     :param method: get post put delete patch
