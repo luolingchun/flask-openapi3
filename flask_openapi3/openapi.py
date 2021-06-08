@@ -4,10 +4,10 @@
 import json
 import os
 from functools import wraps
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template, request, make_response
-from pydantic import ValidationError
+from pydantic import ValidationError, BaseModel
 
 from .models import Info, APISpec, Tag, Components
 from .models.common import Reference
@@ -16,7 +16,18 @@ from .utils import _parse_rule, get_operation, get_responses, parse_and_store_ta
     validate_responses, parse_method, validate_response
 
 
-def _do_wrapper(func, responses, header, cookie, path, query, form, body, validate_resp, **kwargs):
+def _do_wrapper(
+        func: Callable,
+        responses: Dict[str, Type[BaseModel]] = None,
+        header: Type[BaseModel] = None,
+        cookie: Type[BaseModel] = None,
+        path: Type[BaseModel] = None,
+        query: Type[BaseModel] = None,
+        form: Type[BaseModel] = None,
+        body: Type[BaseModel] = None,
+        validate_resp: bool = None,
+        **kwargs: Any
+) -> Any:
     """
     validate request and response
     :param func: view func
@@ -36,24 +47,24 @@ def _do_wrapper(func, responses, header, cookie, path, query, form, body, valida
     kwargs_ = dict()
     try:
         if header:
-            header_ = header.annotation(**request.headers if request.headers is not None else {})
+            header_ = header(**request.headers if request.headers is not None else {})
             kwargs_.update({"header": header_})
         if cookie:
-            cookie_ = cookie.annotation(**request.cookies if request.cookies is not None else {})
+            cookie_ = cookie(**request.cookies if request.cookies is not None else {})
             kwargs_.update({"cookie": cookie_})
         if path:
-            path_ = path.annotation(**kwargs)
+            path_ = path(**kwargs)
             kwargs_.update({"path": path_})
         if query:
-            query_ = query.annotation(**request.args.to_dict() if request.args.to_dict() is not None else {})
+            query_ = query(**request.args.to_dict() if request.args.to_dict() is not None else {})
             kwargs_.update({"query": query_})
         if form:
             req_form = request.form.to_dict()
             req_form.update(**request.files.to_dict() if request.files.to_dict() is not None else {})
-            form_ = form.annotation(**req_form if req_form is not None else {})
+            form_ = form(**req_form if req_form is not None else {})
             kwargs_.update({"form": form_})
         if body:
-            body_ = body.annotation(
+            body_ = body(
                 **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
             kwargs_.update({"body": body_})
     except ValidationError as e:
@@ -76,7 +87,7 @@ class APIBlueprint(Blueprint):
             import_name: str,
             abp_tags: List[Tag] = None,
             abp_security: List[Dict[str, List[str]]] = None,
-            **kwargs
+            **kwargs: Any
     ):
         """
         Based on Flask Blueprint
@@ -100,7 +111,15 @@ class APIBlueprint(Blueprint):
         if self.abp_security is None:
             self.abp_security = []
 
-    def _do_decorator(self, rule, func, tags, responses, security, method='get'):
+    def _do_decorator(
+            self,
+            rule: str,
+            func: Callable,
+            tags: List[Tag] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            security: List[Dict[str, List[Any]]] = None,
+            method: str = 'get'
+    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         collect openapi spec information
         :param rule: flask route
@@ -111,7 +130,7 @@ class APIBlueprint(Blueprint):
         :param method: api method
         :return:
         """
-        responses = validate_responses(responses)
+        validate_responses(responses)
         # create operation
         operation = get_operation(func)
         # add security
@@ -134,7 +153,14 @@ class APIBlueprint(Blueprint):
         parse_method(uri, method, self.paths, operation)
         return header, cookie, path, query, form, body
 
-    def get(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def get(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ):
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security)
 
@@ -150,7 +176,14 @@ class APIBlueprint(Blueprint):
 
         return decorator
 
-    def post(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def post(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ):
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "post")
 
@@ -166,7 +199,14 @@ class APIBlueprint(Blueprint):
 
         return decorator
 
-    def put(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def put(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ):
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "put")
 
@@ -182,7 +222,14 @@ class APIBlueprint(Blueprint):
 
         return decorator
 
-    def delete(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def delete(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ):
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security,
                                                                          "delete")
@@ -199,7 +246,14 @@ class APIBlueprint(Blueprint):
 
         return decorator
 
-    def patch(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def patch(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ):
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "patch")
 
@@ -218,11 +272,12 @@ class APIBlueprint(Blueprint):
 
 class OpenAPI(Flask):
     def __init__(self,
-                 import_name,
+                 import_name: str,
                  info: Info = None,
                  securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
                  doc_ui: bool = True,
-                 **kwargs):
+                 **kwargs: Any
+                 ) -> None:
         """
         Based Flask, provide REST api, swagger-ui and redoc.
         :param import_name: just flask import_name
@@ -249,7 +304,7 @@ class OpenAPI(Flask):
         if doc_ui:
             self.init_doc()
 
-    def init_doc(self):
+    def init_doc(self) -> None:
         """
         provide swagger-ui and redoc
         :return:
@@ -275,7 +330,7 @@ class OpenAPI(Flask):
         self.register_blueprint(blueprint)
 
     @property
-    def api_doc(self):
+    def api_doc(self) -> Dict:
         """generate spec json"""
         spec = APISpec(openapi=self.openapi_version, info=self.info)
         spec.tags = self.tags or None
@@ -285,7 +340,7 @@ class OpenAPI(Flask):
         spec.components = self.components
         return json.loads(spec.json(by_alias=True, exclude_none=True))
 
-    def register_api(self, api: APIBlueprint):
+    def register_api(self, api: APIBlueprint) -> None:
         """register APIBlueprint"""
         for tag in api.tags:
             if tag.name not in self.tag_names:
@@ -294,7 +349,15 @@ class OpenAPI(Flask):
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
 
-    def _do_decorator(self, rule, func, tags, responses, security, method='get'):
+    def _do_decorator(
+            self,
+            rule: str,
+            func: Callable,
+            tags: List[Tag] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            security: List[Dict[str, List[Any]]] = None,
+            method: str = 'get'
+    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         collect openapi spec information
         :param rule: flask route
@@ -305,7 +368,7 @@ class OpenAPI(Flask):
         :param method: api method
         :return:
         """
-        responses = validate_responses(responses)
+        validate_responses(responses)
         # create operation
         operation = get_operation(func)
         # add security
@@ -321,7 +384,14 @@ class OpenAPI(Flask):
         parse_method(uri, method, self.paths, operation)
         return header, cookie, path, query, form, body
 
-    def get(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def get(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ) -> Callable:
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security)
 
@@ -337,7 +407,14 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def post(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def post(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ) -> Callable:
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "post")
 
@@ -353,7 +430,14 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def put(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def put(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ) -> Callable:
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "put")
 
@@ -369,7 +453,14 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def delete(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def delete(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ) -> Callable:
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security,
                                                                          "delete")
@@ -386,7 +477,14 @@ class OpenAPI(Flask):
 
         return decorator
 
-    def patch(self, rule, tags: Optional[List[Tag]] = None, responses=None, validate_resp=True, security=None):
+    def patch(
+            self,
+            rule: str,
+            tags: Optional[List[Tag]] = None,
+            responses: Dict[str, Type[BaseModel]] = None,
+            validate_resp: bool = True,
+            security: List[Dict[str, List[Any]]] = None
+    ) -> Callable:
         def decorator(func):
             header, cookie, path, query, form, body = self._do_decorator(rule, func, tags, responses, security, "patch")
 
