@@ -172,7 +172,7 @@ def create_book(body: BookData):
 
 Receive flask **`resuqet.headers`**.
 
-### cookies
+### cookie
 
 Receive flask **`resuqet.cookies`**.
 
