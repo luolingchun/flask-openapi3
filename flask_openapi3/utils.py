@@ -246,24 +246,25 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
 
 
 def validate_responses(responses: Dict[str, Type[BaseModel]]) -> None:
-    if responses is None:
-        responses = {}
     assert isinstance(responses, dict), "invalid `dict`"
 
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
-    """validate response(only validate 200)"""
-    if responses is None:
-        responses = {}
-    for key, response in responses.items():
-        if key != "200":
-            continue
-        assert inspect.isclass(response) and \
-               issubclass(response, BaseModel), f"{response} is invalid `pydantic.BaseModel`"
-        _resp = resp
-        if isinstance(resp, tuple):  # noqa
-            _resp = resp[0]
-        response(**_resp)
+    """validate response"""
+    if isinstance(resp, tuple):  # noqa
+        _resp, status_code = resp[:2]
+    else:
+        _resp, status_code = resp, 200
+
+    resp_model = responses.get(str(status_code))
+    if resp_model is None:
+        return
+    assert inspect.isclass(resp_model) and \
+           issubclass(resp_model, BaseModel), f"{resp_model} is invalid `pydantic.BaseModel`"
+    try:
+        resp_model(**_resp)
+    except TypeError:
+        raise TypeError(f"{resp_model.__name__} validation failed.")
 
 
 def parse_and_store_tags(
