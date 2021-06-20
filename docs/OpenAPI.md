@@ -204,6 +204,48 @@ default :**`validate_resp=True`**, you can set **`validate_resp=False`** to only
 
 ![image-20210526104627124](./assets/image-20210526104627124.png)
 
+### OpenAPI responses
+
+*New in v0.9.4*
+
+You can add `responses` to each API under the `app` wrapper.
+
+```python hl_lines="4"
+app = OpenAPI(
+    __name__, 
+    info=info, 
+    responses={"404": NotFoundResponse}
+)
+
+@app.get(...)
+def endpoint():
+    ...
+```
+
+### abp_responses
+
+*New in v0.9.4*
+
+You can add `responses` to each API under the `api` wrapper.
+
+```python hl_lines="10"
+class Unauthorized(BaseModel):
+    code: int = Field(-1, description="Status Code")
+    message: str = Field("Unauthorized!", description="Exception Information")
+
+
+api = APIBlueprint(
+    '/book', 
+    __name__, 
+    url_prefix='/api',
+    abp_responses={"401": Unauthorized}
+)
+
+@api.get(...)
+def endpoint():
+    ...
+```
+
 ## summary and description
 
 You need add docs to the view-func. The first line is the summary, and the rest is the description. like this:

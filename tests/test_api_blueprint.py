@@ -19,7 +19,15 @@ app.config["TESTING"] = True
 
 tag = Tag(name='book', description="Book")
 security = [{"jwt": []}]
-api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
+
+
+class Unauthorized(BaseModel):
+    code: int = Field(-1, description="Status Code")
+    message: str = Field("Unauthorized!", description="Exception Information")
+
+
+api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security,
+                   abp_responses={"401": Unauthorized})
 
 
 @pytest.fixture

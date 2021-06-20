@@ -14,7 +14,13 @@ from flask_openapi3.models.security import HTTPBearer
 info = Info(title='book API', version='1.0.0')
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 
-app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
+
+class NotFoundResponse(BaseModel):
+    code: int = Field(-1, description="Status Code")
+    message: str = Field("Resource not found!", description="Exception Information")
+
+
+app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes, responses={"404": NotFoundResponse})
 app.config["TESTING"] = True
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
@@ -49,12 +55,14 @@ def client():
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: Path):
     """Get book
     Get some book by id, like:
     http://localhost:5000/book/3
     """
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+    if path.bid == 4:
+        return NotFoundResponse().dict(), 404
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 
 @app.get('/book', tags=[book_tag])
@@ -102,6 +110,11 @@ def test_openapi(client):
 def test_get(client):
     resp = client.get("/book?age=3&author=joy")
     assert resp.status_code == 200
+
+
+def test_get_by_id_4(client):
+    resp = client.get("/book/4?age=3&author=joy")
+    assert resp.status_code == 404
 
 
 def test_post(client):
