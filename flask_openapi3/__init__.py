@@ -6,6 +6,7 @@
 from .models.file import FileStorage
 from .openapi import APIBlueprint
 from .openapi import OpenAPI
+from .plugins import OAuthConfig
 
 print(r"""
   __ _           _                                             _  _____

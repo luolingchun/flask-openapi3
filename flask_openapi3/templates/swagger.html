@@ -34,7 +34,7 @@
         // End Swagger UI call region
 
         window.ui = SwaggerUIBundle({
-            url: "{{api_doc_url}}",
+            url: '{{api_doc_url}}',
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
@@ -46,6 +46,20 @@
             ],
             layout: "StandaloneLayout"
         })
+
+        const oauthConfig = JSON.parse('{{ oauth_config|tojson }}');
+        if (oauthConfig != null) {
+            window.ui.initOAuth({
+                clientId: oauthConfig.clientId,
+                clientSecret: oauthConfig.clientSecret,
+                realm: oauthConfig.realm,
+                appName: oauthConfig.appName,
+                scopeSeparator: oauthConfig.scopeSeparator,
+                scopes: oauthConfig.scopes,
+                additionalQueryStringParams: oauthConfig.additionalQueryStringParams,
+                usePkceWithAuthorizationCodeGrant: oauthConfig.usePkceWithAuthorizationCodeGrant
+            })
+        }
     }
 </script>
 </body>
