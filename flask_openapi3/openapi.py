@@ -13,6 +13,7 @@ from pydantic import ValidationError, BaseModel
 from .models import Info, APISpec, Tag, Components
 from .models.common import Reference
 from .models.security import SecurityScheme
+from .plugins import OAuthConfig
 from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses, parse_method, validate_response
 
@@ -285,6 +286,7 @@ class OpenAPI(Flask):
                  import_name: str,
                  info: Info = None,
                  securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+                 oauth_config: OAuthConfig = None,
                  responses: Dict[str, Type[BaseModel]] = None,
                  doc_ui: bool = True,
                  **kwargs: Any
@@ -294,6 +296,7 @@ class OpenAPI(Flask):
         :param import_name: just flask import_name
         :param info: see https://spec.openapis.org/oas/v3.0.3#info-object
         :param securitySchemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
+        :param oauth_config: OAuth 2.0 configuration, see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
         :param responses: OpenAPI response model
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param kwargs:
@@ -314,6 +317,10 @@ class OpenAPI(Flask):
         self.tag_names = []
         self.api_name = 'openapi'
         self.api_doc_url = f"/{self.api_name}.json"
+        if oauth_config:
+            if not isinstance(oauth_config, OAuthConfig):
+                raise TypeError("`initOAuth` must be `OAuthConfig`")
+        self.oauth_config = oauth_config
         if doc_ui:
             self.init_doc()
 
@@ -337,7 +344,11 @@ class OpenAPI(Flask):
         blueprint.add_url_rule(rule='/redoc', endpoint='redoc',
                                view_func=lambda: render_template("redoc.html", api_doc_url=f'{self.api_name}.json'))
         blueprint.add_url_rule(rule='/swagger', endpoint='swagger',
-                               view_func=lambda: render_template("swagger.html", api_doc_url=f'{self.api_name}.json'))
+                               view_func=lambda: render_template(
+                                   "swagger.html",
+                                   api_doc_url=f'{self.api_name}.json',
+                                   oauth_config=self.oauth_config.dict() if self.oauth_config else None
+                               ))
         blueprint.add_url_rule(rule='/', endpoint='index',
                                view_func=lambda: render_template("index.html"))
         self.register_blueprint(blueprint)
