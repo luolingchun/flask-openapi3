@@ -12,6 +12,7 @@ from .models.common import Schema, Response, MediaType
 from .models.parameter import ParameterInType, Parameter
 from .models.path import Operation, RequestBody, PathItem
 from .models.validation_error import UnprocessableEntity
+from .status import HTTP_STATUS
 
 
 def _parse_rule(rule: str) -> str:
@@ -200,7 +201,7 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
     _schemas = {}
     if not responses.get("422"):
         _responses["422"] = Response(
-            description="HTTP Validation error",
+            description=HTTP_STATUS["422"],
             content={
                 "application/json": MediaType(
                     **{
@@ -216,13 +217,13 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
         )
         _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
     if not responses.get("500"):
-        _responses["500"] = Response(description='Server error')
+        _responses["500"] = Response(description=HTTP_STATUS["500"])
     for key, response in responses.items():
         assert inspect.isclass(response) and \
                issubclass(response, BaseModel), f" {response} is invalid `pydantic.BaseModel`"
         schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
         _responses[key] = Response(
-            description="Success",
+            description=HTTP_STATUS.get(key, ""),
             content={
                 "application/json": MediaType(
                     **{

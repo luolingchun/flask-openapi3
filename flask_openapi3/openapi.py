@@ -340,17 +340,30 @@ class OpenAPI(Flask):
             template_folder=template_folder,
             static_folder=static_folder
         )
-        blueprint.add_url_rule(rule=self.api_doc_url, endpoint=self.api_name, view_func=lambda: self.api_doc)
-        blueprint.add_url_rule(rule='/redoc', endpoint='redoc',
-                               view_func=lambda: render_template("redoc.html", api_doc_url=f'{self.api_name}.json'))
-        blueprint.add_url_rule(rule='/swagger', endpoint='swagger',
-                               view_func=lambda: render_template(
-                                   "swagger.html",
-                                   api_doc_url=f'{self.api_name}.json',
-                                   oauth_config=self.oauth_config.dict() if self.oauth_config else None
-                               ))
-        blueprint.add_url_rule(rule='/', endpoint='index',
-                               view_func=lambda: render_template("index.html"))
+        blueprint.add_url_rule(
+            rule=self.api_doc_url,
+            endpoint=self.api_name,
+            view_func=lambda: self.api_doc
+        )
+        blueprint.add_url_rule(
+            rule='/redoc',
+            endpoint='redoc',
+            view_func=lambda: render_template("redoc.html", api_doc_url=f'{self.api_name}.json')
+        )
+        blueprint.add_url_rule(
+            rule='/swagger',
+            endpoint='swagger',
+            view_func=lambda: render_template(
+                "swagger.html",
+                api_doc_url=f'{self.api_name}.json',
+                oauth_config=self.oauth_config.dict() if self.oauth_config else None
+            )
+        )
+        blueprint.add_url_rule(
+            rule='/',
+            endpoint='index',
+            view_func=lambda: render_template("index.html")
+        )
         self.register_blueprint(blueprint)
 
     @property
