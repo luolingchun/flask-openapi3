@@ -7,10 +7,19 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI
 from flask_openapi3.models import Info, Tag
-from flask_openapi3.models.security import HTTPBearer
+from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='book API', version='1.0.0')
-securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+jwt = HTTPBearer(bearerFormat="JWT")
+oauth2 = OAuth2(flows=OAuthFlows(
+    implicit=OAuthFlowImplicit(
+        authorizationUrl="https://example.com/api/oauth/dialog",
+        scopes={
+            "write:pets": "modify pets in your account",
+            "read:pets": "read your pets"
+        }
+    )))
+securitySchemes = {"jwt": jwt, "oauth2": oauth2}
 
 
 class NotFoundResponse(BaseModel):
@@ -21,7 +30,10 @@ class NotFoundResponse(BaseModel):
 app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes, responses={"404": NotFoundResponse})
 
 book_tag = Tag(name='book', description='Some Book')
-security = [{"jwt": []}]
+security = [
+    {"jwt": []},
+    {"oauth2": ["write:pets", "read:pets"]}
+]
 
 
 class Path(BaseModel):
