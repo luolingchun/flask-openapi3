@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+# @Author  : [martinatseequent](https://github.com/martinatseequent)
+# @Time    : 2021/6/22 9:32
+
+import json
+from http import HTTPStatus
+
+from flask import make_response
+from flask_openapi3 import OpenAPI, APIBlueprint
+from flask_openapi3.models import Info
+from pydantic import BaseModel, Field
+
+app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"), )
+
+bp = APIBlueprint("Hello BP", __name__)
+
+
+class PathName(BaseModel):
+    name: str = Field(..., description="The name")
+
+
+class Message(BaseModel):
+    message: str = Field(..., description="The message")
+
+
+@bp.get("/hello/<string:name>", responses={"200": Message})
+def hello(path: PathName):
+    message = {"message": f"""Hello {path.name}!"""}
+
+    response = make_response(json.dumps(message), HTTPStatus.OK)
+    # response = make_response("sss", HTTPStatus.OK)
+    response.mimetype = "application/json"
+    return response
+
+
+app.register_api(bp)
+
+if __name__ == "__main__":
+    app.run(debug=True)

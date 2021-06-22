@@ -4,6 +4,7 @@
 import inspect
 from typing import Dict, Type, Callable, List, Tuple, Any
 
+from flask import Response as _Response
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
@@ -254,6 +255,10 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """validate response"""
     if isinstance(resp, tuple):  # noqa
         _resp, status_code = resp[:2]
+    elif isinstance(resp, _Response):
+        if resp.mimetype != "application/json":
+            raise TypeError("`Response` mimetype must be application/json.")
+        _resp, status_code = resp.json, resp.status_code  # noqa
     else:
         _resp, status_code = resp, 200
 
@@ -265,7 +270,7 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     try:
         resp_model(**_resp)
     except TypeError:
-        raise TypeError(f"{resp_model.__name__} validation failed.")
+        raise TypeError(f"`{resp_model.__name__}` validation failed, must be a mapping.")
 
 
 def parse_and_store_tags(
