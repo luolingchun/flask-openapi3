@@ -75,7 +75,7 @@ def _do_wrapper(
         return resp
     # handle request
     resp = func(**kwargs_)
-    if validate_resp:
+    if validate_resp and responses:
         validate_response(resp, responses)
 
     return resp
