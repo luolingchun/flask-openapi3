@@ -24,8 +24,16 @@ class Unauthorized(BaseModel):
     message: str = Field("Unauthorized!", description="Exception Information")
 
 
-api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security,
-                   abp_responses={"401": Unauthorized})
+api = APIBlueprint(
+    '/book',
+    __name__,
+    url_prefix='/api',
+    abp_tags=[tag],
+    abp_security=security,
+    abp_responses={"401": Unauthorized},
+    # disable openapi UI
+    doc_ui=False
+)
 
 
 class BookData(BaseModel):
@@ -35,6 +43,11 @@ class BookData(BaseModel):
 
 class Path(BaseModel):
     bid: int = Field(..., description='book id')
+
+
+@api.get('/book', doc_ui=False)
+def get_book():
+    return {"code": 0, "message": "ok"}
 
 
 @api.post('/book')

@@ -296,13 +296,15 @@ def parse_and_store_tags(
 
 def parse_parameters(
         func: Callable,
-        components_schemas: dict,
-        operation: Operation
+        components_schemas: dict = None,
+        operation: Operation = None,
+        doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
+    :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
     parameters = []
     header = get_func_parameter(func, 'header')
@@ -311,6 +313,8 @@ def parse_parameters(
     query = get_func_parameter(func, 'query')
     form = get_func_parameter(func, 'form')
     body = get_func_parameter(func, 'body')
+    if doc_ui is False:
+        return header, cookie, path, query, form, body
     if header:
         _parameters = parse_header(header)
         parameters.extend(_parameters)

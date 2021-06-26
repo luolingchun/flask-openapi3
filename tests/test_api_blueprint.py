@@ -26,8 +26,14 @@ class Unauthorized(BaseModel):
     message: str = Field("Unauthorized!", description="Exception Information")
 
 
-api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security,
-                   abp_responses={"401": Unauthorized})
+api = APIBlueprint(
+    '/book',
+    __name__,
+    url_prefix='/api',
+    abp_tags=[tag],
+    abp_security=security,
+    abp_responses={"401": Unauthorized}
+)
 
 
 @pytest.fixture
@@ -46,7 +52,7 @@ class Path(BaseModel):
     bid: int = Field(..., description='book id')
 
 
-@api.post('/book')
+@api.post('/book', doc_ui=False)
 def create_book(body: BookData):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
