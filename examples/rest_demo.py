@@ -68,7 +68,8 @@ def get_book(path: Path):
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 
-@app.get('/book', tags=[book_tag])
+# set doc_ui False disable openapi UI
+@app.get('/book', doc_ui=False)
 def get_books(query: BookData):
     """get books
     get all books
@@ -96,7 +97,7 @@ def update_book(path: Path, body: BookData):
     return {"code": 0, "message": "ok"}
 
 
-@app.delete('/book/<int:bid>', tags=[book_tag])
+@app.delete('/book/<int:bid>', tags=[book_tag], doc_ui=False)
 def delete_book(path: Path):
     print(path)
     return {"code": 0, "message": "ok"}
