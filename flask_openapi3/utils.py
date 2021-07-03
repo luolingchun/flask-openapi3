@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/1 21:34
+
 import inspect
+from http import HTTPStatus
 from typing import Dict, Type, Callable, List, Tuple, Any
 
 from flask import Response as _Response
@@ -261,6 +263,9 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
         _resp, status_code = resp.json, resp.status_code  # noqa
     else:
         _resp, status_code = resp, 200
+    # status_code is http.HTTPStatus
+    if isinstance(status_code, HTTPStatus):
+        status_code = status_code.value
 
     resp_model = responses.get(str(status_code))
     if resp_model is None:

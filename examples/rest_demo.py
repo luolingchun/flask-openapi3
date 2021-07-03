@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/28 11:24
+from http import HTTPStatus
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -54,7 +55,7 @@ class BookDataWithID(BaseModel):
 class BookResponse(BaseModel):
     code: int = Field(0, description="Status Code")
     message: str = Field("ok", description="Exception Information")
-    data: BookDataWithID
+    data: Optional[BookDataWithID]
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
@@ -84,10 +85,10 @@ def get_books(query: BookData):
     }
 
 
-@app.post('/book', tags=[book_tag])
+@app.post('/book', tags=[book_tag], responses={"200": BookResponse})
 def create_book(body: BookData):
     print(body)
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}, HTTPStatus.OK
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])

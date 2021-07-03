@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/6 16:38
-
+from http import HTTPStatus
 from typing import Optional
 
 import pytest
@@ -39,6 +39,11 @@ class BookDataWithID(BaseModel):
     bid: int = Field(..., description='book id')
     age: Optional[int] = Field(None, ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
+
+
+class BaseResponse(BaseModel):
+    code: int = Field(0, description="Status Code")
+    message: str = Field("ok", description="Exception Information")
 
 
 class BookResponse(BaseModel):
@@ -82,10 +87,10 @@ def get_books(query: BookData):
     }
 
 
-@app.post('/book', tags=[book_tag])
+@app.post('/book', tags=[book_tag], responses={"200": BaseResponse})
 def create_book(body: BookData):
     assert body.age == 3
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}, HTTPStatus.OK
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])
