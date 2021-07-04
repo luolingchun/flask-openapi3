@@ -207,8 +207,9 @@ def get_book(path: Path, query: BookData):
     """
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
 ```
+*New in v0.9.5*
 
-default :**`validate_resp=True`**, you can set **`validate_resp=False`** to only  generate **Schemas** in swagger-ui.
+By default, the `VALIDATE_RESPONSE` environment variable is `False`. You can set it `True` to validate responses in the development environment.
 
 ![image-20210526104627124](./assets/image-20210526104627124.png)
 

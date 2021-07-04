@@ -7,7 +7,7 @@ from copy import deepcopy
 from functools import wraps
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
-from flask import Flask, Blueprint, render_template, request, make_response
+from flask import Flask, Blueprint, render_template, request, make_response, current_app
 from pydantic import ValidationError, BaseModel
 
 from .models import Info, APISpec, Tag, Components
@@ -27,7 +27,6 @@ def _do_wrapper(
         query: Type[BaseModel] = None,
         form: Type[BaseModel] = None,
         body: Type[BaseModel] = None,
-        validate_resp: bool = None,
         **kwargs: Any
 ) -> Any:
     """
@@ -40,7 +39,6 @@ def _do_wrapper(
     :param query:
     :param form:
     :param body:
-    :param validate_resp: boolean, is validate response
     :param kwargs: path args
     :return:
     """
@@ -75,6 +73,8 @@ def _do_wrapper(
         return resp
     # handle request
     resp = func(**kwargs_)
+
+    validate_resp = current_app.config.get("VALIDATE_RESPONSE", False)
     if validate_resp and responses:
         validate_response(resp, responses)
 
@@ -175,7 +175,6 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -185,7 +184,7 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["GET"]}
@@ -200,7 +199,6 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -210,7 +208,7 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["POST"]}
@@ -225,7 +223,6 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -235,7 +232,7 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["PUT"]}
@@ -250,7 +247,6 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -260,7 +256,7 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["DELETE"]}
@@ -275,7 +271,6 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -285,7 +280,7 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["PATCH"]}
@@ -456,7 +451,6 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -466,7 +460,7 @@ class OpenAPI(Flask):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["GET"]}
@@ -481,7 +475,6 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -491,7 +484,7 @@ class OpenAPI(Flask):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["POST"]}
@@ -506,7 +499,6 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -516,7 +508,7 @@ class OpenAPI(Flask):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["PUT"]}
@@ -531,7 +523,6 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -541,7 +532,7 @@ class OpenAPI(Flask):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["DELETE"]}
@@ -556,7 +547,6 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
-            validate_resp: bool = True,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -566,7 +556,7 @@ class OpenAPI(Flask):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, validate_resp, **kwargs)
+                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
                 return resp
 
             options = {"methods": ["PATCH"]}
