@@ -1,3 +1,7 @@
+## v0.9.5 2021-07-11
+
+- remove `validate_resp` and add `VALIDATE_RESPONSE`
+
 ## v0.9.4 2021-07-03
 
 - OpenAPI add responses and APIBlueprint add abp_responses

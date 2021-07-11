@@ -211,6 +211,10 @@ def get_book(path: Path, query: BookData):
 
 By default, the `VALIDATE_RESPONSE` environment variable is `False`. You can set it `True` to validate responses in the development environment.
 
+!!! warning
+
+    Please do not use it in the production environment, because it will reduce the performance.
+
 ![image-20210526104627124](./assets/image-20210526104627124.png)
 
 ### OpenAPI responses
