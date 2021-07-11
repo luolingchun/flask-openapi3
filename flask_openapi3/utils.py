@@ -255,11 +255,17 @@ def validate_responses(responses: Dict[str, Type[BaseModel]]) -> None:
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """validate response"""
+    print("Warning: "
+          "You are using `VALIDATE_RESPONSE=True`, "
+          "please do not use it in the production environment, "
+          "because it will reduce the performance.")
     if isinstance(resp, tuple):  # noqa
         _resp, status_code = resp[:2]
     elif isinstance(resp, _Response):
         if resp.mimetype != "application/json":
-            raise TypeError("`Response` mimetype must be application/json.")
+            # only application/json
+            return
+            # raise TypeError("`Response` mimetype must be application/json.")
         _resp, status_code = resp.json, resp.status_code  # noqa
     else:
         _resp, status_code = resp, 200
