@@ -8,11 +8,8 @@ repo_name: 'GitHub'
 
 markdown_extensions:
   - admonition
-  - codehilite:
-      guess_lang: false
-      linenums: false
   - toc:
-      permalink: true
+      permalink: ⚓︎
   - footnotes
   - meta
   - def_list
@@ -32,6 +29,8 @@ markdown_extensions:
   - pymdownx.tasklist
   - pymdownx.tilde
   - pymdownx.snippets
+  - pymdownx.highlight:
+      linenums: true
 
 
 theme:
