@@ -5,13 +5,14 @@ import json
 import os
 from copy import deepcopy
 from functools import wraps
+from io import StringIO
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template, request, make_response, current_app
-from pydantic import ValidationError, BaseModel
+from pydantic import ValidationError, BaseModel, AnyUrl
 
 from .models import Info, APISpec, Tag, Components
-from .models.common import Reference
+from .models.common import Reference, ExternalDocumentation
 from .models.security import SecurityScheme
 from .plugins import OAuthConfig
 from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
@@ -370,16 +371,42 @@ class OpenAPI(Flask):
             )
         )
         blueprint.add_url_rule(
+            rule='/markdown',
+            endpoint='markdown',
+            view_func=lambda: self.export_to_markdown()
+        )
+        blueprint.add_url_rule(
             rule='/',
             endpoint='index',
             view_func=lambda: render_template("index.html")
         )
         self.register_blueprint(blueprint)
 
+    def export_to_markdown(self):
+        md = StringIO()
+        # TODO: to markdown
+        md.write(str(self.api_doc))
+
+        r = make_response(md.getvalue())
+        r.headers['Content-Disposition'] = 'attachment; filename=api.md'
+
+        return r
+
     @property
     def api_doc(self) -> Dict:
         """generate spec json"""
-        spec = APISpec(openapi=self.openapi_version, info=self.info)
+        spec = APISpec(
+            openapi=self.openapi_version,
+            info=self.info,
+            externalDocs=ExternalDocumentation(
+                url=AnyUrl(
+                    url=f'/{self.api_name}/markdown',
+                    scheme='',
+                    host=''
+                ),
+                description='export to markdown'
+            )
+        )
         spec.tags = self.tags or None
         spec.paths = self.paths
         self.components.schemas = self.components_schemas
