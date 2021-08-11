@@ -15,7 +15,7 @@ from .models.common import Reference
 from .models.security import SecurityScheme
 from .plugins import OAuthConfig
 from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
-    validate_responses, parse_method, validate_response
+    validate_responses_type, parse_method, validate_response
 
 
 def _do_wrapper(
@@ -30,16 +30,16 @@ def _do_wrapper(
         **kwargs: Any
 ) -> Any:
     """
-    validate request and response
+    Validate requests and responses
     :param func: view func
     :param responses: response model
-    :param header:
-    :param cookie:
-    :param path:
-    :param query:
-    :param form:
-    :param body:
-    :param kwargs: path args
+    :param header: header model
+    :param cookie: cookie model
+    :param path: path model
+    :param query: query model
+    :param form: form model
+    :param body: body model
+    :param kwargs: path parameters
     :return:
     """
     # validate header, cookie, path and query
@@ -126,7 +126,7 @@ class APIBlueprint(Blueprint):
         Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Dict[
             str, Type[BaseModel]]]:
         """
-        collect openapi spec information
+        Collect openapi specification information
         :param rule: flask route
         :param func: flask view_func
         :param tags: api tag
@@ -139,8 +139,8 @@ class APIBlueprint(Blueprint):
         if self.doc_ui is True and doc_ui is True:
             if responses is None:
                 responses = {}
-            validate_responses(responses)
-            validate_responses(self.abp_responses)
+            validate_responses_type(responses)
+            validate_responses_type(self.abp_responses)
             # global response combine api responses
             combine_responses = deepcopy(self.abp_responses)
             combine_responses.update(**responses)
@@ -302,7 +302,7 @@ class OpenAPI(Flask):
                  **kwargs: Any
                  ) -> None:
         """
-        Based Flask, provide REST api, swagger-ui and redoc.
+        Based on Flask. Provide REST api, swagger-ui and redoc.
         :param import_name: just flask import_name
         :param info: see https://spec.openapis.org/oas/v3.0.3#info-object
         :param securitySchemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
@@ -336,7 +336,7 @@ class OpenAPI(Flask):
 
     def init_doc(self) -> None:
         """
-        provide swagger-ui and redoc
+        Provide swagger-ui and redoc
         :return:
         """
         _here = os.path.dirname(__file__)
@@ -378,7 +378,7 @@ class OpenAPI(Flask):
 
     @property
     def api_doc(self) -> Dict:
-        """generate spec json"""
+        """Generate spec json"""
         spec = APISpec(openapi=self.openapi_version, info=self.info)
         spec.tags = self.tags or None
         spec.paths = self.paths
@@ -388,7 +388,7 @@ class OpenAPI(Flask):
         return json.loads(spec.json(by_alias=True, exclude_none=True))
 
     def register_api(self, api: APIBlueprint) -> None:
-        """register APIBlueprint"""
+        """Register APIBlueprint"""
         for tag in api.tags:
             if tag.name not in self.tag_names:
                 self.tags.append(tag)
@@ -409,7 +409,7 @@ class OpenAPI(Flask):
         Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Dict[
             str, Type[BaseModel]]]:
         """
-        collect openapi spec information
+        Collect openapi specification information
         :param rule: flask route
         :param func: flask view_func
         :param tags: api tag
@@ -422,8 +422,8 @@ class OpenAPI(Flask):
         if doc_ui is True:
             if responses is None:
                 responses = {}
-            validate_responses(responses)
-            validate_responses(self.responses)
+            validate_responses_type(responses)
+            validate_responses_type(self.responses)
             # global response combine api responses
             combine_responses = deepcopy(self.responses)
             combine_responses.update(**responses)
