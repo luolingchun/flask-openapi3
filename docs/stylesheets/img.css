@@ -1,4 +1,4 @@
-p img {
+p > img {
     box-shadow: 0 0 10px #333743f0;
 }
 
