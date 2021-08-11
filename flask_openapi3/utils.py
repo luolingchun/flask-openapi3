@@ -19,7 +19,9 @@ from .status import HTTP_STATUS
 
 
 def _parse_rule(rule: str) -> str:
-    """parse route"""
+    """Flask route conversion to openapi:
+    /pet/<petId> --> /pet/{petId}
+    """
     uri = ''
     for converter, args, variable in parse_rule(str(rule)):
         if converter is None:
@@ -30,7 +32,7 @@ def _parse_rule(rule: str) -> str:
 
 
 def get_operation(func: Callable) -> Operation:
-    # get func documents
+    """Return a Operation object with summary and description."""
     doc = inspect.getdoc(func) or ''
     doc = doc.strip()
     lines = doc.split('\n')
@@ -43,20 +45,23 @@ def get_operation(func: Callable) -> Operation:
 
 
 def get_func_parameter(func: Callable, arg_name='path') -> Type[BaseModel]:
-    """get func parameters"""
+    """Get view-func parameters.
+    arg_name has six parameters to choose from: path, query, form, body, header, cookie.
+    """
     signature = inspect.signature(func)
     p = signature.parameters.get(arg_name)
     return p.annotation if p else None
 
 
 def get_schema(obj: Type[BaseModel]) -> dict:
+    """Pydantic model conversion to openapi schema"""
     assert inspect.isclass(obj) and \
            issubclass(obj, BaseModel), f"{obj} is invalid `pydantic.BaseModel`"
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
 def parse_header(header: Type[BaseModel]) -> List[Parameter]:
-    """parse args(header)"""
+    """Parse header model"""
     schema = get_schema(header)
     parameters = []
     properties = schema.get('properties')
@@ -76,7 +81,7 @@ def parse_header(header: Type[BaseModel]) -> List[Parameter]:
 
 
 def parse_cookie(cookie: Type[BaseModel]) -> List[Parameter]:
-    """parse args(cookie)"""
+    """Parse cookie model"""
     schema = get_schema(cookie)
     parameters = []
     properties = schema.get('properties')
@@ -96,7 +101,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> List[Parameter]:
 
 
 def parse_path(path: Type[BaseModel]) -> List[Parameter]:
-    """parse args(path)"""
+    """Parse path model"""
     schema = get_schema(path)
     parameters = []
     properties = schema.get('properties')
@@ -116,6 +121,7 @@ def parse_path(path: Type[BaseModel]) -> List[Parameter]:
 
 
 def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
+    """Parse query model"""
     schema = get_schema(query)
     parameters = []
     components_schemas = dict()
@@ -139,6 +145,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 
 def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
+    """Parse form model"""
     schema = get_schema(form)
     content = None
     components_schemas = dict()
@@ -166,6 +173,7 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
 
 
 def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
+    """Parse body model"""
     schema = get_schema(body)
     content = None
     components_schemas = dict()
@@ -249,12 +257,12 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
     operation.responses = _responses
 
 
-def validate_responses(responses: Dict[str, Type[BaseModel]]) -> None:
+def validate_responses_type(responses: Dict[str, Type[BaseModel]]) -> None:
     assert isinstance(responses, dict), "invalid `dict`"
 
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
-    """validate response"""
+    """Validate response"""
     if isinstance(resp, tuple):  # noqa
         _resp, status_code = resp[:2]
     elif isinstance(resp, _Response):
@@ -284,7 +292,7 @@ def parse_and_store_tags(
         old_tag_names: List[str] = None,
         operation: Operation = None
 ) -> None:
-    """store tags
+    """Store tags
     :param new_tags: api tag
     :param old_tags: openapi doc tags
     :param old_tag_names: openapi doc tag names
