@@ -11,6 +11,7 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template, request, make_response, current_app
 from pydantic import ValidationError, BaseModel, AnyUrl
 
+from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components
 from .models.common import Reference, ExternalDocumentation
 from .models.security import SecurityScheme
@@ -383,9 +384,10 @@ class OpenAPI(Flask):
         self.register_blueprint(blueprint)
 
     def export_to_markdown(self):
+        """Experimental"""
         md = StringIO()
-        # TODO: to markdown
-        md.write(str(self.api_doc))
+
+        md.write(openapi_to_markdown(self.api_doc))
 
         r = make_response(md.getvalue())
         r.headers['Content-Disposition'] = 'attachment; filename=api.md'
@@ -404,7 +406,7 @@ class OpenAPI(Flask):
                     scheme='',
                     host=''
                 ),
-                description='export to markdown'
+                description='Export to markdown'
             )
         )
         spec.tags = self.tags or None
