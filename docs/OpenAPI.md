@@ -61,7 +61,7 @@ def create_book(body: BookData):
 
 ## securitySchemes
 
-like [Info](#info), import **`HTTPBearer`** from **`flask-openapi3.models.flask_openapi3.models.security`**, more features see the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
+like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3.models.security`**, more features see the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
 
 First, you need define the **securitySchemes**  and **security** variable:
 
