@@ -25,6 +25,8 @@ app.config["TESTING"] = True
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 
+app.config["VALIDATE_RESPONSE"] = True
+
 
 class BookData(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
