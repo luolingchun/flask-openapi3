@@ -1,4 +1,4 @@
-**`flask-openapi3`** provide [Swagger](https://swagger.io) and [ReDoc](https://redocly.github.io/redoc/) reference documentation. Before this, you should Learn something about OpenAPI [spec]([OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3)). 
+**`flask-openapi3`** provide [Swagger](https://swagger.io) and [ReDoc](https://redocly.github.io/redoc/) reference documentation. Before this, you should Learn something about OpenAPI [spec](https://spec.openapis.org/oas/v3.0.3). 
 
 ## Info
 
