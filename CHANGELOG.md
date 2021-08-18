@@ -1,3 +1,7 @@
+## v0.9.6 2021-08-18
+
+- Export to markdown(Experimental)
+
 ## v0.9.5 2021-07-11
 
 - remove `validate_resp` and add `VALIDATE_RESPONSE`
