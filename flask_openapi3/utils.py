@@ -60,11 +60,13 @@ def get_schema(obj: Type[BaseModel]) -> dict:
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
-def parse_header(header: Type[BaseModel]) -> List[Parameter]:
+def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse header model"""
     schema = get_schema(header)
     parameters = []
+    components_schemas = dict()
     properties = schema.get('properties')
+    definitions = schema.get('definitions')
 
     if properties:
         for name, value in properties.items():
@@ -76,15 +78,19 @@ def parse_header(header: Type[BaseModel]) -> List[Parameter]:
                 "schema": Schema(**value)
             }
             parameters.append(Parameter(**data))
+    if definitions:
+        for name, value in definitions.items():
+            components_schemas[name] = Schema(**value)
+    return parameters, components_schemas
 
-    return parameters
 
-
-def parse_cookie(cookie: Type[BaseModel]) -> List[Parameter]:
+def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse cookie model"""
     schema = get_schema(cookie)
     parameters = []
+    components_schemas = dict()
     properties = schema.get('properties')
+    definitions = schema.get('definitions')
 
     if properties:
         for name, value in properties.items():
@@ -96,15 +102,19 @@ def parse_cookie(cookie: Type[BaseModel]) -> List[Parameter]:
                 "schema": Schema(**value)
             }
             parameters.append(Parameter(**data))
+    if definitions:
+        for name, value in definitions.items():
+            components_schemas[name] = Schema(**value)
+    return parameters, components_schemas
 
-    return parameters
 
-
-def parse_path(path: Type[BaseModel]) -> List[Parameter]:
+def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse path model"""
     schema = get_schema(path)
     parameters = []
+    components_schemas = dict()
     properties = schema.get('properties')
+    definitions = schema.get('definitions')
 
     if properties:
         for name, value in properties.items():
@@ -116,8 +126,10 @@ def parse_path(path: Type[BaseModel]) -> List[Parameter]:
                 "schema": Schema(**value)
             }
             parameters.append(Parameter(**data))
-
-    return parameters
+    if definitions:
+        for name, value in definitions.items():
+            components_schemas[name] = Schema(**value)
+    return parameters, components_schemas
 
 
 def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
@@ -335,15 +347,18 @@ def parse_parameters(
     if doc_ui is False:
         return header, cookie, path, query, form, body
     if header:
-        _parameters = parse_header(header)
+        _parameters, _components_schemas = parse_header(header)
         parameters.extend(_parameters)
+        components_schemas.update(**_components_schemas)
     if cookie:
-        _parameters = parse_cookie(cookie)
+        _parameters, _components_schemas = parse_cookie(cookie)
         parameters.extend(_parameters)
+        components_schemas.update(**_components_schemas)
     if path:
         # get args from route path
-        _parameters = parse_path(path)
+        _parameters, _components_schemas = parse_path(path)
         parameters.extend(_parameters)
+        components_schemas.update(**_components_schemas)
     if query:
         # get args from route query
         _parameters, _components_schemas = parse_query(query)
