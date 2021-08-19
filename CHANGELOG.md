@@ -1,3 +1,8 @@
+## v0.9.7 2021-08-19
+
+- fix: path $ref
+- fix: markdown enum
+
 ## v0.9.6 2021-08-18
 
 - Export to markdown(Experimental)
