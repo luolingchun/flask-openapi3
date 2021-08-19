@@ -20,10 +20,10 @@ class Language(str, Enum):
 
 
 class Path(BaseModel):
-    layer: Language = Field(..., description='Language')
+    language: Language = Field(..., description='Language')
 
 
-@app.get('/language')
+@app.get('/<language>')
 def get_enum(path: Path):
     print(path)
     return {}
