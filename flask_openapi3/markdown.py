@@ -96,12 +96,9 @@ def openapi_to_markdown(api_json: dict) -> str:
             method_markdown += f"**method:** `{method.upper()}`\n\n"
             tag = operation.get('tags', ['default'])[0]
             parameters = operation.get('parameters', [])
-            print(method_markdown)
             if parameters:
                 method_markdown += f"**parameters:** \n\n"
-                print(method_markdown)
                 method_markdown += parse_parameters(parameters)
-                print(method_markdown)
             request_body = operation.get('requestBody')
             if request_body:
                 method_markdown += f"**requestBody:** \n\n"
