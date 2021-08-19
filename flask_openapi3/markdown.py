@@ -7,23 +7,25 @@ from flask_openapi3.models import OPENAPI3_REF_PREFIX
 def parse_schemas(schemas):
     schemas_dict = {}
     for name, obj in schemas.items():
-        schemas_dict[name] = f"| name | type |required | description |\n"
+        schemas_dict[name] = f"| name | type | required | description |\n"
         schemas_dict[name] += f"| ---- | ---- | -------- | ----------- |\n"
         required = obj.get('required', [])
+        enum = obj.get('enum')
+        if enum:
+            schemas_dict[name] += f"| {name} | {obj.get('type','')} | - | Enum: {', '.join(enum)} |\n"
         properties = obj.get('properties')
-        if not properties:
-            continue
-        for property_name, _property in properties.items():
-            ref = _property.get('$ref')
-            if ref:
-                ref_name = ref.lstrip(OPENAPI3_REF_PREFIX + '/')
-                schemas_dict[name] += f"| {property_name} | - | - | [{ref_name}](#{ref_name}) |\n"
-            else:
-                schemas_dict[name] += f"| {property_name} " \
-                                      f"| {_property.get('format', '') or _property.get('type', '')} " \
-                                      f"| {property_name in required} " \
-                                      f"| {_property.get('description', '')} " \
-                                      f"|\n"
+        if properties:
+            for property_name, _property in properties.items():
+                ref = _property.get('$ref')
+                if ref:
+                    ref_name = ref.lstrip(OPENAPI3_REF_PREFIX + '/')
+                    schemas_dict[name] += f"| {property_name} | - | - | [{ref_name}](#{ref_name}) |\n"
+                else:
+                    schemas_dict[name] += f"| {property_name} " \
+                                          f"| {_property.get('format', '') or _property.get('type', '')} " \
+                                          f"| {property_name in required} " \
+                                          f"| {_property.get('description', '')} " \
+                                          f"|\n"
     return schemas_dict
 
 
@@ -31,6 +33,19 @@ def parse_parameters(parameters):
     md = f"| name | type | in   | required | description |\n"
     md += f"| ---- | ---- | ---- | -------- | ----------- |\n"
     for param in parameters:
+        aff_of = param['schema'].get('allOf')
+        if aff_of:
+            for one in aff_of:
+                if isinstance(one, dict) and one.get('$ref'):
+                    ref_name = one.get('$ref').lstrip(OPENAPI3_REF_PREFIX + '/')
+                    md += f"| {param.get('name', '')} " \
+                          f"| {param['schema'].get('type', '')} " \
+                          f"| {param.get('in', '')} " \
+                          f"| {param.get('required', '')} " \
+                          f"| [{ref_name}](#{ref_name}) " \
+                          f"|\n"
+                    break
+            continue
         md += f"| {param.get('name', '')} " \
               f"| {param['schema'].get('type', '')} " \
               f"| {param.get('in', '')} " \
@@ -81,9 +96,12 @@ def openapi_to_markdown(api_json: dict) -> str:
             method_markdown += f"**method:** `{method.upper()}`\n\n"
             tag = operation.get('tags', ['default'])[0]
             parameters = operation.get('parameters', [])
+            print(method_markdown)
             if parameters:
                 method_markdown += f"**parameters:** \n\n"
+                print(method_markdown)
                 method_markdown += parse_parameters(parameters)
+                print(method_markdown)
             request_body = operation.get('requestBody')
             if request_body:
                 method_markdown += f"**requestBody:** \n\n"
