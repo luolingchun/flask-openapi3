@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css"
-          href="static/css/swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="static/css/swagger-ui.css">
     <style>
         html {
             box-sizing: border-box;
@@ -31,8 +30,6 @@
 <script>
     window.onload = function () {
         // Begin Swagger UI call region
-        // End Swagger UI call region
-
         window.ui = SwaggerUIBundle({
             url: '{{api_doc_url}}',
             dom_id: '#swagger-ui',
@@ -46,7 +43,7 @@
             ],
             layout: "StandaloneLayout"
         })
-
+        // End Swagger UI call region
         const oauthConfig = JSON.parse('{{ oauth_config|tojson }}');
         if (oauthConfig != null) {
             window.ui.initOAuth({
