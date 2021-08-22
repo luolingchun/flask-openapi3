@@ -36,7 +36,7 @@ api = APIBlueprint(
 )
 
 
-class BookData(BaseModel):
+class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
@@ -51,13 +51,13 @@ def get_book():
 
 
 @api.post('/book')
-def create_book(body: BookData):
+def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
 @api.put('/book/<int:bid>')
-def update_book(path: Path, body: BookData):
+def update_book(path: Path, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}

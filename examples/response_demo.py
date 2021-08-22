@@ -15,7 +15,7 @@ app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"), )
 bp = APIBlueprint("Hello BP", __name__)
 
 
-class PathName(BaseModel):
+class HelloPath(BaseModel):
     name: str = Field(..., description="The name")
 
 
@@ -24,7 +24,7 @@ class Message(BaseModel):
 
 
 @bp.get("/hello/<string:name>", responses={"200": Message})
-def hello(path: PathName):
+def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 
     response = make_response(json.dumps(message), HTTPStatus.OK)

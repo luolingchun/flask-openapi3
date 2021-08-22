@@ -35,16 +35,16 @@ from flask_openapi3.models import Info, Tag
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
 
-book_tag = Tag(name='book', description='Book')
+book_tag = Tag(name='book', description='Some Book')
 
 
-class BookData(BaseModel):
+class BookQuery(BaseModel):
     age: int
     author: str
 
 
 @app.get('/book', tags=[book_tag])
-def get_book(query: BookData):
+def get_book(query: BookQuery):
     """get books
     get all books
     """

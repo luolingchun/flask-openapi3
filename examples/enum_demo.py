@@ -19,12 +19,12 @@ class Language(str, Enum):
     en = 'English'
 
 
-class Path(BaseModel):
+class LanguagePath(BaseModel):
     language: Language = Field(..., description='Language')
 
 
 @app.get('/<language>')
-def get_enum(path: Path):
+def get_enum(path: LanguagePath):
     print(path)
     return {}
 
