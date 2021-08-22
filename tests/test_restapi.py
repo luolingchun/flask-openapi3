@@ -28,16 +28,20 @@ book_tag = Tag(name='book', description='Book')
 app.config["VALIDATE_RESPONSE"] = True
 
 
-class BookData(BaseModel):
+class BookQuery(BaseModel):
+    age: Optional[int] = Field(None, description='Age')
+
+
+class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
-class Path(BaseModel):
+class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
 
 
-class BookDataWithID(BaseModel):
+class BookBodyWithID(BaseModel):
     bid: int = Field(..., description='book id')
     age: Optional[int] = Field(None, ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
@@ -51,7 +55,7 @@ class BaseResponse(BaseModel):
 class BookResponse(BaseModel):
     code: int = Field(0, description="Status Code")
     message: str = Field("ok", description="Exception Information")
-    data: BookDataWithID
+    data: BookBodyWithID
 
 
 @pytest.fixture
@@ -62,7 +66,7 @@ def client():
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
-def get_book(path: Path):
+def get_book(path: BookPath):
     """Get book
     Get some book by id, like:
     http://localhost:5000/book/3
@@ -73,7 +77,7 @@ def get_book(path: Path):
 
 
 @app.get('/book', tags=[book_tag])
-def get_books(query: BookData):
+def get_books(query: BookBody):
     """get books
     get all books
     """
@@ -83,27 +87,27 @@ def get_books(query: BookData):
         "code": 0,
         "message": "ok",
         "data": [
-            {"bid": 1, "age": query.age, "author": query.author},
-            {"bid": 2, "age": query.age, "author": query.author}
+            {"bid": 1, "age": query.age, "author": "b1"},
+            {"bid": 2, "age": query.age, "author": "b2"}
         ]
     }
 
 
 @app.post('/book', tags=[book_tag], responses={"200": BaseResponse})
-def create_book(body: BookData):
+def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}, HTTPStatus.OK
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])
-def update_book(path: Path, body: BookData):
+def update_book(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
 @app.delete('/book/<int:bid>', tags=[book_tag])
-def delete_book(path: Path):
+def delete_book(path: BookPath):
     assert path.bid == 1
     return {"code": 0, "message": "ok"}
 

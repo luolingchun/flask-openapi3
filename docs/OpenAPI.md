@@ -123,11 +123,11 @@ Request parameter in rules，**`@app.get('/book/<int:bid>')`**.
 You have to declare path model as a class that inherits from  **`BaseModel`**:
 
 ```python
-class Path(BaseModel):
+class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
         
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
-def get_book(path: Path):
+def get_book(path: BookPath):
     ...
 ```
 
@@ -138,12 +138,12 @@ Receive flask **`resuqet.args`**.
 like path, you need pass **`query`** to view function.
 
 ```python
-class BookData(BaseModel):
+class BookQuery(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: BookPath, query: BookQuery):
     ...
 ```
 
@@ -152,13 +152,13 @@ def get_book(path: Path, query: BookData):
 Receive flask **`resuqet.form`** and **`request.files`**.
 
 ```python
-class UploadFile(BaseModel):
+class UploadFileForm(BaseModel):
     file: FileStorage # request.files["file"]
     file_type: str = Field(None, description="File type")
 
 
 @app.post('/upload')
-def upload_file(form: UploadFile):
+def upload_file(form: UploadFileForm):
     ...
 ```
 
@@ -167,12 +167,12 @@ def upload_file(form: UploadFile):
 Receive flask **`resuqet.json`**.
 
 ```python
-class BookData(BaseModel):
+class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 @app.post('/book', tags=[book_tag])
-def create_book(body: BookData):
+def create_book(body: BookBody):
     ...
 ```
 
@@ -189,7 +189,7 @@ Receive flask **`resuqet.cookies`**.
 If you want to validate response and generate **Schemas**, pass the **`responses`**.
 
 ```python
-class BookDataWithID(BaseModel):
+class BookBodyWithID(BaseModel):
     bid: int = Field(..., description='book id')
     age: Optional[int] = Field(None, ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
@@ -198,10 +198,10 @@ class BookDataWithID(BaseModel):
 class BookResponse(BaseModel):
     code: int = Field(0, description="status code")
     message: str = Field("ok", description="exception information")
-    data: BookDataWithID
+    data: BookBodyWithID
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: BookPath, query: BookBody):
     """get book
     get book by id, age or author
     """
@@ -265,7 +265,7 @@ You need add docs to the view-func. The first line is the summary, and the rest 
 
 ```python hl_lines="3 4 5 6"
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: BookPath, query: BookBody):
     """Get book
     Get some book by id, like:
     http://localhost:5000/book/3

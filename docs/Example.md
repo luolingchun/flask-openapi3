@@ -12,13 +12,13 @@ app = OpenAPI(__name__, info=info)
 book_tag = Tag(name='book', description='Some Book')
 
 
-class BookData(BaseModel):
+class BookQuery(BaseModel):
     age: int
     author: str
 
 
 @app.get('/book', tags=[book_tag])
-def get_book(query: BookData):
+def get_book(query: BookQuery):
     """get books
     get all books
     """
@@ -39,33 +39,58 @@ if __name__ == '__main__':
 ## REST Demo
 
 ```python
+from http import HTTPStatus
 from typing import Optional
 
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI
 from flask_openapi3.models import Info, Tag
-from flask_openapi3.models.security import HTTPBearer
+from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='book API', version='1.0.0')
-securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+jwt = HTTPBearer(bearerFormat="JWT")
+oauth2 = OAuth2(flows=OAuthFlows(
+    implicit=OAuthFlowImplicit(
+        authorizationUrl="https://example.com/api/oauth/dialog",
+        scopes={
+            "write:pets": "modify pets in your account",
+            "read:pets": "read your pets"
+        }
+    )))
+securitySchemes = {"jwt": jwt, "oauth2": oauth2}
 
-app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
+
+class NotFoundResponse(BaseModel):
+    code: int = Field(-1, description="Status Code")
+    message: str = Field("Resource not found!", description="Exception Information")
+
+
+app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes, responses={"404": NotFoundResponse})
 
 book_tag = Tag(name='book', description='Some Book')
-security = [{"jwt": []}]
+security = [
+    {"jwt": []},
+    {"oauth2": ["write:pets", "read:pets"]}
+]
+
+app.config["VALIDATE_RESPONSE"] = True
 
 
-class Path(BaseModel):
+class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
 
 
-class BookData(BaseModel):
+class BookQuery(BaseModel):
+    age: Optional[int] = Field(None, description='Age')
+
+
+class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
-class BookDataWithID(BaseModel):
+class BookBodyWithID(BaseModel):
     bid: int = Field(..., description='book id')
     age: Optional[int] = Field(None, ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
@@ -73,21 +98,24 @@ class BookDataWithID(BaseModel):
 
 class BookResponse(BaseModel):
     code: int = Field(0, description="Status Code")
-    message: str = Field("ok", description="Exception Message")
-    data: BookDataWithID
+    message: str = Field("ok", description="Exception Information")
+    data: Optional[BookBodyWithID]
 
 
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: BookPath):
     """Get book
     Get some book by id, like:
     http://localhost:5000/book/3
     """
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}, 522
+    if path.bid == 4:
+        return NotFoundResponse().dict(), 404
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 
-@app.get('/book', tags=[book_tag])
-def get_books(query: BookData):
+# set doc_ui False disable openapi UI
+@app.get('/book', doc_ui=False)
+def get_books(query: BookQuery):
     """get books
     get all books
     """
@@ -95,27 +123,27 @@ def get_books(query: BookData):
         "code": 0,
         "message": "ok",
         "data": [
-            {"bid": 1, "age": query.age, "author": query.author},
-            {"bid": 2, "age": query.age, "author": query.author}
+            {"bid": 1, "age": query.age, "author": 'a1'},
+            {"bid": 2, "age": query.age, "author": 'a2'}
         ]
     }
 
 
-@app.post('/book', tags=[book_tag])
-def create_book(body: BookData):
+@app.post('/book', tags=[book_tag], responses={"200": BookResponse})
+def create_book(body: BookBody):
     print(body)
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}, HTTPStatus.OK
 
 
 @app.put('/book/<int:bid>', tags=[book_tag])
-def update_book(path: Path, body: BookData):
+def update_book(path: BookPath, body: BookBody):
     print(path)
     print(body)
     return {"code": 0, "message": "ok"}
 
 
-@app.delete('/book/<int:bid>', tags=[book_tag])
-def delete_book(path: Path):
+@app.delete('/book/<int:bid>', tags=[book_tag], doc_ui=False)
+def delete_book(path: BookPath):
     print(path)
     return {"code": 0, "message": "ok"}
 
@@ -133,6 +161,7 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
 from flask_openapi3.models import Tag, Info
+from flask_openapi3.models.security import HTTPBearer
 
 info = Info(title='book API', version='1.0.0')
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
@@ -141,10 +170,26 @@ app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
 
 tag = Tag(name='book', description="Some Book")
 security = [{"jwt": []}]
-api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
 
 
-class BookData(BaseModel):
+class Unauthorized(BaseModel):
+    code: int = Field(-1, description="Status Code")
+    message: str = Field("Unauthorized!", description="Exception Information")
+
+
+api = APIBlueprint(
+    '/book',
+    __name__,
+    url_prefix='/api',
+    abp_tags=[tag],
+    abp_security=security,
+    abp_responses={"401": Unauthorized},
+    # disable openapi UI
+    doc_ui=False
+)
+
+
+class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
@@ -153,14 +198,19 @@ class Path(BaseModel):
     bid: int = Field(..., description='book id')
 
 
+@api.get('/book', doc_ui=False)
+def get_book():
+    return {"code": 0, "message": "ok"}
+
+
 @api.post('/book')
-def create_book(body: BookData):
+def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@app.put('/book/<int:bid>')
-def update_book(path: Path, body: BookData):
+@api.put('/book/<int:bid>')
+def update_book(path: Path, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
@@ -183,13 +233,13 @@ from flask_openapi3 import OpenAPI, FileStorage
 app = OpenAPI(__name__)
 
 
-class UploadFile(BaseModel):
+class UploadFileForm(BaseModel):
     file: FileStorage
     file_type: str = Field(None, description="File Type")
 
 
 @app.post('/upload')
-def upload_file(form: UploadFile):
+def upload_file(form: UploadFileForm):
     print(form.file.filename)
     print(form.file_type)
     form.file.save('test.jpg')

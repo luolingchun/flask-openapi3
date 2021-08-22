@@ -9,13 +9,13 @@ from flask_openapi3 import OpenAPI, FileStorage
 app = OpenAPI(__name__)
 
 
-class UploadFile(BaseModel):
+class UploadFileForm(BaseModel):
     file: FileStorage
     file_type: str = Field(None, description="File Type")
 
 
 @app.post('/upload')
-def upload_file(form: UploadFile):
+def upload_file(form: UploadFileForm):
     print(form.file.filename)
     print(form.file_type)
     form.file.save('test.jpg')
