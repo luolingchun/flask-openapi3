@@ -55,7 +55,7 @@ tag = Tag(name='book', description="Some Book")
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag])
 
 @api.post('/book')
-def create_book(body: BookData):
+def create_book(body: BookBody):
     ...
 ```
 
@@ -76,7 +76,7 @@ Second, add pass the **security** to your api, like this:
 
 ```python
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
-def get_book(path: Path, query: BookData):
+def get_book(path: Path, query: BookBody):
     ...
 ```
 
@@ -96,7 +96,7 @@ security = [{"jwt": []}]
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
 
 @api.post('/book')
-def create_book(body: BookData):
+def create_book(body: BookBody):
     ...
 ```
 
