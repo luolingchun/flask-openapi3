@@ -41,7 +41,8 @@
             plugins: [
                 SwaggerUIBundle.plugins.DownloadUrl
             ],
-            layout: "StandaloneLayout"
+            layout: "StandaloneLayout",
+            docExpansion: "{{ docExpansion }}"
         })
         // End Swagger UI call region
         const oauthConfig = JSON.parse('{{ oauth_config|tojson }}');
