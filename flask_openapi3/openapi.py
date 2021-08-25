@@ -301,6 +301,7 @@ class OpenAPI(Flask):
                  oauth_config: OAuthConfig = None,
                  responses: Dict[str, Type[BaseModel]] = None,
                  doc_ui: bool = True,
+                 docExpansion: str = "list",
                  **kwargs: Any
                  ) -> None:
         """
@@ -311,7 +312,11 @@ class OpenAPI(Flask):
         :param oauth_config: OAuth 2.0 configuration, see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
         :param responses: OpenAPI response model
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
-        :param kwargs:
+        :param docExpansion: String=["list"*, "full", "none"].
+        Controls the default expansion setting for the operations and tags.
+        It can be 'list' (expands only the tags), 'full' (expands the tags and operations) or 'none' (expands nothing).
+        see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
+        :param kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
 
@@ -335,6 +340,7 @@ class OpenAPI(Flask):
         self.oauth_config = oauth_config
         if doc_ui:
             self.init_doc()
+        self.docExpansion = docExpansion
 
     def init_doc(self) -> None:
         """
@@ -368,6 +374,7 @@ class OpenAPI(Flask):
             view_func=lambda: render_template(
                 "swagger.html",
                 api_doc_url=f'{self.api_name}.json',
+                docExpansion=self.docExpansion,
                 oauth_config=self.oauth_config.dict() if self.oauth_config else None
             )
         )
