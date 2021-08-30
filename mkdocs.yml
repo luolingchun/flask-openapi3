@@ -59,8 +59,11 @@ theme:
 plugins:
   - search
 
+extra_javascript:
+  - js/db.js
+
 extra_css:
-  - stylesheets/img.css
+  - css/img.css
 
 nav:
   - Home: index.md
