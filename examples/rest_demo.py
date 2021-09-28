@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2021/4/28 11:24
 from http import HTTPStatus
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -45,6 +45,7 @@ class BookPath(BaseModel):
 
 class BookQuery(BaseModel):
     age: Optional[int] = Field(None, description='Age')
+    s_list: List[str] = Field(None, alias='s_list[]', description='some array')
 
 
 class BookBody(BaseModel):
@@ -76,11 +77,12 @@ def get_book(path: BookPath):
 
 
 # set doc_ui False disable openapi UI
-@app.get('/book', doc_ui=False)
+@app.get('/book', doc_ui=True)
 def get_books(query: BookQuery):
     """get books
     get all books
     """
+    print(query)
     return {
         "code": 0,
         "message": "ok",

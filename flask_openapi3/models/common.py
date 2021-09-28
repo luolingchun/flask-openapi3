@@ -52,8 +52,17 @@ class Schema(BaseModel):
     deprecated: Optional[bool] = None
 
 
+class Encoding(BaseModel):
+    contentType: Optional[str] = None
+    # headers: Optional[Dict[str, Union["Header", Reference]]] = None
+    style: Optional[str] = None
+    explode: Optional[bool] = True
+    allowReserved: Optional[bool] = None
+
+
 class MediaType(BaseModel):
     schema_: Optional[Union[Schema, Reference]] = Field(None, alias="schema")
+    encoding: Optional[Dict[str, Encoding]] = None
 
 
 class Response(BaseModel):

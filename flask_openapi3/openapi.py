@@ -10,6 +10,7 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template, request, make_response, current_app
 from pydantic import ValidationError, BaseModel, AnyUrl
+from werkzeug.datastructures import MultiDict
 
 from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components
@@ -57,12 +58,25 @@ def _do_wrapper(
             path_ = path(**kwargs)
             kwargs_.update({"path": path_})
         if query:
-            query_ = query(**request.args.to_dict() if request.args.to_dict() is not None else {})
+            args = request.args or MultiDict()
+            args_dict = {}
+            for k, v in query.schema().get('properties', {}).items():
+                if v.get('type') == 'array':
+                    args_dict[k] = args.getlist(k)
+                else:
+                    args_dict[k] = args.get(k)
+            query_ = query(**args_dict)
             kwargs_.update({"query": query_})
         if form:
-            req_form = request.form.to_dict()
-            req_form.update(**request.files.to_dict() if request.files.to_dict() is not None else {})
-            form_ = form(**req_form if req_form is not None else {})
+            req_form = request.form or MultiDict()
+            form_dict = {}
+            for k, v in form.schema().get('properties', {}).items():
+                if v.get('type') == 'array':
+                    form_dict[k] = req_form.getlist(k)
+                else:
+                    form_dict[k] = req_form.get(k)
+            form_dict.update(**request.files.to_dict())
+            form_ = form(**form_dict)
             kwargs_.update({"form": form_})
         if body:
             body_ = body(
