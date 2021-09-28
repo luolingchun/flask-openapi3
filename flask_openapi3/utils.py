@@ -167,6 +167,11 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     if properties:
         title = schema.get('title')
         components_schemas[title] = Schema(**schema)
+        encoding = {}
+        for k, v in form.schema().get('properties', {}).items():
+            if v.get('type') == 'array':
+                encoding[k] = {'style': 'form'}
+
         content = {
             "multipart/form-data": MediaType(
                 **{
@@ -174,7 +179,8 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
                         **{
                             "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                         }
-                    )
+                    ),
+                    "encoding": encoding
                 }
             )
         }
