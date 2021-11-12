@@ -15,8 +15,8 @@ from werkzeug.datastructures import MultiDict
 from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components
 from .models.common import Reference, ExternalDocumentation
+from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
-from .plugins import OAuthConfig
 from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, validate_response
 
