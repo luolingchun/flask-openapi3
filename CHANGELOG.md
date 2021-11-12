@@ -1,3 +1,8 @@
+## v0.9.8 2021-11-12
+
+- add Configuration `docExpansion`
+- query and form add array support
+
 ## v0.9.7 2021-08-19
 
 - fix: path $ref
