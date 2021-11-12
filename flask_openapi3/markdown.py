@@ -12,7 +12,7 @@ def parse_schemas(schemas):
         required = obj.get('required', [])
         enum = obj.get('enum')
         if enum:
-            schemas_dict[name] += f"| {name} | {obj.get('type','')} | - | Enum: {', '.join(enum)} |\n"
+            schemas_dict[name] += f"| {name} | {obj.get('type', '')} | - | Enum: {', '.join(enum)} |\n"
         properties = obj.get('properties')
         if properties:
             for property_name, _property in properties.items():
