@@ -58,6 +58,8 @@ theme:
 
 plugins:
   - search
+  - mkdocstrings
+
 
 extra_javascript:
   - js/db.js
@@ -70,6 +72,20 @@ nav:
   - Quickstart: Quickstart.md
   - OpenAPI: OpenAPI.md
   - Example: Example.md
+  - API Reference:
+      - OpenAPI: Reference/OpenAPI.md
+      - APIBlueprint: Reference/APIBlueprint.md
+      - Model:
+        - APISpec: Reference/Model/APISpec.md
+        - common: Reference\Model\common.md
+        - component: Reference\Model\component.md
+        - file: Reference\Model\file.md
+        - oauth: Reference\Model\oauth.md
+        - parameter: Reference\Model\parameter.md
+        - path: Reference\Model\path.md
+        - security: Reference\Model\security.md
+        - tag: Reference\Model\tag.md
+        - validation_error: Reference\Model\validation_error.md
   - LICENSE: LICENSE.md
   - Changelog: Changelog.md
 
