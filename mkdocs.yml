@@ -42,12 +42,10 @@ theme:
       scheme: default
       toggle:
         icon: material/weather-sunny
-        name: Switch to dark
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       toggle:
         icon: material/weather-night
-        name: Switch to light
   features:
     - navigation.tracking
     - navigation.top
@@ -56,9 +54,33 @@ theme:
     - search.highlight
     - search.share
 
+extra:
+  alternate:
+    - name: English
+      link: ./en/
+      lang: en
+    - name: 简体中文
+      link: ./zh/
+      lang: zh
+
 plugins:
   - search
   - mkdocstrings
+  - i18n:
+      default_language: en
+      default_language_only: false
+      languages:
+        en: English
+        zh: 简体中文
+      nav_translations:
+        zh:
+          Home: 简介
+          Quickstart: 快速开始
+          OpenAPI: OpenAPI
+          Example: 示例
+          API Reference: API 参考
+          LICENSE: 许可
+          Changelog: 更新日志
 
 
 extra_javascript:
