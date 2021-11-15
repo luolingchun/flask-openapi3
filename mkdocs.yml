@@ -51,7 +51,7 @@ theme:
   features:
     - navigation.tracking
     - navigation.top
-    - navigation.expand
+#    - navigation.expand
     - search.suggest
     - search.highlight
     - search.share
