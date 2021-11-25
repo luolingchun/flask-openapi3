@@ -19,7 +19,7 @@ flask-openapi3 be dependent on the following libraries:
 ## Installation
 
 ```bash
-$ pip install -U flask-openapi3
+pip install -U flask-openapi3
 ```
 
 ## A Simple Example
