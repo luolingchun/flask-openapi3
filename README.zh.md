@@ -11,20 +11,20 @@
 
 Python 3.6+
 
-flask-openapi3 依赖以下库:
+flask-openapi3 依赖以下库：
 
-- [Flask](https://github.com/pallets/flask)：用于WEB服务；
-- [Pydantic](https://github.com/samuelcolvin/pydantic)：用于数据验证。
+- [Flask](https://github.com/pallets/flask)：用于WEB服务
+- [Pydantic](https://github.com/samuelcolvin/pydantic)：用于数据验证
 
 ## 安装
 
 ```bash
-$ pip install -U flask-openapi3
+pip install -U flask-openapi3
 ```
 
 ## 一个简单的示例
 
-这里有一个简单的示例，更多示例请查看[文档](https://luolingchun.github.io/flask-openapi3/zh/Example/)
+这里有一个简单的示例，更多示例请查看[示例](https://luolingchun.github.io/flask-openapi3/zh/Example/)。
 
 ```python
 from pydantic import BaseModel
@@ -64,9 +64,9 @@ if __name__ == '__main__':
 
 ## API 文档
 
-运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问 http://127.0.0.1:5000/openapi.
+运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问 http://127.0.0.1:5000/openapi。
 
-你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui) 和 [Redoc](https://github.com/Redocly/redoc).
+你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui) 和 [Redoc](https://github.com/Redocly/redoc)。
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
