@@ -1,4 +1,4 @@
-**`flask_openapi3`** 基于 [Flask](https://github.com/pallets/flask/) 和 [pydantic](https://github.com/samuelcolvin/pydantic)，因此你可以像使用Flask一样使用它。
+**`flask_openapi3`** 基于 [Flask](https://github.com/pallets/flask/) 和 [pydantic](https://github.com/samuelcolvin/pydantic)，因此你可以像使用Flask一样使用 **`flask_openapi3`**。
 
 ## 最小应用
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
 ```shell
 python hello.py
 ```
-你将会看到输出。
+你将会看到输出：
 
 ```
   __ _           _                                             _  _____
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
 ## APIBlueprint
 
-APIBlueprint 基于 [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint)，你应该使用 **`app.register_api`** 来代替 **`app.register_blueprint`**.
+APIBlueprint 基于 [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint)，你应该使用 **`app.register_api`** 来代替 **`app.register_blueprint`**。
 
 ```python hl_lines="14"
 from flask_openapi3 import OpenAPI

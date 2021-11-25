@@ -24,7 +24,7 @@ And then run it:
 ```shell
 python hello.py
 ```
-You will see the output.
+You will see the output:
 
 ```
   __ _           _                                             _  _____

@@ -133,9 +133,15 @@ def get_book(path: BookPath):
 
 ### query
 
-Receive flask **`resuqet.args`**.
+Receive flask **`request.args`**.
 
-like path, you need pass **`query`** to view function.
+!!! info
+    
+    ```python
+    from flask import request
+    ```
+
+like [path](#path), you need pass **`query`** to view function.
 
 ```python
 class BookQuery(BaseModel):
@@ -149,7 +155,7 @@ def get_book(path: BookPath, query: BookQuery):
 
 ### form 
 
-Receive flask **`resuqet.form`** and **`request.files`**.
+Receive flask **`request.form`** and **`request.files`**.
 
 ```python
 class UploadFileForm(BaseModel):
@@ -164,7 +170,7 @@ def upload_file(form: UploadFileForm):
 
 ### body
 
-Receive flask **`resuqet.json`**.
+Receive flask **`request.json`**.
 
 ```python
 class BookBody(BaseModel):
@@ -178,11 +184,11 @@ def create_book(body: BookBody):
 
 ### header
 
-Receive flask **`resuqet.headers`**.
+Receive flask **`request.headers`**.
 
 ### cookie
 
-Receive flask **`resuqet.cookies`**.
+Receive flask **`request.cookies`**.
 
 ## Response validate
 
