@@ -5,8 +5,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import Info
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info
 
 app = OpenAPI(
     __name__,

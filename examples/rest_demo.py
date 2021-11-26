@@ -6,8 +6,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info, Tag
 from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='book API', version='1.0.0')

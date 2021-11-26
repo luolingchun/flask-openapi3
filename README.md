@@ -29,8 +29,8 @@ Here's a simple example, further go to the [Example](https://luolingchun.github.
 ```python
 from pydantic import BaseModel
 
+from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info, Tag
 
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
@@ -64,9 +64,11 @@ if __name__ == '__main__':
 
 ## API docs
 
-Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
+Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go
+to http://127.0.0.1:5000/openapi.
 
-You will see the document: [Swagger UI](https://github.com/swagger-api/swagger-ui) and [Redoc](https://github.com/Redocly/redoc).
+You will see the document: [Swagger UI](https://github.com/swagger-api/swagger-ui)
+and [Redoc](https://github.com/Redocly/redoc).
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
