@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2021/6/21 11:23
 from flask_openapi3 import OpenAPI, OAuthConfig
-from flask_openapi3.models import Info
+from flask_openapi3 import Info
 from flask_openapi3.models.security import OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='oauth API', version='1.0.0')

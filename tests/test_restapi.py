@@ -7,9 +7,9 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import HTTPBearer
+from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info, Tag
-from flask_openapi3.models.security import HTTPBearer
 
 info = Info(title='book API', version='1.0.0')
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}

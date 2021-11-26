@@ -1,18 +1,18 @@
-**`flask-openapi3`** provide [Swagger](https://swagger.io) and [ReDoc](https://redocly.github.io/redoc/) reference documentation. Before this, you should Learn something about OpenAPI [spec](https://spec.openapis.org/oas/v3.0.3). 
+**`flask-openapi3`** provide [Swagger](https://swagger.io) and [ReDoc](https://redocly.github.io/redoc/) reference
+documentation. Before this, you should Learn something about OpenAPI [spec](https://spec.openapis.org/oas/v3.0.3).
 
 ## Info
 
-You must import **`Info`** from **`flask-openapi3.models.info`**, it needs some parameters: **`title`**, **`version`** ... , more information see the [OpenAPI Specification info-object](https://spec.openapis.org/oas/v3.0.3#info-object).
+You must import **`Info`** from **`flask-openapi3.models.info`**, it needs some parameters: **`title`**, **`version`**
+... , more information see the [OpenAPI Specification info-object](https://spec.openapis.org/oas/v3.0.3#info-object).
 
 ```python
-from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info
-
+from flask_openapi3 import Info
+from flask_openapi3 import OpenAPI, APIBlueprint
 
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
 api = APIBlueprint('/book', __name__, url_prefix='/api')
-
 
 if __name__ == '__main__':
     app.run()
@@ -54,6 +54,7 @@ tag = Tag(name='book', description="Some Book")
 
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag])
 
+
 @api.post('/book')
 def create_book(body: BookBody):
     ...
@@ -61,7 +62,8 @@ def create_book(body: BookBody):
 
 ## securitySchemes
 
-like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3.models.security`**, more features see the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
+like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3.models.security`**, more features see
+the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
 
 First, you need define the **securitySchemes**  and **security** variable:
 
@@ -95,6 +97,7 @@ tag = Tag(name='book', description="Some Book")
 security = [{"jwt": []}]
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag], abp_security=security)
 
+
 @api.post('/book')
 def create_book(body: BookBody):
     ...
@@ -104,9 +107,11 @@ def create_book(body: BookBody):
 
 *New in v0.9.4*
 
-You can pass `oauth_config` when initializing `OpenAPI`. see the [demo](https://github.com/luolingchun/flask-openapi3/blob/master/examples/init_oauth_demo.py)
+You can pass `oauth_config` when initializing `OpenAPI`. see
+the [demo](https://github.com/luolingchun/flask-openapi3/blob/master/examples/init_oauth_demo.py)
 
-Here's more information about [OAuth 2.0 configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md)
+Here's more information
+about [OAuth 2.0 configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md)
 
 ## Request validate
 
@@ -125,7 +130,8 @@ You have to declare path model as a class that inherits from  **`BaseModel`**:
 ```python
 class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
-        
+
+
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
 def get_book(path: BookPath):
     ...
@@ -136,7 +142,7 @@ def get_book(path: BookPath):
 Receive flask **`request.args`**.
 
 !!! info
-    
+
     ```python
     from flask import request
     ```
@@ -148,18 +154,19 @@ class BookQuery(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
+
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
 def get_book(path: BookPath, query: BookQuery):
     ...
 ```
 
-### form 
+### form
 
 Receive flask **`request.form`** and **`request.files`**.
 
 ```python
 class UploadFileForm(BaseModel):
-    file: FileStorage # request.files["file"]
+    file: FileStorage  # request.files["file"]
     file_type: str = Field(None, description="File type")
 
 
@@ -176,6 +183,7 @@ Receive flask **`request.json`**.
 class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
+
 
 @app.post('/book', tags=[book_tag])
 def create_book(body: BookBody):
@@ -206,6 +214,7 @@ class BookResponse(BaseModel):
     message: str = Field("ok", description="exception information")
     data: BookBodyWithID
 
+
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
 def get_book(path: BookPath, query: BookBody):
     """get book
@@ -213,9 +222,11 @@ def get_book(path: BookPath, query: BookBody):
     """
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
 ```
+
 *New in v0.9.5*
 
-By default, the `VALIDATE_RESPONSE` environment variable is `False`. You can set it `True` to validate responses in the development environment.
+By default, the `VALIDATE_RESPONSE` environment variable is `False`. You can set it `True` to validate responses in the
+development environment.
 
 !!! warning
 

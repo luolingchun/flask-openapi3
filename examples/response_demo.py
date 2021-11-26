@@ -6,9 +6,10 @@ import json
 from http import HTTPStatus
 
 from flask import make_response
-from flask_openapi3 import OpenAPI, APIBlueprint
-from flask_openapi3.models import Info
 from pydantic import BaseModel, Field
+
+from flask_openapi3 import Info
+from flask_openapi3 import OpenAPI, APIBlueprint
 
 app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"), )
 

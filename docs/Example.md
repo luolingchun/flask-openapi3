@@ -3,8 +3,8 @@
 ```python
 from pydantic import BaseModel
 
+from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info, Tag
 
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
@@ -44,8 +44,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import Info, Tag
 from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='book API', version='1.0.0')
@@ -160,8 +160,8 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3.models import Tag, Info
-from flask_openapi3.models.security import HTTPBearer
+from flask_openapi3 import HTTPBearer
+from flask_openapi3 import Tag, Info
 
 info = Info(title='book API', version='1.0.0')
 securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
