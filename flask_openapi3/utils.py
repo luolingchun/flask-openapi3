@@ -50,6 +50,7 @@ def get_func_parameter(func: Callable, arg_name='path') -> Type[BaseModel]:
     """
     signature = inspect.signature(func)
     p = signature.parameters.get(arg_name)
+
     return p.annotation if p else None
 
 
@@ -57,6 +58,7 @@ def get_schema(obj: Type[BaseModel]) -> dict:
     """Pydantic model conversion to openapi schema"""
     assert inspect.isclass(obj) and \
            issubclass(obj, BaseModel), f"{obj} is invalid `pydantic.BaseModel`"
+
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
 
@@ -81,6 +83,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -105,6 +108,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -129,6 +133,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -153,6 +158,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -187,6 +193,9 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
+    assert content is not None, f"{form.__name__}'s properties cannot be empty."
+
     return content, components_schemas
 
 
@@ -215,6 +224,24 @@ def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     if definitions:
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
+
+    if content is None:
+        print("Warning: "
+              f"{body.__name__}'s properties is empty, and"
+              f"{body.__name__}'s schema is set to object.")
+
+        content = {
+            "application/json": MediaType(
+                **{
+                    "schema": Schema(
+                        **{
+                            "type": "object"
+                        }
+                    )
+                }
+            )
+        }
+
     return content, components_schemas
 
 
