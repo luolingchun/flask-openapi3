@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/6 16:38
+from __future__ import annotations
 from http import HTTPStatus
 from typing import Optional
 

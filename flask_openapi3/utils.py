@@ -4,10 +4,11 @@
 
 import inspect
 from http import HTTPStatus
-from typing import Dict, Type, Callable, List, Tuple, Any
+from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
 
 from flask import Response as _Response
 from pydantic import BaseModel
+import pydantic.typing
 from werkzeug.routing import parse_rule
 
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
@@ -44,20 +45,23 @@ def get_operation(func: Callable) -> Operation:
     return operation
 
 
-def get_func_parameter(func: Callable, arg_name='path') -> Type[BaseModel]:
+def get_func_parameter(func: Callable, func_globals: Dict[str, Any], arg_name='path') -> Type[BaseModel]:
     """Get view-func parameters.
     arg_name has six parameters to choose from: path, query, form, body, header, cookie.
     """
     signature = inspect.signature(func)
-    p = signature.parameters.get(arg_name)
-
-    return p.annotation if p else None
+    param = signature.parameters.get(arg_name)
+    annotation = param.annotation if param else None
+    if isinstance(annotation, str):
+        annotation = ForwardRef(annotation)
+        annotation = pydantic.typing.evaluate_forwardref(annotation, func_globals, func_globals)
+    return annotation
 
 
 def get_schema(obj: Type[BaseModel]) -> dict:
     """Pydantic model conversion to openapi schema"""
     assert inspect.isclass(obj) and \
-           issubclass(obj, BaseModel), f"{obj} is invalid `pydantic.BaseModel`"
+           issubclass(obj, BaseModel), f"{obj}{type(obj)} is invalid `pydantic.BaseModel`"
 
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
@@ -370,13 +374,17 @@ def parse_parameters(
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
+    func_globals = getattr(func, '__globals__', {})
+    # extra globals used in decorator(wrapper) for func, wrapper.__extra_globals__ = getattr(func, '__globals__', {})
+    func_globals.update(**getattr(func, '__extra_globals__', {}))
+
     parameters = []
-    header = get_func_parameter(func, 'header')
-    cookie = get_func_parameter(func, 'cookie')
-    path = get_func_parameter(func, 'path')
-    query = get_func_parameter(func, 'query')
-    form = get_func_parameter(func, 'form')
-    body = get_func_parameter(func, 'body')
+    header = get_func_parameter(func, func_globals, 'header')
+    cookie = get_func_parameter(func, func_globals, 'cookie')
+    path = get_func_parameter(func, func_globals, 'path')
+    query = get_func_parameter(func, func_globals, 'query')
+    form = get_func_parameter(func, func_globals, 'form')
+    body = get_func_parameter(func, func_globals, 'body')
     if doc_ui is False:
         return header, cookie, path, query, form, body
     if header:
