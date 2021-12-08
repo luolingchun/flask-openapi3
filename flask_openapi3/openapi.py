@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/30 14:25
-import inspect
 import json
 import os
 from copy import deepcopy
@@ -93,15 +92,8 @@ def _do_wrapper(
         resp.status_code = 422
         return resp
 
-    # region make Cython happy
-    args = []
-    signature = inspect.signature(func)
-    for param in signature.parameters:
-        args.append(kwargs_.get(param))
-    # endregion
-
     # handle request
-    resp = func(*args)
+    resp = func(**kwargs_)
 
     validate_resp = current_app.config.get("VALIDATE_RESPONSE", False)
     if validate_resp and responses:
