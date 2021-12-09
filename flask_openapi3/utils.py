@@ -6,9 +6,9 @@ import inspect
 from http import HTTPStatus
 from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
 
+import pydantic.typing
 from flask import Response as _Response
 from pydantic import BaseModel
-import pydantic.typing
 from werkzeug.routing import parse_rule
 
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
@@ -53,6 +53,7 @@ def get_func_parameter(func: Callable, func_globals: Dict[str, Any], arg_name='p
     param = signature.parameters.get(arg_name)
     annotation = param.annotation if param else None
     if isinstance(annotation, str):
+        # PEP563
         annotation = ForwardRef(annotation)
         annotation = pydantic.typing.evaluate_forwardref(annotation, func_globals, func_globals)
     return annotation
@@ -376,7 +377,7 @@ def parse_parameters(
     """
     func_globals = getattr(func, '__globals__', {})
     # extra globals used in decorator(wrapper) for func, wrapper.__extra_globals__ = getattr(func, '__globals__', {})
-    func_globals.update(**getattr(func, '__extra_globals__', {}))
+    func_globals.update(**getattr(func, '__extra_globals__', {}))  # noqa
 
     parameters = []
     header = get_func_parameter(func, func_globals, 'header')

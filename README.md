@@ -9,7 +9,7 @@ Generate RESTful API and OpenAPI document for your Flask project.
 
 ## Requirements
 
-Python 3.6+
+Python 3.7+
 
 flask-openapi3 be dependent on the following libraries:
 

@@ -9,7 +9,7 @@
 
 ## 依赖
 
-Python 3.6+
+Python =3.7+
 
 flask-openapi3 依赖以下库：
 
