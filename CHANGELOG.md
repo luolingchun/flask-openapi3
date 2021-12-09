@@ -1,4 +1,4 @@
-## v0.9.8 2021-12-09
+## v0.9.9 2021-12-09
 
 - fix: default value in query and form model
 - fix: empty form and body
