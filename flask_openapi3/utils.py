@@ -250,9 +250,15 @@ def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     return content, components_schemas
 
 
-def get_responses(responses: dict, components_schemas: dict, operation: Operation) -> None:
+def get_responses(
+        responses: dict,
+        extra_responses: Dict[str, dict],
+        components_schemas: dict,
+        operation: Operation
+) -> None:
     """
     :param responses: Dict[str, BaseModel]
+    :param extra_responses: Dict[str, dict]
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     """
@@ -277,8 +283,9 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
             }
         )
         _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
-    if not responses.get("500"):
-        _responses["500"] = Response(description=HTTP_STATUS["500"])
+    # if not responses.get("500"):
+    #     _responses["500"] = Response(description=HTTP_STATUS["500"])
+    # handle extra_responses
     for key, response in responses.items():
         assert inspect.isclass(response) and \
                issubclass(response, BaseModel), f" {response} is invalid `pydantic.BaseModel`"
@@ -302,13 +309,26 @@ def get_responses(responses: dict, components_schemas: dict, operation: Operatio
         if definitions:
             for name, value in definitions.items():
                 _schemas[name] = Schema(**value)
+    # handle extra_responses
+    for key, value in extra_responses.items():
+        # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}
+        extra_content = value.get('content', {})
+        if extra_content:
+            # {"text/csv":{"schema":{"type": "string"}}}
+            if _responses.get(key) and isinstance(extra_content, dict):
+                _responses[key].content.update(**extra_content) # noqa
+            else:
+                _responses[key] = Response(
+                    description=HTTP_STATUS.get(key, ""),
+                    content=extra_content
+                )
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
 
 
-def validate_responses_type(responses: Dict[str, Type[BaseModel]]) -> None:
-    assert isinstance(responses, dict), "invalid `dict`"
+def validate_responses_type(responses: Dict[str, Any]) -> None:
+    assert isinstance(responses, dict), f"{responses} invalid `dict`"
 
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:

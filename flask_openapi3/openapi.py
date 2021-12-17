@@ -144,6 +144,7 @@ class APIBlueprint(Blueprint):
             func: Callable,
             tags: List[Tag] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True,
             method: str = 'get'
@@ -156,6 +157,7 @@ class APIBlueprint(Blueprint):
         :param func: flask view_func
         :param tags: api tag
         :param responses: response model
+        :param extra_responses: extra responses dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param method: api method
@@ -164,8 +166,11 @@ class APIBlueprint(Blueprint):
         if self.doc_ui is True and doc_ui is True:
             if responses is None:
                 responses = {}
+            if extra_responses is None:
+                extra_responses = {}
             validate_responses_type(responses)
             validate_responses_type(self.abp_responses)
+            validate_responses_type(extra_responses)
             # global response combine api responses
             combine_responses = deepcopy(self.abp_responses)
             combine_responses.update(**responses)
@@ -181,7 +186,7 @@ class APIBlueprint(Blueprint):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
             # parse response
-            get_responses(combine_responses, self.components_schemas, operation)
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             uri = _parse_rule(rule)
             # merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
@@ -200,6 +205,7 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -207,7 +213,7 @@ class APIBlueprint(Blueprint):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui)
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui)
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -226,6 +232,7 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -233,7 +240,7 @@ class APIBlueprint(Blueprint):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="post")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="post")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -252,6 +259,7 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -259,7 +267,7 @@ class APIBlueprint(Blueprint):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="put")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="put")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -278,6 +286,7 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -285,7 +294,7 @@ class APIBlueprint(Blueprint):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="delete")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="delete")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -304,6 +313,7 @@ class APIBlueprint(Blueprint):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ):
@@ -311,7 +321,7 @@ class APIBlueprint(Blueprint):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="patch")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="patch")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -473,6 +483,7 @@ class OpenAPI(Flask):
             func: Callable,
             tags: List[Tag] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True,
             method: str = 'get'
@@ -485,6 +496,7 @@ class OpenAPI(Flask):
         :param func: flask view_func
         :param tags: api tag
         :param responses: response model
+        :param extra_responses: extra responses dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param method: api method
@@ -493,8 +505,11 @@ class OpenAPI(Flask):
         if doc_ui is True:
             if responses is None:
                 responses = {}
+            if extra_responses is None:
+                extra_responses = {}
             validate_responses_type(responses)
             validate_responses_type(self.responses)
+            validate_responses_type(extra_responses)
             # global response combine api responses
             combine_responses = deepcopy(self.responses)
             combine_responses.update(**responses)
@@ -507,7 +522,7 @@ class OpenAPI(Flask):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
             # parse response
-            get_responses(combine_responses, self.components_schemas, operation)
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             uri = _parse_rule(rule)
             # parse method
             parse_method(uri, method, self.paths, operation)
@@ -522,6 +537,7 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -529,7 +545,7 @@ class OpenAPI(Flask):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui)
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui)
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -548,6 +564,7 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -555,7 +572,7 @@ class OpenAPI(Flask):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="post")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="post")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -574,6 +591,7 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -581,7 +599,7 @@ class OpenAPI(Flask):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="put")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="put")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -600,6 +618,7 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -607,7 +626,7 @@ class OpenAPI(Flask):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="delete")
+                self._do_decorator(rule, func, tags, responses, extra_responses, security, doc_ui, method="delete")
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -626,6 +645,7 @@ class OpenAPI(Flask):
             rule: str,
             tags: Optional[List[Tag]] = None,
             responses: Dict[str, Type[BaseModel]] = None,
+            extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
             doc_ui: bool = True
     ) -> Callable:
@@ -633,7 +653,7 @@ class OpenAPI(Flask):
 
         def decorator(func):
             header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, responses, security, doc_ui, method="patch")
+                self._do_decorator(rule, func, tags, responses, security, extra_responses, doc_ui, method="patch")
 
             @wraps(func)
             def wrapper(**kwargs):
