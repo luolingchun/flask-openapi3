@@ -65,7 +65,13 @@ class BookResponse(BaseModel):
     data: Optional[BookBodyWithID]
 
 
-@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+@app.get(
+    '/book/<int:bid>',
+    tags=[book_tag],
+    responses={"200": BookResponse},
+    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    security=security
+)
 def get_book(path: BookPath):
     """Get book
     Get some book by id, like:

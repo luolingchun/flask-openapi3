@@ -32,7 +32,7 @@ api = APIBlueprint(
     abp_security=security,
     abp_responses={"401": Unauthorized},
     # disable openapi UI
-    doc_ui=False
+    doc_ui=True
 )
 
 
@@ -50,7 +50,7 @@ def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book')
+@api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
