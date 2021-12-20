@@ -92,7 +92,15 @@ extra_css:
 nav:
   - Home: index.md
   - Quickstart: Quickstart.md
-  - OpenAPI: OpenAPI.md
+  - OpenAPI:
+      - Info: OpenAPI/Info.md
+      - Tag: OpenAPI/Tag.md
+      - SecuritySchemes: OpenAPI/SecuritySchemes.md
+      - OAuth: OpenAPI/OAuth.md
+      - Request: OpenAPI/Request.md
+      - Response: OpenAPI/Response.md
+      - Summary and Description: OpenAPI/Summary and Description.md
+      - Specification: OpenAPI/Specification.md
   - Example: Example.md
   - API Reference:
       - OpenAPI: Reference/OpenAPI.md
