@@ -19,8 +19,8 @@ from .models.validation_error import UnprocessableEntity
 from .status import HTTP_STATUS
 
 
-def _parse_rule(rule: str) -> str:
-    """Flask route conversion to openapi:
+def get_openapi_path(rule: str) -> str:
+    """Flask route conversion to openapi path:
     /pet/<petId> --> /pet/{petId}
     """
     uri = ''
