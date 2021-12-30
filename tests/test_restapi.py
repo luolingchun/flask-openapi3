@@ -2,6 +2,7 @@
 # @Author  : llc
 # @Time    : 2021/5/6 16:38
 from __future__ import annotations
+
 from http import HTTPStatus
 from typing import Optional
 
@@ -66,7 +67,13 @@ def client():
     return client
 
 
-@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+@app.get(
+    '/book/<int:bid>',
+    tags=[book_tag],
+    responses={"200": BookResponse},
+    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    security=security
+)
 def get_book(path: BookPath):
     """Get book
     Get some book by id, like:
@@ -115,6 +122,7 @@ def delete_book(path: BookPath):
 
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
+    print(resp.json)
     assert resp.status_code == 200
     assert resp.json == app.api_doc
 
