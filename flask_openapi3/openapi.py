@@ -17,7 +17,7 @@ from .models import Info, APISpec, Tag, Components
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
-from .utils import _parse_rule, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
+from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, validate_response
 
 
@@ -194,7 +194,7 @@ class APIBlueprint(Blueprint):
             header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
-            uri = _parse_rule(rule)
+            uri = get_openapi_path(rule)
             # merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
             # strip the right slash
@@ -541,7 +541,7 @@ class OpenAPI(Flask):
             header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
-            uri = _parse_rule(rule)
+            uri = get_openapi_path(rule)
             # parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body, combine_responses
