@@ -52,10 +52,9 @@ def _do_wrapper(
             request_headers = dict(request.headers) if request.headers is not None else {}
             for key, value in header.__annotations__.items():
                 ket_title = key.title()
-                # add key and delete key title
+                # add original key
                 if ket_title in request_headers.keys():
                     request_headers[key] = request_headers[ket_title]
-                    request_headers.pop(ket_title)
             header_ = header(**request_headers)
             kwargs_.update({"header": header_})
         if cookie:
