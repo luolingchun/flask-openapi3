@@ -68,6 +68,8 @@ class BookResponse(BaseModel):
 @app.get(
     '/book/<int:bid>',
     tags=[book_tag],
+    summary='new summary',
+    description='new description',
     responses={"200": BookResponse},
     extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security

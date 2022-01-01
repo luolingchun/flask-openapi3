@@ -32,14 +32,19 @@ def get_openapi_path(rule: str) -> str:
     return uri
 
 
-def get_operation(func: Callable) -> Operation:
+def get_operation(func: Callable, summary: str = None, description: str = None) -> Operation:
     """Return a Operation object with summary and description."""
     doc = inspect.getdoc(func) or ''
     doc = doc.strip()
     lines = doc.split('\n')
+    doc_summary = lines[0] or None
+    if summary is None:
+        doc_description = lines[0] if len(lines) == 0 else '</br>'.join(lines[1:]) or None
+    else:
+        doc_description = '</br>'.join(lines) or None
     operation = Operation(
-        summary=lines[0] or None,
-        description=lines[0] if len(lines) == 0 else '</br>'.join(lines[1:]) or None
+        summary=summary or doc_summary,
+        description=description or doc_description
     )
 
     return operation
@@ -316,7 +321,7 @@ def get_responses(
         if extra_content:
             # {"text/csv":{"schema":{"type": "string"}}}
             if _responses.get(key) and isinstance(extra_content, dict):
-                _responses[key].content.update(**extra_content) # noqa
+                _responses[key].content.update(**extra_content)  # noqa
             else:
                 _responses[key] = Response(
                     description=HTTP_STATUS.get(key, ""),
