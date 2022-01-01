@@ -113,9 +113,10 @@ class APIBlueprint(Blueprint):
             self,
             name: str,
             import_name: str,
-            abp_tags: List[Tag] = None,
-            abp_security: List[Dict[str, List[str]]] = None,
-            abp_responses: Dict[str, Type[BaseModel]] = None,
+            *,
+            abp_tags: Optional[List[Tag]] = None,
+            abp_security: Optional[List[Dict[str, List[str]]]] = None,
+            abp_responses: Optional[Dict[str, Type[BaseModel]]] = None,
             doc_ui: bool = True,
             **kwargs: Any
     ):
@@ -209,10 +210,11 @@ class APIBlueprint(Blueprint):
     def get(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['GET'])"""
@@ -236,10 +238,11 @@ class APIBlueprint(Blueprint):
     def post(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['POST'])"""
@@ -263,10 +266,11 @@ class APIBlueprint(Blueprint):
     def put(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
@@ -290,10 +294,11 @@ class APIBlueprint(Blueprint):
     def delete(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
@@ -317,10 +322,11 @@ class APIBlueprint(Blueprint):
     def patch(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
@@ -345,10 +351,11 @@ class APIBlueprint(Blueprint):
 class OpenAPI(Flask):
     def __init__(self,
                  import_name: str,
-                 info: Info = None,
+                 *,
+                 info: Optional[Info] = None,
                  securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
-                 oauth_config: OAuthConfig = None,
-                 responses: Dict[str, Type[BaseModel]] = None,
+                 oauth_config: Optional[OAuthConfig] = None,
+                 responses: Optional[Dict[str, Type[BaseModel]]] = None,
                  doc_ui: bool = True,
                  docExpansion: str = "list",
                  **kwargs: Any
@@ -552,10 +559,11 @@ class OpenAPI(Flask):
     def get(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
@@ -579,10 +587,11 @@ class OpenAPI(Flask):
     def post(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
@@ -606,10 +615,11 @@ class OpenAPI(Flask):
     def put(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
@@ -633,10 +643,11 @@ class OpenAPI(Flask):
     def delete(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
@@ -660,10 +671,11 @@ class OpenAPI(Flask):
     def patch(
             self,
             rule: str,
+            *,
             tags: Optional[List[Tag]] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            extra_responses: Optional[Dict[str, dict]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
