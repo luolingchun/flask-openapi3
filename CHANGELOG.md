@@ -1,3 +1,12 @@
+## v1.0.0 2022-??-??
+
+- Add keyword parameters `summary` and `description`
+- [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thinks @blynn99
+- [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thinks @rrr34
+- Upgrade swagger UI v4.1.3
+- Upgrade Redoc v2.0.0-rc.59
+- Add rapidoc
+
 ## v0.9.9 2021-12-09
 
 - fix: default value in query and form model
@@ -27,11 +36,13 @@
 
 - OpenAPI add responses and APIBlueprint add abp_responses
 - fix: validate response error when responses is empty dict
-- [#3](https://github.com/luolingchun/flask-openapi3/issues/3) endpoint and APIBlueprint add `doc_ui`. Thinks @DerManoMann 
-- [#4](https://github.com/luolingchun/flask-openapi3/issues/4) fix: response description. Thinks @DerManoMann 
-- [#5](https://github.com/luolingchun/flask-openapi3/issues/5) add custom parameter `oauth_config`. Thinks @DerManoMann 
-- [#6](https://github.com/luolingchun/flask-openapi3/issues/6) support validation Flask Response. Thinks @DerManoMann 
-- [#7](https://github.com/luolingchun/flask-openapi3/issues/7) fix: response validation does not work when uses http.HTTPStatus enums as status_code. Thinks @DerManoMann 
+- [#3](https://github.com/luolingchun/flask-openapi3/issues/3) endpoint and APIBlueprint add `doc_ui`. Thinks
+  @DerManoMann
+- [#4](https://github.com/luolingchun/flask-openapi3/issues/4) fix: response description. Thinks @DerManoMann
+- [#5](https://github.com/luolingchun/flask-openapi3/issues/5) add custom parameter `oauth_config`. Thinks @DerManoMann
+- [#6](https://github.com/luolingchun/flask-openapi3/issues/6) support validation Flask Response. Thinks @DerManoMann
+- [#7](https://github.com/luolingchun/flask-openapi3/issues/7) fix: response validation does not work when uses
+  http.HTTPStatus enums as status_code. Thinks @DerManoMann
 
 ## v0.9.3 2021-06-08
 
@@ -46,7 +57,7 @@
 
 ## v0.9.1 2021-05-16
 
-- fix：request data is None 
+- fix：request data is None
 - json-->body
 - set 422 Content-Type application/json
 - raise response validate exception
