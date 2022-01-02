@@ -23,6 +23,7 @@ from .utils import get_openapi_path, get_operation, get_responses, parse_and_sto
 
 def _do_wrapper(
         func: Callable,
+        *,
         responses: Dict[str, Type[BaseModel]] = None,
         header: Type[BaseModel] = None,
         cookie: Type[BaseModel] = None,
@@ -149,6 +150,7 @@ class APIBlueprint(Blueprint):
             self,
             rule: str,
             func: Callable,
+            *,
             tags: List[Tag] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
@@ -184,7 +186,7 @@ class APIBlueprint(Blueprint):
             combine_responses = deepcopy(self.abp_responses)
             combine_responses.update(**responses)
             # create operation
-            operation = get_operation(func, summary, description)
+            operation = get_operation(func, summary=summary, description=description)
             # add security
             if security is None:
                 security = []
@@ -193,7 +195,8 @@ class APIBlueprint(Blueprint):
             tags = tags + self.abp_tags if tags else self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
-            header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
+            header, cookie, path, query, form, body = \
+                parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             uri = get_openapi_path(rule)
@@ -224,12 +227,33 @@ class APIBlueprint(Blueprint):
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui)
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='get'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["GET"]}
@@ -254,13 +278,33 @@ class APIBlueprint(Blueprint):
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="post")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='post'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["POST"]}
@@ -285,13 +329,33 @@ class APIBlueprint(Blueprint):
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="put")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='put'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["PUT"]}
@@ -316,13 +380,33 @@ class APIBlueprint(Blueprint):
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="delete")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='delete'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["DELETE"]}
@@ -347,9 +431,19 @@ class APIBlueprint(Blueprint):
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="patch")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='patch'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
@@ -521,6 +615,7 @@ class OpenAPI(Flask):
             self,
             rule: str,
             func: Callable,
+            *,
             tags: List[Tag] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
@@ -556,13 +651,14 @@ class OpenAPI(Flask):
             combine_responses = deepcopy(self.responses)
             combine_responses.update(**responses)
             # create operation
-            operation = get_operation(func, summary, description)
+            operation = get_operation(func, summary=summary, description=description)
             # add security
             operation.security = security
             # store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
-            header, cookie, path, query, form, body = parse_parameters(func, self.components_schemas, operation)
+            header, cookie, path, query, form, body = \
+                parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             uri = get_openapi_path(rule)
@@ -589,12 +685,33 @@ class OpenAPI(Flask):
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui)
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='get'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["GET"]}
@@ -619,13 +736,33 @@ class OpenAPI(Flask):
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="post")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='post'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["POST"]}
@@ -650,13 +787,33 @@ class OpenAPI(Flask):
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="put")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='put'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["PUT"]}
@@ -681,13 +838,33 @@ class OpenAPI(Flask):
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, extra_responses, security, doc_ui,
-                                   method="delete")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='delete'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["DELETE"]}
@@ -712,13 +889,33 @@ class OpenAPI(Flask):
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
         def decorator(func):
-            header, cookie, path, query, form, body, _responses = \
-                self._do_decorator(rule, func, tags, summary, description, responses, security, extra_responses, doc_ui,
-                                   method="patch")
+            header, cookie, path, query, form, body, combine_responses = \
+                self._do_decorator(
+                    rule,
+                    func,
+                    tags=tags,
+                    summary=summary,
+                    description=description,
+                    responses=responses,
+                    extra_responses=extra_responses,
+                    security=security,
+                    doc_ui=doc_ui,
+                    method='patch'
+                )
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, _responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["PATCH"]}

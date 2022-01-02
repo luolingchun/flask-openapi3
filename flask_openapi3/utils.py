@@ -32,7 +32,7 @@ def get_openapi_path(rule: str) -> str:
     return uri
 
 
-def get_operation(func: Callable, summary: str = None, description: str = None) -> Operation:
+def get_operation(func: Callable, *, summary: str = None, description: str = None) -> Operation:
     """Return a Operation object with summary and description."""
     doc = inspect.getdoc(func) or ''
     doc = doc.strip()
@@ -50,12 +50,12 @@ def get_operation(func: Callable, summary: str = None, description: str = None) 
     return operation
 
 
-def get_func_parameter(func: Callable, func_globals: Dict[str, Any], arg_name='path') -> Type[BaseModel]:
+def get_func_parameter(func: Callable, func_globals: Dict[str, Any], *, parameter_name='path') -> Type[BaseModel]:
     """Get view-func parameters.
     arg_name has six parameters to choose from: path, query, form, body, header, cookie.
     """
     signature = inspect.signature(func)
-    param = signature.parameters.get(arg_name)
+    param = signature.parameters.get(parameter_name)
     annotation = param.annotation if param else None
     if isinstance(annotation, str):
         # PEP563
@@ -390,6 +390,7 @@ def parse_and_store_tags(
 
 def parse_parameters(
         func: Callable,
+        *,
         components_schemas: dict = None,
         operation: Operation = None,
         doc_ui: bool = True,
@@ -405,12 +406,12 @@ def parse_parameters(
     func_globals.update(**getattr(func, '__extra_globals__', {}))  # noqa
 
     parameters = []
-    header = get_func_parameter(func, func_globals, 'header')
-    cookie = get_func_parameter(func, func_globals, 'cookie')
-    path = get_func_parameter(func, func_globals, 'path')
-    query = get_func_parameter(func, func_globals, 'query')
-    form = get_func_parameter(func, func_globals, 'form')
-    body = get_func_parameter(func, func_globals, 'body')
+    header = get_func_parameter(func, func_globals, parameter_name='header')
+    cookie = get_func_parameter(func, func_globals, parameter_name='cookie')
+    path = get_func_parameter(func, func_globals, parameter_name='path')
+    query = get_func_parameter(func, func_globals, parameter_name='query')
+    form = get_func_parameter(func, func_globals, parameter_name='form')
+    body = get_func_parameter(func, func_globals, parameter_name='body')
     if doc_ui is False:
         return header, cookie, path, query, form, body
     if header:
