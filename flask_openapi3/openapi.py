@@ -157,6 +157,7 @@ class APIBlueprint(Blueprint):
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True,
             method: str = 'get'
     ) -> Tuple[
@@ -171,6 +172,7 @@ class APIBlueprint(Blueprint):
         :param extra_responses: extra responses dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+        :param deprecated: mark end-point as deprecated
         :param method: api method
         :return:
         """
@@ -191,6 +193,9 @@ class APIBlueprint(Blueprint):
             if security is None:
                 security = []
             operation.security = security + self.abp_security or None
+            # only set `deprecated` if True otherwise leave it as None
+            if deprecated:
+                operation.deprecated = True
             # store tags
             tags = tags + self.abp_tags if tags else self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
@@ -222,6 +227,7 @@ class APIBlueprint(Blueprint):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['GET'])"""
@@ -237,6 +243,7 @@ class APIBlueprint(Blueprint):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='get'
                 )
@@ -273,6 +280,7 @@ class APIBlueprint(Blueprint):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['POST'])"""
@@ -288,6 +296,7 @@ class APIBlueprint(Blueprint):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='post'
                 )
@@ -324,6 +333,7 @@ class APIBlueprint(Blueprint):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
@@ -339,6 +349,7 @@ class APIBlueprint(Blueprint):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='put'
                 )
@@ -375,6 +386,7 @@ class APIBlueprint(Blueprint):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
@@ -390,6 +402,7 @@ class APIBlueprint(Blueprint):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='delete'
                 )
@@ -426,6 +439,7 @@ class APIBlueprint(Blueprint):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ):
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
@@ -441,6 +455,7 @@ class APIBlueprint(Blueprint):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='patch'
                 )
@@ -622,6 +637,7 @@ class OpenAPI(Flask):
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
             security: List[Dict[str, List[Any]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True,
             method: str = 'get'
     ) -> Tuple[
@@ -635,6 +651,7 @@ class OpenAPI(Flask):
         :param responses: response model
         :param extra_responses: extra responses dict
         :param security: security name
+        :param deprecated: mark as deprecated support. Default to not True.
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param method: api method
         :return:
@@ -654,6 +671,9 @@ class OpenAPI(Flask):
             operation = get_operation(func, summary=summary, description=description)
             # add security
             operation.security = security
+            # only set `deprecated` if True otherwise leave it as None
+            if deprecated:
+                operation.deprecated = True
             # store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
@@ -680,6 +700,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
@@ -695,6 +716,7 @@ class OpenAPI(Flask):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='get'
                 )
@@ -731,6 +753,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
@@ -746,6 +769,7 @@ class OpenAPI(Flask):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='post'
                 )
@@ -782,6 +806,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
@@ -797,6 +822,7 @@ class OpenAPI(Flask):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='put'
                 )
@@ -833,6 +859,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
@@ -848,6 +875,7 @@ class OpenAPI(Flask):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='delete'
                 )
@@ -884,6 +912,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
+            deprecated: Optional[bool] = None,
             doc_ui: bool = True
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
@@ -899,6 +928,7 @@ class OpenAPI(Flask):
                     responses=responses,
                     extra_responses=extra_responses,
                     security=security,
+                    deprecated=deprecated,
                     doc_ui=doc_ui,
                     method='patch'
                 )
