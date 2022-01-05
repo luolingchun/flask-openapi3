@@ -23,6 +23,7 @@ class Operation(BaseModel):
     requestBody: Optional[Union[RequestBody, Reference]] = None
     responses: Dict[str, Response] = None
     security: Optional[List[Dict[str, List[str]]]] = None
+    deprecated: Optional[bool] = None
 
 
 class PathItem(BaseModel):
