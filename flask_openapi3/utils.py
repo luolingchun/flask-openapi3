@@ -33,7 +33,7 @@ def get_openapi_path(rule: str) -> str:
 
 
 def get_operation(func: Callable, *, summary: str = None, description: str = None) -> Operation:
-    """Return a Operation object with summary and description."""
+    """Return an Operation object with summary and description."""
     doc = inspect.getdoc(func) or ''
     doc = doc.strip()
     lines = doc.split('\n')
@@ -52,7 +52,7 @@ def get_operation(func: Callable, *, summary: str = None, description: str = Non
 
 def get_func_parameter(func: Callable, func_globals: Dict[str, Any], *, parameter_name='path') -> Type[BaseModel]:
     """Get view-func parameters.
-    arg_name has six parameters to choose from: path, query, form, body, header, cookie.
+    parameter_name has six parameters to choose from: path, query, form, body, header, cookie.
     """
     signature = inspect.signature(func)
     param = signature.parameters.get(parameter_name)
@@ -264,7 +264,7 @@ def get_responses(
     """
     :param responses: Dict[str, BaseModel]
     :param extra_responses: Dict[str, dict]
-    :param components_schemas: `models.component.py` Components.schemas
+    :param components_schemas: `models.component.py` `Components.schemas`
     :param operation: `models.path.py` Operation
     """
     if responses is None:

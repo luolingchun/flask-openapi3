@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
 ```python
 from http import HTTPStatus
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -83,6 +83,7 @@ class BookPath(BaseModel):
 
 class BookQuery(BaseModel):
     age: Optional[int] = Field(None, description='Age')
+    s_list: List[str] = Field(None, alias='s_list[]', description='some array')
 
 
 class BookBody(BaseModel):
@@ -102,7 +103,15 @@ class BookResponse(BaseModel):
     data: Optional[BookBodyWithID]
 
 
-@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+@app.get(
+    '/book/<int:bid>',
+    tags=[book_tag],
+    summary='new summary',
+    description='new description',
+    responses={"200": BookResponse},
+    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    security=security
+)
 def get_book(path: BookPath):
     """Get book
     Get some book by id, like:
@@ -114,11 +123,12 @@ def get_book(path: BookPath):
 
 
 # set doc_ui False disable openapi UI
-@app.get('/book', doc_ui=False)
+@app.get('/book', doc_ui=True, deprecated=True)
 def get_books(query: BookQuery):
     """get books
     get all books
     """
+    print(query)
     return {
         "code": 0,
         "message": "ok",
@@ -185,7 +195,7 @@ api = APIBlueprint(
     abp_security=security,
     abp_responses={"401": Unauthorized},
     # disable openapi UI
-    doc_ui=False
+    doc_ui=True
 )
 
 
@@ -203,7 +213,7 @@ def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book')
+@api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
