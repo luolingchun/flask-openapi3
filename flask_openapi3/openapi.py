@@ -169,10 +169,10 @@ class APIBlueprint(Blueprint):
         :param func: flask view_func
         :param tags: api tag
         :param responses: response model
-        :param extra_responses: extra responses dict
+        :param extra_responses: extra response's dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
-        :param deprecated: mark end-point as deprecated
+        :param deprecated: mark as deprecated support. Default to not True.
         :param method: api method
         :return:
         """
@@ -462,7 +462,17 @@ class APIBlueprint(Blueprint):
 
             @wraps(func)
             def wrapper(**kwargs):
-                resp = _do_wrapper(func, responses, header, cookie, path, query, form, body, **kwargs)
+                resp = _do_wrapper(
+                    func,
+                    responses=combine_responses,
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
                 return resp
 
             options = {"methods": ["PATCH"]}
@@ -492,7 +502,8 @@ class OpenAPI(Flask):
             import_name: just flask import_name
             info: see https://spec.openapis.org/oas/v3.0.3#info-object
             securitySchemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
-            oauth_config: OAuth 2.0 configuration, see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
+            oauth_config: OAuth 2.0 configuration,
+                          see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
             responses: OpenAPI response model
             doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
             docExpansion: String=["list"*, "full", "none"].

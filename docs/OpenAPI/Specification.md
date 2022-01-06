@@ -23,3 +23,14 @@ api = APIBlueprint(
 def get_book():
     ...
 ```
+
+*New in v1.0.0*
+
+`deprecated`: mark as deprecated support. Default to not True.
+
+```python
+@app.get('/book', deprecated=True)
+def get_books(query: BookQuery):
+    ...
+```
+

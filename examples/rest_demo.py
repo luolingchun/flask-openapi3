@@ -85,7 +85,7 @@ def get_book(path: BookPath):
 
 
 # set doc_ui False disable openapi UI
-@app.get('/book', doc_ui=True)
+@app.get('/book', doc_ui=True, deprecated=True)
 def get_books(query: BookQuery):
     """get books
     get all books
