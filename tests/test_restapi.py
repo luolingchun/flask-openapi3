@@ -114,6 +114,13 @@ def update_book(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
+@app.patch('/book/<int:bid>', tags=[book_tag])
+def update_book1(path: BookPath, body: BookBody):
+    assert path.bid == 1
+    assert body.age == 3
+    return {"code": 0, "message": "ok"}
+
+
 @app.delete('/book/<int:bid>', tags=[book_tag])
 def delete_book(path: BookPath):
     assert path.bid == 1
@@ -144,6 +151,11 @@ def test_post(client):
 
 def test_put(client):
     resp = client.put("/book/1", json={"age": 3})
+    assert resp.status_code == 200
+
+
+def test_patch(client):
+    resp = client.patch("/book/1", json={"age": 3})
     assert resp.status_code == 200
 
 
