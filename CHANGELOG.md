@@ -1,8 +1,11 @@
 ## v1.0.0 2022-??-??
 
-- Add keyword parameters `summary` and `description`
-- [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thinks @blynn99
 - [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thinks @rrr34
+- [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thinks @blynn99
+- [#12](https://github.com/luolingchun/flask-openapi3/pull/12) Support for path operation field deprecated. Thinks
+  @blynn99
+- Add keyword parameters `summary` and `description`
+- Add servers for OpenAPI
 - Upgrade swagger UI v4.1.3
 - Upgrade Redoc v2.0.0-rc.59
 - Add rapidoc

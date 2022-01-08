@@ -13,7 +13,7 @@ from pydantic import ValidationError, BaseModel, AnyUrl
 from werkzeug.datastructures import MultiDict
 
 from .markdown import openapi_to_markdown
-from .models import Info, APISpec, Tag, Components
+from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
@@ -493,6 +493,7 @@ class OpenAPI(Flask):
                  responses: Optional[Dict[str, Type[BaseModel]]] = None,
                  doc_ui: bool = True,
                  doc_expansion: str = "list",
+                 servers: Optional[List[Server]] = None,
                  **kwargs: Any
                  ) -> None:
         """
@@ -511,6 +512,7 @@ class OpenAPI(Flask):
                           It can be 'list' (expands only the tags),
                          'full' (expands the tags and operations) or 'none' (expands nothing).
                          see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
+            servers: An array of Server Objects, which provide connectivity information to a target server.
             kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -536,6 +538,7 @@ class OpenAPI(Flask):
         if doc_ui:
             self.init_doc()
         self.doc_expansion = doc_expansion
+        self.severs = servers
 
     def init_doc(self) -> None:
         """
@@ -612,6 +615,7 @@ class OpenAPI(Flask):
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,
+            servers=self.severs,
             externalDocs=ExternalDocumentation(
                 url=AnyUrl(
                     url=f'/{self.api_name}/markdown',
