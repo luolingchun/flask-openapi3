@@ -8,6 +8,7 @@ from .models.info import Info
 from .models.oauth import OAuthConfig
 from .models.security import HTTPBase, HTTPBearer, OAuth2, APIKey, OpenIdConnect
 from .models.tag import Tag
+from .models.server import Server, ServerVariable
 from .models.validation_error import UnprocessableEntity
 from .openapi import APIBlueprint
 from .openapi import OpenAPI

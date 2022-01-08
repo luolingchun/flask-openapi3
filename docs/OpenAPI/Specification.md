@@ -52,3 +52,18 @@ More information to see https://github.com/swagger-api/swagger-ui/blob/master/do
 ```python
 app = OpenAPI(__name__, info=info, doc_expansion='full')
 ```
+
+## servers
+
+An array of Server Objects, which provide connectivity information to a target server. If the servers property is not
+provided, or is an empty array, the default value would be a Server Object with a url value of /.
+
+```python
+from flask_openapi3 import OpenAPI, Server
+
+servers = [
+    Server(url='http://127.0.0.1:5000'),
+    Server(url='https://127.0.0.1:5000'),
+]
+app = OpenAPI(__name__, info=info, servers=servers)
+```
