@@ -14,7 +14,7 @@ from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 
 info = Info(title='book API', version='1.0.0')
-securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 
 
 class NotFoundResponse(BaseModel):
@@ -22,7 +22,7 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes, responses={"404": NotFoundResponse})
+app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
 app.config["TESTING"] = True
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')

@@ -20,7 +20,7 @@ oauth2 = OAuth2(flows=OAuthFlows(
             "read:pets": "read your pets"
         }
     )))
-securitySchemes = {"jwt": jwt, "oauth2": oauth2}
+security_schemes = {"jwt": jwt, "oauth2": oauth2}
 
 
 class NotFoundResponse(BaseModel):
@@ -28,7 +28,7 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes, responses={"404": NotFoundResponse})
+app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
 
 book_tag = Tag(name='book', description='Some Book')
 security = [
