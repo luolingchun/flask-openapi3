@@ -7,6 +7,11 @@
 - Upgrade Redoc v2.0.0-rc.59
 - Add rapidoc
 
+### Breaking Changes
+
+- Renamed `securitySchemes` to `security_schemes`
+- Renamed `docExpansion` to `doc_expansion`
+
 ## v0.9.9 2021-12-09
 
 - fix: default value in query and form model
