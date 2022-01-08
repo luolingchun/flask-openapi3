@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/6/21 15:54
+from enum import Enum
+
 HTTP_STATUS = {
     # 1xx
     "100": "Continue",
@@ -71,3 +73,15 @@ HTTP_STATUS = {
     "510": "Not Extended",
     "511": "Network Authentication Required",
 }
+
+
+class HTTPMethod(str, Enum):
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    DELETE = "DELETE"
+    PATCH = "PATCH"
+    HEAD = "HEAD"
+    OPTIONS = "OPTIONS"
+    TRACE = "TRACE"
+    CONNECT = "CONNECT"

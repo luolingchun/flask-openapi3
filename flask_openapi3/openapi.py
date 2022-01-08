@@ -9,9 +9,11 @@ from io import StringIO
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template, request, make_response, current_app
-from pydantic import ValidationError, BaseModel, AnyUrl
+from flask.wrappers import Response
+from pydantic import ValidationError, BaseModel
 from werkzeug.datastructures import MultiDict
 
+from .http import HTTPMethod
 from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
@@ -32,7 +34,7 @@ def _do_wrapper(
         form: Type[BaseModel] = None,
         body: Type[BaseModel] = None,
         **kwargs: Any
-) -> Any:
+) -> Response:
     """
     Validate requests and responses
     :param func: view func
@@ -120,7 +122,7 @@ class APIBlueprint(Blueprint):
             abp_responses: Optional[Dict[str, Type[BaseModel]]] = None,
             doc_ui: bool = True,
             **kwargs: Any
-    ):
+    ) -> None:
         """
         Based on Flask Blueprint
 
@@ -159,10 +161,16 @@ class APIBlueprint(Blueprint):
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True,
-            method: str = 'get'
+            method: str = HTTPMethod.GET
     ) -> Tuple[
-        Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Dict[
-            str, Type[BaseModel]]]:
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Dict[str, Type[BaseModel]]
+    ]:
         """
         Collect openapi specification information
         :param rule: flask route
@@ -229,10 +237,10 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True
-    ):
+    ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -245,11 +253,11 @@ class APIBlueprint(Blueprint):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='get'
+                    method=HTTPMethod.GET
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -263,7 +271,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": ["GET"]}
+            options = {"methods": [HTTPMethod.GET]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -282,10 +290,10 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True
-    ):
+    ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -298,11 +306,11 @@ class APIBlueprint(Blueprint):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='post'
+                    method=HTTPMethod.POST
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -316,7 +324,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": ["POST"]}
+            options = {"methods": [HTTPMethod.POST]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -335,10 +343,10 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True
-    ):
+    ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -351,11 +359,11 @@ class APIBlueprint(Blueprint):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='put'
+                    method=HTTPMethod.PUT
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -369,7 +377,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": ["PUT"]}
+            options = {"methods": [HTTPMethod.PUT]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -388,10 +396,10 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True
-    ):
+    ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -404,11 +412,11 @@ class APIBlueprint(Blueprint):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='delete'
+                    method=HTTPMethod.DELETE
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -422,7 +430,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": ["DELETE"]}
+            options = {"methods": [HTTPMethod.DELETE]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -441,10 +449,10 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True
-    ):
+    ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -457,11 +465,11 @@ class APIBlueprint(Blueprint):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='patch'
+                    method=HTTPMethod.PATCH
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -475,7 +483,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": ["PATCH"]}
+            options = {"methods": [HTTPMethod.PATCH]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -484,18 +492,19 @@ class APIBlueprint(Blueprint):
 
 
 class OpenAPI(Flask):
-    def __init__(self,
-                 import_name: str,
-                 *,
-                 info: Optional[Info] = None,
-                 security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
-                 oauth_config: Optional[OAuthConfig] = None,
-                 responses: Optional[Dict[str, Type[BaseModel]]] = None,
-                 doc_ui: bool = True,
-                 doc_expansion: str = "list",
-                 servers: Optional[List[Server]] = None,
-                 **kwargs: Any
-                 ) -> None:
+    def __init__(
+            self,
+            import_name: str,
+            *,
+            info: Optional[Info] = None,
+            security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+            oauth_config: Optional[OAuthConfig] = None,
+            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            doc_ui: bool = True,
+            doc_expansion: str = "list",
+            servers: Optional[List[Server]] = None,
+            **kwargs: Any
+    ) -> None:
         """
         Based on Flask. Provide REST api, swagger-ui and redoc.
 
@@ -598,7 +607,7 @@ class OpenAPI(Flask):
         )
         self.register_blueprint(blueprint)
 
-    def export_to_markdown(self):
+    def export_to_markdown(self) -> Response:
         """Experimental"""
         md = StringIO()
 
@@ -617,11 +626,7 @@ class OpenAPI(Flask):
             info=self.info,
             servers=self.severs,
             externalDocs=ExternalDocumentation(
-                url=AnyUrl(
-                    url=f'/{self.api_name}/markdown',
-                    scheme='',
-                    host=''
-                ),
+                url=f'/{self.api_name}/markdown',
                 description='Export to markdown'
             )
         )
@@ -654,10 +659,16 @@ class OpenAPI(Flask):
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
             doc_ui: bool = True,
-            method: str = 'get'
+            method: str = HTTPMethod.GET
     ) -> Tuple[
-        Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Dict[
-            str, Type[BaseModel]]]:
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Type[BaseModel],
+        Dict[str, Type[BaseModel]]
+    ]:
         """
         Collect openapi specification information
         :param rule: flask route
@@ -720,7 +731,7 @@ class OpenAPI(Flask):
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -733,11 +744,11 @@ class OpenAPI(Flask):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='get'
+                    method=HTTPMethod.GET
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -751,7 +762,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": ["GET"]}
+            options = {"methods": [HTTPMethod.GET]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -773,7 +784,7 @@ class OpenAPI(Flask):
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -786,11 +797,11 @@ class OpenAPI(Flask):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='post'
+                    method=HTTPMethod.POST
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -804,7 +815,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": ["POST"]}
+            options = {"methods": [HTTPMethod.POST]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -826,7 +837,7 @@ class OpenAPI(Flask):
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -839,11 +850,11 @@ class OpenAPI(Flask):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='put'
+                    method=HTTPMethod.PUT
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -857,7 +868,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": ["PUT"]}
+            options = {"methods": [HTTPMethod.PUT]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -879,7 +890,7 @@ class OpenAPI(Flask):
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -892,11 +903,11 @@ class OpenAPI(Flask):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='delete'
+                    method=HTTPMethod.DELETE
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -910,7 +921,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": ["DELETE"]}
+            options = {"methods": [HTTPMethod.DELETE]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -932,7 +943,7 @@ class OpenAPI(Flask):
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
-        def decorator(func):
+        def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
                 self._do_decorator(
                     rule,
@@ -945,11 +956,11 @@ class OpenAPI(Flask):
                     security=security,
                     deprecated=deprecated,
                     doc_ui=doc_ui,
-                    method='patch'
+                    method=HTTPMethod.PATCH
                 )
 
             @wraps(func)
-            def wrapper(**kwargs):
+            def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
                     responses=combine_responses,
@@ -963,7 +974,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": ["PATCH"]}
+            options = {"methods": [HTTPMethod.PATCH]}
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
