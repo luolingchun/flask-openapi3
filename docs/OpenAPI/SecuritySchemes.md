@@ -1,13 +1,13 @@
 like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3.models.security`**, more features see
 the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
 
-First, you need define the **securitySchemes**  and **security** variable:
+First, you need define the **security_schemes**  and **security** variable:
 
 ```python
-securitySchemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 security = [{"jwt": []}]
 
-app = OpenAPI(__name__, info=info, securitySchemes=securitySchemes)
+app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 ```
 
 Second, add pass the **security** to your api, like this:
@@ -26,7 +26,7 @@ result:
 
 *New in v0.9.3*
 
-You don't need specify security for every api.
+You don't need to specify security for every api.
 
 ```python
 tag = Tag(name='book', description="Some Book")

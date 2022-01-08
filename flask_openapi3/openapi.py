@@ -488,7 +488,7 @@ class OpenAPI(Flask):
                  import_name: str,
                  *,
                  info: Optional[Info] = None,
-                 securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+                 security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
                  oauth_config: Optional[OAuthConfig] = None,
                  responses: Optional[Dict[str, Type[BaseModel]]] = None,
                  doc_ui: bool = True,
@@ -501,7 +501,7 @@ class OpenAPI(Flask):
         Arguments:
             import_name: just flask import_name
             info: see https://spec.openapis.org/oas/v3.0.3#info-object
-            securitySchemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
+            security_schemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
             oauth_config: OAuth 2.0 configuration,
                           see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
             responses: OpenAPI response model
@@ -520,7 +520,7 @@ class OpenAPI(Flask):
             info = Info(title='OpenAPI', version='1.0.0')
         assert isinstance(info, Info), f"Info is required (got type {type(info)})"
         self.info = info
-        self.securitySchemes = securitySchemes
+        self.security_schemes = security_schemes
         self.responses = responses or {}
         self.paths = dict()
         self.components_schemas = dict()
@@ -624,7 +624,7 @@ class OpenAPI(Flask):
         spec.tags = self.tags or None
         spec.paths = self.paths
         self.components.schemas = self.components_schemas
-        self.components.securitySchemes = self.securitySchemes
+        self.components.securitySchemes = self.security_schemes
         spec.components = self.components
         return json.loads(spec.json(by_alias=True, exclude_none=True))
 

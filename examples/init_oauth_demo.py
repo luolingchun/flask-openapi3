@@ -20,9 +20,9 @@ oauth2 = OAuth2(flows=OAuthFlows(
             "read:pets": "read your pets"
         }
     )))
-securitySchemes = {"oauth2": oauth2}
+security_schemes = {"oauth2": oauth2}
 
-app = OpenAPI(__name__, info=info, oauth_config=oauth_config, securitySchemes=securitySchemes)
+app = OpenAPI(__name__, info=info, oauth_config=oauth_config, security_schemes=security_schemes)
 
 security = [
     {"oauth2": ["write:pets", "read:pets"]}
