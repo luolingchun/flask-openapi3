@@ -11,12 +11,12 @@ from flask import Response as _Response
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
+from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, Response, MediaType
 from .models.parameter import ParameterInType, Parameter
 from .models.path import Operation, RequestBody, PathItem
 from .models.validation_error import UnprocessableEntity
-from .status import HTTP_STATUS
 
 
 def get_openapi_path(rule: str) -> str:
@@ -458,27 +458,27 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
     :param paths: openapi doc paths
     :param operation: `models.path.py` Operation
     """
-    if method == 'get':
+    if method == HTTPMethod.GET:
         if not paths.get(uri):
             paths[uri] = PathItem(get=operation)
         else:
             paths[uri].get = operation
-    elif method == 'post':
+    elif method == HTTPMethod.POST:
         if not paths.get(uri):
             paths[uri] = PathItem(post=operation)
         else:
             paths[uri].post = operation
-    elif method == 'put':
+    elif method == HTTPMethod.PUT:
         if not paths.get(uri):
             paths[uri] = PathItem(put=operation)
         else:
             paths[uri].put = operation
-    elif method == 'patch':
+    elif method == HTTPMethod.PATCH:
         if not paths.get(uri):
             paths[uri] = PathItem(patch=operation)
         else:
             paths[uri].patch = operation
-    elif method == 'delete':
+    elif method == HTTPMethod.DELETE:
         if not paths.get(uri):
             paths[uri] = PathItem(delete=operation)
         else:
