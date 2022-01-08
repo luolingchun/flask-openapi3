@@ -48,7 +48,7 @@ class BookBody(BaseModel):
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
-class Path(BaseModel):
+class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
 
 
@@ -58,10 +58,23 @@ def create_book(body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@app.put('/book/<int:bid>')
-def update_book(path: Path, body: BookBody):
+@api.put('/book/<int:bid>')
+def update_book(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
+    return {"code": 0, "message": "ok"}
+
+
+@api.patch('/book/<int:bid>')
+def update_book1(path: BookPath, body: BookBody):
+    assert path.bid == 1
+    assert body.age == 3
+    return {"code": 0, "message": "ok"}
+
+
+@api.delete('/book/<int:bid>')
+def delete_book(path: BookPath):
+    assert path.bid == 1
     return {"code": 0, "message": "ok"}
 
 
@@ -81,5 +94,15 @@ def test_post(client):
 
 
 def test_put(client):
-    resp = client.put("/book/1", json={"age": 3})
+    resp = client.put("/api/book/1", json={"age": 3})
+    assert resp.status_code == 200
+
+
+def test_patch(client):
+    resp = client.patch("/api/book/1", json={"age": 3})
+    assert resp.status_code == 200
+
+
+def test_delete(client):
+    resp = client.delete("/api/book/1")
     assert resp.status_code == 200
