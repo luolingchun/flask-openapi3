@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-__version__ = '0.9.9'
+__version__ = '1.0.0'
 
 long_description = open('README.md', 'r', encoding='utf-8').read()
 
@@ -29,8 +29,8 @@ setup(
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
         # 'Development Status :: 3 - Alpha    ',
-        'Development Status :: 4 - Beta',
-        # 'Development Status :: 5 - Production/Stable',
+        # 'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         # 'Development Status :: 6 - Mature',
         # 'Development Status :: 7 - Inactive',
         'Environment :: Web Environment',
