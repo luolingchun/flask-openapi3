@@ -1,4 +1,4 @@
-## v1.0.0 2022-??-??
+## v1.0.0 2022-01-11
 
 - [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thinks @rrr34
 - [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thinks @blynn99
