@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-__version__ = '1.0.0'
+from flask_openapi3 import __version__
 
 long_description = open('README.md', 'r', encoding='utf-8').read()
 
