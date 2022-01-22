@@ -80,8 +80,8 @@ def endpoint():
 
 You can pass to your path operation decorators a parameter `extra_responses`.
 
-It receives a `dict`, the keys are status codes for each response, like `200`, 
-and the values are other dicts with the information for each of them.
+It receives a `dict`, the keys are status codes for each response, like `200`, and the values are other dicts with the
+information for each of them.
 
 Like this:
 
@@ -96,11 +96,11 @@ Like this:
 def get_book(path: BookPath):
     ...
 
+
 @api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     ...
 ```
-
 
 ## More information about OpenAPI responses
 

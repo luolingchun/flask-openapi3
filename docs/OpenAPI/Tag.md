@@ -21,7 +21,7 @@ and then you will get the magic.
 
 *New in v0.9.3*
 
-You don't need specify tag for every api.
+You don't need specify **tag** for every api.
 
 ```python
 tag = Tag(name='book', description="Some Book")
