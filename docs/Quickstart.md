@@ -1,4 +1,5 @@
-**`flask_openapi3`** based on [Flask](https://github.com/pallets/flask/) and [pydantic](https://github.com/samuelcolvin/pydantic), So you can use it like Flask.
+**`flask_openapi3`** based on [Flask](https://github.com/pallets/flask/)
+and [Pydantic](https://github.com/samuelcolvin/pydantic), So you can use it like Flask.
 
 ## A Minimal Application
 
@@ -24,6 +25,7 @@ And then run it:
 ```shell
 python hello.py
 ```
+
 You will see the output:
 
 ```
@@ -63,13 +65,15 @@ def get_books():
 def create_book():
     return {"message": "success"}
 
+
 if __name__ == '__main__':
     app.run()
 ```
 
 ## APIBlueprint
 
-APIBlueprint based on [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint), you should use **`app.register_api`** instead of  **`app.register_blueprint`**.
+APIBlueprint based on [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint),
+you should use **`app.register_api`** instead of  **`app.register_blueprint`**.
 
 ```python hl_lines="14"
 from flask_openapi3 import OpenAPI

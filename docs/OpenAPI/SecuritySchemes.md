@@ -1,4 +1,4 @@
-like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3.models.security`**, more features see
+like [Info](/flask-openapi3/en/OpenAPI/Info/), import **`HTTPBearer`** from **`flask_openapi3`**, more features see
 the [OpenAPI Specification security-scheme-object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
 
 First, you need define the **security_schemes**  and **security** variable:
@@ -26,7 +26,7 @@ result:
 
 *New in v0.9.3*
 
-You don't need to specify security for every api.
+You don't need to **specify** security for every api.
 
 ```python
 tag = Tag(name='book', description="Some Book")
