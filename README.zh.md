@@ -1,15 +1,31 @@
-# flask-openapi3
-
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test)](https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml)
-[![PyPI](https://img.shields.io/pypi/v/flask-openapi3)](https://pypi.org/project/flask-openapi3/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/flask-openapi3)](https://pypistats.org/packages/flask-openapi3)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flask-openapi3)](https://pypi.org/project/flask-openapi3/)
-
-为你的 Flask 项目生成 RESTful API 和 OpenAPI 文档。
+<div align="center">
+    <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank"
+       style="font-size: 64px;color: #4051b5;text-decoration: none;line-height:64px;;user-select: none;">
+        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-blue.svg" width="64px"
+             height="64px" align="center" alt="logo">
+        Flask<br/>OpenAPI3</a>
+</div>
+<p align="center">
+    <em>为你的 Flask 项目生成 RESTful API 和 OpenAPI 文档。</em>
+</p>
+<p align="center">
+    <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
+        <img src="https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test" alt="test">
+    </a>
+    <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
+        <img src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
+    </a>
+    <a href="https://pypistats.org/packages/flask-openapi3" target="_blank">
+        <img src="https://img.shields.io/pypi/dm/flask-openapi3" alt="pypistats">
+    </a>
+    <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
+        <img src="https://img.shields.io/pypi/pyversions/flask-openapi3" alt="pypi versions">
+    </a>
+</p>
 
 ## 依赖
 
-Python =3.7+
+Python 3.7+
 
 flask-openapi3 依赖以下库：
 
