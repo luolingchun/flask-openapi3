@@ -1,9 +1,7 @@
 <div align="center">
-    <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank"
-       style="font-size: 64px;color: #4051b5;text-decoration: none;line-height:64px;;user-select: none;">
-        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-blue.svg" width="64px"
-             height="64px" align="center" alt="logo">
-        Flask<br/>OpenAPI3</a>
+    <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
+        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" alt="logo">
+    </a>
 </div>
 <p align="center">
     <em>为你的 Flask 项目生成 RESTful API 和 OpenAPI 文档。</em>
