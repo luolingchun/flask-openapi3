@@ -1,6 +1,7 @@
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" alt="logo">
+        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
+             height="auto" alt="logo">
     </a>
 </div>
 <p align="center">

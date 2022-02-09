@@ -1,6 +1,7 @@
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" alt="logo">
+        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
+             height="auto" alt="logo">
     </a>
 </div>
 <p align="center">
@@ -78,9 +79,11 @@ if __name__ == '__main__':
 
 ## API 文档
 
-运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问 http://127.0.0.1:5000/openapi。
+运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问
+http://127.0.0.1:5000/openapi。
 
-你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
+你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc)
+和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
