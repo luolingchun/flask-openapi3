@@ -24,6 +24,7 @@ class Operation(BaseModel):
     responses: Dict[str, Response] = None
     security: Optional[List[Dict[str, List[str]]]] = None
     deprecated: Optional[bool] = None
+    operationId: Optional[str] = None
 
 
 class PathItem(BaseModel):

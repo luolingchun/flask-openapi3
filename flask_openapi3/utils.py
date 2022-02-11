@@ -3,6 +3,7 @@
 # @Time    : 2021/5/1 21:34
 
 import inspect
+import re
 from http import HTTPStatus
 from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
 
@@ -48,6 +49,13 @@ def get_operation(func: Callable, *, summary: str = None, description: str = Non
     )
 
     return operation
+
+
+def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
+    operation_id = name + path
+    operation_id = re.sub("[^0-9a-zA-Z_]", "_", operation_id)
+    operation_id = operation_id + "_" + method.lower()
+    return operation_id
 
 
 def get_func_parameter(func: Callable, func_globals: Dict[str, Any], *, parameter_name='path') -> Type[BaseModel]:

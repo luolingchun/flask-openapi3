@@ -56,7 +56,7 @@ def create_book(body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@api.put('/book/<int:bid>')
+@api.put('/book/<int:bid>', operation_id='update')
 def update_book(path: Path, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
