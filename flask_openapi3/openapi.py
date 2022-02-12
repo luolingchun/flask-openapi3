@@ -178,10 +178,11 @@ class APIBlueprint(Blueprint):
         :param func: flask view_func
         :param tags: api tag
         :param responses: response model
-        :param extra_responses: extra response's dict
+        :param extra_responses: extra response dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param deprecated: mark as deprecated support. Default to not True.
+        :param operation_id: unique string used to identify the operation.
         :param method: api method
         :return:
         """
@@ -692,10 +693,11 @@ class OpenAPI(Flask):
         :param func: flask view_func
         :param tags: api tag
         :param responses: response model
-        :param extra_responses: extra responses dict
+        :param extra_responses: extra response dict
         :param security: security name
         :param deprecated: mark as deprecated support. Default to not True.
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+        :param operation_id: unique string used to identify the operation.
         :param method: api method
         :return:
         """
