@@ -1,3 +1,7 @@
+## v1.0.1 2022-02-12
+
+- add operation_id for OpenAPI Specification
+
 ## v1.0.0 2022-01-11
 
 - [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thinks @rrr34
