@@ -43,19 +43,19 @@
 
 </head>
 <body>
-<div class="box" onclick="window.location.href= 'swagger';return false">
+<div class="box" onclick="window.location.href= '{{ swagger_url }}';return false">
     <img height="64"
          src="static/images/swagger.svg"
          alt="Swagger UI">
     <a class="swagger">Swagger</a>
 </div>
-<div class="box" onclick="window.location.href= 'redoc';return false">
+<div class="box" onclick="window.location.href= '{{ redoc_url }}';return false">
     <img height="64"
          src="static/images/redoc.svg"
          alt="ReDoc">
     <a class="redoc">ReDoc</a>
 </div>
-<div class="box" onclick="window.location.href= 'rapidoc';return false">
+<div class="box" onclick="window.location.href= '{{ rapidoc_url }}';return false">
     <img height="64"
          src="static/images/rapidoc.svg"
          alt="RapiDoc">
