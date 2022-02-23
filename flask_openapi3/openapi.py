@@ -519,7 +519,11 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
-            doc_prefix: str = "openapi",
+            doc_prefix: str = "/openapi",
+            api_doc_url: str = "/openapi.json",
+            swagger_url: str = "/swagger",
+            redoc_url: str = "/redoc",
+            rapidoc_url: str = "/rapidoc",
             servers: Optional[List[Server]] = None,
             **kwargs: Any
     ) -> None:
@@ -539,7 +543,11 @@ class OpenAPI(Flask):
                           It can be 'list' (expands only the tags),
                          'full' (expands the tags and operations) or 'none' (expands nothing).
                          see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
-            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to 'openapi'.
+            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to '/openapi'.
+            api_doc_url: The OpenAPI Spec documentation. Defaults to '/openapi.json'.
+            swagger_url: The Swagger UI documentation. Defaults to `/swagger`.
+            redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
+            rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
             servers: An array of Server Objects, which provide connectivity information to a target server.
             kwargs: Flask kwargs
         """
@@ -557,8 +565,11 @@ class OpenAPI(Flask):
         self.components = Components()
         self.tags = []
         self.tag_names = []
-        self.api_name = doc_prefix
-        self.api_doc_url = f"/{self.api_name}.json"
+        self.doc_prefix = doc_prefix
+        self.api_doc_url = api_doc_url
+        self.swagger_url = swagger_url
+        self.redoc_url = redoc_url
+        self.rapidoc_url = rapidoc_url
         if oauth_config:
             if not isinstance(oauth_config, OAuthConfig):
                 raise TypeError("`initOAuth` must be `OAuthConfig`")
@@ -577,41 +588,41 @@ class OpenAPI(Flask):
         static_folder = os.path.join(template_folder, 'static')
 
         blueprint = Blueprint(
-            self.api_name,
+            'openapi',
             __name__,
-            url_prefix=f'/{self.api_name}',
+            url_prefix=self.doc_prefix,
             template_folder=template_folder,
             static_folder=static_folder
         )
         blueprint.add_url_rule(
             rule=self.api_doc_url,
-            endpoint=self.api_name,
+            endpoint='api_doc',
             view_func=lambda: self.api_doc
         )
         blueprint.add_url_rule(
-            rule='/swagger',
+            rule=self.swagger_url,
             endpoint='swagger',
             view_func=lambda: render_template(
                 "swagger.html",
-                api_doc_url=f'{self.api_name}.json',
+                api_doc_url=self.api_doc_url.lstrip('/'),
                 doc_expansion=self.doc_expansion,
                 oauth_config=self.oauth_config.dict() if self.oauth_config else None
             )
         )
         blueprint.add_url_rule(
-            rule='/redoc',
+            rule=self.redoc_url,
             endpoint='redoc',
             view_func=lambda: render_template(
                 "redoc.html",
-                api_doc_url=f'{self.api_name}.json'
+                api_doc_url=self.api_doc_url.lstrip('/')
             )
         )
         blueprint.add_url_rule(
-            rule='/rapidoc',
+            rule=self.rapidoc_url,
             endpoint='rapidoc',
             view_func=lambda: render_template(
                 "rapidoc.html",
-                api_doc_url=f'{self.api_name}.json'
+                api_doc_url=self.api_doc_url.lstrip('/')
             )
         )
         blueprint.add_url_rule(
@@ -622,7 +633,12 @@ class OpenAPI(Flask):
         blueprint.add_url_rule(
             rule='/',
             endpoint='index',
-            view_func=lambda: render_template("index.html")
+            view_func=lambda: render_template(
+                "index.html",
+                swagger_url=self.swagger_url.lstrip('/'),
+                redoc_url=self.redoc_url.lstrip('/'),
+                rapidoc_url=self.rapidoc_url.lstrip('/')
+            )
         )
         self.register_blueprint(blueprint)
 
@@ -645,7 +661,7 @@ class OpenAPI(Flask):
             info=self.info,
             servers=self.severs,
             externalDocs=ExternalDocumentation(
-                url=f'/{self.api_name}/markdown',
+                url=f'{self.doc_prefix}/markdown',
                 description='Export to markdown'
             )
         )
