@@ -519,6 +519,7 @@ class OpenAPI(Flask):
             responses: Optional[Dict[str, Type[BaseModel]]] = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
+            doc_prefix: str = "openapi",
             servers: Optional[List[Server]] = None,
             **kwargs: Any
     ) -> None:
@@ -538,6 +539,7 @@ class OpenAPI(Flask):
                           It can be 'list' (expands only the tags),
                          'full' (expands the tags and operations) or 'none' (expands nothing).
                          see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
+            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to 'openapi'.
             servers: An array of Server Objects, which provide connectivity information to a target server.
             kwargs: Flask kwargs
         """
@@ -555,7 +557,7 @@ class OpenAPI(Flask):
         self.components = Components()
         self.tags = []
         self.tag_names = []
-        self.api_name = 'openapi'
+        self.api_name = doc_prefix
         self.api_doc_url = f"/{self.api_name}.json"
         if oauth_config:
             if not isinstance(oauth_config, OAuthConfig):
