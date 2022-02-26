@@ -92,8 +92,12 @@ def _do_wrapper(
             form_ = form(**form_dict)
             kwargs_.update({"form": form_})
         if body:
-            body_ = body(
-                **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+            if body.__annotations__.get('__root__'):
+                body_ = body(
+                    __root__=request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+            else:
+                body_ = body(
+                    **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
             kwargs_.update({"body": body_})
     except ValidationError as e:
         resp = make_response(e.json())
