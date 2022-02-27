@@ -92,7 +92,8 @@ def _do_wrapper(
             form_ = form(**form_dict)
             kwargs_.update({"form": form_})
         if body:
-            if body.__annotations__.get('__root__'):
+            if body.__custom_root_type__:
+                # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
                 body_ = body(
                     __root__=request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
             else:
