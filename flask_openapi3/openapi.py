@@ -92,8 +92,13 @@ def _do_wrapper(
             form_ = form(**form_dict)
             kwargs_.update({"form": form_})
         if body:
-            body_ = body(
-                **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+            if body.__custom_root_type__:
+                # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
+                body_ = body(
+                    __root__=request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+            else:
+                body_ = body(
+                    **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
             kwargs_.update({"body": body_})
     except ValidationError as e:
         resp = make_response(e.json())

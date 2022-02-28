@@ -244,17 +244,11 @@ def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
             components_schemas[name] = Schema(**value)
 
     if content is None:
-        print("Warning: "
-              f"{body.__name__}'s properties is empty, and"
-              f"{body.__name__}'s schema is set to object.")
-
         content = {
             "application/json": MediaType(
                 **{
                     "schema": Schema(
-                        **{
-                            "type": "object"
-                        }
+                        **schema
                     )
                 }
             )
