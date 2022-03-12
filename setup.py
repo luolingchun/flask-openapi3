@@ -24,7 +24,7 @@ setup(
     python_requires=">=3.7",
     zip_safe=False,
     platforms='any',
-    install_requires=["Flask>=1.0", "pydantic>=1.2"],
+    install_requires=["Flask>=1.1", "pydantic>=1.2"],
     classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
@@ -40,6 +40,7 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',

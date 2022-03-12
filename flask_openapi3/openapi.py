@@ -586,7 +586,7 @@ class OpenAPI(Flask):
 
     def init_doc(self) -> None:
         """
-        Provide swagger-ui and redoc
+        Provide Swagger UI, Redoc and Rapidoc
         """
         _here = os.path.dirname(__file__)
         template_folder = os.path.join(_here, 'templates')
