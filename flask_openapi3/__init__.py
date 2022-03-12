@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2021/4/30 10:14
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 from .models.file import FileStorage
 from .models.info import Info

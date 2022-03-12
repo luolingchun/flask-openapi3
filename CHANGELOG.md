@@ -1,12 +1,21 @@
+## v1.1.0 2022-03-13
+
+- [#13](https://github.com/luolingchun/flask-openapi3/issues/13) drop support for flask 1.0.x. Thanks @danmur
+- [#15](https://github.com/luolingchun/flask-openapi3/pull/15) Fix to enable BaseModel with __root__ property. Thanks @tarcisiojr
+- [#14](https://github.com/luolingchun/flask-openapi3/pull/14) Custom parameters: doc_prefix, api_doc_url, swagger_url, redoc_url, rapidoc_url. Thanks @barryrobison
+- Upgrade swagger UI v4.6.2
+- Upgrade Redoc v2.0.0-rc.63
+- Upgrade RapiDoc v9.2.0
+
 ## v1.0.1 2022-02-12
 
 - add operation_id for OpenAPI Specification
 
 ## v1.0.0 2022-01-11
 
-- [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thinks @rrr34
-- [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thinks @blynn99
-- [#12](https://github.com/luolingchun/flask-openapi3/pull/12) Support for path operation field deprecated. Thinks
+- [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thanks @rrr34
+- [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thanks @blynn99
+- [#12](https://github.com/luolingchun/flask-openapi3/pull/12) Support for path operation field deprecated. Thanks
   @blynn99
 - Add keyword parameters `summary` and `description`
 - Add servers for OpenAPI
@@ -48,13 +57,13 @@
 
 - OpenAPI add responses and APIBlueprint add abp_responses
 - fix: validate response error when responses is empty dict
-- [#3](https://github.com/luolingchun/flask-openapi3/issues/3) endpoint and APIBlueprint add `doc_ui`. Thinks
+- [#3](https://github.com/luolingchun/flask-openapi3/issues/3) endpoint and APIBlueprint add `doc_ui`. Thanks
   @DerManoMann
-- [#4](https://github.com/luolingchun/flask-openapi3/issues/4) fix: response description. Thinks @DerManoMann
-- [#5](https://github.com/luolingchun/flask-openapi3/issues/5) add custom parameter `oauth_config`. Thinks @DerManoMann
-- [#6](https://github.com/luolingchun/flask-openapi3/issues/6) support validation Flask Response. Thinks @DerManoMann
+- [#4](https://github.com/luolingchun/flask-openapi3/issues/4) fix: response description. Thanks @DerManoMann
+- [#5](https://github.com/luolingchun/flask-openapi3/issues/5) add custom parameter `oauth_config`. Thanks @DerManoMann
+- [#6](https://github.com/luolingchun/flask-openapi3/issues/6) support validation Flask Response. Thanks @DerManoMann
 - [#7](https://github.com/luolingchun/flask-openapi3/issues/7) fix: response validation does not work when uses
-  http.HTTPStatus enums as status_code. Thinks @DerManoMann
+  http.HTTPStatus enums as status_code. Thanks @DerManoMann
 
 ## v0.9.3 2021-06-08
 

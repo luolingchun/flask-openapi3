@@ -21,7 +21,9 @@
         <img src="https://img.shields.io/pypi/pyversions/flask-openapi3" alt="pypi versions">
     </a>
 </p>
-Flask OpenAPI3 is a web API framework based on Flask. It uses [Pydantic](https://github.com/samuelcolvin/pydantic) to verify data and automatically generates three online API documents: Swagger UI, ReDoc and RapiDoc.
+
+Flask OpenAPI3 is a web API framework based on Flask. It uses [Pydantic](https://github.com/samuelcolvin/pydantic) to
+verify data and automatically generates three online API documents: Swagger UI, ReDoc and RapiDoc.
 
 The key features are:
 
@@ -29,8 +31,7 @@ The key features are:
 
 - **Standard document specification:** Based on [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification).
 
-- **Interactive OpenAPI
-  documentation:** [Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc)
+- **Interactive OpenAPI documentation:** [Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc)
   and [RapiDoc](https://github.com/mrin9/RapiDoc).
 
 - **Data validation:** Fast data verification based on [Pydantic](https://github.com/samuelcolvin/pydantic).
