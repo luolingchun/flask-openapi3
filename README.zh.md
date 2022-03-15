@@ -22,16 +22,15 @@
     </a>
 </p>
 
-Flask OpenAPI3 是一个基于 [Flask](https://github.com/pallets/flask) 的 WEB API
-框架，使用 [Pydantic](https://github.com/samuelcolvin/pydantic) 验证数据，自动生成 Swagger UI，ReDoc 和 RapiDoc 三种在线 API 文档。
+**Flask OpenAPI3** 是一个基于 **Flask** 的 WEB API 框架，使用 **Pydantic** 验证数据，自动生成 **Swagger UI**，**ReDoc** 和 **RapiDoc** 三种在线 API 文档。
 
 主要特点有：
 
-- **编码简单：** 使用简单易于学习。
-- **标准的文档规范：** 基于[开放 API 规范](https://github.com/OAI/OpenAPI-Specification)。
-- **交互式 OpenAPI 文档：** [Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc)
-  和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
-- **数据验证：** 基于 [Pydantic](https://github.com/samuelcolvin/pydantic) 的快速数据验证。
+- **编码简单：** 使用简单易于学习
+- **标准的文档规范：** 基于[开放 API 规范](https://github.com/OAI/OpenAPI-Specification)
+- **交互式 OpenAPI 文档：** [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc)
+  和 [RapiDoc](https://github.com/mrin9/RapiDoc)
+- **数据验证：** 基于 [Pydantic](https://github.com/samuelcolvin/pydantic) 的快速数据验证
 
 ## 依赖
 
