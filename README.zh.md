@@ -50,7 +50,7 @@ pip install -U flask-openapi3
 
 ## 一个简单的示例
 
-这里有一个简单的示例，更多示例请查看[示例](/flask-openapi3/zh/Example/)。
+这里有一个简单的示例，更多示例请查看[示例](https://luolingchun.github.io/flask-openapi3/zh/Example/)。
 
 ```python
 from pydantic import BaseModel
