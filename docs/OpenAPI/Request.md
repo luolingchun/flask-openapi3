@@ -8,9 +8,9 @@ from pydantic import BaseModel
 
 Request parameter in rules，**`@app.get('/book/<int:bid>')`**.
 
-You have to declare path model as a class that inherits from  **`BaseModel`**:
+You have to declare **path** model as a class that inherits from  **`BaseModel`**:
 
-```python
+```python hl_lines="6"
 class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
 
@@ -32,7 +32,7 @@ Receive flask **`request.args`**.
 
 like [path](#path), you need pass **`query`** to view function.
 
-```python
+```python hl_lines="7"
 class BookQuery(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
@@ -47,7 +47,7 @@ def get_book(path: BookPath, query: BookQuery):
 
 Receive flask **`request.form`** and **`request.files`**.
 
-```python
+```python hl_lines="7"
 class UploadFileForm(BaseModel):
     file: FileStorage  # request.files["file"]
     file_type: str = Field(None, description="File type")
@@ -62,7 +62,7 @@ def upload_file(form: UploadFileForm):
 
 Receive flask **`request.json`**.
 
-```python
+```python hl_lines="7"
 class BookBody(BaseModel):
     age: Optional[int] = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')

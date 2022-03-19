@@ -5,7 +5,7 @@
     </a>
 </div>
 <p align="center">
-    <em>为你的 Flask 项目生成 RESTful API 和 OpenAPI 文档。</em>
+    <em>为你的 Flask 项目生成 REST API 和 OpenAPI 文档。</em>
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
@@ -22,7 +22,8 @@
     </a>
 </p>
 
-**Flask OpenAPI3** 是一个基于 **Flask** 的 WEB API 框架，使用 **Pydantic** 验证数据，自动生成 **Swagger UI**，**ReDoc** 和 **RapiDoc** 三种在线 API 文档。
+**Flask OpenAPI3** 是一个基于 **Flask** 的 web API 框架，使用 **Pydantic** 验证数据，自动生成 **Swagger UI**，**ReDoc** 和 **RapiDoc**
+交互文档。
 
 主要特点有：
 
@@ -49,7 +50,7 @@ pip install -U flask-openapi3
 
 ## 一个简单的示例
 
-这里有一个简单的示例，更多示例请查看[示例](https://luolingchun.github.io/flask-openapi3/zh/Example/)。
+这里有一个简单的示例，更多示例请查看[示例](/flask-openapi3/zh/Example/)。
 
 ```python
 from pydantic import BaseModel
@@ -92,8 +93,8 @@ if __name__ == '__main__':
 运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问
 http://127.0.0.1:5000/openapi。
 
-你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc)
-和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
+你将看到文档入口：[Swagger UI](https://github.com/swagger-api/swagger-ui)，
+[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)

@@ -12,7 +12,7 @@ setup(
     name="flask-openapi3",
     version=__version__,
     url='https://github.com/luolingchun/flask-openapi3',
-    description='Generate RESTful API and OpenAPI document for your Flask project.',
+    description='Generate REST API and OpenAPI documentation for your Flask project.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='MIT',

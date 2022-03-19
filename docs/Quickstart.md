@@ -3,7 +3,7 @@ and [Pydantic](https://github.com/samuelcolvin/pydantic), So you can use it like
 
 ## A Minimal Application
 
-just like [Flask](https://flask.palletsprojects.com/en/latest/quickstart/#a-minimal-application), Create `hello.py`:
+Just like [Flask](https://flask.palletsprojects.com/en/latest/quickstart/#a-minimal-application), Create `hello.py`:
 
 ``` python
 from flask_openapi3 import OpenAPI
@@ -26,7 +26,7 @@ And then run it:
 python hello.py
 ```
 
-You will see the output:
+You will see the output information:
 
 ```
 
@@ -54,9 +54,9 @@ version: 1.0.1
 
 ```
 
-## RESTful API
+## REST API
 
-You can use **`get`**, **`post`**, **`put`**, **`patch`**, **`delete`** RESTful API in `flask-openapi3`.
+You can use **`get`**, **`post`**, **`put`**, **`patch`**, **`delete`** REST API in `flask-openapi3`.
 
 ```python
 from flask_openapi3 import OpenAPI
@@ -81,7 +81,7 @@ if __name__ == '__main__':
 ## APIBlueprint
 
 APIBlueprint based on [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint),
-you should use **`app.register_api`** instead of  **`app.register_blueprint`**.
+you should use **`register_api`** instead of  **`register_blueprint`**.
 
 ```python hl_lines="14"
 from flask_openapi3 import OpenAPI

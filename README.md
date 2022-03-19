@@ -5,7 +5,7 @@
     </a>
 </div>
 <p align="center">
-    <em>Generate RESTful API and OpenAPI document for your Flask project.</em>
+    <em>Generate REST API and OpenAPI documentation for your Flask project.</em>
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
@@ -22,8 +22,8 @@
     </a>
 </p>
 
-**Flask OpenAPI3** is a web API framework based on **Flask**. It uses **Pydantic** to verify data and automatically
-generates three online API documents: **Swagger UI**, **ReDoc** and **RapiDoc**.
+**Flask OpenAPI3** is a web API framework based on **Flask**. It uses **Pydantic** to verify data and automatic
+generation of interaction documentation: **Swagger UI**, **ReDoc** and **RapiDoc**.
 
 The key features are:
 
@@ -31,7 +31,8 @@ The key features are:
 
 - **Standard document specification:** Based on [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification)
 
-- **Interactive OpenAPI documentation:** [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc)
+- **Interactive OpenAPI documentation:** [Swagger UI](https://github.com/swagger-api/swagger-ui), 
+  [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc)
 
 - **Data validation:** Fast data verification based on [Pydantic](https://github.com/samuelcolvin/pydantic)
 
@@ -52,7 +53,7 @@ pip install -U flask-openapi3
 
 ## A Simple Example
 
-Here's a simple example, further go to the [Example](https://luolingchun.github.io/flask-openapi3/en/Example/).
+Here's a simple example, further go to the [Example](/flask-openapi3/en/Example/).
 
 ```python
 from pydantic import BaseModel
@@ -95,8 +96,8 @@ if __name__ == '__main__':
 Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go
 to http://127.0.0.1:5000/openapi.
 
-You will see the document: [Swagger UI](https://github.com/swagger-api/swagger-ui)
-, [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc).
+You will see the documentation: [Swagger UI](https://github.com/swagger-api/swagger-ui), 
+[Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc).
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)

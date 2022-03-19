@@ -26,7 +26,7 @@ if __name__ == '__main__':
 python hello.py
 ```
 
-你将会看到输出：
+你将会看到输出信息：
 
 ```
 
@@ -54,9 +54,9 @@ version: 1.0.1
 
 ```
 
-## RESTful API
+## REST API
 
-你可以在 `flask-openapi3` 中使用 **`get`**，**`post`**，**`put`**，**`patch`**，**`delete`** 等 RESTful API 。
+你可以在 `flask-openapi3` 中使用 **`get`**，**`post`**，**`put`**，**`patch`**，**`delete`** 等 REST API 。
 
 ```python
 from flask_openapi3 import OpenAPI
@@ -81,8 +81,8 @@ if __name__ == '__main__':
 ## APIBlueprint
 
 APIBlueprint
-基于 [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint)，你应该使用 **`app.register_api`**
-来代替 **`app.register_blueprint`**。
+基于 [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint)，
+你应该使用 **`register_api`** 来代替 **`register_blueprint`**。
 
 ```python hl_lines="14"
 from flask_openapi3 import OpenAPI

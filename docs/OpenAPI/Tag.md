@@ -1,6 +1,6 @@
 You can also specify tag for apis, like this:
 
-```python
+```python hl_lines="3 6"
 ...
 
 book_tag = Tag(name='book', description='Some Book')
@@ -23,7 +23,7 @@ and then you will get the magic.
 
 You don't need specify **tag** for every api.
 
-```python
+```python hl_lines="3"
 tag = Tag(name='book', description="Some Book")
 
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag])

@@ -1,6 +1,6 @@
 If you want to validate response and generate **Schemas**, pass the **`responses`**.
 
-```python
+```python hl_lines="13"
 class BookBodyWithID(BaseModel):
     bid: int = Field(..., description='book id')
     age: Optional[int] = Field(None, ge=2, le=4, description='Age')
@@ -36,7 +36,7 @@ development environment.
 
 *New in v0.9.4*
 
-You can add `responses` to each API under the `app` wrapper.
+You can add `responses` for each API under the `app` wrapper.
 
 ```python hl_lines="4"
 app = OpenAPI(
@@ -54,7 +54,7 @@ def endpoint():
 
 *New in v0.9.4*
 
-You can add `responses` to each API under the `api` wrapper.
+You can add `responses` for each API under the `api` wrapper.
 
 ```python hl_lines="10"
 class Unauthorized(BaseModel):
