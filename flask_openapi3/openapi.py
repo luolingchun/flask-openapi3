@@ -11,7 +11,6 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template, request, make_response, current_app
 from flask.wrappers import Response
 from pydantic import ValidationError, BaseModel
-from werkzeug.datastructures import MultiDict
 
 from .http import HTTPMethod
 from .markdown import openapi_to_markdown
@@ -49,7 +48,7 @@ def _do_wrapper(
     :return:
     """
     # validate header, cookie, path and query
-    kwargs_ = dict()
+    request_kwargs = dict()
     try:
         if header:
             request_headers = dict(request.headers) if request.headers is not None else {}
@@ -58,39 +57,49 @@ def _do_wrapper(
                 # add original key
                 if ket_title in request_headers.keys():
                     request_headers[key] = request_headers[ket_title]
-            header_ = header(**request_headers)
-            kwargs_.update({"header": header_})
+            request_kwargs.update({"header": header(**request_headers)})
         if cookie:
-            cookie_ = cookie(**request.cookies if request.cookies is not None else {})
-            kwargs_.update({"cookie": cookie_})
+            request_cookies = cookie(**request.cookies if request.cookies is not None else {})
+            request_kwargs.update({"cookie": request_cookies})
         if path:
-            path_ = path(**kwargs)
-            kwargs_.update({"path": path_})
+            request_path = path(**kwargs)
+            request_kwargs.update({"path": request_path})
         if query:
-            args = request.args or MultiDict()
-            args_dict = {}
+            request_args = request.args
+            query_dict = {}
             for k, v in query.schema().get('properties', {}).items():
                 if v.get('type') == 'array':
-                    value = args.getlist(k)
+                    value = request_args.getlist(k)
                 else:
-                    value = args.get(k)
+                    value = request_args.get(k)
                 if value is not None:
-                    args_dict[k] = value
-            query_ = query(**args_dict)
-            kwargs_.update({"query": query_})
+                    query_dict[k] = value
+            request_kwargs.update({"query": query(**query_dict)})
         if form:
-            req_form = request.form or MultiDict()
+            request_form = request.form
+            request_files = request.files
             form_dict = {}
             for k, v in form.schema().get('properties', {}).items():
                 if v.get('type') == 'array':
-                    value = req_form.getlist(k)
+                    items = v.get('items')
+                    if items is not None and items.get('type') == 'string' and items.get('format') == 'binary':
+                        # List[FileStorage]
+                        # {'title': 'Files', 'type': 'array', 'items': {'format': 'binary', 'type': 'string'}
+                        value = request_files.getlist(k)
+                    else:
+                        # List[str], List[int] ...
+                        # {'title': 'Files', 'type': 'array', 'items': {'type': 'string'}
+                        value = request_form.getlist(k)
                 else:
-                    value = req_form.get(k)
+                    if v.get('format') == 'binary':
+                        # FileStorage
+                        value = request_files.get(k)
+                    else:
+                        # str, int ...
+                        value = request_form.get(k)
                 if value is not None:
                     form_dict[k] = value
-            form_dict.update(**request.files.to_dict())
-            form_ = form(**form_dict)
-            kwargs_.update({"form": form_})
+            request_kwargs.update({"form": form(**form_dict)})
         if body:
             if body.__custom_root_type__:
                 # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
@@ -99,21 +108,21 @@ def _do_wrapper(
             else:
                 body_ = body(
                     **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
-            kwargs_.update({"body": body_})
+            request_kwargs.update({"body": body_})
     except ValidationError as e:
-        resp = make_response(e.json())
-        resp.headers['Content-Type'] = 'application/json'
-        resp.status_code = 422
-        return resp
+        response = make_response(e.json())
+        response.headers['Content-Type'] = 'application/json'
+        response.status_code = 422
+        return response
 
     # handle request
-    resp = func(**kwargs_)
+    response = func(**request_kwargs)
 
-    validate_resp = current_app.config.get("VALIDATE_RESPONSE", False)
-    if validate_resp and responses:
-        validate_response(resp, responses)
+    VALIDATE_RESPONSE = current_app.config.get("VALIDATE_RESPONSE", False)
+    if VALIDATE_RESPONSE and responses:
+        validate_response(response, responses)
 
-    return resp
+    return response
 
 
 class APIBlueprint(Blueprint):
