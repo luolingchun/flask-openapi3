@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 120
+# __init__ exports names
+per-file-ignores=./flask_openapi3/__init__.py: F401

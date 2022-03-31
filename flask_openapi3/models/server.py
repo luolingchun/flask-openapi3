@@ -3,7 +3,7 @@
 # @Time    : 2021/4/28 11:26
 from typing import Optional, List, Dict
 
-from pydantic import BaseModel, AnyUrl
+from pydantic import BaseModel
 
 
 class ServerVariable(BaseModel):

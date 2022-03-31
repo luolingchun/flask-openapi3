@@ -7,8 +7,8 @@ from flask_openapi3.models import OPENAPI3_REF_PREFIX
 def parse_schemas(schemas):
     schemas_dict = {}
     for name, obj in schemas.items():
-        schemas_dict[name] = f"| name | type | required | description |\n"
-        schemas_dict[name] += f"| ---- | ---- | -------- | ----------- |\n"
+        schemas_dict[name] = "| name | type | required | description |\n"
+        schemas_dict[name] += "| ---- | ---- | -------- | ----------- |\n"
         required = obj.get('required', [])
         enum = obj.get('enum')
         if enum:
@@ -30,8 +30,8 @@ def parse_schemas(schemas):
 
 
 def parse_parameters(parameters):
-    md = f"| name | type | in   | required | description |\n"
-    md += f"| ---- | ---- | ---- | -------- | ----------- |\n"
+    md = "| name | type | in   | required | description |\n"
+    md += "| ---- | ---- | ---- | -------- | ----------- |\n"
     for param in parameters:
         aff_of = param['schema'].get('allOf')
         if aff_of:
@@ -97,11 +97,11 @@ def openapi_to_markdown(api_json: dict) -> str:
             tag = operation.get('tags', ['default'])[0]
             parameters = operation.get('parameters', [])
             if parameters:
-                method_markdown += f"**parameters:** \n\n"
+                method_markdown += "**parameters:** \n\n"
                 method_markdown += parse_parameters(parameters)
             request_body = operation.get('requestBody')
             if request_body:
-                method_markdown += f"**requestBody:** \n\n"
+                method_markdown += "**requestBody:** \n\n"
                 method_markdown += parse_request_body(request_body, schemas_dict)
             tag_dict[tag]['paths'] += f"{method_markdown}\n\n"
 
@@ -112,7 +112,7 @@ def openapi_to_markdown(api_json: dict) -> str:
             markdown += f"{value.get('description', '*no description*')}\n\n"
             markdown += f"{paths}\n"
     if schemas:
-        markdown += f"## schemas\n\n"
+        markdown += "## schemas\n\n"
         for name, obj in schemas_dict.items():
             markdown += f"### {name}\n\n"
             markdown += f"{obj}\n\n"

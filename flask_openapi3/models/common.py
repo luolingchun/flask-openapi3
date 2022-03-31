@@ -3,7 +3,7 @@
 # @Time    : 2021/4/30 11:46
 from typing import Optional, List, Any, Union, Dict
 
-from pydantic import BaseModel, AnyUrl, Field
+from pydantic import BaseModel, Field
 
 
 class ExternalDocumentation(BaseModel):
