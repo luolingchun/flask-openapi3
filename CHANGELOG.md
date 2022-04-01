@@ -1,3 +1,7 @@
+## v1.1.1 2022-03-31
+
+- [#16](https://github.com/luolingchun/flask-openapi3/issues/16) Fix fileStorage list is not supported. Thanks @tekrei
+
 ## v1.1.0 2022-03-13
 
 - [#13](https://github.com/luolingchun/flask-openapi3/issues/13) drop support for flask 1.0.x. Thanks @danmur
