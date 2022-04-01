@@ -1,4 +1,4 @@
-## v1.1.1 2022-03-31
+## v1.1.2 2022-04-01
 
 - [#16](https://github.com/luolingchun/flask-openapi3/issues/16) Fix fileStorage list is not supported. Thanks @tekrei
 
