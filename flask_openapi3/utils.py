@@ -58,7 +58,7 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     return operation_id
 
 
-def get_func_parameter(func: Callable, func_globals: Dict[str, Any], *, parameter_name='path') -> Type[BaseModel]:
+def get_func_parameter(func: Callable, *, parameter_name='path') -> Type[BaseModel]:
     """Get view-func parameters.
     parameter_name has six parameters to choose from: path, query, form, body, header, cookie.
     """
@@ -67,8 +67,12 @@ def get_func_parameter(func: Callable, func_globals: Dict[str, Any], *, paramete
     annotation = param.annotation if param else None
     if isinstance(annotation, str):
         # PEP563
+        while hasattr(func, '__wrapped__'):
+            # Find globalns for the unwrapped func.
+            func = func.__wrapped__
+        globalns = getattr(func, '__globals__', {})
         annotation = ForwardRef(annotation)
-        annotation = pydantic.typing.evaluate_forwardref(annotation, func_globals, func_globals)
+        annotation = pydantic.typing.evaluate_forwardref(annotation, globalns, globalns)
     return annotation
 
 
@@ -403,17 +407,13 @@ def parse_parameters(
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
-    func_globals = getattr(func, '__globals__', {})
-    # extra globals used in decorator(wrapper) for func, wrapper.__extra_globals__ = getattr(func, '__globals__', {})
-    func_globals.update(**getattr(func, '__extra_globals__', {}))  # noqa
-
     parameters = []
-    header = get_func_parameter(func, func_globals, parameter_name='header')
-    cookie = get_func_parameter(func, func_globals, parameter_name='cookie')
-    path = get_func_parameter(func, func_globals, parameter_name='path')
-    query = get_func_parameter(func, func_globals, parameter_name='query')
-    form = get_func_parameter(func, func_globals, parameter_name='form')
-    body = get_func_parameter(func, func_globals, parameter_name='body')
+    header = get_func_parameter(func, parameter_name='header')
+    cookie = get_func_parameter(func, parameter_name='cookie')
+    path = get_func_parameter(func, parameter_name='path')
+    query = get_func_parameter(func, parameter_name='query')
+    form = get_func_parameter(func, parameter_name='form')
+    body = get_func_parameter(func, parameter_name='body')
     if doc_ui is False:
         return header, cookie, path, query, form, body
     if header:
