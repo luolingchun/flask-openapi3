@@ -105,11 +105,13 @@ if __name__ == '__main__':
 
 ## Nested APIBlueprint
 
-Allow a **API Blueprint** to be registered on another **API Blueprint**.
+*New in v2.0.0*
+
+Allow an **API Blueprint** to be registered on another **API Blueprint**.
 
 For more information, please see [Flask Nesting Blueprints](https://flask.palletsprojects.com/en/latest/blueprints/#nesting-blueprints).
 
-```python
+```python hl_lines="21 22"
 from flask_openapi3 import OpenAPI, APIBlueprint
 
 app = OpenAPI(__name__)

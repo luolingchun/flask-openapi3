@@ -106,11 +106,13 @@ if __name__ == '__main__':
 
 ## 嵌套 APIBlueprint
 
+*v2.0.0 新增*
+
 允许一个 **API Blueprint** 被另一个 **API Blueprint** 注册。
 
 更多信息请查看 [Flask Nesting Blueprints](https://flask.palletsprojects.com/en/latest/blueprints/#nesting-blueprints)。
 
-```python
+```python hl_lines="21 22"
 from flask_openapi3 import OpenAPI, APIBlueprint
 
 app = OpenAPI(__name__)
