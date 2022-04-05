@@ -54,6 +54,7 @@ class APIBlueprint(Blueprint):
         self.doc_ui = doc_ui
 
     def register_api(self, api: "APIBlueprint") -> None:
+        """Register a nested APIBlueprint"""
         if api is self:
             raise ValueError("Cannot register a api blueprint on itself")
 
