@@ -127,8 +127,6 @@ class APIBlueprint(Blueprint):
             uri = get_openapi_path(rule)
             # merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
-            # strip the right slash
-            uri = uri.rstrip('/')
             # parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body, combine_responses
