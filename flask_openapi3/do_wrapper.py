@@ -69,8 +69,8 @@ def _do_wrapper(
             form_dict = {}
             for k, v in form.schema().get('properties', {}).items():
                 if v.get('type') == 'array':
-                    items = v.get('items')
-                    if items is not None and items.get('type') == 'string' and items.get('format') == 'binary':
+                    items = v.get('items', {})
+                    if items.get('type') == 'string' and items.get('format') == 'binary':
                         # List[FileStorage]
                         # {'title': 'Files', 'type': 'array', 'items': {'format': 'binary', 'type': 'string'}
                         value = request_files.getlist(k)

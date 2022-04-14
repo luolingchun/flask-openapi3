@@ -89,22 +89,21 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(header)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    properties = schema.get('properties', {})
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        for name, value in properties.items():
-            data = {
-                "name": name,
-                "in": ParameterInType.header,
-                "description": value.get("description"),
-                "required": name in schema.get("required", []),
-                "schema": Schema(**value)
-            }
-            parameters.append(Parameter(**data))
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    for name, value in properties.items():
+        data = {
+            "name": name,
+            "in": ParameterInType.header,
+            "description": value.get("description"),
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
+        parameters.append(Parameter(**data))
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -114,22 +113,21 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(cookie)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    properties = schema.get('properties', {})
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        for name, value in properties.items():
-            data = {
-                "name": name,
-                "in": ParameterInType.cookie,
-                "description": value.get("description"),
-                "required": name in schema.get("required", []),
-                "schema": Schema(**value)
-            }
-            parameters.append(Parameter(**data))
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    for name, value in properties.items():
+        data = {
+            "name": name,
+            "in": ParameterInType.cookie,
+            "description": value.get("description"),
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
+        parameters.append(Parameter(**data))
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -139,22 +137,21 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(path)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    properties = schema.get('properties', {})
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        for name, value in properties.items():
-            data = {
-                "name": name,
-                "in": ParameterInType.path,
-                "description": value.get("description"),
-                "required": True,
-                "schema": Schema(**value)
-            }
-            parameters.append(Parameter(**data))
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    for name, value in properties.items():
+        data = {
+            "name": name,
+            "in": ParameterInType.path,
+            "description": value.get("description"),
+            "required": True,
+            "schema": Schema(**value)
+        }
+        parameters.append(Parameter(**data))
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -164,22 +161,21 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(query)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    properties = schema.get('properties', {})
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        for name, value in properties.items():
-            data = {
-                "name": name,
-                "in": ParameterInType.query,
-                "description": value.get("description"),
-                "required": name in schema.get("required", []),
-                "schema": Schema(**value)
-            }
-            parameters.append(Parameter(**data))
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    for name, value in properties.items():
+        data = {
+            "name": name,
+            "in": ParameterInType.query,
+            "description": value.get("description"),
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
+        parameters.append(Parameter(**data))
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -187,36 +183,34 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     """Parse form model"""
     schema = get_schema(form)
-    content = None
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    properties = schema.get('properties', {})
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        title = schema.get('title')
-        components_schemas[title] = Schema(**schema)
-        encoding = {}
-        for k, v in form.schema().get('properties', {}).items():
-            if v.get('type') == 'array':
-                encoding[k] = {'style': 'form'}
+    assert properties, f"{form.__name__}'s properties cannot be empty."
 
-        content = {
-            "multipart/form-data": MediaType(
-                **{
-                    "schema": Schema(
-                        **{
-                            "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
-                        }
-                    ),
-                    "encoding": encoding
-                }
-            )
-        }
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    title = schema.get('title')
+    components_schemas[title] = Schema(**schema)
+    encoding = {}
+    for k, v in properties.items():
+        if v.get('type') == 'array':
+            encoding[k] = {'style': 'form'}
 
-    assert content is not None, f"{form.__name__}'s properties cannot be empty."
+    content = {
+        "multipart/form-data": MediaType(
+            **{
+                "schema": Schema(
+                    **{
+                        "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
+                    }
+                ),
+                "encoding": encoding
+            }
+        )
+    }
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return content, components_schemas
 
@@ -224,39 +218,26 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
 def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     """Parse body model"""
     schema = get_schema(body)
-    content = None
     components_schemas = dict()
-    properties = schema.get('properties')
-    definitions = schema.get('definitions')
+    definitions = schema.get('definitions', {})
 
-    if properties:
-        title = schema.get('title')
-        components_schemas[title] = Schema(**schema)
-        content = {
-            "application/json": MediaType(
-                **{
-                    "schema": Schema(
-                        **{
-                            "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
-                        }
-                    )
-                }
-            )
-        }
-    if definitions:
-        for name, value in definitions.items():
-            components_schemas[name] = Schema(**value)
+    title = schema.get('title')
+    components_schemas[title] = Schema(**schema)
 
-    if content is None:
-        content = {
-            "application/json": MediaType(
-                **{
-                    "schema": Schema(
-                        **schema
-                    )
-                }
-            )
-        }
+    content = {
+        "application/json": MediaType(
+            **{
+                "schema": Schema(
+                    **{
+                        "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
+                    }
+                )
+            }
+        )
+    }
+
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return content, components_schemas
 
