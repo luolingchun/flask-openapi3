@@ -13,6 +13,7 @@ from flask.wrappers import Response
 from pydantic import BaseModel
 
 from .api_blueprint import APIBlueprint
+from .commands import openapi_command
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .markdown import openapi_to_markdown
@@ -94,6 +95,8 @@ class OpenAPI(Flask):
             self.init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
+        # add openapi command
+        self.cli.add_command(openapi_command)
 
     def init_doc(self) -> None:
         """
