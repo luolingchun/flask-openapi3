@@ -25,6 +25,7 @@ setup(
     zip_safe=False,
     platforms='any',
     install_requires=["Flask>=1.1", "pydantic>=1.2"],
+    extras_require={'yaml': ['pyyaml']},
     classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',

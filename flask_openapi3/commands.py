@@ -10,16 +10,22 @@ from flask.cli import with_appcontext
 
 @click.command(name='openapi')
 @click.option('--output', '-o', type=click.Path(), help='The output file path.')
+@click.option('--format', '-f', type=click.Choice(['json', 'yaml']), help='The output file format.')
 @click.option('--indent', '-i', type=int, help='The indentation for JSON dumps.')
-@click.option('--ensure_ascii', '-a', is_flag=True, help='Contains ASCII characters or not. Defaults to False.')
+@click.option('--ensure_ascii', '-a', is_flag=True, help='Ensure ASCII characters or not. Defaults to False.')
 @with_appcontext
-def openapi_command(output, indent, ensure_ascii):
+def openapi_command(output, format, indent, ensure_ascii):
     """Export the OpenAPI Specification to console or a file"""
     if hasattr(current_app, 'api_doc'):
-        openapi_json = json.dumps(current_app.api_doc, indent=indent, ensure_ascii=ensure_ascii)
+        obj = current_app.api_doc
+        if format == 'yaml':
+            import yaml
+            openapi = yaml.safe_dump(obj)
+        else:
+            openapi = json.dumps(obj, indent=indent, ensure_ascii=ensure_ascii)
         if output:
             with open(output, 'w', encoding='utf8') as f:
-                f.write(openapi_json)
+                f.write(openapi)
             click.echo(f"Saved to {output}.")
         else:
-            click.echo(openapi_json)
+            click.echo(openapi)
