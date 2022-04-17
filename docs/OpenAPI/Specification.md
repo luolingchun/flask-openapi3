@@ -56,8 +56,8 @@ app = OpenAPI(__name__, info=info, doc_expansion='full')
 
 ## servers
 
-An array of Server Objects, which provide connectivity information to a target server. If the servers property is not
-provided, or is an empty array, the default value would be a Server Object with a url value of /.
+An array of Server Objects, which provide connectivity information to a target server. If the server's property is not
+provided, or is an empty array, the default value would be a Server Object with an url value of /.
 
 ```python
 from flask_openapi3 import OpenAPI, Server

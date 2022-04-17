@@ -21,7 +21,7 @@ and then you will get the magic.
 
 *New in v0.9.3*
 
-You don't need specify **tag** for every api.
+You don't need to specify **tag** for every api.
 
 ```python hl_lines="3"
 tag = Tag(name='book', description="Some Book")
