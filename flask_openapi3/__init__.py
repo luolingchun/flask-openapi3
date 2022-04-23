@@ -4,6 +4,8 @@
 
 __version__ = '1.1.2'
 
+import os
+
 from .models.file import FileStorage
 from .models.info import Info
 from .models.oauth import OAuthConfig
@@ -14,19 +16,5 @@ from .models.validation_error import UnprocessableEntity
 from .openapi import APIBlueprint
 from .openapi import OpenAPI
 
-print(rf"""
-         __ _           _
-        / _| |         | |
-       | |_| | __ _ ___| | __
-       |  _| |/ _` / __| |/ /
-       | | | | (_| \__ \   <        _  _____
-       |_| |_|\__,_|___/_|\_\      (_)|____ |
-  ___  _ __   ___ _ __   __ _ _ __  _     / /
- / _ \| '_ \ / _ \ '_ \ / _` | '_ \| |    \ \
-| (_) | |_) |  __/ | | | (_| | |_) | |.___/ /
- \___/| .__/ \___|_| |_|\__,_| .__/|_|\____/
-      | |                    | |
-      |_|                    |_|
-
-version: {__version__}
-""")
+if os.environ.get("WERKZEUG_RUN_MAIN") is None:
+    print(f" * Powered by flask-openapi3 (version: {__version__})")

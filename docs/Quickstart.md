@@ -29,22 +29,7 @@ python hello.py
 You will see the output information:
 
 ```
-
-         __ _           _    
-        / _| |         | |   
-       | |_| | __ _ ___| | __
-       |  _| |/ _` / __| |/ /
-       | | | | (_| \__ \   <        _  _____
-       |_| |_|\__,_|___/_|\_\      (_)|____ |
-  ___  _ __   ___ _ __   __ _ _ __  _     / /
- / _ \| '_ \ / _ \ '_ \ / _` | '_ \| |    \ \
-| (_) | |_) |  __/ | | | (_| | |_) | |.___/ /
- \___/| .__/ \___|_| |_|\__,_| .__/|_|\____/
-      | |                    | |
-      |_|                    |_|
-        
-version: 1.0.1
-
+ * Powered by flask-openapi3 (version: 1.1.3)
  * Serving Flask app 'just_flask' (lazy loading)
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
