@@ -29,7 +29,6 @@ python hello.py
 You will see the output information:
 
 ```
- * Powered by flask-openapi3 (version: 1.1.3)
  * Serving Flask app 'just_flask' (lazy loading)
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
