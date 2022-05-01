@@ -1,3 +1,10 @@
+## v1.1.3 2022-05-01
+
+- fix: Find globalns for the unwrapped func
+- [#19](https://github.com/luolingchun/flask-openapi3/issues/19) fix: Trailing slash in APIBlueprint. Thinks @ev-agelos
+- add description for UnprocessableEntity
+- remove printouts in `__init__.py`
+
 ## v1.1.2 2022-04-01
 
 - [#16](https://github.com/luolingchun/flask-openapi3/issues/16) Fix fileStorage list is not supported. Thanks @tekrei

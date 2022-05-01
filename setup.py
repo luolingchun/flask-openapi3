@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/28 11:03
+import os
+import re
 
 from setuptools import setup, find_packages
 
-from flask_openapi3 import __version__
-
 long_description = open('README.md', 'r', encoding='utf-8').read()
+
+version_file = os.path.join(os.path.dirname(__file__), 'flask_openapi3', '__version__.py')
+with open(version_file, 'r', encoding='utf-8') as f:
+    version = re.findall(r"__version__ = '(.*?)'", f.read())[0]
 
 setup(
     name="flask-openapi3",
-    version=__version__,
+    version=version,
     url='https://github.com/luolingchun/flask-openapi3',
     description='Generate REST API and OpenAPI documentation for your Flask project.',
     long_description=long_description,
