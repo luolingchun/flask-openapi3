@@ -159,7 +159,7 @@ class OpenAPI(Flask):
         self.register_blueprint(blueprint)
 
     def export_to_markdown(self) -> Response:
-        """Experimental"""
+        """Export to markdown(Experimental)"""
         md = StringIO()
 
         md.write(openapi_to_markdown(self.api_doc))
@@ -171,7 +171,7 @@ class OpenAPI(Flask):
 
     @property
     def api_doc(self) -> Dict:
-        """Generate spec json"""
+        """Generate Specification json"""
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,

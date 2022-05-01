@@ -2,19 +2,19 @@
 # @Author  : llc
 # @Time    : 2021/4/30 10:14
 
-__version__ = '1.1.2'
+from .__version__ import __version__
 
-import os
-
+from .api_blueprint import APIBlueprint
 from .models.file import FileStorage
 from .models.info import Info
 from .models.oauth import OAuthConfig
-from .models.security import HTTPBase, HTTPBearer, OAuth2, APIKey, OpenIdConnect
-from .models.server import Server, ServerVariable
+from .models.security import APIKey
+from .models.security import HTTPBase
+from .models.security import HTTPBearer
+from .models.security import OAuth2
+from .models.security import OpenIdConnect
+from .models.server import Server
+from .models.server import ServerVariable
 from .models.tag import Tag
 from .models.validation_error import UnprocessableEntity
-from .openapi import APIBlueprint
 from .openapi import OpenAPI
-
-if os.environ.get("WERKZEUG_RUN_MAIN") is None:
-    print(f" * Powered by flask-openapi3 (version: {__version__})")

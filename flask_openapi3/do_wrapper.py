@@ -39,15 +39,15 @@ def _do_wrapper(
     request_kwargs = dict()
     try:
         if header:
-            request_headers = dict(request.headers) if request.headers is not None else {}
+            request_headers = dict(request.headers) or {}
             for key, value in header.__annotations__.items():
-                ket_title = key.title()
+                key_title = key.title()
                 # add original key
-                if ket_title in request_headers.keys():
-                    request_headers[key] = request_headers[ket_title]
+                if key_title in request_headers.keys():
+                    request_headers[key] = request_headers[key_title]
             request_kwargs.update({"header": header(**request_headers)})
         if cookie:
-            request_cookies = cookie(**request.cookies if request.cookies is not None else {})
+            request_cookies = cookie(**request.cookies or {})
             request_kwargs.update({"cookie": request_cookies})
         if path:
             request_path = path(**kwargs)
@@ -91,11 +91,9 @@ def _do_wrapper(
         if body:
             if body.__custom_root_type__:
                 # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
-                body_ = body(
-                    __root__=request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+                body_ = body(__root__=request.get_json(silent=True) or {})
             else:
-                body_ = body(
-                    **request.get_json(silent=True) if request.get_json(silent=True) is not None else {})
+                body_ = body(**request.get_json(silent=True) or {})
             request_kwargs.update({"body": body_})
     except ValidationError as e:
         response = make_response(e.json())
