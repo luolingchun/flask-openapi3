@@ -31,6 +31,11 @@ app = OpenAPI(
     responses={"404": NotFoundResponse}
 )
 app.config["TESTING"] = True
+
+# Because there are no way to check what the url_root is going to be
+# when just calling app.doc_prefix, we have to use app.doc_prefix to generate the same url
+app.doc_prefix = f"http://localhost{app.doc_prefix}"
+
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 

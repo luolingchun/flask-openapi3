@@ -8,7 +8,7 @@ from functools import wraps
 from io import StringIO
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
-from flask import Flask, Blueprint, render_template, make_response
+from flask import Flask, Blueprint, render_template, make_response, request
 from flask.wrappers import Response
 from pydantic import BaseModel
 
@@ -172,12 +172,17 @@ class OpenAPI(Flask):
     @property
     def api_doc(self) -> Dict:
         """Generate spec json"""
+
+        url_root: str = ""
+        if request.__class__.__name__ != "LocalProxy" and self.doc_prefix[0] == "/":
+            url_root = request.url_root.rstrip("/")
+
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,
             servers=self.severs,
             externalDocs=ExternalDocumentation(
-                url=f'{self.doc_prefix}/markdown',
+                url=f'{url_root}{self.doc_prefix}/markdown',
                 description='Export to markdown'
             )
         )

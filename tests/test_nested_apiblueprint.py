@@ -8,6 +8,10 @@ from flask_openapi3 import APIBlueprint, OpenAPI
 
 app = OpenAPI(__name__)
 
+# Because there are no way to check what the url_root is going to be
+# when just calling app.doc_prefix, we have to use app.doc_prefix to generate the same url
+app.doc_prefix = f"http://localhost{app.doc_prefix}"
+
 api = APIBlueprint('book', __name__, url_prefix='/api/book')
 api_english = APIBlueprint('english', __name__)
 api_chinese = APIBlueprint('chinese', __name__)
