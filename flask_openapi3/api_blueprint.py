@@ -125,8 +125,11 @@ class APIBlueprint(Blueprint):
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             uri = get_openapi_path(rule)
+            trail_slash = uri.endswith('/')
             # merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
+            if not trail_slash:
+                uri = uri.rstrip('/')
             # parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body, combine_responses
