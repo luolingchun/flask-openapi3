@@ -1,3 +1,7 @@
+## v1.1.4 2022-05-05
+
+- fix: Trailing slash in APIBlueprint
+
 ## v1.1.3 2022-05-01
 
 - fix: Find globalns for the unwrapped func
