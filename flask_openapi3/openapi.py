@@ -41,6 +41,7 @@ class OpenAPI(Flask):
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
             servers: Optional[List[Server]] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -94,6 +95,7 @@ class OpenAPI(Flask):
             self.init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
+        self.external_docs = external_docs
 
     def init_doc(self) -> None:
         """
@@ -173,18 +175,11 @@ class OpenAPI(Flask):
     def api_doc(self) -> Dict:
         """Generate spec json"""
 
-        url_root: str = ""
-        if request.__class__.__name__ != "LocalProxy" and self.doc_prefix[0] == "/":
-            url_root = request.url_root.rstrip("/")
-
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,
             servers=self.severs,
-            externalDocs=ExternalDocumentation(
-                url=f'{url_root}{self.doc_prefix}/markdown',
-                description='Export to markdown'
-            )
+            externalDocs=self.external_docs
         )
         spec.tags = self.tags or None
         spec.paths = self.paths

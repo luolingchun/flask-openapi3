@@ -17,10 +17,6 @@ security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 
-# Because there are no way to check what the url_root is going to be
-# when just calling app.doc_prefix, we have to use app.doc_prefix to generate the same url
-app.doc_prefix = f"http://localhost{app.doc_prefix}"
-
 tag = Tag(name='book', description="Book")
 security = [{"jwt": []}]
 

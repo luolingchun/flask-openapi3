@@ -1,41 +1,66 @@
 import pytest
-from flask_openapi3 import OpenAPI
-from openapi_python_client import GeneratorData, Config, GeneratorError
+from pydantic import ValidationError
 
-app = OpenAPI(__name__)
-app.config["TESTING"] = True
-app.config["VALIDATE_RESPONSE"] = True
+from flask_openapi3 import OpenAPI
+from flask_openapi3.models import ExternalDocumentation
+from openapi_python_client import GeneratorData, Config
 
 
 @pytest.fixture
-def client():
+def app():
+    _app = OpenAPI(__name__)
+    _app.config["TESTING"] = True
+    _app.config["VALIDATE_RESPONSE"] = True
+    return _app
+
+
+def test_openapi_api_doc_with_and_without_external_docs(app):
+    config = Config()
+
+    error_code = None
+    try:
+        ExternalDocumentation(url="example.com/openapi/markdown", description="Testing the description")
+    except ValidationError as err:
+        error_code = err.raw_errors[0].exc.code
+    assert 'url.scheme' == error_code
+
+    error_code = None
+    try:
+        ExternalDocumentation(url="/openapi/markdown", description="Testing the description")
+    except ValidationError as err:
+        error_code = err.raw_errors[0].exc.code
+    assert 'url.scheme' == error_code
+
+    error_code = None
+    try:
+        ExternalDocumentation(url="ftp://example.com/openapi/markdown", description="Testing the description")
+    except ValidationError as err:
+        error_code = err.raw_errors[0].exc.code
+    assert 'url.scheme' == error_code
+
+    assert "externalDocs" not in app.api_doc
+    app.external_docs = ExternalDocumentation(
+        url="http://example.com/openapi/markdown", description="Testing the description")
+    assert "externalDocs" in app.api_doc
+
+    openapi = GeneratorData.from_dict(data=app.api_doc, config=config)
+    assert type(openapi) == GeneratorData
+
+
+def test_openapi_api_doc_with_and_without_external_docs_url(app):
     client = app.test_client()
-
-    return client
-
-
-def test_openapi_generator(client):
     config = Config()
 
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
-
     openapi = GeneratorData.from_dict(data=resp.json, config=config)
     assert type(openapi) == GeneratorData
+    assert "externalDocs" not in resp.json
 
-
-def test_openapi_generator_problem_with_externaldocs_url():
-    config = Config()
-
-    openapi = GeneratorData.from_dict(data=app.api_doc, config=config)
-    assert type(openapi) == GeneratorError
-
-    # Because there are no way to check what the url_root is going to be
-    # when just calling app.doc_prefix, we have to use app.doc_prefix to generate the same url
-    old_doc_prefix = app.doc_prefix
-    app.doc_prefix = f"http://localhost{app.doc_prefix}"
-
-    openapi = GeneratorData.from_dict(data=app.api_doc, config=config)
+    app.external_docs = ExternalDocumentation(
+        url="http://example.com/openapi/markdown", description="Testing the description")
+    resp = client.get("/openapi/openapi.json")
+    assert resp.status_code == 200
+    openapi = GeneratorData.from_dict(data=resp.json, config=config)
     assert type(openapi) == GeneratorData
-
-    app.doc_prefix = old_doc_prefix
+    assert "externalDocs" in resp.json
