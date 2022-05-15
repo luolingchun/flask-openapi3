@@ -63,10 +63,12 @@ class APIBlueprint(Blueprint):
                 self.tags.append(tag)
 
         for path_url, path_item in api.paths.items():
+            trail_slash = path_url.endswith('/')
             # merge url_prefix and new api blueprint path url
             uri = self.url_prefix.rstrip("/") + "/" + path_url.lstrip("/") if self.url_prefix else path_url
             # strip the right slash
-            uri = uri.rstrip('/')
+            if not trail_slash:
+                uri = uri.rstrip('/')
             self.paths[uri] = path_item
 
         self.components_schemas.update(**api.components_schemas)
