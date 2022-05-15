@@ -41,6 +41,7 @@ class OpenAPI(Flask):
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
             servers: Optional[List[Server]] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -65,6 +66,8 @@ class OpenAPI(Flask):
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
             servers: An array of Server Objects, which provide connectivity information to a target server.
+            external_docs: Allows referencing an external resource for extended documentation.
+                           See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
             kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -94,6 +97,7 @@ class OpenAPI(Flask):
             self.init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
+        self.external_docs = external_docs
 
     def init_doc(self) -> None:
         """
@@ -176,10 +180,7 @@ class OpenAPI(Flask):
             openapi=self.openapi_version,
             info=self.info,
             servers=self.severs,
-            externalDocs=ExternalDocumentation(
-                url=f'{self.doc_prefix}/markdown',
-                description='Export to markdown'
-            )
+            externalDocs=self.external_docs
         )
         spec.tags = self.tags or None
         spec.paths = self.paths

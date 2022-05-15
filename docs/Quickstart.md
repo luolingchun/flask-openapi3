@@ -72,7 +72,7 @@ from flask_openapi3 import OpenAPI
 
 app = OpenAPI(__name__)
 
-api = APIBlueprint('/book', __name__, url_prefix='/api')
+api = APIBlueprint('book', __name__, url_prefix='/api')
 
 
 @api.post('/book')
@@ -86,3 +86,42 @@ app.register_api(api)
 if __name__ == '__main__':
     app.run()
 ```
+
+## Nested APIBlueprint
+
+*New in v2.0.0*
+
+Allow an **API Blueprint** to be registered on another **API Blueprint**.
+
+For more information, please see [Flask Nesting Blueprints](https://flask.palletsprojects.com/en/latest/blueprints/#nesting-blueprints).
+
+```python hl_lines="21 22"
+from flask_openapi3 import OpenAPI, APIBlueprint
+
+app = OpenAPI(__name__)
+
+api = APIBlueprint('book', __name__, url_prefix='/api/book')
+api_english = APIBlueprint('english', __name__)
+api_chinese = APIBlueprint('chinese', __name__)
+
+
+@api_english.post('/english')
+def create_english_book():
+    return {"message": "english"}
+
+
+@api_chinese.post('/chinese')
+def create_chinese_book():
+    return {"message": "chinese"}
+
+
+# register nested api
+api.register_api(api_english)
+api.register_api(api_chinese)
+# register api
+app.register_api(api)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+

@@ -53,6 +53,26 @@ class APIBlueprint(Blueprint):
         self.abp_responses = abp_responses or {}
         self.doc_ui = doc_ui
 
+    def register_api(self, api: "APIBlueprint") -> None:
+        """Register a nested APIBlueprint"""
+        if api is self:
+            raise ValueError("Cannot register a api blueprint on itself")
+
+        for tag in api.tags:
+            if tag.name not in self.tag_names:
+                self.tags.append(tag)
+
+        for path_url, path_item in api.paths.items():
+            # merge url_prefix and new api blueprint path url
+            uri = self.url_prefix.rstrip("/") + "/" + path_url.lstrip("/") if self.url_prefix else path_url
+            # strip the right slash
+            uri = uri.rstrip('/')
+            self.paths[uri] = path_item
+
+        self.components_schemas.update(**api.components_schemas)
+
+        self.register_blueprint(api)
+
     def _do_decorator(
             self,
             rule: str,

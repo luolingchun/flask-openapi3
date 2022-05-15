@@ -24,6 +24,7 @@ class NotFoundResponse(BaseModel):
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
 app.config["TESTING"] = True
+
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 

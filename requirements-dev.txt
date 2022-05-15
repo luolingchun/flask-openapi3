@@ -1,4 +1,4 @@
-Flask>=1.1
+Flask>=2.0
 pydantic>=1.2
 
 # document
@@ -8,3 +8,4 @@ mkdocs-material
 
 # test
 pytest
+openapi-python-client

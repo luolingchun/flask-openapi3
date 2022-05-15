@@ -28,7 +28,7 @@ setup(
     python_requires=">=3.7",
     zip_safe=False,
     platforms='any',
-    install_requires=["Flask>=1.1", "pydantic>=1.2"],
+    install_requires=["Flask>=2.0", "pydantic>=1.2"],
     classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
