@@ -1,4 +1,46 @@
+## Specification
+
 If you need the complete Specification(json) , go to http://127.0.0.1:5000/openapi/openapi.json
+
+**command: `flask openapi`**
+
+*New in v2.0.0*
+
+The `flask openapi` command will export the OpenAPI Specification to console when you execute the command:
+
+```
+flask openapi
+```
+
+Execute `flask openapi --help` for more information:
+
+```
+flask openapi --help
+
+Usage: flask openapi [OPTIONS]
+
+  Export the OpenAPI Specification to console or a file
+
+Options:
+  -o, --output PATH               The output file path.
+  -f, --format [json|yaml|markdown]
+                                  The output file format.
+  -i, --indent INTEGER            The indentation for JSON dumps.
+  -a, --ensure_ascii              Ensure ASCII characters or not. Defaults to
+                                  False.
+  --help                          Show this message and exit.
+
+```
+
+!!! info
+
+    You need to manually install `yaml` using pip:
+    ```bash
+    pip install flask-openapi3[yaml]
+    
+    # or
+    pip install yaml
+    ```
 
 ## doc_ui
 
