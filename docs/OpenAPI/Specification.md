@@ -22,11 +22,14 @@ Usage: flask openapi [OPTIONS]
   Export the OpenAPI Specification to console or a file
 
 Options:
-  -o, --output PATH         The output file path.
-  -f, --format [json|yaml]  The output file format.
-  -i, --indent INTEGER      The indentation for JSON dumps.
-  -a, --ensure_ascii        Ensure ASCII characters or not. Defaults to False.
-  --help                    Show this message and exit.
+  -o, --output PATH               The output file path.
+  -f, --format [json|yaml|markdown]
+                                  The output file format.
+  -i, --indent INTEGER            The indentation for JSON dumps.
+  -a, --ensure_ascii              Ensure ASCII characters or not. Defaults to
+                                  False.
+  --help                          Show this message and exit.
+
 ```
 
 !!! info

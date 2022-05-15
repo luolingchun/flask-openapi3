@@ -7,10 +7,12 @@ from flask import current_app
 from flask.cli import click
 from flask.cli import with_appcontext
 
+from .markdown import openapi_to_markdown
+
 
 @click.command(name='openapi')
 @click.option('--output', '-o', type=click.Path(), help='The output file path.')
-@click.option('--format', '-f', type=click.Choice(['json', 'yaml']), help='The output file format.')
+@click.option('--format', '-f', type=click.Choice(['json', 'yaml', 'markdown']), help='The output file format.')
 @click.option('--indent', '-i', type=int, help='The indentation for JSON dumps.')
 @click.option('--ensure_ascii', '-a', is_flag=True, help='Ensure ASCII characters or not. Defaults to False.')
 @with_appcontext
@@ -21,6 +23,8 @@ def openapi_command(output, format, indent, ensure_ascii):
         if format == 'yaml':
             import yaml
             openapi = yaml.safe_dump(obj)
+        elif format == 'markdown':
+            openapi = openapi_to_markdown(obj)
         else:
             openapi = json.dumps(obj, indent=indent, ensure_ascii=ensure_ascii)
         if output:

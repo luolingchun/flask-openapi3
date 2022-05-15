@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/8/11 10:39
-from flask_openapi3.models import OPENAPI3_REF_PREFIX
+from .models import OPENAPI3_REF_PREFIX
 
 
 def parse_schemas(schemas):
