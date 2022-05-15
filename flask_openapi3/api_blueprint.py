@@ -172,7 +172,8 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
@@ -208,7 +209,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.GET]}
+            options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -227,7 +228,8 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
@@ -263,7 +265,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.POST]}
+            options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -282,7 +284,8 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
@@ -318,7 +321,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PUT]}
+            options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -337,7 +340,8 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
@@ -373,7 +377,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.DELETE]}
+            options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -392,7 +396,8 @@ class APIBlueprint(Blueprint):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
@@ -428,7 +433,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PATCH]}
+            options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper

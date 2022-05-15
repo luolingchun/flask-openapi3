@@ -272,7 +272,8 @@ class OpenAPI(Flask):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
@@ -308,7 +309,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.GET]}
+            options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -327,7 +328,8 @@ class OpenAPI(Flask):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
@@ -363,7 +365,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.POST]}
+            options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -382,7 +384,8 @@ class OpenAPI(Flask):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
@@ -418,7 +421,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PUT]}
+            options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -437,7 +440,8 @@ class OpenAPI(Flask):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
@@ -473,7 +477,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.DELETE]}
+            options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -492,7 +496,8 @@ class OpenAPI(Flask):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
@@ -528,7 +533,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PATCH]}
+            options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
