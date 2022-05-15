@@ -5,10 +5,9 @@ import json
 import os
 from copy import deepcopy
 from functools import wraps
-from io import StringIO
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
-from flask import Flask, Blueprint, render_template, make_response
+from flask import Flask, Blueprint, render_template
 from flask.wrappers import Response
 from pydantic import BaseModel
 
@@ -16,7 +15,6 @@ from .api_blueprint import APIBlueprint
 from .commands import openapi_command
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
-from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
@@ -149,11 +147,6 @@ class OpenAPI(Flask):
             )
         )
         blueprint.add_url_rule(
-            rule='/markdown',
-            endpoint='markdown',
-            view_func=lambda: self.export_to_markdown()
-        )
-        blueprint.add_url_rule(
             rule='/',
             endpoint='index',
             view_func=lambda: render_template(
@@ -164,17 +157,6 @@ class OpenAPI(Flask):
             )
         )
         self.register_blueprint(blueprint)
-
-    def export_to_markdown(self) -> Response:
-        """Export to markdown(Experimental)"""
-        md = StringIO()
-
-        md.write(openapi_to_markdown(self.api_doc))
-
-        r = make_response(md.getvalue())
-        r.headers['Content-Disposition'] = 'attachment; filename=api.md'
-
-        return r
 
     @property
     def api_doc(self) -> Dict:
