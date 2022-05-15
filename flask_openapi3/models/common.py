@@ -3,11 +3,11 @@
 # @Time    : 2021/4/30 11:46
 from typing import Optional, List, Any, Union, Dict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AnyHttpUrl
 
 
 class ExternalDocumentation(BaseModel):
-    url: str
+    url: AnyHttpUrl
     description: Optional[str] = None
 
 

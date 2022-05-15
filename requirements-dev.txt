@@ -8,3 +8,4 @@ mkdocs-material
 
 # test
 pytest
+openapi-python-client
