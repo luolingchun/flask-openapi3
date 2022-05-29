@@ -49,7 +49,7 @@ theme:
   features:
     - navigation.tracking
     - navigation.top
-#    - navigation.expand
+    #    - navigation.expand
     - search.suggest
     - search.highlight
     - search.share
@@ -75,10 +75,24 @@ plugins:
       nav_translations:
         zh:
           Home: 简介
+
           Quickstart: 快速开始
+
           OpenAPI: OpenAPI
+          # ————————————————
+          Info: 一般信息
+          Tag: 标签
+          SecuritySchemes: 安全模式
+          Request: 请求
+          Response: 响应
+          Summary and Description: 摘要和说明
+          Specification: 规范
+
           Example: 示例
           API Reference: API 参考
+          # ————————————————
+          Model: 模型
+
           LICENSE: 许可
           Changelog: 更新日志
 
@@ -106,16 +120,16 @@ nav:
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
       - Model:
-        - APISpec: Reference/Model/APISpec.md
-        - common: Reference/Model/common.md
-        - component: Reference/Model/component.md
-        - file: Reference/Model/file.md
-        - oauth: Reference/Model/oauth.md
-        - parameter: Reference/Model/parameter.md
-        - path: Reference/Model/path.md
-        - security: Reference/Model/security.md
-        - tag: Reference/Model/tag.md
-        - validation_error: Reference/Model/validation_error.md
+          - APISpec: Reference/Model/APISpec.md
+          - common: Reference/Model/common.md
+          - component: Reference/Model/component.md
+          - file: Reference/Model/file.md
+          - oauth: Reference/Model/oauth.md
+          - parameter: Reference/Model/parameter.md
+          - path: Reference/Model/path.md
+          - security: Reference/Model/security.md
+          - tag: Reference/Model/tag.md
+          - validation_error: Reference/Model/validation_error.md
   - LICENSE: LICENSE.md
   - Changelog: Changelog.md
 
