@@ -75,24 +75,25 @@ plugins:
       nav_translations:
         zh:
           Home: 简介
-
           Quickstart: 快速开始
-
           OpenAPI: OpenAPI
-          # ————————————————
+          # OpenAPI-second: start
           Info: 一般信息
           Tag: 标签
           SecuritySchemes: 安全模式
+          OAuth: OAuth
           Request: 请求
           Response: 响应
           Summary and Description: 摘要和说明
           Specification: 规范
-
+          # OpenAPI-second: end
           Example: 示例
           API Reference: API 参考
-          # ————————————————
+          # API Reference-second: start
+          # OpenAPI: OpenAPI
+          APIBlueprint: APIBlueprint
           Model: 模型
-
+          # API Reference-second: end
           LICENSE: 许可
           Changelog: 更新日志
 
