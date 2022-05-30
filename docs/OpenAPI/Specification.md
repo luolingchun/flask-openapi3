@@ -34,12 +34,12 @@ Options:
 
 !!! info
 
-    You need to manually install `yaml` using pip:
+    You need to manually install `pyyaml` using pip:
     ```bash
     pip install flask-openapi3[yaml]
     
     # or
-    pip install yaml
+    pip install pyyaml
     ```
 
 ## doc_ui
