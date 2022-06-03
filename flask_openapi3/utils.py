@@ -305,7 +305,7 @@ def get_responses(
 
         # Verify that if the key is "204", the response is None,
         # because http status code "204" means return "No Content"
-        elif key in ["204"] and response is None:
+        elif response is None:
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
             )
