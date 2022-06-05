@@ -34,6 +34,16 @@ def hello(path: HelloPath):
     return response
 
 
+@bp.get("/hello_no_response/<string:name>", responses={"204": None})
+def hello_no_response(path: HelloPath):
+    message = {"message": f"""Hello {path.name}!"""}
+
+    # This message will never be returned because the http code (NO_CONTENT) doesn't return anything
+    response = make_response(message, HTTPStatus.NO_CONTENT)
+    response.mimetype = "application/json"
+    return response
+
+
 app.register_api(bp)
 
 if __name__ == "__main__":

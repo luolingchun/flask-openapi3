@@ -19,6 +19,7 @@ from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
+from .types import OpenAPIResponsesType
 from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, get_operation_id_for_path
 
@@ -31,7 +32,7 @@ class OpenAPI(Flask):
             info: Optional[Info] = None,
             security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
             oauth_config: Optional[OAuthConfig] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
@@ -267,7 +268,7 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -323,7 +324,7 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -379,7 +380,7 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -435,7 +436,7 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -491,7 +492,7 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,

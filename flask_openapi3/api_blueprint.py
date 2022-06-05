@@ -12,6 +12,7 @@ from pydantic import BaseModel
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import Tag, Components
+from .types import OpenAPIResponsesType
 from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, get_operation_id_for_path
 
@@ -24,7 +25,7 @@ class APIBlueprint(Blueprint):
             *,
             abp_tags: Optional[List[Tag]] = None,
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
-            abp_responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            abp_responses: OpenAPIResponsesType = None,
             doc_ui: bool = True,
             **kwargs: Any
     ) -> None:
@@ -167,7 +168,7 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -223,7 +224,7 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -279,7 +280,7 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -335,7 +336,7 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
@@ -391,7 +392,7 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
