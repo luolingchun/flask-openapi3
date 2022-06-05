@@ -275,10 +275,6 @@ def get_responses(
             }
         )
         _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
-    # if not responses.get("500"):
-    #     _responses["500"] = Response(description=HTTP_STATUS["500"])
-    # handle extra_responses
-
     for key, response in responses.items():
         # Verify that the response is a class and that class is a subclass of `pydantic.BaseModel`
         if inspect.isclass(response) and issubclass(response, BaseModel):
@@ -302,17 +298,13 @@ def get_responses(
             if definitions:
                 for name, value in definitions.items():
                     _schemas[name] = Schema(**value)
-
-        # Verify that if the key is "204", the response is None,
-        # because http status code "204" means return "No Content"
+        # Verify that if the response is None, because http status code "204" means return "No Content"
         elif response is None:
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
             )
-
         else:
-            raise AttributeError(f'{response} is invalid `pydantic.BaseModel` '
-                                 f'or if the key is "204" the type should be None')
+            raise TypeError(f'{response} is invalid `pydantic.BaseModel`.')
     # handle extra_responses
     for key, value in extra_responses.items():
         # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}
