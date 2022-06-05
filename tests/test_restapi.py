@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
+from openapi_python_client import GeneratorData, Config
 
 info = Info(title='book API', version='1.0.0')
 security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
@@ -24,6 +25,7 @@ class NotFoundResponse(BaseModel):
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
 app.config["TESTING"] = True
+
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 
@@ -121,10 +123,16 @@ def update_book1(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@app.delete('/book/<int:bid>', tags=[book_tag])
+@app.delete('/book/<int:bid>', tags=[book_tag], responses={"200": BaseResponse})
 def delete_book(path: BookPath):
     assert path.bid == 1
     return {"code": 0, "message": "ok"}
+
+
+@app.delete('/book_no_response/<int:bid>', tags=[book_tag], responses={"204": None})
+def delete_book_no_response(path: BookPath):
+    assert path.bid == 1
+    return b'', 204
 
 
 def test_openapi(client):
@@ -162,3 +170,25 @@ def test_patch(client):
 def test_delete(client):
     resp = client.delete("/book/1")
     assert resp.status_code == 200
+
+
+def test_delete_no_response(client):
+    resp = client.delete("/book_no_response/1")
+    assert resp.status_code == 204
+
+
+def test_openapi_api_json_schema_against_openapi_python_client_generator(client):
+    config = Config()
+
+    resp = client.get("/openapi/openapi.json")
+    assert resp.status_code == 200
+    openapi = GeneratorData.from_dict(data=resp.json, config=config)
+    assert type(openapi) == GeneratorData
+
+    assert "content" in resp.json["paths"]["/book/{bid}"]["delete"]["responses"]["200"]
+    assert "content" in resp.json["paths"]["/book/{bid}"]["delete"]["responses"]["404"]
+    assert "content" in resp.json["paths"]["/book/{bid}"]["delete"]["responses"]["422"]
+
+    assert "content" not in resp.json["paths"]["/book_no_response/{bid}"]["delete"]["responses"]["204"]
+    assert "content" in resp.json["paths"]["/book_no_response/{bid}"]["delete"]["responses"]["404"]
+    assert "content" in resp.json["paths"]["/book_no_response/{bid}"]["delete"]["responses"]["422"]

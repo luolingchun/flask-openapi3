@@ -5,21 +5,21 @@ import json
 import os
 from copy import deepcopy
 from functools import wraps
-from io import StringIO
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
-from flask import Flask, Blueprint, render_template, make_response
+from flask import Flask, Blueprint, render_template
 from flask.wrappers import Response
 from pydantic import BaseModel
 
 from .api_blueprint import APIBlueprint
+from .commands import openapi_command
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
-from .markdown import openapi_to_markdown
 from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
+from .types import OpenAPIResponsesType
 from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, get_operation_id_for_path
 
@@ -32,7 +32,7 @@ class OpenAPI(Flask):
             info: Optional[Info] = None,
             security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
             oauth_config: Optional[OAuthConfig] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
@@ -41,6 +41,7 @@ class OpenAPI(Flask):
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
             servers: Optional[List[Server]] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -65,6 +66,8 @@ class OpenAPI(Flask):
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
             servers: An array of Server Objects, which provide connectivity information to a target server.
+            external_docs: Allows referencing an external resource for extended documentation.
+                           See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
             kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -94,6 +97,9 @@ class OpenAPI(Flask):
             self.init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
+        self.external_docs = external_docs
+        # add openapi command
+        self.cli.add_command(openapi_command)
 
     def init_doc(self) -> None:
         """
@@ -142,11 +148,6 @@ class OpenAPI(Flask):
             )
         )
         blueprint.add_url_rule(
-            rule='/markdown',
-            endpoint='markdown',
-            view_func=lambda: self.export_to_markdown()
-        )
-        blueprint.add_url_rule(
             rule='/',
             endpoint='index',
             view_func=lambda: render_template(
@@ -158,17 +159,6 @@ class OpenAPI(Flask):
         )
         self.register_blueprint(blueprint)
 
-    def export_to_markdown(self) -> Response:
-        """Export to markdown(Experimental)"""
-        md = StringIO()
-
-        md.write(openapi_to_markdown(self.api_doc))
-
-        r = make_response(md.getvalue())
-        r.headers['Content-Disposition'] = 'attachment; filename=api.md'
-
-        return r
-
     @property
     def api_doc(self) -> Dict:
         """Generate Specification json"""
@@ -176,10 +166,7 @@ class OpenAPI(Flask):
             openapi=self.openapi_version,
             info=self.info,
             servers=self.severs,
-            externalDocs=ExternalDocumentation(
-                url=f'{self.doc_prefix}/markdown',
-                description='Export to markdown'
-            )
+            externalDocs=self.external_docs
         )
         spec.tags = self.tags or None
         spec.paths = self.paths
@@ -281,12 +268,13 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
@@ -322,7 +310,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.GET]}
+            options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -336,12 +324,13 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
@@ -377,7 +366,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.POST]}
+            options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -391,12 +380,13 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
@@ -432,7 +422,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PUT]}
+            options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -446,12 +436,13 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
@@ -487,7 +478,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.DELETE]}
+            options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -501,12 +492,13 @@ class OpenAPI(Flask):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
@@ -542,7 +534,7 @@ class OpenAPI(Flask):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PATCH]}
+            options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper

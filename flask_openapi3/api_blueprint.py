@@ -12,6 +12,7 @@ from pydantic import BaseModel
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import Tag, Components
+from .types import OpenAPIResponsesType
 from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
     validate_responses_type, parse_method, get_operation_id_for_path
 
@@ -24,7 +25,7 @@ class APIBlueprint(Blueprint):
             *,
             abp_tags: Optional[List[Tag]] = None,
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
-            abp_responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            abp_responses: OpenAPIResponsesType = None,
             doc_ui: bool = True,
             **kwargs: Any
     ) -> None:
@@ -52,6 +53,28 @@ class APIBlueprint(Blueprint):
         self.abp_security = abp_security or []
         self.abp_responses = abp_responses or {}
         self.doc_ui = doc_ui
+
+    def register_api(self, api: "APIBlueprint") -> None:
+        """Register a nested APIBlueprint"""
+        if api is self:
+            raise ValueError("Cannot register a api blueprint on itself")
+
+        for tag in api.tags:
+            if tag.name not in self.tag_names:
+                self.tags.append(tag)
+
+        for path_url, path_item in api.paths.items():
+            trail_slash = path_url.endswith('/')
+            # merge url_prefix and new api blueprint path url
+            uri = self.url_prefix.rstrip("/") + "/" + path_url.lstrip("/") if self.url_prefix else path_url
+            # strip the right slash
+            if not trail_slash:
+                uri = uri.rstrip('/')
+            self.paths[uri] = path_item
+
+        self.components_schemas.update(**api.components_schemas)
+
+        self.register_blueprint(api)
 
     def _do_decorator(
             self,
@@ -145,12 +168,13 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['GET'])"""
 
@@ -186,7 +210,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.GET]}
+            options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -200,12 +224,13 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['POST'])"""
 
@@ -241,7 +266,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.POST]}
+            options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -255,12 +280,13 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PUT'])"""
 
@@ -296,7 +322,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PUT]}
+            options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -310,12 +336,13 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['DELETE'])"""
 
@@ -351,7 +378,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.DELETE]}
+            options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper
@@ -365,12 +392,13 @@ class APIBlueprint(Blueprint):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
-            responses: Optional[Dict[str, Type[BaseModel]]] = None,
+            responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            **options: Any
     ) -> Callable:
         """Decorator for rest api, like: app.route(methods=['PATCH'])"""
 
@@ -406,7 +434,7 @@ class APIBlueprint(Blueprint):
                 )
                 return resp
 
-            options = {"methods": [HTTPMethod.PATCH]}
+            options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=wrapper, **options)
 
             return wrapper

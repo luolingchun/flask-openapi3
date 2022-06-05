@@ -1,3 +1,11 @@
+## 2.0.0 2022-??-??
+
+- [#17](https://github.com/luolingchun/flask-openapi3/issues/17) Support for Nested APIBlueprint enhancement. Thanks @dvaerum
+- [#23](https://github.com/luolingchun/flask-openapi3/pull/23) Fixed externalDocs support. Thanks @dvaerum
+- Add `flask openapi` command
+- Remove export markdown to `flask openapi` command
+- Upgrade flask to v2.0
+
 ## v1.1.4 2022-05-05
 
 - fix: Trailing slash in APIBlueprint
@@ -5,7 +13,7 @@
 ## v1.1.3 2022-05-01
 
 - fix: Find globalns for the unwrapped func
-- [#19](https://github.com/luolingchun/flask-openapi3/issues/19) fix: Trailing slash in APIBlueprint. Thinks @ev-agelos
+- [#19](https://github.com/luolingchun/flask-openapi3/issues/19) fix: Trailing slash in APIBlueprint. Thanks @ev-agelos
 - add description for UnprocessableEntity
 - remove printouts in `__init__.py`
 

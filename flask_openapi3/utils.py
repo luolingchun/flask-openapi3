@@ -278,29 +278,41 @@ def get_responses(
     # if not responses.get("500"):
     #     _responses["500"] = Response(description=HTTP_STATUS["500"])
     # handle extra_responses
+
     for key, response in responses.items():
-        assert inspect.isclass(response) and \
-               issubclass(response, BaseModel), f" {response} is invalid `pydantic.BaseModel`"
-        schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
-        _responses[key] = Response(
-            description=HTTP_STATUS.get(key, ""),
-            content={
-                "application/json": MediaType(
-                    **{
-                        "schema": Schema(
-                            **{
-                                "$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"
-                            }
-                        )
-                    }
-                )
-            }
-        )
-        _schemas[response.__name__] = Schema(**schema)
-        definitions = schema.get('definitions')
-        if definitions:
-            for name, value in definitions.items():
-                _schemas[name] = Schema(**value)
+        # Verify that the response is a class and that class is a subclass of `pydantic.BaseModel`
+        if inspect.isclass(response) and issubclass(response, BaseModel):
+            schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+            _responses[key] = Response(
+                description=HTTP_STATUS.get(key, ""),
+                content={
+                    "application/json": MediaType(
+                        **{
+                            "schema": Schema(
+                                **{
+                                    "$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"
+                                }
+                            )
+                        }
+                    )
+                }
+            )
+            _schemas[response.__name__] = Schema(**schema)
+            definitions = schema.get('definitions')
+            if definitions:
+                for name, value in definitions.items():
+                    _schemas[name] = Schema(**value)
+
+        # Verify that if the key is "204", the response is None,
+        # because http status code "204" means return "No Content"
+        elif response is None:
+            _responses[key] = Response(
+                description=HTTP_STATUS.get(key, ""),
+            )
+
+        else:
+            raise AttributeError(f'{response} is invalid `pydantic.BaseModel` '
+                                 f'or if the key is "204" the type should be None')
     # handle extra_responses
     for key, value in extra_responses.items():
         # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}

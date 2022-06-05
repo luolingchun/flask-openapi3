@@ -31,6 +31,7 @@ app = OpenAPI(
     responses={"404": NotFoundResponse}
 )
 app.config["TESTING"] = True
+
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 
