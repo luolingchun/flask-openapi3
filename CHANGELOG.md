@@ -1,10 +1,16 @@
 ## 2.0.0 2022-??-??
 
+- [#26]((https://github.com/luolingchun/flask-openapi3/issues/26)) fix: Body throws exception when receiving str instead of dict. Thanks @nor3th
 - [#17](https://github.com/luolingchun/flask-openapi3/issues/17) Support for Nested APIBlueprint enhancement. Thanks @dvaerum
 - [#23](https://github.com/luolingchun/flask-openapi3/pull/23) Fixed externalDocs support. Thanks @dvaerum
 - Add `flask openapi` command
-- Remove export markdown to `flask openapi` command
+- add options in view functions
+- Support for empty response body. Thanks @dvaerum
 - Upgrade flask to v2.0
+
+### Breaking Changes
+
+- Remove export markdown to `flask openapi` command
 
 ## v1.1.4 2022-05-05
 
