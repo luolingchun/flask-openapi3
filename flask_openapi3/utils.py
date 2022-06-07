@@ -8,7 +8,7 @@ from http import HTTPStatus
 from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
 
 import pydantic.typing
-from flask import Response as _Response
+from flask import Response as _Response, current_app
 from pydantic import BaseModel
 from werkzeug.routing import parse_rule
 
@@ -329,10 +329,12 @@ def validate_responses_type(responses: Dict[str, Any]) -> None:
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """Validate response"""
-    print("Warning: "
-          "You are using `VALIDATE_RESPONSE=True`, "
-          "please do not use it in the production environment, "
-          "because it will reduce the performance.")
+    if not current_app.config.get('FLASK_OPENAPI_DISABLE_WARNINGS', False):
+        print("Warning: "
+              "You are using `VALIDATE_RESPONSE=True`, "
+              "please do not use it in the production environment, "
+              "because it will reduce the performance. "
+              "Note, you can disable this warning with `Flask.config['FLASK_OPENAPI_DISABLE_WARNINGS'] = True`")
     if isinstance(resp, tuple):  # noqa
         _resp, status_code = resp[:2]
     elif isinstance(resp, _Response):
