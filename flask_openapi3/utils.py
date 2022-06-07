@@ -353,7 +353,10 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     assert inspect.isclass(resp_model) and \
            issubclass(resp_model, BaseModel), f"{resp_model} is invalid `pydantic.BaseModel`"
     try:
-        resp_model(**_resp)
+        if len(resp_model.__fields__) == 1 and isinstance(_resp, list):
+            resp_model(**{list(resp_model.__fields__.keys())[0]: _resp})
+        else:
+            resp_model(**_resp)
     except TypeError:
         raise TypeError(f"`{resp_model.__name__}` validation failed, must be a mapping.")
 

@@ -3,12 +3,14 @@
 # @Time    : 2021/5/6 16:38
 from __future__ import annotations
 
+import json
 from http import HTTPStatus
-from typing import Optional
+from typing import Optional, List
 
 import pytest
 from pydantic import BaseModel, Field
 
+from flask import Response
 from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
@@ -56,6 +58,18 @@ class BaseResponse(BaseModel):
     message: str = Field("ok", description="Exception Information")
 
 
+class BookListResponseV1(BaseResponse):
+    data: List[BookBodyWithID] = Field(..., description="All the books")
+
+
+class BookListResponseV2(BaseModel):
+    books: List[BookBodyWithID] = Field(...)
+
+
+class BookListResponseV3(BaseModel):
+    __root__: List[BookBodyWithID]
+
+
 class BookResponse(BaseModel):
     code: int = Field(0, description="Status Code")
     message: str = Field("ok", description="Exception Information")
@@ -86,7 +100,7 @@ def get_book(path: BookPath):
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 
-@app.get('/book', tags=[book_tag])
+@app.get('/book', tags=[book_tag], responses={"200": BookListResponseV1})
 def get_books(query: BookBody):
     """get books
     get all books
@@ -101,6 +115,38 @@ def get_books(query: BookBody):
             {"bid": 2, "age": query.age, "author": "b2"}
         ]
     }
+
+
+@app.get('/book_v2', tags=[book_tag], responses={"200": BookListResponseV2})
+def get_books_v2(query: BookBody):
+    """get books
+    get all books (v2)
+    """
+    assert query.age == 3
+    assert query.author == 'joy'
+    return {
+        "books": [
+            {"bid": 1, "age": query.age, "author": "b1"},
+            {"bid": 2, "age": query.age, "author": "b2"}
+        ]
+    }
+
+
+@app.get('/book_v3', tags=[book_tag], responses={"200": BookListResponseV3})
+def get_books_v3(query: BookBody):
+    """get books
+    get all books (v3)
+    """
+    assert query.age == 3
+    assert query.author == 'joy'
+
+    books = [
+        {"bid": 1, "age": query.age, "author": "b1"},
+        {"bid": 2, "age": query.age, "author": "b2"}
+    ]
+    # A `list` have to be converted to json-format `str` returned as a `Response` object,
+    # because flask doesn't support returning a `list` as a response
+    return Response(json.dumps(books), status=200, headers={'Content-Type': 'application/json'})
 
 
 @app.post('/book', tags=[book_tag], responses={"200": BaseResponse})
@@ -145,6 +191,10 @@ def test_openapi(client):
 def test_get(client):
     resp = client.get("/book?age=3&author=joy")
     assert resp.status_code == 200
+    resp_v2 = client.get("/book_v2?age=3&author=joy")
+    assert resp_v2.status_code == 200
+    resp_v3 = client.get("/book_v3?age=3&author=joy")
+    assert resp_v3.status_code == 200
 
 
 def test_get_by_id_4(client):
