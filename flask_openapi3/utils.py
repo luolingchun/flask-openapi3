@@ -353,8 +353,9 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     assert inspect.isclass(resp_model) and \
            issubclass(resp_model, BaseModel), f"{resp_model} is invalid `pydantic.BaseModel`"
     try:
-        if len(resp_model.__fields__) == 1 and isinstance(_resp, list):
-            resp_model(**{list(resp_model.__fields__.keys())[0]: _resp})
+        if resp_model.__custom_root_type__:
+            # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
+            resp_model(__root__=_resp)
         else:
             resp_model(**_resp)
     except TypeError:
