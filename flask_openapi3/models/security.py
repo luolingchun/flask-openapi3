@@ -27,7 +27,7 @@ class APIKeyIn(str, Enum):
 
 class APIKey(SecurityBase):
     type_ = Field(default=SecuritySchemeType.apiKey, alias="type")
-    in_: APIKeyIn = Field(..., alias="in")
+    in_: APIKeyIn = Field(APIKeyIn.header, alias="in")
     name: str
 
 
