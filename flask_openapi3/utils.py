@@ -331,7 +331,7 @@ def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """Validate response"""
     if not current_app.config.get('FLASK_OPENAPI_DISABLE_WARNINGS', False):
         print("Warning: "
-              "You are using `VALIDATE_RESPONSE=True`, "
+              "You are using `FLASK_OPENAPI_VALIDATE_RESPONSE=True`, "
               "please do not use it in the production environment, "
               "because it will reduce the performance. "
               "Note, you can disable this warning with `Flask.config['FLASK_OPENAPI_DISABLE_WARNINGS'] = True`")

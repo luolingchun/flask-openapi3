@@ -137,8 +137,8 @@ def _do_wrapper(
     # handle request
     response = func(**request_kwargs)
 
-    VALIDATE_RESPONSE = current_app.config.get("VALIDATE_RESPONSE", False)
-    if VALIDATE_RESPONSE and responses:
+    is_validate_response = current_app.config.get("FLASK_OPENAPI_VALIDATE_RESPONSE", False)
+    if is_validate_response and responses:
         validate_response(response, responses)
 
     return response

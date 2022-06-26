@@ -12,7 +12,7 @@ info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info)
 app.config["TESTING"] = True
 
-app.config["VALIDATE_RESPONSE"] = True
+app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True
 
 
 @pytest.fixture
