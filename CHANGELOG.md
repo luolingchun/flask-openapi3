@@ -1,16 +1,20 @@
-## 2.0.0 2022-??-??
+## 2.0.0 2022-06-26
 
-- [#26]((https://github.com/luolingchun/flask-openapi3/issues/26)) fix: Body throws exception when receiving str instead of dict. Thanks @nor3th
-- [#17](https://github.com/luolingchun/flask-openapi3/issues/17) Support for Nested APIBlueprint enhancement. Thanks @dvaerum
+- [#26]((https://github.com/luolingchun/flask-openapi3/issues/26)) Fixed: Body throws exception when receiving str instead of dict. Thanks @nor3th
 - [#23](https://github.com/luolingchun/flask-openapi3/pull/23) Fixed externalDocs support. Thanks @dvaerum
-- Add `flask openapi` command
-- add options in view functions
+- [#28](https://github.com/luolingchun/flask-openapi3/pull/28) Fixed to enable `__root__` property when validation responses. Thanks @dvaerum
+- [#17](https://github.com/luolingchun/flask-openapi3/issues/17) Support for Nested APIBlueprint enhancement. Thanks @dvaerum
+- [#29](https://github.com/luolingchun/flask-openapi3/pull/29) Support disable warnings. Thanks @dvaerum
 - Support for empty response body. Thanks @dvaerum
-- Upgrade flask to v2.0
+- Support reload authorizations in Swagger UI
+- Add `flask openapi` command
+- Add options in view functions
+- Upgrade flask to v2.x
 
 ### Breaking Changes
 
 - Remove export markdown to `flask openapi` command
+- Configuration `VALIDATE_RESPONSE` rename to `FLASK_OPENAPI_VALIDATE_RESPONSE`
 
 ## v1.1.4 2022-05-05
 
@@ -30,7 +34,7 @@
 ## v1.1.0 2022-03-13
 
 - [#13](https://github.com/luolingchun/flask-openapi3/issues/13) drop support for flask 1.0.x. Thanks @danmur
-- [#15](https://github.com/luolingchun/flask-openapi3/pull/15) Fix to enable BaseModel with __root__ property. Thanks @tarcisiojr
+- [#15](https://github.com/luolingchun/flask-openapi3/pull/15) Fix to enable BaseModel with `__root__` property. Thanks @tarcisiojr
 - [#14](https://github.com/luolingchun/flask-openapi3/pull/14) Custom parameters: doc_prefix, api_doc_url, swagger_url, redoc_url, rapidoc_url. Thanks @barryrobison
 - Upgrade swagger UI v4.6.2
 - Upgrade Redoc v2.0.0-rc.63
@@ -44,8 +48,7 @@
 
 - [#10](https://github.com/luolingchun/flask-openapi3/issues/10) Fix: header's title case. Thanks @rrr34
 - [#9](https://github.com/luolingchun/flask-openapi3/issues/9) Support for extra responses. Thanks @blynn99
-- [#12](https://github.com/luolingchun/flask-openapi3/pull/12) Support for path operation field deprecated. Thanks
-  @blynn99
+- [#12](https://github.com/luolingchun/flask-openapi3/pull/12) Support for path operation field deprecated. Thanks @blynn99
 - Add keyword parameters `summary` and `description`
 - Add servers for OpenAPI
 - Upgrade swagger UI v4.1.3
