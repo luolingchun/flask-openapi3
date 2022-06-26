@@ -88,6 +88,7 @@ plugins:
           Specification: 规范
           # OpenAPI-second: end
           Example: 示例
+          Configuration: 配置
           API Reference: API 参考
           # API Reference-second: start
           # OpenAPI: OpenAPI
@@ -117,6 +118,7 @@ nav:
       - Summary and Description: OpenAPI/Summary and Description.md
       - Specification: OpenAPI/Specification.md
   - Example: Example.md
+  - Configuration: Configuration.md
   - API Reference:
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
