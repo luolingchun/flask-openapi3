@@ -1,6 +1,6 @@
-## 2.0.0 2022-06-26
+## v2.0.0 2022-06-26
 
-- [#26]((https://github.com/luolingchun/flask-openapi3/issues/26)) Fixed: Body throws exception when receiving str instead of dict. Thanks @nor3th
+- [#26](https://github.com/luolingchun/flask-openapi3/issues/26) Fixed: Body throws exception when receiving str instead of dict. Thanks @nor3th
 - [#23](https://github.com/luolingchun/flask-openapi3/pull/23) Fixed externalDocs support. Thanks @dvaerum
 - [#28](https://github.com/luolingchun/flask-openapi3/pull/28) Fixed to enable `__root__` property when validation responses. Thanks @dvaerum
 - [#17](https://github.com/luolingchun/flask-openapi3/issues/17) Support for Nested APIBlueprint enhancement. Thanks @dvaerum
