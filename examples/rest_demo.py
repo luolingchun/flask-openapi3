@@ -8,10 +8,11 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit, APIKey
+from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit, APIKey, HTTPBase
 
 info = Info(title='book API', version='1.0.0')
-jwt = HTTPBearer(bearerFormat="JWT")
+basic = HTTPBase()
+jwt = HTTPBearer()
 api_key = APIKey(name='api key')
 oauth2 = OAuth2(flows=OAuthFlows(
     implicit=OAuthFlowImplicit(
@@ -21,7 +22,7 @@ oauth2 = OAuth2(flows=OAuthFlows(
             "read:pets": "read your pets"
         }
     )))
-security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2}
+security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
 
 class NotFoundResponse(BaseModel):
@@ -34,7 +35,8 @@ app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses=
 book_tag = Tag(name='book', description='Some Book')
 security = [
     {"jwt": []},
-    {"oauth2": ["write:pets", "read:pets"]}
+    {"oauth2": ["write:pets", "read:pets"]},
+    {"basic": basic}
 ]
 
 app.config["VALIDATE_RESPONSE"] = True

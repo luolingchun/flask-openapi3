@@ -33,12 +33,12 @@ class APIKey(SecurityBase):
 
 class HTTPBase(SecurityBase):
     type_ = Field(default=SecuritySchemeType.http, alias="type")
-    scheme: str
+    scheme = 'basic'
 
 
 class HTTPBearer(HTTPBase):
     scheme = "bearer"
-    bearerFormat: Optional[str] = None
+    bearerFormat: Optional[str] = Field('JWT')
 
 
 class OAuthFlow(BaseModel):
