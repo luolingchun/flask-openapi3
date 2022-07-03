@@ -23,8 +23,8 @@ def get_book(path: BookPath, query: BookBody):
 
 *New in v0.9.5*
 
-By default, the `VALIDATE_RESPONSE` environment variable is `False`. You can set it `True` to validate responses in the
-development environment.
+By default, the configuration `FLASK_OPENAPI_VALIDATE_RESPONSE` is `False`. You can set
+`app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True` to validate responses in the development environment.
 
 !!! warning
 
