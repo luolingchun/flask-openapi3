@@ -1,11 +1,12 @@
-Flask>=2.0
-pydantic>=1.2
+-r requirements.txt
 
 # document
 mkdocs-static-i18n
 mkdocstrings
 mkdocs-material
+pyyaml
 
 # test
+flake8
 pytest
 openapi-python-client

@@ -6,11 +6,18 @@ import re
 
 from setuptools import setup, find_packages
 
-long_description = open('README.md', 'r', encoding='utf-8').read()
-
 version_file = os.path.join(os.path.dirname(__file__), 'flask_openapi3', '__version__.py')
 with open(version_file, 'r', encoding='utf-8') as f:
     version = re.findall(r"__version__ = '(.*?)'", f.read())[0]
+
+long_description = open('README.md', 'r', encoding='utf-8').read()
+
+install_requires = []
+with open(os.path.join(os.path.dirname(__file__), 'requirements.txt'), 'r', encoding='utf-8') as f:
+    for line in f.readlines():
+        line = line.strip()
+        if line:
+            install_requires.append(line)
 
 setup(
     name="flask-openapi3",
@@ -28,7 +35,7 @@ setup(
     python_requires=">=3.7",
     zip_safe=False,
     platforms='any',
-    install_requires=["Flask>=2.0", "pydantic>=1.2"],
+    install_requires=install_requires,
     extras_require={'yaml': ['pyyaml']},
     classifiers=[
         # 'Development Status :: 1 - Planning',

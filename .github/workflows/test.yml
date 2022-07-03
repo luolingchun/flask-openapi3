@@ -27,12 +27,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest flake8 openapi-python-client
+          pip install -r requirements-dev.txt
           pip install -e .
       - name: Test with pytest
-        run: |
-          pytest tests
+        run: pytest tests
       - name: Flake8
-        run: |
-          flake8 ./flask_openapi3 ./examples ./tests
+        run: flake8 ./flask_openapi3 ./examples ./tests
