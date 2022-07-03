@@ -2,7 +2,7 @@
 
 # document
 mkdocs-static-i18n
-mkdocstrings
+mkdocstrings[python]
 mkdocs-material
 pyyaml
 
