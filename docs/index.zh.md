@@ -32,6 +32,7 @@
 - **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc)
   和 [RapiDoc](https://github.com/mrin9/RapiDoc)
 - **数据验证：** 基于 [Pydantic](https://github.com/samuelcolvin/pydantic) 的快速数据验证
+- **认证：** 支持在 Swagger UI 中重新加载认证信息
 
 ## 依赖
 
@@ -58,10 +59,10 @@ from pydantic import BaseModel
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 
-book_tag = Tag(name='book', description='Some Book')
+book_tag = Tag(name="book", description="Some Book")
 
 
 class BookQuery(BaseModel):
@@ -69,7 +70,7 @@ class BookQuery(BaseModel):
     author: str
 
 
-@app.get('/book', tags=[book_tag])
+@app.get("/book", tags=[book_tag])
 def get_book(query: BookQuery):
     """get books
     get all books
@@ -84,7 +85,7 @@ def get_book(query: BookQuery):
     }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
 ```
 
