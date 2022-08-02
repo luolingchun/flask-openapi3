@@ -36,7 +36,7 @@ book_tag = Tag(name='book', description='Some Book')
 security = [
     {"jwt": []},
     {"oauth2": ["write:pets", "read:pets"]},
-    {"basic": basic}
+    {"basic": []}
 ]
 
 app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True
