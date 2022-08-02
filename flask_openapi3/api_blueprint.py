@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
+import re
 from copy import deepcopy
 from functools import wraps
 from typing import Optional, List, Dict, Any, Type, Callable, Tuple
@@ -13,8 +14,8 @@ from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import Tag, Components
 from .types import OpenAPIResponsesType
-from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
-    validate_responses_type, parse_method, get_operation_id_for_path
+from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
+    parse_method, get_operation_id_for_path
 
 
 class APIBlueprint(Blueprint):
@@ -64,12 +65,12 @@ class APIBlueprint(Blueprint):
                 self.tags.append(tag)
 
         for path_url, path_item in api.paths.items():
-            trail_slash = path_url.endswith('/')
+            trail_slash = path_url.endswith("/")
             # merge url_prefix and new api blueprint path url
             uri = self.url_prefix.rstrip("/") + "/" + path_url.lstrip("/") if self.url_prefix else path_url
             # strip the right slash
             if not trail_slash:
-                uri = uri.rstrip('/')
+                uri = uri.rstrip("/")
             self.paths[uri] = path_item
 
         self.components_schemas.update(**api.components_schemas)
@@ -147,12 +148,13 @@ class APIBlueprint(Blueprint):
                 parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
-            uri = get_openapi_path(rule)
-            trail_slash = uri.endswith('/')
+            # /pet/<petId> --> /pet/{petId}
+            uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
+            trail_slash = uri.endswith("/")
             # merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
             if not trail_slash:
-                uri = uri.rstrip('/')
+                uri = uri.rstrip("/")
             # parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body, combine_responses
@@ -176,7 +178,7 @@ class APIBlueprint(Blueprint):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['GET'])"""
+        """Decorator for rest api, like: app.route(methods=["GET"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -232,7 +234,7 @@ class APIBlueprint(Blueprint):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['POST'])"""
+        """Decorator for rest api, like: app.route(methods=["POST"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -288,7 +290,7 @@ class APIBlueprint(Blueprint):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['PUT'])"""
+        """Decorator for rest api, like: app.route(methods=["PUT"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -344,7 +346,7 @@ class APIBlueprint(Blueprint):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['DELETE'])"""
+        """Decorator for rest api, like: app.route(methods=["DELETE"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -400,7 +402,7 @@ class APIBlueprint(Blueprint):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['PATCH'])"""
+        """Decorator for rest api, like: app.route(methods=["PATCH"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \

@@ -10,7 +10,6 @@ from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
 import pydantic.typing
 from flask import Response as _Response, current_app
 from pydantic import BaseModel
-from werkzeug.routing import parse_rule
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
@@ -20,29 +19,16 @@ from .models.path import Operation, RequestBody, PathItem
 from .models.validation_error import UnprocessableEntity
 
 
-def get_openapi_path(rule: str) -> str:
-    """Flask route conversion to openapi path:
-    /pet/<petId> --> /pet/{petId}
-    """
-    uri = ''
-    for converter, args, variable in parse_rule(str(rule)):
-        if converter is None:
-            uri += variable
-            continue
-        uri += "{%s}" % variable
-    return uri
-
-
 def get_operation(func: Callable, *, summary: str = None, description: str = None) -> Operation:
     """Return an Operation object with summary and description."""
-    doc = inspect.getdoc(func) or ''
+    doc = inspect.getdoc(func) or ""
     doc = doc.strip()
-    lines = doc.split('\n')
+    lines = doc.split("\n")
     doc_summary = lines[0] or None
     if summary is None:
-        doc_description = lines[0] if len(lines) == 0 else '</br>'.join(lines[1:]) or None
+        doc_description = lines[0] if len(lines) == 0 else "</br>".join(lines[1:]) or None
     else:
-        doc_description = '</br>'.join(lines) or None
+        doc_description = "</br>".join(lines) or None
     operation = Operation(
         summary=summary or doc_summary,
         description=description or doc_description
@@ -58,7 +44,7 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     return operation_id
 
 
-def get_func_parameter(func: Callable, *, parameter_name='path') -> Type[BaseModel]:
+def get_func_parameter(func: Callable, *, parameter_name="path") -> Type[BaseModel]:
     """Get view-func parameters.
     parameter_name has six parameters to choose from: path, query, form, body, header, cookie.
     """
@@ -67,10 +53,10 @@ def get_func_parameter(func: Callable, *, parameter_name='path') -> Type[BaseMod
     annotation = param.annotation if param else None
     if isinstance(annotation, str):
         # PEP563
-        while hasattr(func, '__wrapped__'):
+        while hasattr(func, "__wrapped__"):
             # Find globalns for the unwrapped func.
             func = func.__wrapped__
-        globalns = getattr(func, '__globals__', {})
+        globalns = getattr(func, "__globals__", {})
         annotation = ForwardRef(annotation)
         annotation = pydantic.typing.evaluate_forwardref(annotation, globalns, globalns)
     return annotation
@@ -89,8 +75,8 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(header)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties', {})
-    definitions = schema.get('definitions', {})
+    properties = schema.get("properties", {})
+    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -113,8 +99,8 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(cookie)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties', {})
-    definitions = schema.get('definitions', {})
+    properties = schema.get("properties", {})
+    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -137,8 +123,8 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(path)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties', {})
-    definitions = schema.get('definitions', {})
+    properties = schema.get("properties", {})
+    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -161,8 +147,8 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     schema = get_schema(query)
     parameters = []
     components_schemas = dict()
-    properties = schema.get('properties', {})
-    definitions = schema.get('definitions', {})
+    properties = schema.get("properties", {})
+    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -184,17 +170,17 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     """Parse form model"""
     schema = get_schema(form)
     components_schemas = dict()
-    properties = schema.get('properties', {})
-    definitions = schema.get('definitions', {})
+    properties = schema.get("properties", {})
+    definitions = schema.get("definitions", {})
 
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
-    title = schema.get('title')
+    title = schema.get("title")
     components_schemas[title] = Schema(**schema)
     encoding = {}
     for k, v in properties.items():
-        if v.get('type') == 'array':
-            encoding[k] = {'style': 'form'}
+        if v.get("type") == "array":
+            encoding[k] = {"style": "form"}
 
     content = {
         "multipart/form-data": MediaType(
@@ -219,9 +205,9 @@ def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     """Parse body model"""
     schema = get_schema(body)
     components_schemas = dict()
-    definitions = schema.get('definitions', {})
+    definitions = schema.get("definitions", {})
 
-    title = schema.get('title')
+    title = schema.get("title")
     components_schemas[title] = Schema(**schema)
 
     content = {
@@ -294,7 +280,7 @@ def get_responses(
                 }
             )
             _schemas[response.__name__] = Schema(**schema)
-            definitions = schema.get('definitions')
+            definitions = schema.get("definitions")
             if definitions:
                 for name, value in definitions.items():
                     _schemas[name] = Schema(**value)
@@ -304,11 +290,11 @@ def get_responses(
                 description=HTTP_STATUS.get(key, ""),
             )
         else:
-            raise TypeError(f'{response} is invalid `pydantic.BaseModel`.')
+            raise TypeError(f"{response} is invalid `pydantic.BaseModel`.")
     # handle extra_responses
     for key, value in extra_responses.items():
         # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}
-        extra_content = value.get('content', {})
+        extra_content = value.get("content", {})
         if extra_content:
             # {"text/csv":{"schema":{"type": "string"}}}
             if _responses.get(key) and isinstance(extra_content, dict):
@@ -329,7 +315,7 @@ def validate_responses_type(responses: Dict[str, Any]) -> None:
 
 def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
     """Validate response"""
-    if not current_app.config.get('FLASK_OPENAPI_DISABLE_WARNINGS', False):
+    if not current_app.config.get("FLASK_OPENAPI_DISABLE_WARNINGS", False):
         print("Warning: "
               "You are using `FLASK_OPENAPI_VALIDATE_RESPONSE=True`, "
               "please do not use it in the production environment, "
@@ -399,12 +385,12 @@ def parse_parameters(
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
     parameters = []
-    header = get_func_parameter(func, parameter_name='header')
-    cookie = get_func_parameter(func, parameter_name='cookie')
-    path = get_func_parameter(func, parameter_name='path')
-    query = get_func_parameter(func, parameter_name='query')
-    form = get_func_parameter(func, parameter_name='form')
-    body = get_func_parameter(func, parameter_name='body')
+    header = get_func_parameter(func, parameter_name="header")
+    cookie = get_func_parameter(func, parameter_name="cookie")
+    path = get_func_parameter(func, parameter_name="path")
+    query = get_func_parameter(func, parameter_name="query")
+    form = get_func_parameter(func, parameter_name="form")
+    body = get_func_parameter(func, parameter_name="body")
     if doc_ui is False:
         return header, cookie, path, query, form, body
     if header:

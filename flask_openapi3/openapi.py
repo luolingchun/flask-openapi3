@@ -3,6 +3,7 @@
 # @Time    : 2021/4/30 14:25
 import json
 import os
+import re
 from copy import deepcopy
 from functools import wraps
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
@@ -20,8 +21,8 @@ from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
 from .types import OpenAPIResponsesType
-from .utils import get_openapi_path, get_operation, get_responses, parse_and_store_tags, parse_parameters, \
-    validate_responses_type, parse_method, get_operation_id_for_path
+from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
+    parse_method, get_operation_id_for_path
 
 
 class OpenAPI(Flask):
@@ -57,11 +58,11 @@ class OpenAPI(Flask):
             doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
             doc_expansion: String=["list"*, "full", "none"].
                           Controls the default expansion setting for the operations and tags.
-                          It can be 'list' (expands only the tags),
-                         'full' (expands the tags and operations) or 'none' (expands nothing).
+                          It can be "list" (expands only the tags),
+                         "full" (expands the tags and operations) or "none" (expands nothing).
                          see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
-            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to '/openapi'.
-            api_doc_url: The OpenAPI Spec documentation. Defaults to '/openapi.json'.
+            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi".
+            api_doc_url: The OpenAPI Spec documentation. Defaults to "/openapi.json".
             swagger_url: The Swagger UI documentation. Defaults to `/swagger`.
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
@@ -74,7 +75,7 @@ class OpenAPI(Flask):
 
         self.openapi_version = "3.0.3"
         if info is None:
-            info = Info(title='OpenAPI', version='1.0.0')
+            info = Info(title="OpenAPI", version="1.0.0")
         assert isinstance(info, Info), f"Info is required (got type {type(info)})"
         self.info = info
         self.security_schemes = security_schemes
@@ -106,11 +107,11 @@ class OpenAPI(Flask):
         Provide Swagger UI, Redoc and Rapidoc
         """
         _here = os.path.dirname(__file__)
-        template_folder = os.path.join(_here, 'templates')
-        static_folder = os.path.join(template_folder, 'static')
+        template_folder = os.path.join(_here, "templates")
+        static_folder = os.path.join(template_folder, "static")
 
         blueprint = Blueprint(
-            'openapi',
+            "openapi",
             __name__,
             url_prefix=self.doc_prefix,
             template_folder=template_folder,
@@ -118,43 +119,43 @@ class OpenAPI(Flask):
         )
         blueprint.add_url_rule(
             rule=self.api_doc_url,
-            endpoint='api_doc',
+            endpoint="api_doc",
             view_func=lambda: self.api_doc
         )
         blueprint.add_url_rule(
             rule=self.swagger_url,
-            endpoint='swagger',
+            endpoint="swagger",
             view_func=lambda: render_template(
                 "swagger.html",
-                api_doc_url=self.api_doc_url.lstrip('/'),
+                api_doc_url=self.api_doc_url.lstrip("/"),
                 doc_expansion=self.doc_expansion,
                 oauth_config=self.oauth_config.dict() if self.oauth_config else None
             )
         )
         blueprint.add_url_rule(
             rule=self.redoc_url,
-            endpoint='redoc',
+            endpoint="redoc",
             view_func=lambda: render_template(
                 "redoc.html",
-                api_doc_url=self.api_doc_url.lstrip('/')
+                api_doc_url=self.api_doc_url.lstrip("/")
             )
         )
         blueprint.add_url_rule(
             rule=self.rapidoc_url,
-            endpoint='rapidoc',
+            endpoint="rapidoc",
             view_func=lambda: render_template(
                 "rapidoc.html",
-                api_doc_url=self.api_doc_url.lstrip('/')
+                api_doc_url=self.api_doc_url.lstrip("/")
             )
         )
         blueprint.add_url_rule(
-            rule='/',
-            endpoint='index',
+            rule="/",
+            endpoint="index",
             view_func=lambda: render_template(
                 "index.html",
-                swagger_url=self.swagger_url.lstrip('/'),
-                redoc_url=self.redoc_url.lstrip('/'),
-                rapidoc_url=self.rapidoc_url.lstrip('/')
+                swagger_url=self.swagger_url.lstrip("/"),
+                redoc_url=self.redoc_url.lstrip("/"),
+                rapidoc_url=self.rapidoc_url.lstrip("/")
             )
         )
         self.register_blueprint(blueprint)
@@ -252,7 +253,8 @@ class OpenAPI(Flask):
                 parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
-            uri = get_openapi_path(rule)
+            # /pet/<petId> --> /pet/{petId}
+            uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             # parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body, combine_responses
@@ -276,7 +278,7 @@ class OpenAPI(Flask):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['GET'])"""
+        """Decorator for rest api, like: app.route(methods=["GET"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -332,7 +334,7 @@ class OpenAPI(Flask):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['POST'])"""
+        """Decorator for rest api, like: app.route(methods=["POST"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -388,7 +390,7 @@ class OpenAPI(Flask):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['PUT'])"""
+        """Decorator for rest api, like: app.route(methods=["PUT"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -444,7 +446,7 @@ class OpenAPI(Flask):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['DELETE'])"""
+        """Decorator for rest api, like: app.route(methods=["DELETE"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
@@ -500,7 +502,7 @@ class OpenAPI(Flask):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=['PATCH'])"""
+        """Decorator for rest api, like: app.route(methods=["PATCH"])"""
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body, combine_responses = \
