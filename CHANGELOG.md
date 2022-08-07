@@ -1,4 +1,4 @@
-## v2.0.0 2022-06-26
+## v2.0.1 2022-08-07
 
 - [#32](https://github.com/luolingchun/flask-openapi3/issues/32) Fix: parse_rule is deprecated in werkzeug>=2.2.0.
 
