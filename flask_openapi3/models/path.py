@@ -5,14 +5,41 @@ from typing import Optional, List, Dict, Union
 
 from pydantic import BaseModel, Field
 
-from .common import Reference, MediaType, Response
+from .common import Reference, MediaType, Schema
 from .parameter import Parameter
+from .server import Link
 
 
 class RequestBody(BaseModel):
     description: Optional[str] = None
     content: Dict[str, MediaType]
     required: Optional[bool] = Field(default=True)
+
+
+class Header(BaseModel):
+    description: Optional[str] = None
+    required: Optional[bool] = None
+    schema_: Optional[Union[Schema, Reference]] = Field(None, alias="schema")
+
+
+class Response(BaseModel):
+    description: Optional[str]
+    headers: Optional[Dict[str, Union[Header, Reference]]] = None
+    content: Optional[Dict[str, MediaType]] = None
+    links: Optional[Dict[str, Union[Link, Reference]]] = None
+
+    def merge_with(self, other_response: Optional["Response"]) -> "Response":
+        """Merge content from both responses."""
+        if not other_response:
+            return self
+
+        if other_response.content:
+            if self.content:
+                self.content.update(other_response.content)
+            else:
+                self.content = other_response.content
+
+        return self
 
 
 class Operation(BaseModel):

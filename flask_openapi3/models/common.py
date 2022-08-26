@@ -63,8 +63,3 @@ class Encoding(BaseModel):
 class MediaType(BaseModel):
     schema_: Optional[Union[Schema, Reference]] = Field(None, alias="schema")
     encoding: Optional[Dict[str, Encoding]] = None
-
-
-class Response(BaseModel):
-    description: Optional[str]
-    content: Optional[Dict[str, MediaType]] = None

@@ -13,9 +13,9 @@ from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
-from .models.common import Schema, Response, MediaType
+from .models.common import Schema, MediaType
 from .models.parameter import ParameterInType, Parameter
-from .models.path import Operation, RequestBody, PathItem
+from .models.path import Operation, RequestBody, PathItem, Response
 from .models.validation_error import UnprocessableEntity
 
 
@@ -294,16 +294,12 @@ def get_responses(
     # handle extra_responses
     for key, value in extra_responses.items():
         # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}
-        extra_content = value.get("content", {})
-        if extra_content:
-            # {"text/csv":{"schema":{"type": "string"}}}
-            if _responses.get(key) and isinstance(extra_content, dict):
-                _responses[key].content.update(**extra_content)  # noqa
-            else:
-                _responses[key] = Response(
-                    description=HTTP_STATUS.get(key, ""),
-                    content=extra_content
-                )
+        new_response = Response(
+            # Best effort to ensure there is always a description
+            description=value.pop("description", HTTP_STATUS.get(key, "")),
+            **value
+        )
+        _responses[key] = new_response.merge_with(_responses.get(key))
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
