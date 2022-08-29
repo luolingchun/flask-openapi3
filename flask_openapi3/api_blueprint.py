@@ -15,7 +15,7 @@ from .http import HTTPMethod
 from .models import Tag, Components
 from .types import OpenAPIResponsesType
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
-    parse_method, get_operation_id_for_path, add_examples
+    parse_method, get_operation_id_for_path
 
 
 class APIBlueprint(Blueprint):
@@ -147,8 +147,7 @@ class APIBlueprint(Blueprint):
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
             header, cookie, path, query, form, body = \
-                parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
-            add_examples(operation, body_examples=body_examples)
+                parse_parameters(func, body_examples=body_examples, components_schemas=self.components_schemas, operation=operation)
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             # /pet/<petId> --> /pet/{petId}

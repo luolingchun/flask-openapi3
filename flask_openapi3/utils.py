@@ -201,7 +201,10 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
     return content, components_schemas
 
 
-def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
+def parse_body(
+        body: Type[BaseModel],
+        body_examples: Optional[Dict[str, dict]]
+) -> Tuple[Dict[str, MediaType], dict]:
     """Parse body model"""
     schema = get_schema(body)
     components_schemas = dict()
@@ -217,7 +220,8 @@ def parse_body(body: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
                     **{
                         "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                     }
-                )
+                ),
+                "examples": body_examples
             }
         )
     }
@@ -370,12 +374,14 @@ def parse_and_store_tags(
 def parse_parameters(
         func: Callable,
         *,
+        body_examples: Optional[Dict[str, dict]] = None,
         components_schemas: dict = None,
         operation: Operation = None,
         doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
+    :param body_examples: body (application/json) examples dict
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
@@ -415,7 +421,7 @@ def parse_parameters(
         })
         operation.requestBody = requestBody
     if body:
-        _content, _components_schemas = parse_body(body)
+        _content, _components_schemas = parse_body(body, body_examples)
         components_schemas.update(**_components_schemas)
         requestBody = RequestBody(**{
             "content": _content,
@@ -458,13 +464,3 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
             paths[uri] = PathItem(delete=operation)
         else:
             paths[uri].delete = operation
-
-
-def add_examples(
-    operation: Operation,
-    body_examples: Optional[Dict[str, dict]]
-):
-    if isinstance(operation.requestBody, RequestBody):
-        body_content = operation.requestBody.content.get("application/json")
-        if body_content:
-            body_content.examples = body_examples

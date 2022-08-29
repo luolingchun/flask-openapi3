@@ -240,12 +240,17 @@ def test_body_examples_are_replicated_in_open_api(request):
         '/test',
         body_examples={
             "Example 01": {
-                "test_int": -1,
-                "test_str": "negative",
+                "summary": "An example",
+                "value": {
+                    "test_int": -1,
+                    "test_str": "negative",
+                }
             },
             "Example 02": {
-                "test_int": 0,
-                "test_str": "zero",
+                "externalValue": 'https://example.org/examples/second-example.xml'
+            },
+            "Example 03": {
+                "$ref": "#/components/examples/third-example"
             }
         }
     )
@@ -259,10 +264,13 @@ def test_body_examples_are_replicated_in_open_api(request):
             'content': {
                 'application/json': {
                     'examples': {
-                        'Example 01': {'test_int': -1, 'test_str': 'negative'},
-                        'Example 02': {'test_int': 0, 'test_str': 'zero'}
+                        'Example 01': {'summary': 'An example', 'value': {'test_int': -1, 'test_str': 'negative'}},
+                        'Example 02': {'externalValue': 'https://example.org/examples/second-example.xml'},
+                        # As components cannot be altered for now, providing invalid reference is not supported
+                        'Example 03': {}
                     },
-                    'schema': {'$ref': '#/components/schemas/BaseRequest'}}
+                    'schema': {'$ref': '#/components/schemas/BaseRequest'}
+                }
             },
             'required': True
         }
@@ -276,13 +284,12 @@ def test_body_examples_are_not_replicated_with_form(request):
         '/test',
         body_examples={
             "Example 01": {
-                "test_int": -1,
-                "test_str": "negative",
+                "summary": "An example",
+                "value": {
+                    "test_int": -1,
+                    "test_str": "negative",
+                }
             },
-            "Example 02": {
-                "test_int": 0,
-                "test_str": "zero",
-            }
         }
     )
     def endpoint_test(form: BaseRequest):
