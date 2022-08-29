@@ -5,7 +5,7 @@
 import inspect
 import re
 from http import HTTPStatus
-from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef
+from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef, Optional
 
 import pydantic.typing
 from flask import Response as _Response, current_app
@@ -462,3 +462,13 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
             paths[uri] = PathItem(delete=operation)
         else:
             paths[uri].delete = operation
+
+
+def add_examples(
+    operation: Operation,
+    body_examples: Optional[Dict[str, dict]]
+):
+    if isinstance(operation.requestBody, RequestBody):
+        body_content = operation.requestBody.content.get("application/json")
+        if body_content:
+            body_content.examples = body_examples
