@@ -72,8 +72,3 @@ class MediaType(BaseModel):
     example: Optional[Any] = None
     examples: Optional[Dict[str, Union[Example, Reference]]] = None
     encoding: Optional[Dict[str, Encoding]] = None
-
-
-class Response(BaseModel):
-    description: Optional[str]
-    content: Optional[Dict[str, MediaType]] = None
