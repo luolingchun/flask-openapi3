@@ -146,8 +146,12 @@ class APIBlueprint(Blueprint):
             tags = tags + self.abp_tags if tags else self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
-            header, cookie, path, query, form, body = \
-                parse_parameters(func, body_examples=body_examples, components_schemas=self.components_schemas, operation=operation)
+            header, cookie, path, query, form, body = parse_parameters(
+                func,
+                body_examples=body_examples,
+                components_schemas=self.components_schemas,
+                operation=operation
+            )
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             # /pet/<petId> --> /pet/{petId}
