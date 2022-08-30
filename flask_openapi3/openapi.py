@@ -192,6 +192,7 @@ class OpenAPI(_Scaffold, Flask):
             description: Optional[str] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
+            form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
@@ -214,6 +215,7 @@ class OpenAPI(_Scaffold, Flask):
         :param tags: api tag
         :param responses: response model
         :param extra_responses: extra response dict
+        :param form_examples: form (multipart/form-data) examples dict
         :param body_examples: body (application/json) examples dict
         :param security: security name
         :param deprecated: mark as deprecated support. Default to not True.
@@ -250,6 +252,7 @@ class OpenAPI(_Scaffold, Flask):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
+                form_examples=form_examples,
                 body_examples=body_examples,
                 components_schemas=self.components_schemas,
                 operation=operation

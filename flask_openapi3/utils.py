@@ -166,7 +166,10 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     return parameters, components_schemas
 
 
-def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
+def parse_form(
+        form: Type[BaseModel],
+        form_examples: Optional[Dict[str, dict]]
+) -> Tuple[Dict[str, MediaType], dict]:
     """Parse form model"""
     schema = get_schema(form)
     components_schemas = dict()
@@ -190,6 +193,7 @@ def parse_form(form: Type[BaseModel]) -> Tuple[Dict[str, MediaType], dict]:
                         "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                     }
                 ),
+                "examples": form_examples,
                 "encoding": encoding
             }
         )
@@ -374,6 +378,7 @@ def parse_and_store_tags(
 def parse_parameters(
         func: Callable,
         *,
+        form_examples: Optional[Dict[str, dict]] = None,
         body_examples: Optional[Dict[str, dict]] = None,
         components_schemas: dict = None,
         operation: Operation = None,
@@ -381,6 +386,7 @@ def parse_parameters(
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
+    :param form_examples: form (multipart/form-data) examples dict
     :param body_examples: body (application/json) examples dict
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
@@ -414,19 +420,19 @@ def parse_parameters(
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
     if form:
-        _content, _components_schemas = parse_form(form)
+        _content, _components_schemas = parse_form(form, form_examples)
         components_schemas.update(**_components_schemas)
-        requestBody = RequestBody(**{
+        request_body = RequestBody(**{
             "content": _content,
         })
-        operation.requestBody = requestBody
+        operation.requestBody = request_body
     if body:
         _content, _components_schemas = parse_body(body, body_examples)
         components_schemas.update(**_components_schemas)
-        requestBody = RequestBody(**{
+        request_body = RequestBody(**{
             "content": _content,
         })
-        operation.requestBody = requestBody
+        operation.requestBody = request_body
     operation.parameters = parameters if parameters else None
 
     return header, cookie, path, query, form, body
