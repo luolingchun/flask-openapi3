@@ -195,6 +195,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -216,6 +217,7 @@ class OpenAPI(Flask):
         :param tags: api tag
         :param responses: response model
         :param extra_responses: extra response dict
+        :param body_examples: body (application/json) examples dict
         :param security: security name
         :param deprecated: mark as deprecated support. Default to not True.
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
@@ -249,8 +251,12 @@ class OpenAPI(Flask):
             # store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
-            header, cookie, path, query, form, body = \
-                parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            header, cookie, path, query, form, body = parse_parameters(
+                func,
+                body_examples=body_examples,
+                components_schemas=self.components_schemas,
+                operation=operation
+            )
             # parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             # /pet/<petId> --> /pet/{petId}
@@ -272,6 +278,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -290,6 +297,7 @@ class OpenAPI(Flask):
                     description=description,
                     responses=responses,
                     extra_responses=extra_responses,
+                    body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
                     operation_id=operation_id,
@@ -328,6 +336,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -346,6 +355,7 @@ class OpenAPI(Flask):
                     description=description,
                     responses=responses,
                     extra_responses=extra_responses,
+                    body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
                     operation_id=operation_id,
@@ -384,6 +394,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -402,6 +413,7 @@ class OpenAPI(Flask):
                     description=description,
                     responses=responses,
                     extra_responses=extra_responses,
+                    body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
                     operation_id=operation_id,
@@ -440,6 +452,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -458,6 +471,7 @@ class OpenAPI(Flask):
                     description=description,
                     responses=responses,
                     extra_responses=extra_responses,
+                    body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
                     operation_id=operation_id,
@@ -496,6 +510,7 @@ class OpenAPI(Flask):
             description: Optional[str] = None,
             responses: OpenAPIResponsesType = None,
             extra_responses: Optional[Dict[str, dict]] = None,
+            body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
             operation_id: Optional[str] = None,
@@ -514,6 +529,7 @@ class OpenAPI(Flask):
                     description=description,
                     responses=responses,
                     extra_responses=extra_responses,
+                    body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
                     operation_id=operation_id,

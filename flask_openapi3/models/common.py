@@ -60,6 +60,15 @@ class Encoding(BaseModel):
     allowReserved: Optional[bool] = None
 
 
+class Example(BaseModel):
+    summary: Optional[str] = None
+    description: Optional[str] = None
+    value: Optional[Any] = None
+    externalValue: Optional[str] = None
+
+
 class MediaType(BaseModel):
     schema_: Optional[Union[Schema, Reference]] = Field(None, alias="schema")
+    example: Optional[Any] = None
+    examples: Optional[Dict[str, Union[Example, Reference]]] = None
     encoding: Optional[Dict[str, Encoding]] = None
