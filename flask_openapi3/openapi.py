@@ -5,27 +5,24 @@ import json
 import os
 import re
 from copy import deepcopy
-from functools import wraps
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template
-from flask.wrappers import Response
 from pydantic import BaseModel
 
 from .api_blueprint import APIBlueprint
 from .commands import openapi_command
-from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
-from .types import OpenAPIResponsesType
+from .scaffold import _Scaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
 
 
-class OpenAPI(Flask):
+class OpenAPI(_Scaffold, Flask):
     def __init__(
             self,
             import_name: str,
@@ -33,7 +30,7 @@ class OpenAPI(Flask):
             info: Optional[Info] = None,
             security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
             oauth_config: Optional[OAuthConfig] = None,
-            responses: OpenAPIResponsesType = None,
+            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
@@ -268,293 +265,3 @@ class OpenAPI(Flask):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
             return header, cookie, path, query, form, body, {}
-
-    def get(
-            self,
-            rule: str,
-            *,
-            tags: Optional[List[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            responses: OpenAPIResponsesType = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
-            deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
-            doc_ui: bool = True,
-            **options: Any
-    ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["GET"])"""
-
-        def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
-                self._do_decorator(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    responses=responses,
-                    extra_responses=extra_responses,
-                    body_examples=body_examples,
-                    security=security,
-                    deprecated=deprecated,
-                    operation_id=operation_id,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.GET
-                )
-
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    responses=combine_responses,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
-            options.update({"methods": [HTTPMethod.GET]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
-
-            return wrapper
-
-        return decorator
-
-    def post(
-            self,
-            rule: str,
-            *,
-            tags: Optional[List[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            responses: OpenAPIResponsesType = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
-            deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
-            doc_ui: bool = True,
-            **options: Any
-    ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["POST"])"""
-
-        def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
-                self._do_decorator(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    responses=responses,
-                    extra_responses=extra_responses,
-                    body_examples=body_examples,
-                    security=security,
-                    deprecated=deprecated,
-                    operation_id=operation_id,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.POST
-                )
-
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    responses=combine_responses,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
-            options.update({"methods": [HTTPMethod.POST]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
-
-            return wrapper
-
-        return decorator
-
-    def put(
-            self,
-            rule: str,
-            *,
-            tags: Optional[List[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            responses: OpenAPIResponsesType = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
-            deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
-            doc_ui: bool = True,
-            **options: Any
-    ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["PUT"])"""
-
-        def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
-                self._do_decorator(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    responses=responses,
-                    extra_responses=extra_responses,
-                    body_examples=body_examples,
-                    security=security,
-                    deprecated=deprecated,
-                    operation_id=operation_id,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PUT
-                )
-
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    responses=combine_responses,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
-            options.update({"methods": [HTTPMethod.PUT]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
-
-            return wrapper
-
-        return decorator
-
-    def delete(
-            self,
-            rule: str,
-            *,
-            tags: Optional[List[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            responses: OpenAPIResponsesType = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
-            deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
-            doc_ui: bool = True,
-            **options: Any
-    ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["DELETE"])"""
-
-        def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
-                self._do_decorator(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    responses=responses,
-                    extra_responses=extra_responses,
-                    body_examples=body_examples,
-                    security=security,
-                    deprecated=deprecated,
-                    operation_id=operation_id,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.DELETE
-                )
-
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    responses=combine_responses,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
-            options.update({"methods": [HTTPMethod.DELETE]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
-
-            return wrapper
-
-        return decorator
-
-    def patch(
-            self,
-            rule: str,
-            *,
-            tags: Optional[List[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            responses: OpenAPIResponsesType = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
-            deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
-            doc_ui: bool = True,
-            **options: Any
-    ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["PATCH"])"""
-
-        def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
-                self._do_decorator(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    responses=responses,
-                    extra_responses=extra_responses,
-                    body_examples=body_examples,
-                    security=security,
-                    deprecated=deprecated,
-                    operation_id=operation_id,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PATCH
-                )
-
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    responses=combine_responses,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
-            options.update({"methods": [HTTPMethod.PATCH]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
-
-            return wrapper
-
-        return decorator
