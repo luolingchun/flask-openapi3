@@ -1,9 +1,8 @@
 import pytest
-from pydantic import ValidationError
+from openapi_python_client import GeneratorData, Config
 
 from flask_openapi3 import OpenAPI
 from flask_openapi3.models import ExternalDocumentation
-from openapi_python_client import GeneratorData, Config
 
 
 @pytest.fixture
@@ -17,30 +16,17 @@ def app():
 def test_openapi_api_doc_with_and_without_external_docs(app):
     config = Config()
 
-    error_code = None
-    try:
-        ExternalDocumentation(url="example.com/openapi/markdown", description="Testing the description")
-    except ValidationError as err:
-        error_code = err.raw_errors[0].exc.code
-    assert 'url.scheme' == error_code
+    ExternalDocumentation(url="example.com/openapi/markdown", description="Testing the description")
 
-    error_code = None
-    try:
-        ExternalDocumentation(url="/openapi/markdown", description="Testing the description")
-    except ValidationError as err:
-        error_code = err.raw_errors[0].exc.code
-    assert 'url.scheme' == error_code
+    ExternalDocumentation(url="/openapi/markdown", description="Testing the description")
 
-    error_code = None
-    try:
-        ExternalDocumentation(url="ftp://example.com/openapi/markdown", description="Testing the description")
-    except ValidationError as err:
-        error_code = err.raw_errors[0].exc.code
-    assert 'url.scheme' == error_code
+    ExternalDocumentation(url="ftp://example.com/openapi/markdown", description="Testing the description")
 
     assert "externalDocs" not in app.api_doc
     app.external_docs = ExternalDocumentation(
-        url="http://example.com/openapi/markdown", description="Testing the description")
+        url="http://example.com/openapi/markdown",
+        description="Testing the description"
+    )
     assert "externalDocs" in app.api_doc
 
     openapi = GeneratorData.from_dict(data=app.api_doc, config=config)

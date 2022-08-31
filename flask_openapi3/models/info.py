@@ -3,25 +3,34 @@
 # @Time    : 2021/4/28 10:58
 from typing import Optional
 
-from pydantic import BaseModel, AnyUrl
+from pydantic import BaseModel
 
 
 class Contact(BaseModel):
     name: Optional[str] = None
-    url: Optional[AnyUrl] = None
+    url: Optional[str] = None
+    email: Optional[str] = None
+
+    class Config:
+        extra = "allow"
 
 
 class License(BaseModel):
     name: str
-    identifier: Optional[str] = None
-    url: Optional[AnyUrl] = None
+    url: Optional[str] = None
+
+    class Config:
+        extra = "allow"
 
 
 class Info(BaseModel):
+    """https://spec.openapis.org/oas/v3.0.3#info-object"""
     title: str
-    version: str
-    summary: Optional[str] = None
     description: Optional[str] = None
-    termsOfService: Optional[AnyUrl] = None
+    termsOfService: Optional[str] = None
     contact: Optional[Contact] = None
     license: Optional[License] = None
+    version: str
+
+    class Config:
+        extra = "allow"

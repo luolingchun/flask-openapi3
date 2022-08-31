@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, MediaType
-from .models.parameter import ParameterInType, Parameter
+from .models.path import ParameterInType, Parameter
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.validation_error import UnprocessableEntity
 
@@ -31,7 +31,8 @@ def get_operation(func: Callable, *, summary: str = None, description: str = Non
         doc_description = "</br>".join(lines) or None
     operation = Operation(
         summary=summary or doc_summary,
-        description=description or doc_description
+        description=description or doc_description,
+        responses={}
     )
 
     return operation

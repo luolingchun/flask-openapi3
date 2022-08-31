@@ -17,6 +17,7 @@ OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + '/{model}'
 
 
 class APISpec(BaseModel):
+    """https://spec.openapis.org/oas/v3.0.3#openapi-object"""
     openapi: str
     info: Info
     servers: Optional[List[Server]] = None
@@ -25,3 +26,6 @@ class APISpec(BaseModel):
     security: Optional[List[Dict[str, List[str]]]] = None
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
+
+    class Config:
+        extra = "allow"

@@ -266,13 +266,11 @@ def test_body_examples_are_replicated_in_open_api(request):
                     'examples': {
                         'Example 01': {'summary': 'An example', 'value': {'test_int': -1, 'test_str': 'negative'}},
                         'Example 02': {'externalValue': 'https://example.org/examples/second-example.xml'},
-                        # As components cannot be altered for now, providing invalid reference is not supported
-                        'Example 03': {}
+                        'Example 03': {"$ref": "#/components/examples/third-example"}
                     },
                     'schema': {'$ref': '#/components/schemas/BaseRequest'}
                 }
-            },
-            'required': True
+            }
         }
 
 
@@ -304,8 +302,7 @@ def test_body_examples_are_not_replicated_with_form(request):
                     'encoding': {},
                     'schema': {'$ref': '#/components/schemas/BaseRequest'}
                 }
-            },
-            'required': True
+            }
         }
 
 
@@ -340,6 +337,5 @@ def test_form_examples(request):
                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
                     }
                 }
-            },
-            'required': True
+            }
         }

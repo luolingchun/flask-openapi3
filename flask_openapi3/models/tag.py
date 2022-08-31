@@ -9,6 +9,10 @@ from .common import ExternalDocumentation
 
 
 class Tag(BaseModel):
+    """https://spec.openapis.org/oas/v3.0.3#tag-object"""
     name: str
     description: Optional[str] = None
     externalDocs: Optional[ExternalDocumentation] = None
+
+    class Config:
+        extra = "allow"
