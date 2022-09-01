@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from .api_blueprint import APIBlueprint
 from .commands import openapi_command
 from .http import HTTPMethod
-from .models import Info, APISpec, Tag, Components, Server
+from .models import Info, APISpec, Tag, Components, Server, ExtraRequestBody
 from .models.common import Reference, ExternalDocumentation
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
@@ -192,10 +192,9 @@ class OpenAPI(_Scaffold, Flask):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            extra_body: Optional[ExtraRequestBody] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
-            form_examples: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: List[Dict[str, List[Any]]] = None,
             servers: Optional[List[Server]] = None,
@@ -209,8 +208,6 @@ class OpenAPI(_Scaffold, Flask):
         :param tags: api tag
         :param responses: response model
         :param extra_responses: extra response dict
-        :param form_examples: form (multipart/form-data) examples dict
-        :param body_examples: body (application/json) examples dict
         :param security: security name
         :param deprecated: mark as deprecated support. Default to not True.
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
@@ -249,8 +246,7 @@ class OpenAPI(_Scaffold, Flask):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
-                form_examples=form_examples,
-                body_examples=body_examples,
+                extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation
             )

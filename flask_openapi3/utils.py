@@ -10,7 +10,7 @@ import pydantic.typing
 from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
-from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
+from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag, ExtraRequestBody
 from .models.common import Schema, MediaType
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
@@ -167,7 +167,6 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_form(
         form: Type[BaseModel],
-        form_examples: Optional[Dict[str, dict]]
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parse form model"""
     schema = get_schema(form)
@@ -192,7 +191,6 @@ def parse_form(
                         "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
                     }
                 ),
-                "examples": form_examples,
                 "encoding": encoding
             }
         )
@@ -206,7 +204,7 @@ def parse_form(
 
 def parse_body(
         body: Type[BaseModel],
-        body_examples: Optional[Dict[str, dict]]
+        extra_body: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parse body model"""
     schema = get_schema(body)
@@ -215,19 +213,21 @@ def parse_body(
 
     title = schema.get("title")
     components_schemas[title] = Schema(**schema)
-
-    content = {
-        "application/json": MediaType(
-            **{
-                "schema": Schema(
-                    **{
-                        "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
-                    }
-                ),
-                "examples": body_examples
-            }
-        )
-    }
+    if extra_body:
+        content = {
+            "application/json": MediaType(
+                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
+                example=extra_body.example,
+                examples=extra_body.examples,
+                encoding=extra_body.encoding
+            )
+        }
+    else:
+        content = {
+            "application/json": MediaType(
+                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"})
+            )
+        }
 
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -340,16 +340,14 @@ def parse_and_store_tags(
 def parse_parameters(
         func: Callable,
         *,
-        form_examples: Optional[Dict[str, dict]] = None,
-        body_examples: Optional[Dict[str, dict]] = None,
+        extra_body: Optional[ExtraRequestBody] = None,
         components_schemas: dict = None,
         operation: Operation = None,
         doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
-    :param form_examples: form (multipart/form-data) examples dict
-    :param body_examples: body (application/json) examples dict
+    :param extra_body
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
@@ -382,18 +380,23 @@ def parse_parameters(
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
     if form:
-        _content, _components_schemas = parse_form(form, form_examples)
+        _content, _components_schemas = parse_form(form)
         components_schemas.update(**_components_schemas)
         request_body = RequestBody(**{
             "content": _content,
         })
         operation.requestBody = request_body
     if body:
-        _content, _components_schemas = parse_body(body, body_examples)
+        _content, _components_schemas = parse_body(body, extra_body)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(**{
-            "content": _content,
-        })
+        if extra_body:
+            request_body = RequestBody(
+                description=extra_body.description,
+                content=_content,
+                required=extra_body.required
+            )
+        else:
+            request_body = RequestBody(content=_content)
         operation.requestBody = request_body
     operation.parameters = parameters if parameters else None
 

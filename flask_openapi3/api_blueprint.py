@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from .http import HTTPMethod
 from .models import Tag, Components, ExternalDocumentation
+from .models.path import RequestBody
 from .models.server import Server
 from .scaffold import _Scaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
@@ -85,10 +86,9 @@ class APIBlueprint(_Scaffold, Blueprint):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            extra_body: Optional[RequestBody] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
-            form_examples: Optional[Dict[str, dict]] = None,
-            body_examples: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: List[Dict[str, List[Any]]] = None,
             servers: Optional[List[Server]] = None,
@@ -102,8 +102,6 @@ class APIBlueprint(_Scaffold, Blueprint):
         :param tags: api tag
         :param responses: response model
         :param extra_responses: extra response dict
-        :param form_examples: form (multipart/form-data) examples dict
-        :param body_examples: body (application/json) examples dict
         :param security: security name
         :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
         :param deprecated: mark as deprecated support. Default to not True.
@@ -145,7 +143,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
-                body_examples=body_examples,
+                extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation
             )

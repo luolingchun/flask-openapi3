@@ -73,32 +73,6 @@ def create_book(body: BookBody):
     ...
 ```
 
-Examples can be provided using **`body_examples`** as in the following sample:
-
-```python hl_lines="20"
-examples = {
-    "chinese": {
-        "summary": "An example of a chinese",
-        "value": {
-            "author": "chinese",
-            "age": "12"
-        }
-    },
-    "english": {
-        "summary": "An example of a english",
-        "value": {
-            "author": "english",
-            "age": "15"
-        }
-    }
-}
-
-
-@app.post('/book', body_examples=examples)
-def create_book(body: BookBody):
-    ...
-```
-
 ### header
 
 Receive flask **`request.headers`**.
