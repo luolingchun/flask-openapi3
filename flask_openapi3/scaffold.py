@@ -9,6 +9,7 @@ from flask.scaffold import Scaffold
 from flask.wrappers import Response
 from pydantic import BaseModel
 
+from .models.server import Server
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import ExternalDocumentation
@@ -24,14 +25,15 @@ class _Scaffold(Scaffold, ABC):
             tags: List[Tag] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
+            security: List[Dict[str, List[Any]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
@@ -53,8 +55,9 @@ class _Scaffold(Scaffold, ABC):
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -73,8 +76,9 @@ class _Scaffold(Scaffold, ABC):
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
-                    security=security,
                     deprecated=deprecated,
+                    security=security,
+                    servers=servers,
                     doc_ui=doc_ui,
                     method=HTTPMethod.GET
                 )
@@ -113,8 +117,9 @@ class _Scaffold(Scaffold, ABC):
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -134,8 +139,9 @@ class _Scaffold(Scaffold, ABC):
                     form_examples=form_examples,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
-                    security=security,
                     deprecated=deprecated,
+                    security=security,
+                    servers=servers,
                     doc_ui=doc_ui,
                     method=HTTPMethod.POST
                 )
@@ -174,8 +180,9 @@ class _Scaffold(Scaffold, ABC):
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -194,8 +201,9 @@ class _Scaffold(Scaffold, ABC):
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
-                    security=security,
                     deprecated=deprecated,
+                    security=security,
+                    servers=servers,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PUT
                 )
@@ -234,8 +242,9 @@ class _Scaffold(Scaffold, ABC):
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -254,8 +263,9 @@ class _Scaffold(Scaffold, ABC):
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
-                    security=security,
                     deprecated=deprecated,
+                    security=security,
+                    servers=servers,
                     doc_ui=doc_ui,
                     method=HTTPMethod.DELETE
                 )
@@ -294,8 +304,9 @@ class _Scaffold(Scaffold, ABC):
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -314,8 +325,9 @@ class _Scaffold(Scaffold, ABC):
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
-                    security=security,
                     deprecated=deprecated,
+                    security=security,
+                    servers=servers,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PATCH
                 )

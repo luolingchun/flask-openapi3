@@ -6,7 +6,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import Info, Tag
+from flask_openapi3 import Info, Tag, Server
 from flask_openapi3 import OpenAPI
 from flask_openapi3.models import ExternalDocumentation
 from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit, APIKey, HTTPBase
@@ -78,7 +78,8 @@ class BookResponse(BaseModel):
         description="Something great got better, get excited!"),
     responses={"200": BookResponse},
     extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
-    security=security
+    security=security,
+    servers=[Server(url="https://www.openapis.org/", description="openapi")]
 )
 def get_book(path: BookPath):
     """Get book

@@ -196,8 +196,9 @@ class OpenAPI(_Scaffold, Flask):
             extra_responses: Dict[str, dict] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
-            security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
+            security: List[Dict[str, List[Any]]] = None,
+            servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
@@ -230,19 +231,19 @@ class OpenAPI(_Scaffold, Flask):
             combine_responses.update(**responses)
             # create operation
             operation = get_operation(func, summary=summary, description=description)
-            # add security
-            operation.security = security
             # set external docs
-            if external_docs:
-                operation.externalDocs = external_docs
+            operation.externalDocs = external_docs
             # Unique string used to identify the operation.
             if operation_id:
                 operation.operationId = operation_id
             else:
                 operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
             # only set `deprecated` if True otherwise leave it as None
-            if deprecated:
-                operation.deprecated = True
+            operation.deprecated = deprecated
+            # add security
+            operation.security = security
+            # add servers
+            operation.servers = servers
             # store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
