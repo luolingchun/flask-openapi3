@@ -88,12 +88,10 @@ plugins:
           Specification: 规范
           # OpenAPI-second: end
           Example: 示例
-          Configuration: 配置
           API Reference: API 参考
           # API Reference-second: start
           # OpenAPI: OpenAPI
           APIBlueprint: APIBlueprint
-          Model: 模型
           # API Reference-second: end
           LICENSE: 许可
           Changelog: 更新日志
@@ -118,8 +116,8 @@ nav:
       - Summary and Description: OpenAPI/Summary and Description.md
       - Specification: OpenAPI/Specification.md
   - Example: Example.md
-  - Configuration: Configuration.md
   - API Reference:
+      - _Scaffold: Reference/Scaffold.md
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
       - Model:
@@ -128,7 +126,6 @@ nav:
           - component: Reference/Model/component.md
           - file: Reference/Model/file.md
           - oauth: Reference/Model/oauth.md
-          - parameter: Reference/Model/parameter.md
           - path: Reference/Model/path.md
           - security: Reference/Model/security.md
           - tag: Reference/Model/tag.md

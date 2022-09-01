@@ -199,15 +199,7 @@ class OpenAPI(_Scaffold, Flask):
             operation_id: Optional[str] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Dict[str, Type[BaseModel]]
-    ]:
+    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collect openapi specification information
         :param rule: flask route
@@ -263,8 +255,8 @@ class OpenAPI(_Scaffold, Flask):
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             # parse method
             parse_method(uri, method, self.paths, operation)
-            return header, cookie, path, query, form, body, combine_responses
+            return header, cookie, path, query, form, body
         else:
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-            return header, cookie, path, query, form, body, {}
+            return header, cookie, path, query, form, body

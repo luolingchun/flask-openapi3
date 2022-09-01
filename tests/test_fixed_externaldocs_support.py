@@ -9,7 +9,6 @@ from flask_openapi3.models import ExternalDocumentation
 def app():
     _app = OpenAPI(__name__)
     _app.config["TESTING"] = True
-    _app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True
     return _app
 
 

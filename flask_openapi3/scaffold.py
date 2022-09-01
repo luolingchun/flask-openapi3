@@ -32,15 +32,7 @@ class _Scaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Dict[str, Type[BaseModel]]
-    ]:
+    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         raise NotImplementedError
 
     def register_api(self, api) -> None:
@@ -66,7 +58,7 @@ class _Scaffold(Scaffold, ABC):
         """Decorator for rest api, like: app.route(methods=["GET"])"""
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
+            header, cookie, path, query, form, body = \
                 self._do_decorator(
                     rule,
                     func,
@@ -87,7 +79,6 @@ class _Scaffold(Scaffold, ABC):
             def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
-                    responses=combine_responses,
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -125,7 +116,7 @@ class _Scaffold(Scaffold, ABC):
         """Decorator for rest api, like: app.route(methods=["POST"])"""
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
+            header, cookie, path, query, form, body = \
                 self._do_decorator(
                     rule,
                     func,
@@ -147,7 +138,6 @@ class _Scaffold(Scaffold, ABC):
             def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
-                    responses=combine_responses,
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -185,7 +175,7 @@ class _Scaffold(Scaffold, ABC):
         """Decorator for rest api, like: app.route(methods=["PUT"])"""
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
+            header, cookie, path, query, form, body = \
                 self._do_decorator(
                     rule,
                     func,
@@ -206,7 +196,6 @@ class _Scaffold(Scaffold, ABC):
             def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
-                    responses=combine_responses,
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -244,7 +233,7 @@ class _Scaffold(Scaffold, ABC):
         """Decorator for rest api, like: app.route(methods=["DELETE"])"""
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
+            header, cookie, path, query, form, body = \
                 self._do_decorator(
                     rule,
                     func,
@@ -265,7 +254,6 @@ class _Scaffold(Scaffold, ABC):
             def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
-                    responses=combine_responses,
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -303,7 +291,7 @@ class _Scaffold(Scaffold, ABC):
         """Decorator for rest api, like: app.route(methods=["PATCH"])"""
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, combine_responses = \
+            header, cookie, path, query, form, body = \
                 self._do_decorator(
                     rule,
                     func,
@@ -324,7 +312,6 @@ class _Scaffold(Scaffold, ABC):
             def wrapper(**kwargs) -> Response:
                 resp = _do_wrapper(
                     func,
-                    responses=combine_responses,
                     header=header,
                     cookie=cookie,
                     path=path,

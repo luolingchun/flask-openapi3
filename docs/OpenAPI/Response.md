@@ -21,14 +21,6 @@ def get_book(path: BookPath, query: BookBody):
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
 ```
 
-*New in v0.9.5*
-
-By default, the configuration `FLASK_OPENAPI_VALIDATE_RESPONSE` is `False`. You can set
-`app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True` to validate responses in the development environment.
-
-!!! warning
-
-    Please do not use it in the production environment, because it will reduce the performance.
 
 ![image-20210526104627124](../assets/image-20210526104627124.png)
 

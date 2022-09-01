@@ -3,14 +3,12 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Dict, Any, Type, Callable
+from typing import Any, Type, Callable
 
-from flask import request, make_response, current_app
+from flask import request, make_response
 from flask.wrappers import Response
 from pydantic import ValidationError, BaseModel
 from pydantic.error_wrappers import ErrorWrapper
-
-from .utils import validate_response
 
 
 def _do_header(header, request_kwargs):
@@ -91,7 +89,6 @@ def _do_body(body, request_kwargs):
 def _do_wrapper(
         func: Callable,
         *,
-        responses: Dict[str, Type[BaseModel]] = None,
         header: Type[BaseModel] = None,
         cookie: Type[BaseModel] = None,
         path: Type[BaseModel] = None,
@@ -136,9 +133,5 @@ def _do_wrapper(
 
     # handle request
     response = func(**request_kwargs)
-
-    is_validate_response = current_app.config.get("FLASK_OPENAPI_VALIDATE_RESPONSE", False)
-    if is_validate_response and responses:
-        validate_response(response, responses)
 
     return response

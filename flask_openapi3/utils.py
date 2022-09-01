@@ -4,18 +4,16 @@
 
 import inspect
 import re
-from http import HTTPStatus
 from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef, Optional
 
 import pydantic.typing
-from flask import Response as _Response, current_app
 from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, MediaType
-from .models.path import ParameterInType, Parameter
 from .models.path import Operation, RequestBody, PathItem, Response
+from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity
 
 
@@ -316,43 +314,6 @@ def get_responses(
 
 def validate_responses_type(responses: Dict[str, Any]) -> None:
     assert isinstance(responses, dict), f"{responses} invalid `dict`"
-
-
-def validate_response(resp: Any, responses: Dict[str, Type[BaseModel]]) -> None:
-    """Validate response"""
-    if not current_app.config.get("FLASK_OPENAPI_DISABLE_WARNINGS", False):
-        print("Warning: "
-              "You are using `FLASK_OPENAPI_VALIDATE_RESPONSE=True`, "
-              "please do not use it in the production environment, "
-              "because it will reduce the performance. "
-              "Note, you can disable this warning with `Flask.config['FLASK_OPENAPI_DISABLE_WARNINGS'] = True`")
-    if isinstance(resp, tuple):  # noqa
-        _resp, status_code = resp[:2]
-    elif isinstance(resp, _Response):
-        if resp.mimetype != "application/json":
-            # only application/json
-            return
-            # raise TypeError("`Response` mimetype must be application/json.")
-        _resp, status_code = resp.json, resp.status_code  # noqa
-    else:
-        _resp, status_code = resp, 200
-    # status_code is http.HTTPStatus
-    if isinstance(status_code, HTTPStatus):
-        status_code = status_code.value
-
-    resp_model = responses.get(str(status_code))
-    if resp_model is None:
-        return
-    assert inspect.isclass(resp_model) and \
-           issubclass(resp_model, BaseModel), f"{resp_model} is invalid `pydantic.BaseModel`"
-    try:
-        if resp_model.__custom_root_type__:
-            # https://pydantic-docs.helpmanual.io/usage/models/#custom-root-types
-            resp_model(__root__=_resp)
-        else:
-            resp_model(**_resp)
-    except TypeError:
-        raise TypeError(f"`{resp_model.__name__}` validation failed, must be a mapping.")
 
 
 def parse_and_store_tags(

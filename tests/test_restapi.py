@@ -31,7 +31,6 @@ app.config["TESTING"] = True
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 
-app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True
 
 
 class BookQuery(BaseModel):

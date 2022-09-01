@@ -39,7 +39,6 @@ security = [
     {"basic": []}
 ]
 
-app.config["FLASK_OPENAPI_VALIDATE_RESPONSE"] = True
 
 
 class BookPath(BaseModel):

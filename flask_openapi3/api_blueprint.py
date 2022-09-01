@@ -91,15 +91,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             operation_id: Optional[str] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Type[BaseModel],
-        Dict[str, Type[BaseModel]]
-    ]:
+    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collect openapi specification information
         :param rule: flask route
@@ -162,8 +154,8 @@ class APIBlueprint(_Scaffold, Blueprint):
                 uri = uri.rstrip("/")
             # parse method
             parse_method(uri, method, self.paths, operation)
-            return header, cookie, path, query, form, body, combine_responses
+            return header, cookie, path, query, form, body
         else:
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-            return header, cookie, path, query, form, body, {}
+            return header, cookie, path, query, form, body
