@@ -192,6 +192,7 @@ class OpenAPI(_Scaffold, Flask):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
@@ -246,6 +247,7 @@ class OpenAPI(_Scaffold, Flask):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
+                extra_form=extra_form,
                 extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation

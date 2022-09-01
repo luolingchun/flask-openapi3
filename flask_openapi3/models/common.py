@@ -90,7 +90,7 @@ class Encoding(BaseModel):
     contentType: Optional[str] = None
     headers: Optional[Dict[str, Union["Header", Reference]]] = None
     style: Optional[str] = None
-    explode: Optional[bool] = True
+    explode: Optional[bool] = None
     allowReserved: Optional[bool] = None
 
     class Config:

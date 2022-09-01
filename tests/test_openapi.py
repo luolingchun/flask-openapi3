@@ -302,42 +302,41 @@ def test_body_examples_are_not_replicated_with_form(request):
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
             'content': {
                 'multipart/form-data': {
-                    'encoding': {},
                     'schema': {'$ref': '#/components/schemas/BaseRequest'}
                 }
             }
         }
 
-# def test_form_examples(request):
-#     test_app = OpenAPI(request.node.name)
-#     test_app.config["TESTING"] = True
-#
-#     @test_app.post(
-#         '/test',
-#         form_examples={
-#             "Example 01": {
-#                 "summary": "An example",
-#                 "value": {
-#                     "test_int": -1,
-#                     "test_str": "negative",
-#                 }
-#             },
-#         }
-#     )
-#     def endpoint_test(form: BaseRequest):
-#         return form.json(), 200
-#
-#     with test_app.test_client() as client:
-#         resp = client.get("/openapi/openapi.json")
-#         assert resp.status_code == 200
-#         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
-#             'content': {
-#                 'multipart/form-data': {
-#                     'encoding': {},
-#                     'schema': {'$ref': '#/components/schemas/BaseRequest'},
-#                     'examples': {
-#                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
-#                     }
-#                 }
-#             }
-#         }
+
+def test_form_examples(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    @test_app.post(
+        '/test',
+        extra_form=ExtraRequestBody(examples={
+            "Example 01": Example(**{
+                "summary": "An example",
+                "value": {
+                    "test_int": -1,
+                    "test_str": "negative",
+                }
+            }),
+        })
+    )
+    def endpoint_test(form: BaseRequest):
+        return form.json(), 200
+
+    with test_app.test_client() as client:
+        resp = client.get("/openapi/openapi.json")
+        assert resp.status_code == 200
+        assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
+            'content': {
+                'multipart/form-data': {
+                    'schema': {'$ref': '#/components/schemas/BaseRequest'},
+                    'examples': {
+                        "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
+                    }
+                }
+            }
+        }

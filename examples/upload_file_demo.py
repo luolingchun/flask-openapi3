@@ -6,7 +6,8 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI, FileStorage
+from flask_openapi3 import OpenAPI, FileStorage, ExtraRequestBody
+from flask_openapi3.models import Encoding
 
 app = OpenAPI(__name__)
 
@@ -22,6 +23,14 @@ class UploadFilesForm(BaseModel):
     int_list: List[int]
 
 
+extra_form = ExtraRequestBody(
+    description="This is form RequestBody",
+    required=True,
+    # replace style (default to form)
+    encoding={"str_list": Encoding(style="simple")}
+)
+
+
 @app.post('/upload/file')
 def upload_file(form: UploadFileForm):
     print(form.file.filename)
@@ -30,7 +39,7 @@ def upload_file(form: UploadFileForm):
     return {"code": 0, "message": "ok"}
 
 
-@app.post('/upload/files')
+@app.post('/upload/files', extra_form=extra_form)
 def upload_files(form: UploadFilesForm):
     print(form.files)
     print(form.str_list)

@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag, ExtraRequestBody
-from .models.common import Schema, MediaType
+from .models.common import Schema, MediaType, Encoding
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity
@@ -167,6 +167,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_form(
         form: Type[BaseModel],
+        extra_form: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parse form model"""
     schema = get_schema(form)
@@ -181,20 +182,26 @@ def parse_form(
     encoding = {}
     for k, v in properties.items():
         if v.get("type") == "array":
-            encoding[k] = {"style": "form"}
-
-    content = {
-        "multipart/form-data": MediaType(
-            **{
-                "schema": Schema(
-                    **{
-                        "$ref": f"{OPENAPI3_REF_PREFIX}/{title}"
-                    }
-                ),
-                "encoding": encoding
-            }
-        )
-    }
+            encoding[k] = Encoding(style="form")
+    if extra_form:
+        # update encoding
+        if extra_form.encoding:
+            encoding.update(**extra_form.encoding)
+        content = {
+            "multipart/form-data": MediaType(
+                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
+                example=extra_form.example,
+                examples=extra_form.examples,
+                encoding=encoding or None
+            )
+        }
+    else:
+        content = {
+            "multipart/form-data": MediaType(
+                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
+                encoding=encoding or None
+            )
+        }
 
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -340,6 +347,7 @@ def parse_and_store_tags(
 def parse_parameters(
         func: Callable,
         *,
+        extra_form: Optional[ExtraRequestBody] = None,
         extra_body: Optional[ExtraRequestBody] = None,
         components_schemas: dict = None,
         operation: Operation = None,
@@ -347,6 +355,7 @@ def parse_parameters(
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
     :param func: flask view func
+    :param extra_form
     :param extra_body
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
@@ -380,11 +389,18 @@ def parse_parameters(
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
     if form:
-        _content, _components_schemas = parse_form(form)
+        _content, _components_schemas = parse_form(form, extra_form)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(**{
-            "content": _content,
-        })
+        if extra_form:
+            request_body = RequestBody(
+                description=extra_form.description,
+                content=_content,
+                required=extra_form.required
+            )
+        else:
+            request_body = RequestBody(**{
+                "content": _content,
+            })
         operation.requestBody = request_body
     if body:
         _content, _components_schemas = parse_body(body, extra_body)

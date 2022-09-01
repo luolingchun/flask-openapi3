@@ -9,7 +9,7 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from .http import HTTPMethod
-from .models import Tag, Components, ExternalDocumentation
+from .models import Tag, Components, ExternalDocumentation, ExtraRequestBody
 from .models.path import RequestBody
 from .models.server import Server
 from .scaffold import _Scaffold
@@ -86,6 +86,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[RequestBody] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
@@ -143,6 +144,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
+                extra_form=extra_form,
                 extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation
