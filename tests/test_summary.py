@@ -13,7 +13,6 @@ app = OpenAPI(__name__, info=info)
 app.config["TESTING"] = True
 
 
-
 @pytest.fixture
 def client():
     client = app.test_client()

@@ -36,7 +36,6 @@ security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
 
 
-
 class BookQuery(BaseModel):
     age: Optional[int] = Field(None, description='Age')
 

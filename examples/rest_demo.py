@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
+from flask_openapi3.models import ExternalDocumentation
 from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit, APIKey, HTTPBase
 
 info = Info(title='book API', version='1.0.0')
@@ -38,7 +39,6 @@ security = [
     {"oauth2": ["write:pets", "read:pets"]},
     {"basic": []}
 ]
-
 
 
 class BookPath(BaseModel):
@@ -72,6 +72,10 @@ class BookResponse(BaseModel):
     tags=[book_tag],
     summary='new summary',
     description='new description',
+    operation_id="get_book_id",
+    external_docs=ExternalDocumentation(
+        url="https://www.openapis.org/",
+        description="Something great got better, get excited!"),
     responses={"200": BookResponse},
     extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security

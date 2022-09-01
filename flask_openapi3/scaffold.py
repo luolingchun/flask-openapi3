@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
+from .models import ExternalDocumentation
 from .models.tag import Tag
 
 
@@ -29,6 +30,7 @@ class _Scaffold(Scaffold, ABC):
             body_examples: Optional[Dict[str, dict]] = None,
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
@@ -45,13 +47,14 @@ class _Scaffold(Scaffold, ABC):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -65,12 +68,13 @@ class _Scaffold(Scaffold, ABC):
                     tags=tags,
                     summary=summary,
                     description=description,
+                    external_docs=external_docs,
+                    operation_id=operation_id,
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
-                    operation_id=operation_id,
                     doc_ui=doc_ui,
                     method=HTTPMethod.GET
                 )
@@ -103,13 +107,14 @@ class _Scaffold(Scaffold, ABC):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -123,13 +128,14 @@ class _Scaffold(Scaffold, ABC):
                     tags=tags,
                     summary=summary,
                     description=description,
+                    external_docs=external_docs,
+                    operation_id=operation_id,
                     responses=responses,
                     form_examples=form_examples,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
-                    operation_id=operation_id,
                     doc_ui=doc_ui,
                     method=HTTPMethod.POST
                 )
@@ -162,13 +168,14 @@ class _Scaffold(Scaffold, ABC):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -182,12 +189,13 @@ class _Scaffold(Scaffold, ABC):
                     tags=tags,
                     summary=summary,
                     description=description,
+                    external_docs=external_docs,
+                    operation_id=operation_id,
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
-                    operation_id=operation_id,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PUT
                 )
@@ -220,13 +228,14 @@ class _Scaffold(Scaffold, ABC):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -240,12 +249,13 @@ class _Scaffold(Scaffold, ABC):
                     tags=tags,
                     summary=summary,
                     description=description,
+                    external_docs=external_docs,
+                    operation_id=operation_id,
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
-                    operation_id=operation_id,
                     doc_ui=doc_ui,
                     method=HTTPMethod.DELETE
                 )
@@ -278,13 +288,14 @@ class _Scaffold(Scaffold, ABC):
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -298,12 +309,13 @@ class _Scaffold(Scaffold, ABC):
                     tags=tags,
                     summary=summary,
                     description=description,
+                    external_docs=external_docs,
+                    operation_id=operation_id,
                     responses=responses,
                     extra_responses=extra_responses,
                     body_examples=body_examples,
                     security=security,
                     deprecated=deprecated,
-                    operation_id=operation_id,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PATCH
                 )

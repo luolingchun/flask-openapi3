@@ -9,7 +9,7 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from .http import HTTPMethod
-from .models import Tag, Components
+from .models import Tag, Components, ExternalDocumentation
 from .scaffold import _Scaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
@@ -82,13 +82,14 @@ class APIBlueprint(_Scaffold, Blueprint):
             tags: List[Tag] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
             responses: Dict[str, Type[BaseModel]] = None,
             extra_responses: Dict[str, dict] = None,
             form_examples: Optional[Dict[str, dict]] = None,
             body_examples: Optional[Dict[str, dict]] = None,
             security: List[Dict[str, List[Any]]] = None,
             deprecated: Optional[bool] = None,
-            operation_id: Optional[str] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
@@ -125,14 +126,17 @@ class APIBlueprint(_Scaffold, Blueprint):
             if security is None:
                 security = []
             operation.security = security + self.abp_security or None
-            # only set `deprecated` if True otherwise leave it as None
-            if deprecated:
-                operation.deprecated = True
+            # set external docs
+            if external_docs:
+                operation.externalDocs = external_docs
             # Unique string used to identify the operation.
             if operation_id:
                 operation.operationId = operation_id
             else:
                 operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
+            # only set `deprecated` if True otherwise leave it as None
+            if deprecated:
+                operation.deprecated = True
             # store tags
             tags = tags + self.abp_tags if tags else self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)

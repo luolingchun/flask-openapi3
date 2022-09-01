@@ -8,13 +8,14 @@ from http import HTTPStatus
 from typing import Optional, List
 
 import pytest
+from flask import Response
+from openapi_python_client import GeneratorData, Config
 from pydantic import BaseModel, Field
 
-from flask import Response
 from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from openapi_python_client import GeneratorData, Config
+from flask_openapi3.models import ExternalDocumentation
 
 info = Info(title='book API', version='1.0.0')
 security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
@@ -30,7 +31,6 @@ app.config["TESTING"] = True
 
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
-
 
 
 class BookQuery(BaseModel):
@@ -85,6 +85,10 @@ def client():
 @app.get(
     '/book/<int:bid>',
     tags=[book_tag],
+    operation_id="get_book_id",
+    external_docs=ExternalDocumentation(
+        url="https://www.openapis.org/",
+        description="Something great got better, get excited!"),
     responses={"200": BookResponse},
     extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
