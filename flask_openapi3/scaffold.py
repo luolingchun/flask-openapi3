@@ -61,7 +61,26 @@ class _Scaffold(Scaffold, ABC):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["GET"])"""
+        """
+        Decorator for rest api, like: app.route(methods=["GET"])
+        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+
+        Arguments:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: Responses model, must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+        """
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -124,7 +143,26 @@ class _Scaffold(Scaffold, ABC):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["POST"])"""
+        """
+        Decorator for rest api, like: app.route(methods=["POST"])
+        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+
+        Arguments:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: Responses model, must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            doc_ui: Declares this operation to be show.
+        """
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -187,7 +225,26 @@ class _Scaffold(Scaffold, ABC):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["PUT"])"""
+        """
+        Decorator for rest api, like: app.route(methods=["PUT"])
+        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+
+        Arguments:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: Responses model, must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            doc_ui: Declares this operation to be show.
+        """
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -250,7 +307,26 @@ class _Scaffold(Scaffold, ABC):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["DELETE"])"""
+        """
+        Decorator for rest api, like: app.route(methods=["DELETE"])
+        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+
+        Arguments:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: Responses model, must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            doc_ui: Declares this operation to be show.
+        """
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -313,7 +389,26 @@ class _Scaffold(Scaffold, ABC):
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
-        """Decorator for rest api, like: app.route(methods=["PATCH"])"""
+        """
+        Decorator for rest api, like: app.route(methods=["PATCH"])
+        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+
+        Arguments:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: Responses model, must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            doc_ui: Declares this operation to be show.
+        """
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \

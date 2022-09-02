@@ -46,13 +46,13 @@ class OpenAPI(_Scaffold, Flask):
         Based on Flask. Provide REST api, swagger-ui and redoc.
 
         Arguments:
-            import_name: just flask import_name
-            info: see https://spec.openapis.org/oas/v3.0.3#info-object
-            security_schemes: see https://spec.openapis.org/oas/v3.0.3#security-scheme-object
+            import_name: Just flask import_name
+            info: See https://spec.openapis.org/oas/v3.0.3#info-object
+            security_schemes: See https://spec.openapis.org/oas/v3.0.3#security-scheme-object
             oauth_config: OAuth 2.0 configuration,
                           see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
             responses: OpenAPI response model
-            doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+            doc_ui: Add openapi document UI(swagger and redoc). Defaults to True.
             doc_expansion: String=["list"*, "full", "none"].
                           Controls the default expansion setting for the operations and tags.
                           It can be "list" (expands only the tags),
@@ -204,16 +204,16 @@ class OpenAPI(_Scaffold, Flask):
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collect openapi specification information
-        :param rule: flask route
-        :param func: flask view_func
-        :param tags: api tag
-        :param responses: response model
-        :param extra_responses: extra response dict
-        :param security: security name
-        :param deprecated: mark as deprecated support. Default to not True.
-        :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
-        :param operation_id: unique string used to identify the operation.
-        :param method: api method
+        :param rule: Flask route
+        :param func: Flask view_func
+        :param tags: API tag
+        :param responses: Response model
+        :param extra_responses: Extra response dict
+        :param security: Security name
+        :param deprecated: Mark as deprecated support. Default to not True.
+        :param doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+        :param operation_id: Unique string used to identify the operation.
+        :param method: API method
         :return:
         """
         if doc_ui is True:

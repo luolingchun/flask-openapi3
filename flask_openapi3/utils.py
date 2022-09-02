@@ -362,9 +362,9 @@ def parse_parameters(
         doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
-    :param func: flask view func
-    :param extra_form
-    :param extra_body
+    :param func: Flask view func
+    :param extra_form: Extra information describing the request body(application/form).
+    :param extra_body: Extra information describing the request body(application/json).
     :param components_schemas: `models.component.py` Components.schemas
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.

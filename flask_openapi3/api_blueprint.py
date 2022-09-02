@@ -39,7 +39,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             abp_tags: APIBlueprint tags for every api
             abp_security: APIBlueprint security for every api
             abp_responses: APIBlueprint response model
-            doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
             kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
