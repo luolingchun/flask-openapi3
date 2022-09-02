@@ -4,6 +4,8 @@ First, you need to import `BaseModel` from `pydantic`:
 from pydantic import BaseModel
 ```
 
+## Request parameter declaration
+
 ### path
 
 Request parameter in rules，**`@app.get('/book/<int:bid>')`**.
@@ -80,3 +82,58 @@ Receive flask **`request.headers`**.
 ### cookie
 
 Receive flask **`request.cookies`**.
+
+## Operation fields
+
+*new in v2.1.0*
+
+### extra_form
+
+Extra form information can be provided using `extra_form` as in the following sample:
+
+```python hl_lines="8"
+extra_form = ExtraRequestBody(
+    description="This is form RequestBody",
+    required=True,
+    # replace style (default to form)
+    encoding={"str_list": Encoding(style="simple")}
+)
+
+@app.post('/book', extra_form=extra_form)
+def create_book(body: BookForm):
+    ...
+```
+
+### extra_body
+
+Extra body information can be provided using `extra_body` as in the following sample:
+
+```python hl_lines="25"
+extra_body = ExtraRequestBody(
+    description="This is post RequestBody",
+    required=True,
+    example="ttt",
+    examples={
+        "example1": Example(
+            summary="example summary1",
+            description="example description1",
+            value={
+                "age": 24,
+                "author": "author1"
+            }
+        ),
+        "example2": Example(
+            summary="example summary2",
+            description="example description2",
+            value={
+                "age": 48,
+                "author": "author2"
+            }
+        )
+    }
+)
+
+@app.post('/book', extra_body=extra_body)
+def create_book(body: BookForm):
+    ...
+```
