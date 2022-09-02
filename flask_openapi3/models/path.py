@@ -88,9 +88,6 @@ class Parameter(BaseModel):
     # Serialization rules for more complex scenarios
     content: Optional[Dict[str, MediaType]] = None
 
-    class Config:
-        extra = "allow"
-
 
 class Operation(BaseModel):
     tags: Optional[List[str]] = None

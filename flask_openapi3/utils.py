@@ -85,6 +85,8 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
+        # parse extra values
+        data.update(**value)
         parameters.append(Parameter(**data))
 
     for name, value in definitions.items():
@@ -109,6 +111,8 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
+        # parse extra values
+        data.update(**value)
         parameters.append(Parameter(**data))
 
     for name, value in definitions.items():
@@ -133,6 +137,8 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": True,
             "schema": Schema(**value)
         }
+        # parse extra values
+        data.update(**value)
         parameters.append(Parameter(**data))
 
     for name, value in definitions.items():
@@ -157,6 +163,8 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
+        # parse extra values
+        data.update(**value)
         parameters.append(Parameter(**data))
 
     for name, value in definitions.items():

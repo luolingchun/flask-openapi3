@@ -72,9 +72,6 @@ class Schema(BaseModel):
     example: Optional[Any] = None
     deprecated: Optional[bool] = None
 
-    class Config:
-        extra: str = "allow"
-
 
 class Example(BaseModel):
     summary: Optional[str] = None

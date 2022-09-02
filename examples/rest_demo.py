@@ -42,7 +42,7 @@ security = [
 
 
 class BookPath(BaseModel):
-    bid: int = Field(..., description='book id')
+    bid: int = Field(..., description='book id', deprecated=True, example=100)
 
 
 class BookQuery(BaseModel):
