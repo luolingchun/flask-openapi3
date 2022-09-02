@@ -35,6 +35,11 @@ api = APIBlueprint(
     abp_responses={"401": Unauthorized}
 )
 
+try:
+    api.register_api(api)
+except ValueError as e:
+    assert str(e) == "Cannot register a api blueprint on itself"
+
 
 @pytest.fixture
 def client():

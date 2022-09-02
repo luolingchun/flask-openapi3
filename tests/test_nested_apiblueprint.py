@@ -4,7 +4,7 @@
 
 import pytest
 
-from flask_openapi3 import APIBlueprint, OpenAPI
+from flask_openapi3 import APIBlueprint, OpenAPI, Tag
 
 app = OpenAPI(__name__)
 
@@ -18,7 +18,7 @@ def create_english_book():
     return {"message": "english"}
 
 
-@api_chinese.post('/chinese')
+@api_chinese.post('/chinese', tags=[Tag(name="chinese")])
 def create_chinese_book():
     return {"message": "chinese"}
 

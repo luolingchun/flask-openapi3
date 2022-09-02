@@ -75,7 +75,6 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     parameters = []
     components_schemas = dict()
     properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -89,9 +88,6 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
-
     return parameters, components_schemas
 
 
@@ -101,7 +97,6 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     parameters = []
     components_schemas = dict()
     properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -115,9 +110,6 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
-
     return parameters, components_schemas
 
 
@@ -127,7 +119,6 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     parameters = []
     components_schemas = dict()
     properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -141,9 +132,6 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
-
     return parameters, components_schemas
 
 
@@ -153,7 +141,6 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     parameters = []
     components_schemas = dict()
     properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
 
     for name, value in properties.items():
         data = {
@@ -167,9 +154,6 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
-
     return parameters, components_schemas
 
 
@@ -181,7 +165,6 @@ def parse_form(
     schema = get_schema(form)
     components_schemas = dict()
     properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
 
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
@@ -210,9 +193,6 @@ def parse_form(
                 encoding=encoding or None
             )
         }
-
-    for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
 
     return content, components_schemas
 

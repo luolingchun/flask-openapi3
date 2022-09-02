@@ -165,7 +165,7 @@ def update_book(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@app.patch('/book/<int:bid>', tags=[book_tag])
+@app.patch('/book/<int:bid>', tags=[book_tag], doc_ui=False)
 def update_book1(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
