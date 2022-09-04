@@ -1,3 +1,21 @@
+## v2.1.0 2022-09-04
+
+- [#36](https://github.com/luolingchun/flask-openapi3/issues/36) Add extra_form for operation. Thanks @Colin-b
+- [#36](https://github.com/luolingchun/flask-openapi3/issues/36) Add extra_body for operation. Thanks @Colin-b
+- Add external_docs for operation
+- Add servers for operation
+- Support parse extra field in parameters
+- [#35](https://github.com/luolingchun/flask-openapi3/issues/35) Fixed extra_responses can now be used to set every field in Response. Thanks @Colin-b
+- Upgrade Swagger UI 4.14.0
+- Upgrade Redoc UI 2.0.0-rc.76
+- Upgrade RapiDoc UI 9.3.3
+
+
+### Breaking Changes
+
+- [#39](https://github.com/luolingchun/flask-openapi3/issues/39) Remove configuration FLASK_OPENAPI_VALIDATE_RESPONSE
+
+
 ## v2.0.1 2022-08-07
 
 - [#32](https://github.com/luolingchun/flask-openapi3/issues/32) Fix: parse_rule is deprecated in werkzeug>=2.2.0.
