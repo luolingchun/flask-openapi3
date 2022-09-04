@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import ExternalDocumentation
+from flask_openapi3 import ExternalDocumentation
 
 info = Info(title='book API', version='1.0.0')
 security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}

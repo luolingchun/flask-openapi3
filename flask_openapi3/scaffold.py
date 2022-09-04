@@ -11,7 +11,8 @@ from pydantic import BaseModel
 
 from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
-from .models import ExternalDocumentation, ExtraRequestBody
+from .models import ExternalDocumentation
+from .models.common import ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
 

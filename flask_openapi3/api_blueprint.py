@@ -9,7 +9,8 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from .http import HTTPMethod
-from .models import Tag, Components, ExternalDocumentation, ExtraRequestBody
+from .models import Tag, Components, ExternalDocumentation
+from .models.common import ExtraRequestBody
 from .models.path import RequestBody
 from .models.server import Server
 from .scaffold import _Scaffold
@@ -40,7 +41,7 @@ class APIBlueprint(_Scaffold, Blueprint):
             abp_security: APIBlueprint security for every api
             abp_responses: APIBlueprint response model
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
-            kwargs: Flask Blueprint kwargs
+            **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
         self.paths = dict()

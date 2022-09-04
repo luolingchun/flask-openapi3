@@ -7,7 +7,7 @@ from typing import List
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, FileStorage, ExtraRequestBody
-from flask_openapi3.models import Encoding
+from flask_openapi3 import Encoding
 
 app = OpenAPI(__name__)
 

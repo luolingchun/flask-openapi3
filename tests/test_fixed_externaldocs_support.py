@@ -2,7 +2,7 @@ import pytest
 from openapi_python_client import GeneratorData, Config
 
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models import ExternalDocumentation
+from flask_openapi3 import ExternalDocumentation
 
 
 @pytest.fixture

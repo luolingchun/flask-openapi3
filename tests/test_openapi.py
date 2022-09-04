@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
+from flask_openapi3 import Example
 from flask_openapi3 import OpenAPI, ExtraRequestBody
-from flask_openapi3.models import Example
 
 
 def test_responses_and_extra_responses_are_replicated_in_open_api(request):

@@ -10,8 +10,8 @@ import pydantic.typing
 from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
-from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag, ExtraRequestBody
-from .models.common import Schema, MediaType, Encoding
+from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
+from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity

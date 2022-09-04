@@ -13,8 +13,8 @@ from pydantic import BaseModel
 from .api_blueprint import APIBlueprint
 from .commands import openapi_command
 from .http import HTTPMethod
-from .models import Info, APISpec, Tag, Components, Server, ExtraRequestBody
-from .models.common import Reference, ExternalDocumentation
+from .models import Info, APISpec, Tag, Components, Server
+from .models.common import Reference, ExternalDocumentation, ExtraRequestBody
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
 from .scaffold import _Scaffold
@@ -66,7 +66,7 @@ class OpenAPI(_Scaffold, Flask):
             servers: An array of Server Objects, which provide connectivity information to a target server.
             external_docs: Allows referencing an external resource for extended documentation.
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
-            kwargs: Flask kwargs
+            **kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
 

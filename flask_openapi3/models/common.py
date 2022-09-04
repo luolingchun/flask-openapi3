@@ -120,3 +120,12 @@ class Header(BaseModel):
 
     class Config:
         extra = "allow"
+
+
+class ExtraRequestBody(BaseModel):
+    description: Optional[str] = None
+    required: Optional[bool] = None
+    # For MediaType
+    example: Optional[Any] = None
+    examples: Optional[Dict[str, Union[Example, Reference]]] = None
+    encoding: Optional[Dict[str, Encoding]] = None
