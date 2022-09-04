@@ -1,10 +1,10 @@
+## Request declaration
+
 First, you need to import `BaseModel` from `pydantic`:
 
 ```python
 from pydantic import BaseModel
 ```
-
-## Request parameter declaration
 
 ### path
 
@@ -83,57 +83,32 @@ Receive flask **`request.headers`**.
 
 Receive flask **`request.cookies`**.
 
-## Operation fields
+## Request model
 
-*new in v2.1.0*
+First, you need to define a [pydantic](https://github.com/pydantic/pydantic) model:
 
-### extra_form
-
-Extra form information can be provided using `extra_form` as in the following sample:
-
-```python hl_lines="8"
-extra_form = ExtraRequestBody(
-    description="This is form RequestBody",
-    required=True,
-    # replace style (default to form)
-    encoding={"str_list": Encoding(style="simple")}
-)
-
-@app.post('/book', extra_form=extra_form)
-def create_book(body: BookForm):
-    ...
+```python
+class BookQuery(BaseModel):
+    age: int = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, description='Author')
 ```
 
-### extra_body
+More information to see [BaseModel](https://pydantic-docs.helpmanual.io/usage/models/), and you can [Customize the Field](https://pydantic-docs.helpmanual.io/usage/schema/#field-customization).
 
-Extra body information can be provided using `extra_body` as in the following sample:
+*New in v2.1.0*
 
-```python hl_lines="25"
-extra_body = ExtraRequestBody(
-    description="This is post RequestBody",
-    required=True,
-    example="ttt",
-    examples={
-        "example1": Example(
-            summary="example summary1",
-            description="example description1",
-            value={
-                "age": 24,
-                "author": "author1"
-            }
-        ),
-        "example2": Example(
-            summary="example summary2",
-            description="example description2",
-            value={
-                "age": 48,
-                "author": "author2"
-            }
-        )
-    }
-)
+However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.0.3#parameter-object). Here is an example:
 
-@app.post('/book', extra_body=extra_body)
-def create_book(body: BookForm):
-    ...
+`age` with **`example`** and `author` with **`deprecated`**.
+
+```python
+class BookQuery(BaseModel):
+    age: int = Field(..., ge=2, le=4, description='Age', example=3)
+    author: str = Field(None, description='Author', deprecated=True)
 ```
+
+Magic:
+
+![](../assets/Snipaste_2022-09-04_10-10-03.png)
+
+More available fields to see [Parameter Object Fixed Fields](https://spec.openapis.org/oas/v3.1.0#fixed-fields-9).

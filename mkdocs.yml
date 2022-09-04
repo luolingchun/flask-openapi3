@@ -78,21 +78,13 @@ plugins:
           Quickstart: 快速开始
           OpenAPI: OpenAPI
           # OpenAPI-second: start
-          Info: 一般信息
-          Tag: 标签
-          SecuritySchemes: 安全模式
-          OAuth: OAuth
+          Specification: 规范
+          Operation: 路由操作
           Request: 请求
           Response: 响应
-          Summary and Description: 摘要和说明
-          Specification: 规范
           # OpenAPI-second: end
           Example: 示例
           API Reference: API 参考
-          # API Reference-second: start
-          # OpenAPI: OpenAPI
-          APIBlueprint: APIBlueprint
-          # API Reference-second: end
           LICENSE: 许可
           Changelog: 更新日志
 
@@ -107,14 +99,10 @@ nav:
   - Home: index.md
   - Quickstart: Quickstart.md
   - OpenAPI:
-      - Info: OpenAPI/Info.md
-      - Tag: OpenAPI/Tag.md
-      - SecuritySchemes: OpenAPI/SecuritySchemes.md
-      - OAuth: OpenAPI/OAuth.md
+      - Specification: OpenAPI/Specification.md
+      - Operation : OpenAPI/Operation.md
       - Request: OpenAPI/Request.md
       - Response: OpenAPI/Response.md
-      - Summary and Description: OpenAPI/Summary and Description.md
-      - Specification: OpenAPI/Specification.md
   - Example: Example.md
   - API Reference:
       - _Scaffold: Reference/Scaffold.md
@@ -125,6 +113,7 @@ nav:
           - common: Reference/Model/common.md
           - component: Reference/Model/component.md
           - file: Reference/Model/file.md
+          - info: Reference/Model/info.md
           - oauth: Reference/Model/oauth.md
           - path: Reference/Model/path.md
           - security: Reference/Model/security.md
