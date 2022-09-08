@@ -124,7 +124,7 @@ class Header(BaseModel):
 
 class ExtraRequestBody(BaseModel):
     description: Optional[str] = None
-    required: Optional[bool] = None
+    required: Optional[bool] = True
     # For MediaType
     example: Optional[Any] = None
     examples: Optional[Dict[str, Union[Example, Reference]]] = None

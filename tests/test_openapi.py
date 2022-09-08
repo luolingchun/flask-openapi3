@@ -15,7 +15,7 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
         test: int
 
     @test_app.get(
-        '/test',
+        "/test",
         responses={"201": BaseResponse},
         extra_responses={
             "201": {
@@ -55,8 +55,8 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
             },
             "content": {
                 # This content is coming from responses
-                'application/json': {
-                    'schema': {'$ref': '#/components/schemas/BaseResponse'}
+                "application/json": {
+                    "schema": {"$ref": "#/components/schemas/BaseResponse"}
                 },
                 # While this one comes from extra_responses
                 "text/plain": {
@@ -76,7 +76,7 @@ def test_none_responses_and_extra_responses_are_replicated_in_open_api(request):
     test_app.config["TESTING"] = True
 
     @test_app.get(
-        '/test',
+        "/test",
         responses={"204": None},
         extra_responses={
             "204": {
@@ -132,7 +132,7 @@ def test_extra_responses_are_replicated_in_open_api(request):
     test_app.config["TESTING"] = True
 
     @test_app.get(
-        '/test',
+        "/test",
         extra_responses={
             "201": {
                 "description": "Custom description",
@@ -187,7 +187,7 @@ def test_extra_responses_without_content_are_replicated_in_open_api(request):
     test_app.config["TESTING"] = True
 
     @test_app.get(
-        '/test',
+        "/test",
         extra_responses={
             "201": {
                 "description": "Custom description",
@@ -238,7 +238,7 @@ def test_body_examples_are_replicated_in_open_api(request):
     test_app.config["TESTING"] = True
 
     @test_app.post(
-        '/test',
+        "/test",
         extra_body=ExtraRequestBody(
             examples={
                 "Example 01": Example(
@@ -249,7 +249,7 @@ def test_body_examples_are_replicated_in_open_api(request):
                     }
                 ),
                 "Example 02": Example(
-                    externalValue='https://example.org/examples/second-example.xml'
+                    externalValue="https://example.org/examples/second-example.xml"
                 ),
                 "Example 03": Example(**{
                     "$ref": "#/components/examples/third-example"
@@ -264,16 +264,17 @@ def test_body_examples_are_replicated_in_open_api(request):
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
-            'content': {
-                'application/json': {
-                    'examples': {
-                        'Example 01': {'summary': 'An example', 'value': {'test_int': -1, 'test_str': 'negative'}},
-                        'Example 02': {'externalValue': 'https://example.org/examples/second-example.xml'},
-                        'Example 03': {"$ref": "#/components/examples/third-example"}
+            "content": {
+                "application/json": {
+                    "examples": {
+                        "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}},
+                        "Example 02": {"externalValue": "https://example.org/examples/second-example.xml"},
+                        "Example 03": {"$ref": "#/components/examples/third-example"}
                     },
-                    'schema': {'$ref': '#/components/schemas/BaseRequest'}
+                    "schema": {"$ref": "#/components/schemas/BaseRequest"}
                 }
-            }
+            },
+            "required": True
         }
 
 
@@ -282,7 +283,7 @@ def test_body_examples_are_not_replicated_with_form(request):
     test_app.config["TESTING"] = True
 
     @test_app.post(
-        '/test',
+        "/test",
         extra_body=ExtraRequestBody(example={
             "Example 01": Example(**{
                 "summary": "An example",
@@ -300,9 +301,9 @@ def test_body_examples_are_not_replicated_with_form(request):
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
-            'content': {
-                'multipart/form-data': {
-                    'schema': {'$ref': '#/components/schemas/BaseRequest'}
+            "content": {
+                "multipart/form-data": {
+                    "schema": {"$ref": "#/components/schemas/BaseRequest"}
                 }
             }
         }
@@ -313,7 +314,7 @@ def test_form_examples(request):
     test_app.config["TESTING"] = True
 
     @test_app.post(
-        '/test',
+        "/test",
         extra_form=ExtraRequestBody(examples={
             "Example 01": Example(**{
                 "summary": "An example",
@@ -331,12 +332,13 @@ def test_form_examples(request):
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
-            'content': {
-                'multipart/form-data': {
-                    'schema': {'$ref': '#/components/schemas/BaseRequest'},
-                    'examples': {
+            "content": {
+                "multipart/form-data": {
+                    "schema": {"$ref": "#/components/schemas/BaseRequest"},
+                    "examples": {
                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
                     }
                 }
-            }
+            },
+            "required": True
         }
