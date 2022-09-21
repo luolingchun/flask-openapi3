@@ -119,9 +119,11 @@ class _Scaffold(Scaffold, ABC):
                 return resp
 
             options.update({"methods": [HTTPMethod.GET]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
+            if not hasattr(func, "wrapper"):
+                func.wrapper = wrapper
+            self.add_url_rule(rule, view_func=func.wrapper, **options)
 
-            return wrapper
+            return func
 
         return decorator
 
@@ -201,9 +203,11 @@ class _Scaffold(Scaffold, ABC):
                 return resp
 
             options.update({"methods": [HTTPMethod.POST]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
+            if not hasattr(func, "wrapper"):
+                func.wrapper = wrapper
+            self.add_url_rule(rule, view_func=func.wrapper, **options)
 
-            return wrapper
+            return func
 
         return decorator
 
@@ -283,9 +287,11 @@ class _Scaffold(Scaffold, ABC):
                 return resp
 
             options.update({"methods": [HTTPMethod.PUT]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
+            if not hasattr(func, "wrapper"):
+                func.wrapper = wrapper
+            self.add_url_rule(rule, view_func=func.wrapper, **options)
 
-            return wrapper
+            return func
 
         return decorator
 
@@ -365,9 +371,11 @@ class _Scaffold(Scaffold, ABC):
                 return resp
 
             options.update({"methods": [HTTPMethod.DELETE]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
+            if not hasattr(func, "wrapper"):
+                func.wrapper = wrapper
+            self.add_url_rule(rule, view_func=func.wrapper, **options)
 
-            return wrapper
+            return func
 
         return decorator
 
@@ -447,8 +455,10 @@ class _Scaffold(Scaffold, ABC):
                 return resp
 
             options.update({"methods": [HTTPMethod.PATCH]})
-            self.add_url_rule(rule, view_func=wrapper, **options)
+            if not hasattr(func, "wrapper"):
+                func.wrapper = wrapper
+            self.add_url_rule(rule, view_func=func.wrapper, **options)
 
-            return wrapper
+            return func
 
         return decorator
