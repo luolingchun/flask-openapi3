@@ -66,6 +66,7 @@ extra:
 plugins:
   - search
   - mkdocstrings
+  - glightbox
   - i18n:
       default_language: en
       default_language_only: false

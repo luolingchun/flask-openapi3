@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
+        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
              height="auto" alt="logo">
     </a>
 </div>
@@ -9,16 +9,16 @@
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
-        <img src="https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test" alt="test">
+        <img class="off-glb" src="https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test" alt="test">
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
-        <img src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
+        <img class="off-glb" src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
     </a>
     <a href="https://pypistats.org/packages/flask-openapi3" target="_blank">
-        <img src="https://img.shields.io/pypi/dm/flask-openapi3" alt="pypistats">
+        <img class="off-glb" src="https://img.shields.io/pypi/dm/flask-openapi3" alt="pypistats">
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
-        <img src="https://img.shields.io/pypi/pyversions/flask-openapi3" alt="pypi versions">
+        <img class="off-glb" src="https://img.shields.io/pypi/pyversions/flask-openapi3" alt="pypi versions">
     </a>
 </p>
 
