@@ -1,6 +1,5 @@
 ::: flask_openapi3.models.info
-    selection:
+    options:
       filters: ["!^__"]
-    rendering:
       show_if_no_docstring: true
       heading_level: 4
