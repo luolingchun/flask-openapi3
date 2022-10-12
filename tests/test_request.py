@@ -40,9 +40,10 @@ class BookCookie(BaseModel):
 
 
 class BookHeader(BaseModel):
-    Hello1: str = Field("what's up", max_length=12, description='sds')
+    Hello1: str = Field("what's up", max_length=12, description="sds")
     # required
-    hello2: str = Field(..., max_length=12, description='sds')
+    hello2: str = Field(..., max_length=12, description="sds")
+    api_key: str = Field(..., description="API Key")
 
 
 def decorator(func):
@@ -72,7 +73,7 @@ def api_error_json(body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@app.get('/header')
+@app.get("/header")
 def get_book(header: BookHeader):
     return header.dict()
 
@@ -97,7 +98,7 @@ def test_form(client):
         "string": "a",
         "string_list": ["a", "b", "c"]
     }
-    r = client.post("/form", data=data, content_type='multipart/form-data')
+    r = client.post("/form", data=data, content_type="multipart/form-data")
     assert r.status_code == 200
 
 
@@ -113,7 +114,7 @@ def test_cookie(client):
 
 
 def test_header(client):
-    headers = {'Hello1': '111', 'hello2': '222'}
+    headers = {"Hello1": "111", "hello2": "222", "api_key": "333"}
     resp = client.get("/header", headers=headers)
     print(resp.json)
     assert resp.status_code == 200
