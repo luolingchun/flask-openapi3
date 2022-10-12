@@ -1,3 +1,9 @@
+## v2.1.1 2022-10-12
+
+- [#41](https://github.com/luolingchun/flask-openapi3/issues/41) Set the `requestBody required` default value to True. Thanks @Colin-b
+- Fix multi decorator for api
+- [#42](https://github.com/luolingchun/flask-openapi3/issues/42) Fix required header is not found when `_` in header field. Thanks @elirud
+
 ## v2.1.0 2022-09-04
 
 - [#36](https://github.com/luolingchun/flask-openapi3/issues/36) Add extra_form for operation. Thanks @Colin-b
