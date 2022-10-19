@@ -20,6 +20,7 @@ from .models.security import SecurityScheme
 from .scaffold import _Scaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
+from .view import APIView
 
 
 class OpenAPI(_Scaffold, Flask):
@@ -181,6 +182,12 @@ class OpenAPI(_Scaffold, Flask):
         self.paths.update(**api.paths)
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
+
+    def register_api_view(self, api_view: APIView) -> None:
+        """Register APIView"""
+        for rule, method_view in api_view.method_view_dict.items():
+            print(method_view.__name__)
+            self.add_url_rule(rule, view_func=method_view.as_view(method_view.__name__))
 
     def _do_decorator(
             self,
