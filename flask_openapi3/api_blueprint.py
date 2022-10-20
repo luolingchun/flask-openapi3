@@ -9,7 +9,7 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from .http import HTTPMethod
-from .models import Tag, Components, ExternalDocumentation
+from .models import Tag, ExternalDocumentation
 from .models.common import ExtraRequestBody
 from .models.path import RequestBody
 from .models.server import Server
@@ -46,7 +46,6 @@ class APIBlueprint(_Scaffold, Blueprint):
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
         self.paths = dict()
         self.components_schemas = dict()
-        self.components = Components()
         self.tags = []
         self.tag_names = []
 

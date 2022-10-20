@@ -185,9 +185,24 @@ class OpenAPI(_Scaffold, Flask):
 
     def register_api_view(self, api_view: APIView) -> None:
         """Register APIView"""
-        for rule, method_view in api_view.method_view_dict.items():
-            print(method_view.__name__)
-            self.add_url_rule(rule, view_func=method_view.as_view(method_view.__name__))
+        # update openapi document
+        for tag in api_view.tags:
+            if tag.name not in self.tag_names:
+                self.tags.append(tag)
+        self.paths.update(**api_view.paths)
+        self.components_schemas.update(**api_view.components_schemas)
+        # add rule to Flask
+        for rule, (cls, methods) in api_view.views.items():
+            for method in methods:
+                func = getattr(cls, method.lower())
+                header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
+                self._create_wrapper(func, header, cookie, path, query, form, body)
+                options = {
+                    "endpoint": cls.__name__ + "." + method.lower(),
+                    "methods": [method.upper()]
+                }
+                func.view_class = cls
+                self.add_url_rule(rule, view_func=func.wrapper, **options)
 
     def _do_decorator(
             self,

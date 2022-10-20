@@ -130,8 +130,11 @@ def _do_wrapper(
         response.headers['Content-Type'] = 'application/json'
         response.status_code = 422
         return response
-
+    view_class = getattr(func, "view_class", None)
     # handle request
-    response = func(**request_kwargs)
+    if view_class:
+        response = func(view_class, **request_kwargs)
+    else:
+        response = func(**request_kwargs)
 
     return response

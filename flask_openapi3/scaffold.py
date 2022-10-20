@@ -43,6 +43,27 @@ class _Scaffold(Scaffold, ABC):
     def register_api(self, api) -> None:
         raise NotImplementedError
 
+    @staticmethod
+    def _create_wrapper(func, header, cookie, path, query, form, body):
+        @wraps(func)
+        def wrapper(**kwargs) -> Response:
+            resp = _do_wrapper(
+                func,
+                header=header,
+                cookie=cookie,
+                path=path,
+                query=query,
+                form=form,
+                body=body,
+                **kwargs
+            )
+            return resp
+
+        if not hasattr(func, "wrapper"):
+            func.wrapper = wrapper
+
+        return wrapper
+
     def get(
             self,
             rule: str,
@@ -104,23 +125,8 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.GET
                 )
 
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
+            self._create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.GET]})
-            if not hasattr(func, "wrapper"):
-                func.wrapper = wrapper
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
             return func
@@ -188,23 +194,8 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.POST
                 )
 
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
+            self._create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.POST]})
-            if not hasattr(func, "wrapper"):
-                func.wrapper = wrapper
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
             return func
@@ -272,23 +263,8 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PUT
                 )
 
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
+            self._create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PUT]})
-            if not hasattr(func, "wrapper"):
-                func.wrapper = wrapper
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
             return func
@@ -356,23 +332,8 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.DELETE
                 )
 
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
+            self._create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.DELETE]})
-            if not hasattr(func, "wrapper"):
-                func.wrapper = wrapper
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
             return func
@@ -440,23 +401,8 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PATCH
                 )
 
-            @wraps(func)
-            def wrapper(**kwargs) -> Response:
-                resp = _do_wrapper(
-                    func,
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    **kwargs
-                )
-                return resp
-
+            self._create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PATCH]})
-            if not hasattr(func, "wrapper"):
-                func.wrapper = wrapper
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
             return func

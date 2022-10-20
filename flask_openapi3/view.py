@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
+import re
+from copy import deepcopy
 from typing import Optional, List, Dict, Type, Any, Callable
-from uuid import uuid4
 
-from flask.views import MethodView
 from pydantic import BaseModel
 
+from .http import HTTPMethod
 from .models.common import ExternalDocumentation, ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
+from .utils import validate_responses_type, get_operation, parse_and_store_tags, parse_parameters, get_responses, \
+    parse_method, get_operation_id_for_path
 
 
 class APIView:
@@ -22,35 +25,55 @@ class APIView:
             doc_ui: bool = True
     ):
         self.url_prefix = url_prefix
-        self.view_tags = view_tags
-        self.view_security = view_security
-        self.view_responses = view_responses
+        self.view_tags = view_tags or []
+        self.view_security = view_security or []
+        self.view_responses = view_responses or {}
         self.doc_ui = doc_ui
 
-        self.method_view_dict = {}
+        self.views = {}
+        self.paths = dict()
+        self.components_schemas = dict()
+        self.tags = []
+        self.tag_names = []
 
     def route(self, rule: str):
         def wrapper(cls):
-            _dict = {'__doc__': cls.__doc__}
-            for method in ["get", "post", "put", "patch", "delete"]:
-                if hasattr(cls, method):
-                    _dict[method] = getattr(cls, method)
-            # Inherit from MethodView
-            method_view = type(f"{cls.__name__}-{uuid4()}", (MethodView,), _dict)
-            if self.url_prefix:
-                _rule = self.url_prefix.rstrip("/") + "/" + rule.lstrip("/")
-            else:
-                _rule = rule
-            if self.method_view_dict.get(_rule):
-                raise ValueError(f"malformed url rule: {_rule!r}")
-            self.method_view_dict[_rule] = method_view
+            if self.views.get(rule):
+                raise ValueError(f"malformed url rule: {rule!r}")
+            methods = []
+            # /pet/<petId> --> /pet/{petId}
+            uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
+            trail_slash = uri.endswith("/")
+            # merge url_prefix and uri
+            uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
+            if not trail_slash:
+                uri = uri.rstrip("/")
+            for method in HTTPMethod:
+                cls_method = getattr(cls, method.lower(), None)
+                if not cls_method:
+                    continue
+                methods.append(method)
+                if self.doc_ui is False:
+                    continue
+                if not getattr(cls_method, "operation", None):
+                    continue
+                # parse method
+                parse_method(uri, method, self.paths, cls_method.operation)
+                # update operation_id
+                if not cls_method.operation.operationId:
+                    cls_method.operation.operationId = get_operation_id_for_path(
+                        name=cls_method.__qualname__,
+                        path=rule,
+                        method=method
+                    )
+            self.views[uri] = (cls, methods)
+
             return cls
 
         return wrapper
 
     def doc(
             self,
-            rule: str,
             *,
             tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
@@ -64,15 +87,13 @@ class APIView:
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
-            doc_ui: bool = True,
-            **options: Any
+            doc_ui: bool = True
     ) -> Callable:
         """
         Decorator for rest api, like: app.route(methods=["POST"])
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
-            rule: The URL rule string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -88,8 +109,49 @@ class APIView:
             doc_ui: Declares this operation to be show.
         """
 
-        raise NotImplementedError()
+        if responses is None:
+            responses = {}
+        if extra_responses is None:
+            extra_responses = {}
+        if security is None:
+            security = []
+        tags = tags + self.view_tags if tags else self.view_tags
 
+        def decorator(func):
+            if self.doc_ui is False or doc_ui is False:
+                return
+            validate_responses_type(responses)
+            validate_responses_type(self.view_responses)
+            validate_responses_type(extra_responses)
+            # global response combine api responses
+            combine_responses = deepcopy(self.view_responses)
+            combine_responses.update(**responses)
+            # create operation
+            operation = get_operation(func, summary=summary, description=description)
+            # set external docs
+            operation.externalDocs = external_docs
+            # Unique string used to identify the operation.
+            operation.operationId = operation_id
+            # only set `deprecated` if True otherwise leave it as None
+            operation.deprecated = deprecated
+            # add security
+            operation.security = security + self.view_security or None
+            # add servers
+            operation.servers = servers
+            # store tags
+            parse_and_store_tags(tags, self.tags, self.tag_names, operation)
+            # parse parameters
+            parse_parameters(
+                func,
+                extra_form=extra_form,
+                extra_body=extra_body,
+                components_schemas=self.components_schemas,
+                operation=operation
+            )
+            # parse response
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
+            func.operation = operation
 
-if __name__ == "__main__":
-    api_view = APIView()
+            return func
+
+        return decorator
