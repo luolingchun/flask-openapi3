@@ -3,7 +3,6 @@
 # @Time    : 2022/10/18 9:00
 from typing import Optional
 
-from flask.views import MethodView
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, Tag, Info, HTTPBearer
@@ -29,7 +28,7 @@ class BookBody(BaseModel):
 
 
 @api_view.route("/book")
-class BookListAPIView(MethodView):
+class BookListAPIView:
     a = 1
 
     @api_view.doc(summary="get book list")
