@@ -66,7 +66,9 @@ class APIView:
                         path=rule,
                         method=method
                     )
-            self.views[uri] = (cls, methods)
+            # /pet/{petId} --> /pet/<petId>
+            _rule = uri.replace("{", "<").replace("}", ">")
+            self.views[_rule] = (cls, methods)
 
             return cls
 

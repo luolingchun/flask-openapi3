@@ -18,6 +18,10 @@ security = [{"jwt": []}]
 api_view = APIView(url_prefix="/api/v1", view_tags=[Tag(name="book")], view_security=security)
 
 
+class BookPath(BaseModel):
+    id: int = Field(..., description="book ID")
+
+
 class BookQuery(BaseModel):
     age: Optional[int] = Field(None, description='Age')
 
@@ -44,21 +48,24 @@ class BookListAPIView:
 
 @api_view.route("/book/<id>")
 class BookAPIView:
-    @api_view.doc(summary="get book", deprecated=True)
-    def get(self):
+    @api_view.doc(summary="get book")
+    def get(self, path: BookPath):
+        print(path)
         return "get"
 
     @api_view.doc(summary="update book")
-    def put(self):
+    def put(self, path: BookPath):
+        print(path)
         return "put"
 
-    @api_view.doc(summary="delete book")
-    def delete(self):
+    @api_view.doc(summary="delete book", deprecated=True)
+    def delete(self, path: BookPath):
+        print(path)
         return "delete"
 
 
 app.register_api_view(api_view)
 
 if __name__ == "__main__":
-    # print(app.url_map)
+    print(app.url_map)
     app.run(debug=True)
