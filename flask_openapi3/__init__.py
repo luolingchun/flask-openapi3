@@ -4,6 +4,7 @@
 
 from .__version__ import __version__
 from .api_blueprint import APIBlueprint
+from .api_view import APIView
 from .models.common import Discriminator
 from .models.common import Encoding
 from .models.common import Example

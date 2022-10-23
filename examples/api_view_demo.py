@@ -5,8 +5,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import APIView
 from flask_openapi3 import OpenAPI, Tag, Info, HTTPBearer
-from flask_openapi3.view import APIView
 
 jwt = HTTPBearer()
 security_schemes = {"jwt": jwt}
