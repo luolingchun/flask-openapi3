@@ -11,6 +11,7 @@ from flask import Flask, Blueprint, render_template
 from pydantic import BaseModel
 
 from .api_blueprint import APIBlueprint
+from .api_view import APIView
 from .commands import openapi_command
 from .http import HTTPMethod
 from .models import Info, APISpec, Tag, Components, Server
@@ -20,7 +21,6 @@ from .models.security import SecurityScheme
 from .scaffold import _Scaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
-from .view import APIView
 
 
 class OpenAPI(_Scaffold, Flask):
@@ -185,24 +185,12 @@ class OpenAPI(_Scaffold, Flask):
 
     def register_api_view(self, api_view: APIView) -> None:
         """Register APIView"""
-        # update openapi document
         for tag in api_view.tags:
             if tag.name not in self.tag_names:
                 self.tags.append(tag)
         self.paths.update(**api_view.paths)
         self.components_schemas.update(**api_view.components_schemas)
-        # add rule to Flask
-        for rule, (cls, methods) in api_view.views.items():
-            for method in methods:
-                func = getattr(cls, method.lower())
-                header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-                self._create_wrapper(func, header, cookie, path, query, form, body)
-                options = {
-                    "endpoint": cls.__name__ + "." + method.lower(),
-                    "methods": [method.upper()]
-                }
-                func.view_class = cls
-                self.add_url_rule(rule, view_func=func.wrapper, **options)
+        api_view.register(self)
 
     def _do_decorator(
             self,

@@ -44,7 +44,7 @@ class _Scaffold(Scaffold, ABC):
         raise NotImplementedError
 
     @staticmethod
-    def _create_wrapper(func, header, cookie, path, query, form, body):
+    def create_wrapper(func, header, cookie, path, query, form, body):
         @wraps(func)
         def wrapper(**kwargs) -> Response:
             resp = _do_wrapper(
@@ -125,7 +125,7 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.GET
                 )
 
-            self._create_wrapper(func, header, cookie, path, query, form, body)
+            self.create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
@@ -194,7 +194,7 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.POST
                 )
 
-            self._create_wrapper(func, header, cookie, path, query, form, body)
+            self.create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
@@ -263,7 +263,7 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PUT
                 )
 
-            self._create_wrapper(func, header, cookie, path, query, form, body)
+            self.create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
@@ -332,7 +332,7 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.DELETE
                 )
 
-            self._create_wrapper(func, header, cookie, path, query, form, body)
+            self.create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
@@ -401,7 +401,7 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PATCH
                 )
 
-            self._create_wrapper(func, header, cookie, path, query, form, body)
+            self.create_wrapper(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=func.wrapper, **options)
 
