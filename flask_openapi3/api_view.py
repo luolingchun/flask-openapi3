@@ -29,6 +29,16 @@ class APIView:
             view_responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             doc_ui: bool = True
     ):
+        """
+        Create a class-based view
+
+        Arguments:
+            url_prefix: A path to prepend to all the APIView's urls
+            view_tags: APIView tags for every api
+            view_security: APIView security for every api
+            view_responses: APIView response models
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+        """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
         self.view_security = view_security or []
@@ -42,6 +52,7 @@ class APIView:
         self.tag_names = []
 
     def route(self, rule: str):
+        """Decorator for view class"""
         def wrapper(cls):
             if self.views.get(rule):
                 raise ValueError(f"malformed url rule: {rule!r}")
@@ -97,7 +108,7 @@ class APIView:
             doc_ui: bool = True
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["POST"])
+        Decorator for view method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:

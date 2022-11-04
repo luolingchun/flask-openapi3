@@ -89,6 +89,77 @@ if __name__ == "__main__":
     app.run(debug=True)
 ```
 
+
+<details>
+<summary>基于类的 API 视图示例</summary>
+
+```python
+from typing import Optional
+
+from pydantic import BaseModel, Field
+
+from flask_openapi3 import OpenAPI, Tag, Info, APIView
+
+
+info = Info(title='book API', version='1.0.0')
+app = OpenAPI(__name__, info=info)
+
+api_view = APIView(url_prefix="/api/v1", view_tags=[Tag(name="book")])
+
+
+class BookPath(BaseModel):
+    id: int = Field(..., description="book ID")
+
+
+class BookQuery(BaseModel):
+    age: Optional[int] = Field(None, description='Age')
+
+
+class BookBody(BaseModel):
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
+
+
+@api_view.route("/book")
+class BookListAPIView:
+    a = 1
+
+    @api_view.doc(summary="get book list")
+    def get(self, query: BookQuery):
+        print(self.a)
+        return query.json()
+
+    @api_view.doc(summary="create book")
+    def post(self, body: BookBody):
+        """description for create book"""
+        return body.json()
+
+
+@api_view.route("/book/<id>")
+class BookAPIView:
+    @api_view.doc(summary="get book")
+    def get(self, path: BookPath):
+        print(path)
+        return "get"
+
+    @api_view.doc(summary="update book")
+    def put(self, path: BookPath):
+        print(path)
+        return "put"
+
+    @api_view.doc(summary="delete book", deprecated=True)
+    def delete(self, path: BookPath):
+        print(path)
+        return "delete"
+
+
+app.register_api_view(api_view)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+</details>
+
 ## API 文档
 
 运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问

@@ -126,3 +126,24 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+## APIView
+
+*v2.2.0 新增*
+
+基于类的 API 视图， 点击[这里](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) 查看完整示例:
+
+```python
+@api_view.route("/book")
+class BookListAPIView:
+    a = 1
+
+    @api_view.doc(summary="get book list")
+    def get(self, query: BookQuery):
+        print(self.a)
+        return query.json()
+
+    @api_view.doc(summary="create book")
+    def post(self, body: BookBody):
+        """description for create book"""
+        return body.json()
+```

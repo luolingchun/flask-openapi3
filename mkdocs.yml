@@ -109,6 +109,7 @@ nav:
       - _Scaffold: Reference/Scaffold.md
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
+      - APIView: Reference/APIView.md
       - Model:
           - APISpec: Reference/Model/APISpec.md
           - common: Reference/Model/common.md

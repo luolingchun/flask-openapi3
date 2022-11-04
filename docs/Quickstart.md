@@ -125,3 +125,24 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+## APIView
+
+*New in v2.2.0*
+
+Class-based API View, click [here](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) go to the complete example:
+
+```python
+@api_view.route("/book")
+class BookListAPIView:
+    a = 1
+
+    @api_view.doc(summary="get book list")
+    def get(self, query: BookQuery):
+        print(self.a)
+        return query.json()
+
+    @api_view.doc(summary="create book")
+    def post(self, body: BookBody):
+        """description for create book"""
+        return body.json()
+```
