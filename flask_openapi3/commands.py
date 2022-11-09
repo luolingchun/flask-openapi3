@@ -21,7 +21,7 @@ def openapi_command(output, format, indent, ensure_ascii):
     if hasattr(current_app, 'api_doc'):
         obj = current_app.api_doc
         if format == 'yaml':
-            import yaml
+            import yaml  # type: ignore
             openapi = yaml.safe_dump(obj, allow_unicode=True)
         elif format == 'markdown':
             openapi = openapi_to_markdown(obj)

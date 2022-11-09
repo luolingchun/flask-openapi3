@@ -95,9 +95,9 @@ class Operation(BaseModel):
     description: Optional[str] = None
     externalDocs: Optional[ExternalDocumentation] = None
     operationId: Optional[str] = None
-    parameters: Optional[List[Union[Parameter, Reference]]] = None
+    parameters: Optional[List[Parameter]] = None
     requestBody: Optional[Union[RequestBody, Reference]] = None
-    responses: Dict[str, Union[Response, Any]]
+    responses: Optional[Dict[str, Union[Response, Any]]] = None
     callbacks: Optional[Dict[str, Union[Dict[str, "PathItem"], Reference]]] = None
     deprecated: Optional[bool] = None
     security: Optional[List[Dict[str, List[str]]]] = None
@@ -121,7 +121,7 @@ class PathItem(BaseModel):
     patch: Optional[Operation] = None
     trace: Optional[Operation] = None
     servers: Optional[List[Server]] = None
-    parameters: Optional[List[Union[Parameter, Reference]]] = None
+    parameters: Optional[List[Parameter]] = None
 
     class Config:
         extra = "allow"

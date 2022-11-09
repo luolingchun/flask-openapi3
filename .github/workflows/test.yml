@@ -33,3 +33,5 @@ jobs:
         run: pytest tests
       - name: Flake8
         run: flake8 ./flask_openapi3 ./examples ./tests
+      - name: mypy
+        run: mypy flask_openapi3

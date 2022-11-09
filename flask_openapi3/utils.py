@@ -17,7 +17,7 @@ from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity
 
 
-def get_operation(func: Callable, *, summary: str = None, description: str = None) -> Operation:
+def get_operation(func: Callable, *, summary: Optional[str] = None, description: Optional[str] = None) -> Operation:
     """Return an Operation object with summary and description."""
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
@@ -29,8 +29,7 @@ def get_operation(func: Callable, *, summary: str = None, description: str = Non
         doc_description = "</br>".join(lines) or None
     operation = Operation(
         summary=summary or doc_summary,
-        description=description or doc_description,
-        responses={}
+        description=description or doc_description
     )
 
     return operation
@@ -73,7 +72,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse header model"""
     schema = get_schema(header)
     parameters = []
-    components_schemas = dict()
+    components_schemas: Dict = dict()
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
@@ -95,7 +94,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse cookie model"""
     schema = get_schema(cookie)
     parameters = []
-    components_schemas = dict()
+    components_schemas: Dict = dict()
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
@@ -117,7 +116,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse path model"""
     schema = get_schema(path)
     parameters = []
-    components_schemas = dict()
+    components_schemas: Dict = dict()
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
@@ -139,7 +138,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parse query model"""
     schema = get_schema(query)
     parameters = []
-    components_schemas = dict()
+    components_schemas: Dict = dict()
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
@@ -312,10 +311,10 @@ def validate_responses_type(responses: Dict[str, Any]) -> None:
 
 
 def parse_and_store_tags(
-        new_tags: List[Tag] = None,
-        old_tags: List[Tag] = None,
-        old_tag_names: List[str] = None,
-        operation: Operation = None
+        new_tags: List[Tag],
+        old_tags: List[Tag],
+        old_tag_names: List[str],
+        operation: Operation
 ) -> None:
     """Store tags
     :param new_tags: api tag
@@ -337,8 +336,8 @@ def parse_parameters(
         *,
         extra_form: Optional[ExtraRequestBody] = None,
         extra_body: Optional[ExtraRequestBody] = None,
-        components_schemas: dict = None,
-        operation: Operation = None,
+        components_schemas: Optional[Dict] = None,
+        operation: Optional[Operation] = None,
         doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
@@ -349,7 +348,6 @@ def parse_parameters(
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
-    parameters = []
     header = get_func_parameter(func, parameter_name="header")
     cookie = get_func_parameter(func, parameter_name="cookie")
     path = get_func_parameter(func, parameter_name="path")
@@ -358,6 +356,11 @@ def parse_parameters(
     body = get_func_parameter(func, parameter_name="body")
     if doc_ui is False:
         return header, cookie, path, query, form, body
+    parameters = []
+    if components_schemas is None:
+        components_schemas = dict()
+    if operation is None:
+        operation = Operation()
     if header:
         _parameters, _components_schemas = parse_header(header)
         parameters.extend(_parameters)

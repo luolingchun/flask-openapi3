@@ -16,6 +16,8 @@ Before submitting pr, you need to complete the following steps:
 2. Running the tests
 
     ```bash
+    set pythonpath=. 
+    # or export pythonpath=.
     pytest tests
     ```
 
@@ -25,7 +27,13 @@ Before submitting pr, you need to complete the following steps:
     flake8 flask_openapi3 tests examples
     ```
 
-4. Building the docs
+4. Running the mypy
+
+    ```bash
+    mypy flask_openapi3
+    ```
+
+5. Building the docs
 
     Serve the live docs with [Material for MkDocs](https://github.com/squidfunk/mkdocs-material), and make sure it's correct.
 

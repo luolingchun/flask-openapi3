@@ -45,14 +45,15 @@ class APIView:
         self.view_responses = view_responses or {}
         self.doc_ui = doc_ui
 
-        self.views = {}
-        self.paths = dict()
-        self.components_schemas = dict()
-        self.tags = []
-        self.tag_names = []
+        self.views: Dict = dict()
+        self.paths: Dict = dict()
+        self.components_schemas: Dict = dict()
+        self.tags: List[Tag] = []
+        self.tag_names: List[str] = []
 
     def route(self, rule: str):
         """Decorator for view class"""
+
         def wrapper(cls):
             if self.views.get(rule):
                 raise ValueError(f"malformed url rule: {rule!r}")

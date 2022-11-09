@@ -78,11 +78,11 @@ class OpenAPI(_Scaffold, Flask):
         self.info = info
         self.security_schemes = security_schemes
         self.responses = responses or {}
-        self.paths = dict()
-        self.components_schemas = dict()
+        self.paths: Dict = dict()
+        self.components_schemas: Dict = dict()
         self.components = Components()
-        self.tags = []
-        self.tag_names = []
+        self.tags: List[Tag] = []
+        self.tag_names: List[str] = []
         self.doc_prefix = doc_prefix
         self.api_doc_url = api_doc_url
         self.swagger_url = swagger_url
@@ -197,17 +197,17 @@ class OpenAPI(_Scaffold, Flask):
             rule: str,
             func: Callable,
             *,
-            tags: List[Tag] = None,
+            tags: Optional[List[Tag]] = None,
             summary: Optional[str] = None,
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Dict[str, Type[BaseModel]] = None,
-            extra_responses: Dict[str, dict] = None,
+            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            extra_responses: Optional[Dict[str, Dict]] = None,
             deprecated: Optional[bool] = None,
-            security: List[Dict[str, List[Any]]] = None,
+            security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
@@ -253,6 +253,8 @@ class OpenAPI(_Scaffold, Flask):
             # add servers
             operation.servers = servers
             # store tags
+            if tags is None:
+                tags = []
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters
             header, cookie, path, query, form, body = parse_parameters(

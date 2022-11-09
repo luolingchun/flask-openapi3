@@ -3,7 +3,7 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Any, Type, Callable
+from typing import Any, Type, Callable, Optional, Dict
 
 from flask import request, make_response
 from flask.wrappers import Response
@@ -89,12 +89,12 @@ def _do_body(body, request_kwargs):
 def _do_wrapper(
         func: Callable,
         *,
-        header: Type[BaseModel] = None,
-        cookie: Type[BaseModel] = None,
-        path: Type[BaseModel] = None,
-        query: Type[BaseModel] = None,
-        form: Type[BaseModel] = None,
-        body: Type[BaseModel] = None,
+        header: Optional[Type[BaseModel]] = None,
+        cookie: Optional[Type[BaseModel]] = None,
+        path: Optional[Type[BaseModel]] = None,
+        query: Optional[Type[BaseModel]] = None,
+        form: Optional[Type[BaseModel]] = None,
+        body: Optional[Type[BaseModel]] = None,
         **kwargs: Any
 ) -> Response:
     """
@@ -111,7 +111,7 @@ def _do_wrapper(
     :return:
     """
     # validate header, cookie, path and query
-    request_kwargs = dict()
+    request_kwargs: Dict = dict()
     try:
         if header:
             _do_header(header, request_kwargs)

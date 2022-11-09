@@ -21,7 +21,7 @@ class APISpec(BaseModel):
     openapi: str
     info: Info
     servers: Optional[List[Server]] = None
-    paths: Dict[str, PathItem] = None
+    paths: Optional[Dict[str, PathItem]] = None
     components: Optional[Components] = None
     security: Optional[List[Dict[str, List[str]]]] = None
     tags: Optional[List[Tag]] = None

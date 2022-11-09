@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/11 16:17
-from typing import Any, Dict, Callable
+from typing import Any, Dict, Generator
 
 from werkzeug.datastructures import FileStorage as _FileStorage
 
@@ -12,7 +12,7 @@ class FileStorage(_FileStorage):
     """
 
     @classmethod
-    def __get_validators__(cls) -> 'Callable[..., Any]':
+    def __get_validators__(cls) -> Generator:
         # one or more validators may be yielded which will be called in the
         # order to validate the input, each validator will receive as an input
         # the value returned from the previous validator
