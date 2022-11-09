@@ -123,4 +123,4 @@ nav:
           - validation_error: Reference/Model/validation_error.md
   - LICENSE: LICENSE.md
   - Changelog: Changelog.md
-
+  - Contributing: Contributing.md
