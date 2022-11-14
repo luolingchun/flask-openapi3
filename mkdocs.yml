@@ -88,6 +88,7 @@ plugins:
           API Reference: API 参考
           LICENSE: 许可
           Changelog: 更新日志
+          Contributing: 贡献
 
 
 extra_javascript:
