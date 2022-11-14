@@ -1,3 +1,11 @@
+## v2.2.0 2022-11-14
+
+- support APIView
+- Add mypy
+- Support python 3.11
+- Upgrade Swagger UI 4.15.5
+- Upgrade Redoc UI 2.0.0
+
 ## v2.1.1 2022-10-12
 
 - [#41](https://github.com/luolingchun/flask-openapi3/issues/41) Set the `requestBody required` default value to True. Thanks @Colin-b
