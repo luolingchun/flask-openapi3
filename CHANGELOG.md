@@ -1,3 +1,7 @@
+## v2.2.1 2022-11-23
+
+- Add dependent files
+
 ## v2.2.0 2022-11-14
 
 - support APIView
