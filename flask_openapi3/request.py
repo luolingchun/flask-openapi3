@@ -3,7 +3,7 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Any, Type, Callable, Optional, Dict
+from typing import Any, Type, Optional, Dict, Union
 
 from flask import request, make_response
 from flask.wrappers import Response
@@ -86,9 +86,7 @@ def _do_body(body, request_kwargs):
     request_kwargs.update({"body": body_})
 
 
-def _do_wrapper(
-        func: Callable,
-        *,
+def _do_request(
         header: Optional[Type[BaseModel]] = None,
         cookie: Optional[Type[BaseModel]] = None,
         path: Optional[Type[BaseModel]] = None,
@@ -96,7 +94,7 @@ def _do_wrapper(
         form: Optional[Type[BaseModel]] = None,
         body: Optional[Type[BaseModel]] = None,
         **kwargs: Any
-) -> Response:
+) -> Union[Response, Dict]:
     """
     Validate requests and responses
     :param func: view func
@@ -130,11 +128,4 @@ def _do_wrapper(
         response.headers['Content-Type'] = 'application/json'
         response.status_code = 422
         return response
-    view_class = getattr(func, "view_class", None)
-    # handle request
-    if view_class:
-        response = func(view_class, **request_kwargs)
-    else:
-        response = func(**request_kwargs)
-
-    return response
+    return request_kwargs

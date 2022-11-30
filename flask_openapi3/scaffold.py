@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/8/30 9:40
+import functools
+import inspect
+import sys
 from abc import ABC
 from functools import wraps
 from typing import Callable, List, Optional, Dict, Type, Any, Tuple
@@ -9,12 +12,24 @@ from flask.scaffold import Scaffold
 from flask.wrappers import Response
 from pydantic import BaseModel
 
-from .do_wrapper import _do_wrapper
 from .http import HTTPMethod
 from .models import ExternalDocumentation
 from .models.common import ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
+from .request import _do_request
+
+if sys.version_info >= (3, 8):
+    iscoroutinefunction = inspect.iscoroutinefunction
+else:
+    def iscoroutinefunction(func: Any) -> bool:
+        while inspect.ismethod(func):
+            func = func.__func__
+
+        while isinstance(func, functools.partial):
+            func = func.func
+
+        return inspect.iscoroutinefunction(func)
 
 
 class _Scaffold(Scaffold, ABC):
@@ -44,25 +59,55 @@ class _Scaffold(Scaffold, ABC):
         raise NotImplementedError
 
     @staticmethod
-    def create_wrapper(func, header, cookie, path, query, form, body):
-        @wraps(func)
-        def wrapper(**kwargs) -> Response:
-            resp = _do_wrapper(
-                func,
-                header=header,
-                cookie=cookie,
-                path=path,
-                query=query,
-                form=form,
-                body=body,
-                **kwargs
-            )
-            return resp
+    def create_view_func(func, header, cookie, path, query, form, body, view_class=None):
+        is_coroutine_function = iscoroutinefunction(func)
+        if is_coroutine_function:
+            @wraps(func)
+            async def view_func(**kwargs) -> Response:
+                result = _do_request(
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
+                if isinstance(result, Response):
+                    # 422
+                    return result
+                # handle async request
+                if view_class:
+                    response = await func(view_class, **result)
+                else:
+                    response = await func(**result)
+                return response
+        else:
+            @wraps(func)
+            def view_func(**kwargs) -> Response:
+                result = _do_request(
+                    header=header,
+                    cookie=cookie,
+                    path=path,
+                    query=query,
+                    form=form,
+                    body=body,
+                    **kwargs
+                )
+                if isinstance(result, Response):
+                    # 422
+                    return result
+                # handle request
+                if view_class:
+                    response = func(view_class, **result)
+                else:
+                    response = func(**result)
+                return response
 
-        if not hasattr(func, "wrapper"):
-            func.wrapper = wrapper
+        if not hasattr(func, "view"):
+            func.view = view_func
 
-        return wrapper
+        return func.view
 
     def get(
             self,
@@ -125,9 +170,9 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.GET
                 )
 
-            self.create_wrapper(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.GET]})
-            self.add_url_rule(rule, view_func=func.wrapper, **options)
+            self.add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -194,9 +239,9 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.POST
                 )
 
-            self.create_wrapper(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.POST]})
-            self.add_url_rule(rule, view_func=func.wrapper, **options)
+            self.add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -263,9 +308,9 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PUT
                 )
 
-            self.create_wrapper(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PUT]})
-            self.add_url_rule(rule, view_func=func.wrapper, **options)
+            self.add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -332,9 +377,9 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.DELETE
                 )
 
-            self.create_wrapper(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.DELETE]})
-            self.add_url_rule(rule, view_func=func.wrapper, **options)
+            self.add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -401,9 +446,9 @@ class _Scaffold(Scaffold, ABC):
                     method=HTTPMethod.PATCH
                 )
 
-            self.create_wrapper(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PATCH]})
-            self.add_url_rule(rule, view_func=func.wrapper, **options)
+            self.add_url_rule(rule, view_func=view_func, **options)
 
             return func
 

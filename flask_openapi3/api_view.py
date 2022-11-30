@@ -180,10 +180,9 @@ class APIView:
             for method in methods:
                 func = getattr(cls, method.lower())
                 header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-                app.create_wrapper(func, header, cookie, path, query, form, body)
+                view_func = app.create_view_func(func, header, cookie, path, query, form, body, view_class=cls)
                 options = {
                     "endpoint": cls.__name__ + "." + method.lower(),
                     "methods": [method.upper()]
                 }
-                func.view_class = cls
-                app.add_url_rule(rule, view_func=func.wrapper, **options)
+                app.add_url_rule(rule, view_func=view_func, **options)
