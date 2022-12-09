@@ -146,3 +146,17 @@ class BookListAPIView:
         """description for create book"""
         return body.json()
 ```
+
+
+## Async API
+
+*New in v2.2.2*
+
+Just use `async` when defining functions. More information go to [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/).
+
+```python hl_lines="2"
+@app.post('/open/api')
+async def post_openapi(body: Query):
+    print(body)
+    return 'POST, OpenAPI!'
+```

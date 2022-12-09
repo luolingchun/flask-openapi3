@@ -147,3 +147,16 @@ class BookListAPIView:
         """description for create book"""
         return body.json()
 ```
+
+## 异步 API
+
+*v2.2.2 新增*
+
+在定义函数时使用 `async`。 更多信息参考 [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/)。
+
+```python hl_lines="2"
+@app.post('/open/api')
+async def post_openapi(body: Query):
+    print(body)
+    return 'POST, OpenAPI!'
+```
