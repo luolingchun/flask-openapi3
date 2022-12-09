@@ -31,7 +31,7 @@ jobs:
           pip install -e .
       - name: Test with pytest
         run: |
-          pip install -U pytest openapi-python-client
+          pip install -U pytest openapi-python-client asgiref
           pytest tests
       - name: Flake8
         run: |

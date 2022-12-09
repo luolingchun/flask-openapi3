@@ -12,3 +12,4 @@ flake8
 pytest
 openapi-python-client
 mypy
+asgiref
