@@ -36,7 +36,10 @@ setup(
     zip_safe=False,
     platforms="any",
     install_requires=install_requires,
-    extras_require={"yaml": ["pyyaml"]},
+    extras_require={
+        "yaml": ["pyyaml"],
+        "async": ["asgiref >= 3.2"],
+    },
     classifiers=[
         # "Development Status :: 1 - Planning",
         # "Development Status :: 2 - Pre-Alpha",
