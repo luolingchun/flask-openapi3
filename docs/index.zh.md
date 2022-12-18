@@ -9,7 +9,7 @@
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
-        <img class="off-glb" src="https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test" alt="test">
+        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
         <img class="off-glb" src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
@@ -47,6 +47,11 @@ flask-openapi3 依赖以下库：
 
 ```bash
 pip install -U flask-openapi3
+```
+或者
+
+```bash
+conda install -c conda-forge flask-openapi3
 ```
 
 ## 一个简单的示例

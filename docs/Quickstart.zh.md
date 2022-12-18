@@ -154,6 +154,16 @@ class BookListAPIView:
 
 在定义函数时使用 `async`。 更多信息参考 [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/)。
 
+!!! info
+
+    你需要使用 pip 手动安装 `asgiref`:
+    ```bash
+    pip install flask-openapi3[async]
+    
+    # or
+    pip install asgiref
+    ```
+
 ```python hl_lines="2"
 @app.post('/open/api')
 async def post_openapi(body: Query):

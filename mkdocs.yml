@@ -77,7 +77,7 @@ plugins:
         zh:
           Home: 简介
           Quickstart: 快速开始
-          OpenAPI: OpenAPI
+          Tutorial: 教程
           # OpenAPI-second: start
           Specification: 规范
           Operation: 路由操作
@@ -100,14 +100,15 @@ extra_css:
 nav:
   - Home: index.md
   - Quickstart: Quickstart.md
-  - OpenAPI:
-      - Specification: OpenAPI/Specification.md
-      - Operation : OpenAPI/Operation.md
-      - Request: OpenAPI/Request.md
-      - Response: OpenAPI/Response.md
+  - Tutorial:
+      - Specification: Tutorial/Specification.md
+      - Operation: Tutorial/Operation.md
+      - Request: Tutorial/Request.md
+      - Response: Tutorial/Response.md
+      - JSON: Tutorial/JSON.md
   - Example: Example.md
   - API Reference:
-      - _Scaffold: Reference/Scaffold.md
+      - APIScaffold: Reference/Scaffold.md
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
       - APIView: Reference/APIView.md
