@@ -3,8 +3,7 @@
 # @Time    : 2021/4/30 10:14
 
 from .__version__ import __version__
-from .api_blueprint import APIBlueprint
-from .api_view import APIView
+from .blueprint import APIBlueprint
 from .models.common import Discriminator
 from .models.common import Encoding
 from .models.common import Example
@@ -48,3 +47,4 @@ from .models.server import ServerVariable
 from .models.tag import Tag
 from .models.validation_error import UnprocessableEntity
 from .openapi import OpenAPI
+from .view import APIView

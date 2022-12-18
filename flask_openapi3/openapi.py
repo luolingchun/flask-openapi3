@@ -10,20 +10,20 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template
 from pydantic import BaseModel
 
-from .api_blueprint import APIBlueprint
-from .api_view import APIView
+from .blueprint import APIBlueprint
+from .view import APIView
 from .commands import openapi_command
 from .http import HTTPMethod
 from .models import Info, APISpec, Tag, Components, Server
 from .models.common import Reference, ExternalDocumentation, ExtraRequestBody
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
-from .scaffold import _Scaffold
+from .scaffold import APIScaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
 
 
-class OpenAPI(_Scaffold, Flask):
+class OpenAPI(APIScaffold, Flask):
     def __init__(
             self,
             import_name: str,

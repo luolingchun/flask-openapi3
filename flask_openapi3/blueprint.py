@@ -12,12 +12,12 @@ from .http import HTTPMethod
 from .models import Tag, ExternalDocumentation
 from .models.common import ExtraRequestBody
 from .models.server import Server
-from .scaffold import _Scaffold
+from .scaffold import APIScaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
     parse_method, get_operation_id_for_path
 
 
-class APIBlueprint(_Scaffold, Blueprint):
+class APIBlueprint(APIScaffold, Blueprint):
     def __init__(
             self,
             name: str,

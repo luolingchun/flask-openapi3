@@ -32,7 +32,7 @@ else:
         return inspect.iscoroutinefunction(func)
 
 
-class _Scaffold(Scaffold, ABC):
+class APIScaffold(Scaffold, ABC):
     def _do_decorator(
             self,
             rule: str,
