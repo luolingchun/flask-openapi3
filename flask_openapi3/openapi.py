@@ -179,6 +179,7 @@ class OpenAPI(APIScaffold, Flask):
         for tag in api.tags:
             if tag.name not in self.tag_names:
                 self.tags.append(tag)
+                self.tag_names.append(tag.name)
         self.paths.update(**api.paths)
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
@@ -188,6 +189,7 @@ class OpenAPI(APIScaffold, Flask):
         for tag in api_view.tags:
             if tag.name not in self.tag_names:
                 self.tags.append(tag)
+                self.tag_names.append(tag.name)
         self.paths.update(**api_view.paths)
         self.components_schemas.update(**api_view.components_schemas)
         api_view.register(self)

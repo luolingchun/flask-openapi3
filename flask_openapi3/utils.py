@@ -62,8 +62,8 @@ def get_func_parameter(func: Callable, *, parameter_name="path") -> Type[BaseMod
 
 def get_schema(obj: Type[BaseModel]) -> dict:
     """Pydantic model conversion to openapi schema"""
-    assert inspect.isclass(obj) and \
-           issubclass(obj, BaseModel), f"{obj}{type(obj)} is invalid `pydantic.BaseModel`"
+    assert inspect.isclass(obj) and issubclass(obj, BaseModel), \
+        f"{obj} is invalid `pydantic.BaseModel`"
 
     return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
 
