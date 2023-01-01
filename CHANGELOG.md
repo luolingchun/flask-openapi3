@@ -1,3 +1,8 @@
+## v2.2.2 2023-01-01
+
+- Fix async
+- Fix duplicate tags
+
 ## v2.2.1 2022-11-23
 
 - Add dependent files
