@@ -1,6 +1,6 @@
 site_name: flask-openapi3
 site_url: https://luolingchun.github.io/flask-openapi3
-site_description: Generate RESTful API and OpenAPI document for your Flask project.
+site_description: Generate REST API and OpenAPI documentation for your Flask project.
 site_author: llc
 
 repo_url: https://github.com/luolingchun/flask-openapi3
@@ -10,24 +10,9 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: ⚓︎
-  - footnotes
-  - meta
-  - def_list
-  - pymdownx.arithmatex
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.critic
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_png
-  - pymdownx.inlinehilite
+  - md_in_html
   - pymdownx.magiclink
-  - pymdownx.mark
-  - pymdownx.smartsymbols
   - pymdownx.superfences
-  - pymdownx.tasklist
-  - pymdownx.tilde
   - pymdownx.snippets
   - pymdownx.highlight:
       linenums: true
@@ -54,14 +39,6 @@ theme:
     - search.highlight
     - search.share
 
-extra:
-  alternate:
-    - name: English
-      link: ./en/
-      lang: en
-    - name: 简体中文
-      link: ./zh/
-      lang: zh
 
 plugins:
   - search
@@ -78,12 +55,10 @@ plugins:
           Home: 简介
           Quickstart: 快速开始
           Tutorial: 教程
-          # OpenAPI-second: start
           Specification: 规范
           Operation: 路由操作
           Request: 请求
           Response: 响应
-          # OpenAPI-second: end
           Example: 示例
           API Reference: API 参考
           LICENSE: 许可

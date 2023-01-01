@@ -1,13 +1,13 @@
-<div align="center">
+<div style="text-align: center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
-             height="auto" alt="logo">
+        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" 
+             width="60%" height="auto" alt="logo">
     </a>
 </div>
-<p align="center">
+<p style="text-align: center">
     <em>Generate REST API and OpenAPI documentation for your Flask project.</em>
 </p>
-<p align="center">
+<p style="text-align: center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
         <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
     </a>
@@ -31,9 +31,8 @@ The key features are:
 
 - **Standard document specification:** Based on [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification)
 
-- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), 
-  [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc)
-
+- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc)
+  
 - **Data validation:** Fast data verification based on [Pydantic](https://github.com/samuelcolvin/pydantic)
 
 - **Authorization:** Support to reload authorizations in Swagger UI
@@ -58,6 +57,31 @@ or
 ```bash
 conda install -c conda-forge flask-openapi3
 ```
+
+<details markdown="block">
+<summary>Optional dependencies</summary>
+
+- [python-email-validator](https://github.com/JoshData/python-email-validator) supports email verification.
+- [python-dotenv](https://github.com/theskumar/python-dotenv#readme) enables support for [Environment Variables From dotenv](https://flask.palletsprojects.com/en/latest/cli/#dotenv) when running `flask` commands.
+- [pyyaml](https://github.com/yaml/pyyaml) is used to output the OpenAPI document in yaml format.
+- [asgiref](https://github.com/django/asgiref) allows views to be defined with `async def` and use `await`.
+
+To install these dependencies with flask-openapi3:
+
+```bash
+pip install flask-openapi3[yaml]
+# or
+pip install flask-openapi3[async]
+# or
+pip install flask-openapi3[dotenv]
+# or
+pip install flask-openapi3[email]
+# or all
+pip install flask-openapi3[yaml,async,dotenv,email]
+# or manually
+pip install pyyaml asgiref python-dotenv email-validator
+```
+</details>
 
 ## A Simple Example
 
@@ -171,11 +195,9 @@ if __name__ == "__main__":
 
 ## API Document
 
-Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go
-to http://127.0.0.1:5000/openapi.
+Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
 
-You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), 
-[Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc).
+You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc).
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)

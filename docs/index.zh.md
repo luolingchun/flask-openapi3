@@ -1,13 +1,12 @@
-<div align="center">
+<div style="text-align: center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.png" width="50%"
-             height="auto" alt="logo">
+        <img class="off-glb" src="images/logo-text.svg" width="60%" height="auto" alt="logo">
     </a>
 </div>
-<p align="center">
+<p style="text-align: center">
     <em>为你的 Flask 项目生成 REST API 和 OpenAPI 文档。</em>
 </p>
-<p align="center">
+<p style="text-align: center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
         <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
     </a>
@@ -29,8 +28,7 @@
 
 - **编码简单：** 使用简单易于学习
 - **标准的文档规范：** 基于[开放 API 规范](https://github.com/OAI/OpenAPI-Specification)
-- **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc)
-  和 [RapiDoc](https://github.com/mrin9/RapiDoc)
+- **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)
 - **数据验证：** 基于 [Pydantic](https://github.com/samuelcolvin/pydantic) 的快速数据验证
 - **认证：** 支持在 Swagger UI 中重新加载认证信息
 
@@ -48,11 +46,39 @@ flask-openapi3 依赖以下库：
 ```bash
 pip install -U flask-openapi3
 ```
+
 或者
 
 ```bash
 conda install -c conda-forge flask-openapi3
 ```
+
+<details markdown="block">
+<summary>可选依赖项</summary>
+
+- [python-email-validator](https://github.com/JoshData/python-email-validator) 支持邮箱验证；
+- [python-dotenv](https://github.com/theskumar/python-dotenv#readme) 在运行 `flask`
+  命令时启用对[ dotenv 环境变量](https://flask.palletsprojects.com/en/latest/cli/#dotenv) 的支持；
+- [pyyaml](https://github.com/yaml/pyyaml) 用于输出 `yaml`格式的 OpenAPI 文档；
+- [asgiref](https://github.com/django/asgiref) 允许在定义视图函数时使用 `async def` 和 `await`.
+
+和 flask-openapi3 一起安装这些依赖:
+
+```bash
+pip install flask-openapi3[yaml]
+# 或者
+pip install flask-openapi3[async]
+# 或者
+pip install flask-openapi3[dotenv]
+# 或者
+pip install flask-openapi3[email]
+# 或者安装全部
+pip install flask-openapi3[yaml,async,dotenv,email]
+# 或者手动安装
+pip install pyyaml asgiref python-dotenv email-validator
+```
+
+</details>
 
 ## 一个简单的示例
 
@@ -167,13 +193,11 @@ if __name__ == "__main__":
 
 ## API 文档
 
-运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问
-http://127.0.0.1:5000/openapi。
+运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问 http://127.0.0.1:5000/openapi。
 
-你将看到文档入口：[Swagger](https://github.com/swagger-api/swagger-ui)，
-[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
+你将看到文档入口：[Swagger](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
 
-![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
-![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
-![openapi-redoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-redoc.png)
-![openapi-RapiDoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-rapidoc.png)
+![openapi](./images/openapi.png)
+![openapi-swagger](./images/openapi-swagger.png)
+![openapi-redoc](./images/openapi-redoc.png)
+![openapi-RapiDoc](./images/openapi-rapidoc.png)

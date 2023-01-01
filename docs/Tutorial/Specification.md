@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
 run it, and go to http://127.0.0.1:5000/openapi, you will see the documentation.
 
-![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
+![openapi](../images/openapi.png)
 ![image-20210525160157057](../assets/image-20210525160157057.png)
 
 ## security_schemes
