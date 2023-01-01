@@ -1,12 +1,12 @@
-<div style="text-align: center">
+<div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
         <img class="off-glb" src="images/logo-text.svg" width="60%" height="auto" alt="logo">
     </a>
 </div>
-<p style="text-align: center">
+<p align="center">
     <em>为你的 Flask 项目生成 REST API 和 OpenAPI 文档。</em>
 </p>
-<p style="text-align: center">
+<p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
         <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
     </a>

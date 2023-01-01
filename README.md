@@ -1,13 +1,13 @@
-<div style="text-align: center">
+<div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
         <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" 
              width="60%" height="auto" alt="logo">
     </a>
 </div>
-<p style="text-align: center">
+<p align="center">
     <em>Generate REST API and OpenAPI documentation for your Flask project.</em>
 </p>
-<p style="text-align: center">
+<p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
         <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
     </a>
