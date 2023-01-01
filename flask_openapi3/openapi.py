@@ -93,14 +93,14 @@ class OpenAPI(APIScaffold, Flask):
                 raise TypeError("`initOAuth` must be `OAuthConfig`")
         self.oauth_config = oauth_config
         if doc_ui:
-            self.init_doc()
+            self._init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
         self.external_docs = external_docs
         # add openapi command
         self.cli.add_command(openapi_command)
 
-    def init_doc(self) -> None:
+    def _init_doc(self) -> None:
         """
         Provide Swagger UI, Redoc and Rapidoc
         """

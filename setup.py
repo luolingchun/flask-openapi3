@@ -39,6 +39,8 @@ setup(
     extras_require={
         "yaml": ["pyyaml"],
         "async": ["asgiref >= 3.2"],
+        "dotenv": ["python-dotenv"],
+        "email": ["email-validator"]
     },
     classifiers=[
         # "Development Status :: 1 - Planning",
