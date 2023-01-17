@@ -37,4 +37,3 @@ def test_get(client):
 
     if app._app_config.get('ui_hide_top_bar'):
         assert 'layout: "StandaloneLayout"' not in data
-
