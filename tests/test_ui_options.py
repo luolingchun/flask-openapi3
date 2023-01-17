@@ -3,7 +3,6 @@
 # @Time    : 2023/12/18 9:23
 
 import pytest
-from pydantic import BaseModel, Extra
 
 from flask_openapi3 import Info, OpenAPI
 
