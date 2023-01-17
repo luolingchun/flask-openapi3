@@ -69,6 +69,14 @@ class OpenAPI(APIScaffold, Flask):
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
             **kwargs: Flask kwargs
         """
+
+        # build app_config from kwargs -- this permits overriding some default view behavior such as
+        # favicon or whether to render the top bar
+        self._app_config = dict()
+        self._app_config['ui_hide_top_bar'] = kwargs.pop('ui_hide_top_bar', False) is True
+        self._app_config['ui_favicon'] = kwargs.pop('ui_favicon', "static/images/swagger.svg")
+        self._app_config['ui_title'] = kwargs.pop('ui_title', "Swagger UI")
+
         super(OpenAPI, self).__init__(import_name, **kwargs)
 
         self.openapi_version = "3.0.3"
@@ -127,7 +135,8 @@ class OpenAPI(APIScaffold, Flask):
                 "swagger.html",
                 api_doc_url=self.api_doc_url.lstrip("/"),
                 doc_expansion=self.doc_expansion,
-                oauth_config=self.oauth_config.dict() if self.oauth_config else None
+                oauth_config=self.oauth_config.dict() if self.oauth_config else None,
+                app_config=self._app_config
             )
         )
         blueprint.add_url_rule(

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Swagger UI</title>
-    <link rel="shortcut icon" href="static/images/swagger.svg">
+    <title>{{ app_config.ui_title }}</title>
+    <link rel="shortcut icon" href="{{ app_config.ui_favicon }}">
     <link rel="stylesheet" type="text/css" href="static/css/swagger-ui.css">
     <style>
         html {
@@ -40,7 +40,9 @@
             plugins: [
                 SwaggerUIBundle.plugins.DownloadUrl
             ],
+            {% if not app_config.ui_hide_top_bar -%}
             layout: "StandaloneLayout",
+            {%- endif %}
             docExpansion: "{{ doc_expansion }}"
         })
         // End Swagger UI call region
