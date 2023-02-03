@@ -130,8 +130,9 @@ class OpenAPI(APIScaffold, Flask):
             blueprint.add_url_rule(
                 rule=f"/{key}",
                 endpoint=key,
-                view_func=lambda: render_template_string(
-                    value,
+                # pass default value to source
+                view_func=lambda source=value: render_template_string(
+                    source,
                     api_doc_url=self.api_doc_url.lstrip("/")
                 )
             )

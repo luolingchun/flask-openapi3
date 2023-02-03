@@ -115,6 +115,12 @@ def test_openapi(client):
     assert resp.json == app.api_doc
 
 
+def test_swagger(client):
+    resp = client.get("/openapi/swagger")
+    assert resp.status_code == 200
+    assert "Custom Title" in resp.text
+
+
 def test_rapipdf(client):
     resp = client.get("/openapi/rapipdf")
     assert resp.status_code == 200
