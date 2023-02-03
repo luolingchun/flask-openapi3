@@ -65,11 +65,11 @@ rapipdf_html_string = """
   </head>
   <body>
     <rapi-pdf
-      style = "width:700px; height:40px; font-size:18px;" 
+      style = "width:700px; height:40px; font-size:18px;"
       spec-url = "{{api_doc_url}}"
-      button-bg = "#b44646" 
+      button-bg = "#b44646"
     > </rapi-pdf>
-  </body> 
+  </body>
   </html>
 """
 ui_templates = {
