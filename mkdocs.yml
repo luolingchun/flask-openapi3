@@ -33,11 +33,16 @@ theme:
         icon: material/weather-night
   features:
     - navigation.tracking
+    - navigation.footer
     - navigation.top
     #    - navigation.expand
     - search.suggest
     - search.highlight
     - search.share
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - toc.follow
 
 
 plugins:
