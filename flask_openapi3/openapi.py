@@ -150,7 +150,7 @@ class OpenAPI(APIScaffold, Flask):
             rule="/",
             endpoint="index",
             view_func=lambda: render_template(
-                "index.html",
+                "openapi.html",
                 swagger_url=self.swagger_url.lstrip("/"),
                 redoc_url=self.redoc_url.lstrip("/"),
                 rapidoc_url=self.rapidoc_url.lstrip("/")
