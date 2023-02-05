@@ -148,7 +148,7 @@ class OpenAPI(APIScaffold, Flask):
         )
         blueprint.add_url_rule(
             rule="/",
-            endpoint="index",
+            endpoint="openapi",
             view_func=lambda: render_template(
                 "openapi.html",
                 swagger_url=self.swagger_url.lstrip("/"),
