@@ -16,8 +16,8 @@ from .http import HTTPMethod
 from .models.common import ExternalDocumentation, ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
-from .utils import validate_responses_type, get_operation, parse_and_store_tags, parse_parameters, get_responses, \
-    parse_method, get_operation_id_for_path
+from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
+    get_operation_id_for_path
 
 
 class APIView:
@@ -139,9 +139,6 @@ class APIView:
         def decorator(func):
             if self.doc_ui is False or doc_ui is False:
                 return
-            validate_responses_type(responses)
-            validate_responses_type(self.view_responses)
-            validate_responses_type(extra_responses)
             # global response combine api responses
             combine_responses = deepcopy(self.view_responses)
             combine_responses.update(**responses)
