@@ -11,7 +11,6 @@ from flask import Flask, Blueprint, render_template
 from pydantic import BaseModel
 
 from .blueprint import APIBlueprint
-from .view import APIView
 from .commands import openapi_command
 from .http import HTTPMethod
 from .models import Info, APISpec, Tag, Components, Server
@@ -19,8 +18,9 @@ from .models.common import Reference, ExternalDocumentation, ExtraRequestBody
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
 from .scaffold import APIScaffold
-from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, validate_responses_type, \
-    parse_method, get_operation_id_for_path
+from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
+    get_operation_id_for_path
+from .view import APIView
 
 
 class OpenAPI(APIScaffold, Flask):
@@ -233,9 +233,6 @@ class OpenAPI(APIScaffold, Flask):
                 responses = {}
             if extra_responses is None:
                 extra_responses = {}
-            validate_responses_type(responses)
-            validate_responses_type(self.responses)
-            validate_responses_type(extra_responses)
             # global response combine api responses
             combine_responses = deepcopy(self.responses)
             combine_responses.update(**responses)
