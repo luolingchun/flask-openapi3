@@ -4,9 +4,8 @@
 
 import inspect
 import re
-from typing import Dict, Type, Callable, List, Tuple, Any, ForwardRef, Optional
+from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional
 
-import pydantic.typing
 from pydantic import BaseModel
 
 from .http import HTTP_STATUS, HTTPMethod
@@ -40,24 +39,6 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     operation_id = re.sub(r"\W", "_", operation_id)
     operation_id = operation_id + "_" + method.lower()
     return operation_id
-
-
-def get_func_parameter(func: Callable, *, parameter_name="path") -> Type[BaseModel]:
-    """Get view-func parameters.
-    parameter_name has six parameters to choose from: path, query, form, body, header, cookie.
-    """
-    signature = inspect.signature(func)
-    param = signature.parameters.get(parameter_name)
-    annotation = param.annotation if param else None
-    if isinstance(annotation, str):
-        # PEP563
-        while hasattr(func, "__wrapped__"):
-            # Find globalns for the unwrapped func.
-            func = func.__wrapped__
-        globalns = getattr(func, "__globals__", {})
-        annotation = ForwardRef(annotation)
-        annotation = pydantic.typing.evaluate_forwardref(annotation, globalns, globalns)
-    return annotation
 
 
 def get_schema(obj: Type[BaseModel]) -> dict:
@@ -306,10 +287,6 @@ def get_responses(
     operation.responses = _responses
 
 
-def validate_responses_type(responses: Dict[str, Any]) -> None:
-    assert isinstance(responses, dict), f"{responses} invalid `dict`"
-
-
 def parse_and_store_tags(
         new_tags: List[Tag],
         old_tags: List[Tag],
@@ -348,14 +325,15 @@ def parse_parameters(
     :param operation: `models.path.py` Operation
     :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
     """
-    header = get_func_parameter(func, parameter_name="header")
-    cookie = get_func_parameter(func, parameter_name="cookie")
-    path = get_func_parameter(func, parameter_name="path")
-    query = get_func_parameter(func, parameter_name="query")
-    form = get_func_parameter(func, parameter_name="form")
-    body = get_func_parameter(func, parameter_name="body")
+    annotations = get_type_hints(func)
+    header = annotations.get("header")
+    cookie = annotations.get("cookie")
+    path = annotations.get("path")
+    query = annotations.get("query")
+    form = annotations.get("form")
+    body = annotations.get("body")
     if doc_ui is False:
-        return header, cookie, path, query, form, body
+        return header, cookie, path, query, form, body  # type: ignore
     parameters = []
     if components_schemas is None:
         components_schemas = dict()
@@ -407,7 +385,7 @@ def parse_parameters(
         operation.requestBody = request_body
     operation.parameters = parameters if parameters else None
 
-    return header, cookie, path, query, form, body
+    return header, cookie, path, query, form, body  # type: ignore
 
 
 def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:
