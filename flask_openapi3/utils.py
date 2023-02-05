@@ -68,6 +68,11 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
+    # parse definitions
+    definitions = schema.get("definitions", {})
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -89,6 +94,11 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         # parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
+
+    # parse definitions
+    definitions = schema.get("definitions", {})
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -112,6 +122,11 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data.update(**value)
         parameters.append(Parameter(**data))
 
+    # parse definitions
+    definitions = schema.get("definitions", {})
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
+
     return parameters, components_schemas
 
 
@@ -133,6 +148,11 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         # parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
+
+    # parse definitions
+    definitions = schema.get("definitions", {})
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
 
     return parameters, components_schemas
 
@@ -174,6 +194,11 @@ def parse_form(
             )
         }
 
+    # parse definitions
+    definitions = schema.get("definitions", {})
+    for name, value in definitions.items():
+        components_schemas[name] = Schema(**value)
+
     return content, components_schemas
 
 
@@ -184,7 +209,6 @@ def parse_body(
     """Parse body model"""
     schema = get_schema(body)
     components_schemas = dict()
-    definitions = schema.get("definitions", {})
 
     title = schema.get("title")
     components_schemas[title] = Schema(**schema)
@@ -204,6 +228,8 @@ def parse_body(
             )
         }
 
+    # parse definitions
+    definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
