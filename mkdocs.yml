@@ -64,6 +64,7 @@ plugins:
           Operation: 路由操作
           Request: 请求
           Response: 响应
+          UI Templates: 自定义模板
           Example: 示例
           API Reference: API 参考
           LICENSE: 许可
@@ -85,6 +86,7 @@ nav:
       - Operation: Tutorial/Operation.md
       - Request: Tutorial/Request.md
       - Response: Tutorial/Response.md
+      - UI Templates: Tutorial/UI_Templates.md
       - JSON: Tutorial/JSON.md
   - Example: Example.md
   - API Reference:
