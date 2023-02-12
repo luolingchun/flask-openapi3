@@ -7,7 +7,7 @@ import re
 from copy import deepcopy
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
-from flask import Flask, Blueprint, render_template
+from flask import Flask, Blueprint, render_template, render_template_string
 from pydantic import BaseModel
 
 from .blueprint import APIBlueprint
@@ -39,6 +39,7 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: str = "/swagger",
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
+            ui_templates: Optional[Dict[str, str]] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             **kwargs: Any
@@ -64,6 +65,7 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: The Swagger UI documentation. Defaults to `/swagger`.
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
+            ui_templates: Custom UI templates, which used to overwrite or add UI documents.
             servers: An array of Server Objects, which provide connectivity information to a target server.
             external_docs: Allows referencing an external resource for extended documentation.
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
@@ -92,11 +94,14 @@ class OpenAPI(APIScaffold, Flask):
             if not isinstance(oauth_config, OAuthConfig):
                 raise TypeError("`initOAuth` must be `OAuthConfig`")
         self.oauth_config = oauth_config
-        if doc_ui:
-            self._init_doc()
         self.doc_expansion = doc_expansion
+        if ui_templates is None:
+            ui_templates = dict()
+        self.ui_templates = ui_templates
         self.severs = servers
         self.external_docs = external_docs
+        if doc_ui:
+            self._init_doc()
         # add openapi command
         self.cli.add_command(openapi_command)
 
@@ -120,32 +125,46 @@ class OpenAPI(APIScaffold, Flask):
             endpoint="api_doc",
             view_func=lambda: self.api_doc
         )
-        blueprint.add_url_rule(
-            rule=self.swagger_url,
-            endpoint="swagger",
-            view_func=lambda: render_template(
-                "swagger.html",
-                api_doc_url=self.api_doc_url.lstrip("/"),
-                doc_expansion=self.doc_expansion,
-                oauth_config=self.oauth_config.dict() if self.oauth_config else None
+        # iter ui_templates
+        for key, value in self.ui_templates.items():
+            blueprint.add_url_rule(
+                rule=f"/{key}",
+                endpoint=key,
+                # pass default value to source
+                view_func=lambda source=value: render_template_string(
+                    source,
+                    api_doc_url=self.api_doc_url.lstrip("/")
+                )
             )
-        )
-        blueprint.add_url_rule(
-            rule=self.redoc_url,
-            endpoint="redoc",
-            view_func=lambda: render_template(
-                "redoc.html",
-                api_doc_url=self.api_doc_url.lstrip("/")
+        if self.swagger_url.strip("/") not in self.ui_templates.keys():
+            blueprint.add_url_rule(
+                rule=self.swagger_url,
+                endpoint="swagger",
+                view_func=lambda: render_template(
+                    "swagger.html",
+                    api_doc_url=self.api_doc_url.lstrip("/"),
+                    doc_expansion=self.doc_expansion,
+                    oauth_config=self.oauth_config.dict() if self.oauth_config else None
+                )
             )
-        )
-        blueprint.add_url_rule(
-            rule=self.rapidoc_url,
-            endpoint="rapidoc",
-            view_func=lambda: render_template(
-                "rapidoc.html",
-                api_doc_url=self.api_doc_url.lstrip("/")
+        if self.redoc_url.strip("/") not in self.ui_templates.keys():
+            blueprint.add_url_rule(
+                rule=self.redoc_url,
+                endpoint="redoc",
+                view_func=lambda: render_template(
+                    "redoc.html",
+                    api_doc_url=self.api_doc_url.lstrip("/")
+                )
             )
-        )
+        if self.rapidoc_url.strip("/") not in self.ui_templates.keys():
+            blueprint.add_url_rule(
+                rule=self.rapidoc_url,
+                endpoint="rapidoc",
+                view_func=lambda: render_template(
+                    "rapidoc.html",
+                    api_doc_url=self.api_doc_url.lstrip("/")
+                )
+            )
         blueprint.add_url_rule(
             rule="/",
             endpoint="openapi",
