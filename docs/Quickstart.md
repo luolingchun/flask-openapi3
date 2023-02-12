@@ -1,5 +1,5 @@
 **`flask_openapi3`** based on [Flask](https://github.com/pallets/flask/)
-and [Pydantic](https://github.com/samuelcolvin/pydantic), So you can use it like Flask.
+and [Pydantic](https://github.com/pydantic/pydantic), So you can use it like Flask.
 
 ## A Minimal Application
 

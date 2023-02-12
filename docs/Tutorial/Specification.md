@@ -44,7 +44,7 @@ Options:
 
 ## info
 
-**`flask-openapi3`** provide [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc) interactive documentation.
+**`flask-openapi3`** provide [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc) interactive documentation.
 Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3).
 
 You must import **`Info`** from **`flask-openapi3`**, it needs some parameters: **`title`**, **`version`**... , more information see the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.0.3#info-object).
@@ -244,7 +244,7 @@ app = OpenAPI(__name__, info=info, doc_expansion='full')
 
 - [Swagger](https://github.com/swagger-api/swagger-ui)
 - [Redoc](https://github.com/Redocly/redoc)
-- [RapiDoc](https://github.com/mrin9/RapiDoc)
+- [RapiDoc](https://github.com/rapi-doc/RapiDoc)
 
 The following are the default values of these configurations. Of course, you can change them:
 

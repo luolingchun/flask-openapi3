@@ -31,9 +31,9 @@ The key features are:
 
 - **Standard document specification:** Based on [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification)
 
-- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc)
+- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc)
   
-- **Data validation:** Fast data verification based on [Pydantic](https://github.com/samuelcolvin/pydantic)
+- **Data validation:** Fast data verification based on [Pydantic](https://github.com/pydantic/pydantic)
 
 - **Authorization:** Support to reload authorizations in Swagger UI
 
@@ -44,7 +44,7 @@ Python 3.7+
 flask-openapi3 be dependent on the following libraries:
 
 - [Flask](https://github.com/pallets/flask) for the web app.
-- [Pydantic](https://github.com/samuelcolvin/pydantic) for the data validation.
+- [Pydantic](https://github.com/pydantic/pydantic) for the data validation.
 
 ## Installation
 
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
 Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
 
-You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/mrin9/RapiDoc).
+You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc).
 
 ![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
 ![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)

@@ -1,5 +1,5 @@
 **`flask_openapi3`** 基于 [Flask](https://github.com/pallets/flask/)
-和 [Pydantic](https://github.com/samuelcolvin/pydantic)，因此你可以像使用Flask一样使用 **`flask_openapi3`**。
+和 [Pydantic](https://github.com/pydantic/pydantic)，因此你可以像使用Flask一样使用 **`flask_openapi3`**。
 
 ## 最小应用
 

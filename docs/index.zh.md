@@ -28,8 +28,8 @@
 
 - **编码简单：** 使用简单易于学习
 - **标准的文档规范：** 基于[开放 API 规范](https://github.com/OAI/OpenAPI-Specification)
-- **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)
-- **数据验证：** 基于 [Pydantic](https://github.com/samuelcolvin/pydantic) 的快速数据验证
+- **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/rapi-doc/RapiDoc)
+- **数据验证：** 基于 [Pydantic](https://github.com/pydantic/pydantic) 的快速数据验证
 - **认证：** 支持在 Swagger UI 中重新加载认证信息
 
 ## 依赖
@@ -39,7 +39,7 @@ Python 3.7+
 flask-openapi3 依赖以下库：
 
 - [Flask](https://github.com/pallets/flask)：用于WEB服务
-- [Pydantic](https://github.com/samuelcolvin/pydantic)：用于数据验证
+- [Pydantic](https://github.com/pydantic/pydantic)：用于数据验证
 
 ## 安装
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
 运行[简单示例](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py)，然后访问 http://127.0.0.1:5000/openapi。
 
-你将看到文档入口：[Swagger](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/mrin9/RapiDoc)。
+你将看到文档入口：[Swagger](https://github.com/swagger-api/swagger-ui)，[Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/rapi-doc/RapiDoc)。
 
 ![openapi](./images/openapi.png)
 ![openapi-swagger](./images/openapi-swagger.png)
