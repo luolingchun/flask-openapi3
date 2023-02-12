@@ -1,3 +1,9 @@
+## v2.3.0 2023-02-12
+
+- Support custom UI templates (#55)
+- endpoint index rename to openapi
+- fix missing enum in components schemas
+
 ## v2.2.2 2023-01-01
 
 - Fix async
