@@ -1,3 +1,7 @@
+## v2.3.1 2023-02-13
+
+- remove * in install_requires for setuptools 67+
+
 ## v2.3.0 2023-02-12
 
 - Support custom UI templates (#55)
