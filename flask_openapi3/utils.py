@@ -46,7 +46,7 @@ def get_schema(obj: Type[BaseModel]) -> dict:
     assert inspect.isclass(obj) and issubclass(obj, BaseModel), \
         f"{obj} is invalid `pydantic.BaseModel`"
 
-    return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+    return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE, by_alias=True)
 
 
 def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
@@ -272,7 +272,7 @@ def get_responses(
     for key, response in responses.items():
         # Verify that the response is a class and that class is a subclass of `pydantic.BaseModel`
         if inspect.isclass(response) and issubclass(response, BaseModel):
-            schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+            schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE, by_alias=True)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
