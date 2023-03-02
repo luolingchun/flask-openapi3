@@ -1,3 +1,113 @@
+# -*- coding: utf-8 -*-
+# @Author  : llc
+# @Time    : 2023/2/16 9:46
+openapi_html_string = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>APIdoc</title>
+    <link rel="shortcut icon" href="static/images/apidoc.svg">
+    <style>
+        body {
+            background-color: #131417;
+        }
+
+        .box {
+            width: 300px;
+            height: 200px;
+            background: #2c303a;
+            border-radius: 30px;
+            margin: 50px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transform: scale(1);
+            transition: all .3s ease;
+        }
+
+        .box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #333743f0;
+        }
+
+        .swagger, .redoc, .rapidoc {
+            margin: 10px;
+            color: white;
+            font-size: 30px;
+            user-select: none;
+        }
+
+        .box img {
+            user-select: none;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="box" onclick="window.location.href= '{{ swagger_url }}';return false">
+    <img height="64"
+         src="static/images/swagger.svg"
+         alt="Swagger UI">
+    <a class="swagger">Swagger</a>
+</div>
+<div class="box" onclick="window.location.href= '{{ redoc_url }}';return false">
+    <img height="64"
+         src="static/images/redoc.svg"
+         alt="ReDoc">
+    <a class="redoc">ReDoc</a>
+</div>
+<div class="box" onclick="window.location.href= '{{ rapidoc_url }}';return false">
+    <img height="64"
+         src="static/images/rapidoc.svg"
+         alt="RapiDoc">
+    <a class="rapidoc">RapiDoc</a>
+</div>
+</body>
+</html>
+"""
+rapidoc_html_string = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>RapiDoc</title>
+    <link rel="shortcut icon" href="static/images/rapidoc.svg">
+    <script src="static/js/rapidoc-min.js"></script>
+</head>
+<body>
+<rapi-doc spec-url='{{ api_doc_url }}'></rapi-doc>
+</body>
+</html>
+"""
+redoc_html_string = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ReDoc</title>
+    <link rel="shortcut icon" href="static/images/redoc.svg">
+    <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--link href="static/css/google-fonts.css" rel="stylesheet" -->
+    <!-- ReDoc doesn't change outer page styles -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<redoc spec-url='{{ api_doc_url }}'></redoc>
+<script src="static/js/redoc.standalone.js"></script>
+</body>
+</html>
+"""
+swagger_html_string = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,3 +197,4 @@
 </script>
 </body>
 </html>
+"""
