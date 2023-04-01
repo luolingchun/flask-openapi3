@@ -143,7 +143,7 @@ class BookListAPIView:
 
     @api_view.doc(summary="create book")
     def post(self, body: BookBody):
-        """description for create book"""
+        """description for a created book"""
         return body.json()
 ```
 
@@ -152,7 +152,7 @@ class BookListAPIView:
 
 *New in v2.2.2*
 
-Just use `async` when defining functions. More information go to [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/).
+Just use `async` when defining functions. More information goes to [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/).
 
 !!! info
 

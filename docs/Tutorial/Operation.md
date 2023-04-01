@@ -1,6 +1,6 @@
 ## tag
 
-You can also specify tag for apis, like this:
+You can also specify tag for apis like this:
 
 ```python hl_lines="3 6"
 from flask_openapi3 import Tag
@@ -36,7 +36,7 @@ def create_book(body: BookBody):
 
 ## summary and description
 
-You need add docs to the view-func. The first line is the **summary**, and the rest is the **description**. like this:
+You need to add docs to the view-func. The first line is the **summary**, and the rest is the **description**. Like this:
 
 ```python hl_lines="3 4 5 6"
 @app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
@@ -92,7 +92,7 @@ def get_book(path: BookPath):
 
 ## operation_id
 
-You can set `operation_id` for an api (operation) . The default is automatically.
+You can set `operation_id` for an api (operation). The default is automatically.
 
 ```python hl_lines="6"
 @app.get(
@@ -169,7 +169,7 @@ def create_book(body: BookForm):
 
 *New in v1.0.0*
 
-`deprecated`: mark as deprecated support. Default to not True.
+`deprecated`: mark as deprecated support. default to not True.
 
 ```python
 @app.get('/book', deprecated=True)

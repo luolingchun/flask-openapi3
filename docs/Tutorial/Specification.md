@@ -47,7 +47,7 @@ Options:
 **`flask-openapi3`** provide [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc) interactive documentation.
 Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3).
 
-You must import **`Info`** from **`flask-openapi3`**, it needs some parameters: **`title`**, **`version`**... , more information see the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.0.3#info-object).
+You must import **`Info`** from **`flask-openapi3`**, it needs some parameters: **`title`**, **`version`**... , more information sees the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.0.3#info-object).
 
 ```python hl_lines="4 5"
 from flask_openapi3 import Info
@@ -70,7 +70,7 @@ run it, and go to http://127.0.0.1:5000/openapi, you will see the documentation.
 
 Like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3`**, more features see the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
 
-First, you need define the **security_schemes**  and **security** variable:
+First, you need to define the **security_schemes** and **security** variable:
 
 ```python
 security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
@@ -240,7 +240,7 @@ app = OpenAPI(__name__, info=info, doc_expansion='full')
 
 ## Interactive documentation
 
-**Flask OpenAPI3** provides support to the following Interactive documentation:
+**Flask OpenAPI3** provides support for the following Interactive documentation:
 
 - [Swagger](https://github.com/swagger-api/swagger-ui)
 - [Redoc](https://github.com/Redocly/redoc)

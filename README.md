@@ -41,7 +41,7 @@ The key features are:
 
 Python 3.7+
 
-flask-openapi3 be dependent on the following libraries:
+flask-openapi3 is dependent on the following libraries:
 
 - [Flask](https://github.com/pallets/flask) for the web app.
 - [Pydantic](https://github.com/pydantic/pydantic) for the data validation.
@@ -107,7 +107,7 @@ class BookQuery(BaseModel):
 @app.get("/book", tags=[book_tag])
 def get_book(query: BookQuery):
     """get books
-    get all books
+    to get all books
     """
     return {
         "code": 0,
@@ -164,7 +164,7 @@ class BookListAPIView:
 
     @api_view.doc(summary="create book")
     def post(self, body: BookBody):
-        """description for create book"""
+        """description for a created book"""
         return body.json()
 
 

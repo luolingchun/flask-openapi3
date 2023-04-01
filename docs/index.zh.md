@@ -104,7 +104,7 @@ class BookQuery(BaseModel):
 @app.get("/book", tags=[book_tag])
 def get_book(query: BookQuery):
     """get books
-    get all books
+    to get all books
     """
     return {
         "code": 0,
@@ -162,7 +162,7 @@ class BookListAPIView:
 
     @api_view.doc(summary="create book")
     def post(self, body: BookBody):
-        """description for create book"""
+        """description for a created book"""
         return body.json()
 
 

@@ -33,7 +33,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         Based on Flask Blueprint
 
         Arguments:
-            name: The name of the blueprint. Will be prepended to each endpoint name.
+            name: The name of the blueprint. It Will be prepared to each endpoint name.
             import_name: The name of the blueprint package, usually
                          ``__name__``. This helps locate the ``root_path`` for the blueprint.
             abp_tags: APIBlueprint tags for every api
@@ -103,8 +103,8 @@ class APIBlueprint(APIScaffold, Blueprint):
         :param responses: response model
         :param extra_responses: extra response dict
         :param security: security name
-        :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
-        :param deprecated: mark as deprecated support. Default to not True.
+        :param doc_ui: adds openapi document UI(swagger and redoc). defaults to True.
+        :param deprecated: mark as deprecated support. default to not True.
         :param operation_id: unique string used to identify the operation.
         :param method: api method
         :return:

@@ -374,7 +374,7 @@ def parse_parameters(
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
     if path:
-        # get args from route path
+        # get args from a route path
         _parameters, _components_schemas = parse_path(path)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)

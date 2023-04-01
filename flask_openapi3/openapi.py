@@ -66,7 +66,7 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: The Swagger UI documentation. Defaults to `/swagger`.
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
-            ui_templates: Custom UI templates, which used to overwrite or add UI documents.
+            ui_templates: Custom UI templates, which are used to overwrite or add UI documents.
             servers: An array of Server Objects, which provide connectivity information to a target server.
             external_docs: Allows referencing an external resource for extended documentation.
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
@@ -99,7 +99,7 @@ class OpenAPI(APIScaffold, Flask):
 
     def _init_doc(self) -> None:
         """
-        Provide Swagger UI, Redoc and Rapidoc
+        Provide Swagger UI, Redoc, and Rapidoc
         """
         _here = os.path.dirname(__file__)
         template_folder = os.path.join(_here, "templates")

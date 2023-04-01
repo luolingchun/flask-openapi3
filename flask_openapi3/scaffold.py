@@ -141,7 +141,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: Responses model, must be pydantic BaseModel.
+            responses: response's model must be pydantic BaseModel.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -210,12 +210,12 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: Responses model, must be pydantic BaseModel.
+            responses: response's model must be pydantic BaseModel.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
-            doc_ui: Declares this operation to be show.
+            doc_ui: Declares this operation to be shown.
         """
 
         def decorator(func) -> Callable:
@@ -279,12 +279,12 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: Responses model, must be pydantic BaseModel.
+            responses: response's model must be pydantic BaseModel.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
-            doc_ui: Declares this operation to be show.
+            doc_ui: Declares this operation to be shown.
         """
 
         def decorator(func) -> Callable:
@@ -348,12 +348,12 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: Responses model, must be pydantic BaseModel.
+            responses: response's model must be pydantic BaseModel.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
-            doc_ui: Declares this operation to be show.
+            doc_ui: Declares this operation to be shown.
         """
 
         def decorator(func) -> Callable:
@@ -417,12 +417,12 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: Responses model, must be pydantic BaseModel.
+            responses: response's model must be pydantic BaseModel.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
-            doc_ui: Declares this operation to be show.
+            doc_ui: Declares this operation to be shown.
         """
 
         def decorator(func) -> Callable:
