@@ -44,6 +44,7 @@ class BookHeader(BaseModel):
     # required
     hello2: str = Field(..., max_length=12, description="sds")
     api_key: str = Field(..., description="API Key")
+    x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
 
 
 def decorator(func):
@@ -75,7 +76,7 @@ def api_error_json(body: BookBody):
 
 @app.get("/header")
 def get_book(header: BookHeader):
-    return header.dict()
+    return header.dict(by_alias=True)
 
 
 @app.post("/cookie")
@@ -114,7 +115,7 @@ def test_cookie(client):
 
 
 def test_header(client):
-    headers = {"Hello1": "111", "hello2": "222", "api_key": "333"}
+    headers = {"Hello1": "111", "hello2": "222", "api_key": "333", "x-hello": "444"}
     resp = client.get("/header", headers=headers)
     print(resp.json)
     assert resp.status_code == 200

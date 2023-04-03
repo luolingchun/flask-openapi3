@@ -13,7 +13,7 @@ from pydantic.error_wrappers import ErrorWrapper
 
 def _do_header(header, request_kwargs):
     request_headers = dict(request.headers) or {}
-    for key, value in header.__annotations__.items():
+    for key, value in header.schema().get("properties", {}).items():
         key_title = key.replace("_", "-").title()
         # add original key
         if key_title in request_headers.keys():

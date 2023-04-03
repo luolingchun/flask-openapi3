@@ -17,6 +17,7 @@ class Headers(BaseModel):
     hello: str = Field("what's up", max_length=12, description='sds')
     # required
     # hello: str = Field(..., max_length=12, description='sds')
+    x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
 
 
 @app.get('/book', tags=[book_tag])
