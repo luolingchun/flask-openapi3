@@ -104,9 +104,9 @@ class BookQuery(BaseModel):
     author: str
 
 
-@app.get("/book", tags=[book_tag])
+@app.get("/book", summary="get books", tags=[book_tag])
 def get_book(query: BookQuery):
-    """get books
+    """
     to get all books
     """
     return {

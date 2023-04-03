@@ -6,10 +6,10 @@ from pydantic import BaseModel
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 
-book_tag = Tag(name='book', description='Some Book')
+book_tag = Tag(name="book", description="Some Book")
 
 
 class BookQuery(BaseModel):
@@ -17,9 +17,9 @@ class BookQuery(BaseModel):
     author: str
 
 
-@app.get('/book', tags=[book_tag])
+@app.get("/book", summary="get books", tags=[book_tag])
 def get_book(query: BookQuery):
-    """get books
+    """
     get all books
     """
     return {
@@ -32,5 +32,5 @@ def get_book(query: BookQuery):
     }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
