@@ -1,3 +1,7 @@
+## v2.3.2 2023-04-03
+
+- [#61](https://github.com/luolingchun/flask-openapi3/issues/61) Fix headers with pydantic alias
+
 ## v2.3.1 2023-02-13
 
 - remove * in install_requires for setuptools 67+
