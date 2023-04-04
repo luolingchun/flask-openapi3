@@ -129,7 +129,7 @@ if __name__ == '__main__':
 
 *New in v2.2.0*
 
-Class-based API View, click [here](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) go to the complete example:
+Class-based API View, click [here](https://github.com/luolingchun/flask-openapi3/blob/master/examples/api_view_demo.py) go to the complete example:
 
 ```python
 @api_view.route("/book")
