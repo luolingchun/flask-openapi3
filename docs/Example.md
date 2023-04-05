@@ -74,8 +74,6 @@ security = [
     {"oauth2": ["write:pets", "read:pets"]}
 ]
 
-app.config["VALIDATE_RESPONSE"] = True
-
 
 class BookPath(BaseModel):
     bid: int = Field(..., description='book id')
