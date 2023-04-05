@@ -6,16 +6,25 @@ If you need the complete Specification, go to http://127.0.0.1:5000/openapi/open
 
 *New in v2.0.0*
 
-The `flask openapi` command will export the OpenAPI Specification to console when you execute the command:
+The `flask openapi` command will export the OpenAPI Specification to console when you execute the command,
 
 ```
-flask openapi
+flask --app IMPORT openapi
 ```
+where `IMPORT` is the Flask application, in our case an OpenAPI application, to loan.
+For example, if your OpenAPI application is `app` defined in `hello.py`, 
+as in the example in [Quickstart](https://luolingchun.github.io/flask-openapi3/Quickstart/#rest-api), the command is
+`flask --app hello:app openapi `.
+(For more information about the command line interface of Flask, please check out 
+the [Flask CLI documentation](https://flask.palletsprojects.com/en/2.2.x/cli/#application-discovery).)
 
-Execute `flask openapi --help` for more information:
+
+Execute `flask --app IMPORT openapi --help` for more information about the command:
+
+Again, assuming your OpenAPI application is `app` defined in `hello.py`,
 
 ```
-flask openapi --help
+flask --app hello:app openapi --help
 
 Usage: flask openapi [OPTIONS]
 
@@ -32,15 +41,15 @@ Options:
 
 ```
 
-!!! info
+Please note, by default, the command will export the OpenAPI specification in JSON.
+If you want the OpenAPI specification in YAML, by running the command with the `-f yaml` option,
+you need to install the `pyyaml` package.
+```bash
+pip install flask-openapi3[yaml]
 
-    You need to manually install `pyyaml` using pip:
-    ```bash
-    pip install flask-openapi3[yaml]
-    
-    # or
-    pip install pyyaml
-    ```
+# or
+pip install pyyaml
+```
 
 ## info
 
