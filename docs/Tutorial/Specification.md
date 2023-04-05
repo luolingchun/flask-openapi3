@@ -14,7 +14,7 @@ flask --app IMPORT openapi
 where `IMPORT` is the Flask application, in our case an OpenAPI application, to loan.
 For example, if your OpenAPI application is `app` defined in `hello.py`, 
 as in the example in [Quickstart](https://luolingchun.github.io/flask-openapi3/Quickstart/#rest-api), the command is
-`flask --app hello.py:app openapi `.
+`flask --app hello:app openapi `.
 (For more information about the command line interface of Flask, please check out 
 the [Flask CLI documentation](https://flask.palletsprojects.com/en/2.2.x/cli/#application-discovery).)
 
@@ -24,7 +24,7 @@ Execute `flask --app IMPORT openapi --help` for more information about the comma
 Again, assuming your OpenAPI application is `app` defined in `hello.py`,
 
 ```
-flask --app hello.py:app openapi --help
+flask --app hello:app openapi --help
 
 Usage: flask openapi [OPTIONS]
 
