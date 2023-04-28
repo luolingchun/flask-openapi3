@@ -9,7 +9,8 @@
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
-        <img src="https://img.shields.io/github/workflow/status/luolingchun/flask-openapi3/test" alt="test">
+        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
+    </a>
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
         <img src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
