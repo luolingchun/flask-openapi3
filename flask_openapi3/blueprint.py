@@ -27,6 +27,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
             abp_responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             doc_ui: bool = True,
+            operation_id_callback: Callable = get_operation_id_for_path,
             **kwargs: Any
     ) -> None:
         """
@@ -40,6 +41,9 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_security: APIBlueprint security for every api
             abp_responses: APIBlueprint response model
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            operation_id_callback: Callback function for custom operation_id generation.
+                Receives function_name (str), request_path (str) and request_method (str) parameters.
+                Defaults to `get_operation_id_for_path` from utils
             **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -52,6 +56,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         self.abp_security = abp_security or []
         self.abp_responses = abp_responses or {}
         self.doc_ui = doc_ui
+        self.operation_id_callback: Callable = operation_id_callback
 
     def register_api(self, api: "APIBlueprint") -> None:
         """Register a nested APIBlueprint"""
@@ -122,10 +127,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
-            if operation_id:
-                operation.operationId = operation_id
-            else:
-                operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
+            operation.operationId = operation_id or self.operation_id_callback(name=func.__name__, path=rule, method=method)
             # only set `deprecated` if True otherwise leave it as None
             operation.deprecated = deprecated
             # add security
