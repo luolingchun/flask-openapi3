@@ -10,24 +10,9 @@ markdown_extensions:
   - admonition
   - toc:
       permalink: ⚓︎
-  - footnotes
-  - meta
-  - def_list
-  - pymdownx.arithmatex
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.critic
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_png
-  - pymdownx.inlinehilite
+  - md_in_html
   - pymdownx.magiclink
-  - pymdownx.mark
-  - pymdownx.smartsymbols
   - pymdownx.superfences
-  - pymdownx.tasklist
-  - pymdownx.tilde
   - pymdownx.snippets
   - pymdownx.highlight:
       linenums: true
@@ -48,20 +33,17 @@ theme:
         icon: material/weather-night
   features:
     - navigation.tracking
+    - navigation.footer
     - navigation.top
-#    - navigation.expand
+    #    - navigation.expand
     - search.suggest
     - search.highlight
     - search.share
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - toc.follow
 
-extra:
-  alternate:
-    - name: English
-      link: ./en/
-      lang: en
-    - name: 简体中文
-      link: ./zh/
-      lang: zh
 
 plugins:
   - search
@@ -81,6 +63,10 @@ plugins:
           API Reference: API 参考
           LICENSE: 许可
           Changelog: 更新日志
+
+extra:
+  version:
+      provider: mike
 
 
 extra_javascript:

@@ -1,8 +1,7 @@
-p > img {
+p > a[class="glightbox"] > img {
     box-shadow: 0 0 10px #333743f0;
 }
 
 .md-header {
-    background-image: linear-gradient(to right, #0250c5 0%, #d43f8d 100%);
-    opacity: 0.9;
+    background: linear-gradient(to right, transparent, rgba(2, 80, 197, 0.9) 0%, rgba(212, 63, 141, 0.9) 100%);
 }
