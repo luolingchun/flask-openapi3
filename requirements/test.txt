@@ -1,0 +1,3 @@
+pytest
+openapi-python-client
+asgiref

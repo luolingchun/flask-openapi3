@@ -31,13 +31,13 @@ jobs:
           pip install -e .
       - name: Test with pytest
         run: |
-          pip install -U pytest openapi-python-client asgiref
+          pip install -U -r ./requirements/test.txt
           pytest tests
       - name: Flake8
         run: |
-          pip install -U flake8
+          pip install -U -r ./requirements/flake8.txt
           flake8 flask_openapi3 examples tests
       - name: mypy
         run: |
-          pip install -U mypy
+          pip install -U -r ./requirements/mypy.txt
           mypy flask_openapi3

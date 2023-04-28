@@ -1,0 +1,6 @@
+mkdocs-static-i18n
+mkdocstrings[python]
+mkdocs-material
+mkdocs-glightbox
+pyyaml
+mike

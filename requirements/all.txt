@@ -1,15 +1,18 @@
--r requirements.txt
-
-# document
+# doc
 mkdocs-static-i18n
 mkdocstrings[python]
 mkdocs-material
 mkdocs-glightbox
 pyyaml
+mike
+
+# flake8
+flake8
+
+# mypy
+mypy
 
 # test
-flake8
 pytest
 openapi-python-client
-mypy
 asgiref
