@@ -71,6 +71,9 @@ plugins:
           Changelog: 更新日志
           Contributing: 贡献
 
+extra:
+  version:
+      provider: mike
 
 extra_javascript:
   - js/db.js

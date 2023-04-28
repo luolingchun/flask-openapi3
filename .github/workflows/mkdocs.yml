@@ -28,6 +28,7 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - name: Build docs
         run: |
+          pip install mike
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git fetch origin gh-pages:gh-pages
