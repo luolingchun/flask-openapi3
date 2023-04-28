@@ -239,7 +239,9 @@ class OpenAPI(APIScaffold, Flask):
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
-            operation.operationId = operation_id or self.operation_id_callback(name=func.__name__, path=rule, method=method)
+            operation.operationId = operation_id or self.operation_id_callback(
+                name=func.__name__, path=rule, method=method
+            )
             # only set `deprecated` if True otherwise leave it as None
             operation.deprecated = deprecated
             # add security
