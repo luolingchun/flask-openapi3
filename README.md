@@ -85,7 +85,7 @@ pip install pyyaml asgiref python-dotenv email-validator
 
 ## A Simple Example
 
-Here's a simple example, further go to the [Example](https://luolingchun.github.io/flask-openapi3/en/Example/).
+Here's a simple example, further go to the [Example](https://luolingchun.github.io/flask-openapi3/latest/Example/).
 
 ```python
 from pydantic import BaseModel
