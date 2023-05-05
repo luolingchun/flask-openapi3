@@ -67,7 +67,7 @@ class OpenAPI(Flask):
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
             servers: An array of Server Objects, which provide connectivity information to a target server.
             operation_id_callback: Callback function for custom operation_id generation.
-                          Receives function_name (str), request_path (str) and request_method (str) parameters.
+                          Receives name (str), path (str) and method (str) parameters.
                           Defaults to `get_operation_id_for_path` from utils
             kwargs: Flask kwargs
         """
