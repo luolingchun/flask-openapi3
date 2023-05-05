@@ -72,7 +72,7 @@ class OpenAPI(APIScaffold, Flask):
             external_docs: Allows referencing an external resource for extended documentation.
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
             operation_id_callback: Callback function for custom operation_id generation.
-                          Receives function_name (str), request_path (str) and request_method (str) parameters.
+                          Receives name (str), path (str) and method (str) parameters.
                           Defaults to `get_operation_id_for_path` from utils
             **kwargs: Flask kwargs
         """

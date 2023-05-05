@@ -55,7 +55,7 @@ class BookAPIView:
         print(path)
         return "get"
 
-    @api_view.doc(summary="update book")
+    @api_view.doc(summary="update book", operation_id="update")
     def put(self, path: BookPath):
         print(path)
         return "put"
@@ -80,6 +80,8 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     assert resp.json == app.api_doc
+    assert resp.json["paths"]["/api/v1/book/{id}"]["put"]["operationId"] == "update"
+    assert resp.json["paths"]["/api/v1/book/{id}"]["delete"]["operationId"] == "BookAPIView_delete_book__id__delete"
 
 
 def test_get_list(client):

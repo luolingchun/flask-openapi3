@@ -27,7 +27,8 @@ class APIView:
             view_tags: Optional[List[Tag]] = None,
             view_security: Optional[List[Dict[str, List[str]]]] = None,
             view_responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            operation_id_callback: Callable = get_operation_id_for_path,
     ):
         """
         Create a class-based view
@@ -38,12 +39,16 @@ class APIView:
             view_security: APIView security for every api
             view_responses: APIView response models
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            operation_id_callback: Callback function for custom operation_id generation.
+                Receives name (str), path (str) and method (str) parameters.
+                Defaults to `get_operation_id_for_path` from utils
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
         self.view_security = view_security or []
         self.view_responses = view_responses or {}
         self.doc_ui = doc_ui
+        self.operation_id_callback: Callable = operation_id_callback
 
         self.views: Dict = dict()
         self.paths: Dict = dict()
@@ -78,7 +83,7 @@ class APIView:
                 parse_method(uri, method, self.paths, cls_method.operation)
                 # update operation_id
                 if not cls_method.operation.operationId:
-                    cls_method.operation.operationId = get_operation_id_for_path(
+                    cls_method.operation.operationId = self.operation_id_callback(
                         name=cls_method.__qualname__,
                         path=rule,
                         method=method

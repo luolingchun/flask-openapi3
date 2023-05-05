@@ -42,7 +42,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_responses: APIBlueprint response model
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
-                Receives function_name (str), request_path (str) and request_method (str) parameters.
+                Receives name (str), path (str) and method (str) parameters.
                 Defaults to `get_operation_id_for_path` from utils
             **kwargs: Flask Blueprint kwargs
         """

@@ -9,10 +9,16 @@ from flask_openapi3 import APIBlueprint, OpenAPI
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
 
+
+def get_operation_id_for_path_callback(*, name: str, path: str, method: str) -> str:
+    return name
+
+
 api = APIBlueprint(
     '/book',
     __name__,
     url_prefix='/api',
+    operation_id_callback=get_operation_id_for_path_callback,
 )
 
 
@@ -35,6 +41,14 @@ def create_book():
 
 # register api
 app.register_api(api)
+
+
+def test_openapi(client):
+    resp = client.get("/openapi/openapi.json")
+    assert resp.status_code == 200
+    assert resp.json == app.api_doc
+    assert resp.json["paths"]["/book"]["get"]["operationId"] == "get_book_book_get"  # Default operation_id generator
+    assert resp.json["paths"]["/api/book"]["post"]["operationId"] == "create_book"  # Custom callback opreation_id
 
 
 def test_get(client):
