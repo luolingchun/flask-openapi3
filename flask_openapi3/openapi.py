@@ -41,6 +41,7 @@ class OpenAPI(Flask):
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
             servers: Optional[List[Server]] = None,
+            operation_id_callback: Callable = get_operation_id_for_path,
             **kwargs: Any
     ) -> None:
         """
@@ -65,6 +66,9 @@ class OpenAPI(Flask):
             redoc_url: The Redoc UI documentation. Defaults to `/redoc`.
             rapidoc_url: The RapiDoc UI documentation. Defaults to `/rapidoc`.
             servers: An array of Server Objects, which provide connectivity information to a target server.
+            operation_id_callback: Callback function for custom operation_id generation.
+                          Receives name (str), path (str) and method (str) parameters.
+                          Defaults to `get_operation_id_for_path` from utils
             kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -94,6 +98,7 @@ class OpenAPI(Flask):
             self.init_doc()
         self.doc_expansion = doc_expansion
         self.severs = servers
+        self.operation_id_callback: Callable = operation_id_callback
 
     def init_doc(self) -> None:
         """
@@ -254,10 +259,9 @@ class OpenAPI(Flask):
             if deprecated:
                 operation.deprecated = True
             # Unique string used to identify the operation.
-            if operation_id:
-                operation.operationId = operation_id
-            else:
-                operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
+            operation.operationId = operation_id or self.operation_id_callback(
+                name=func.__name__, path=rule, method=method
+            )
             # store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # parse parameters

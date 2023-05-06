@@ -86,6 +86,8 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     assert resp.json == app.api_doc
+    assert resp.json["paths"]["/api/book/{bid}"]["put"]["operationId"] == "update"
+    assert resp.json["paths"]["/api/book/{bid}"]["delete"]["operationId"] == "delete_book_book__int_bid__delete"
 
 
 def test_post(client):

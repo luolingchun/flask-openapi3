@@ -21,8 +21,18 @@ class NotFoundResponse(BaseModel):
     code: int = Field(-1, description="Status Code")
     message: str = Field("Resource not found!", description="Exception Information")
 
+def get_operation_id_for_path_callback(*, name: str, path: str, method: str) -> str:
+    return name
 
-app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
+
+app = OpenAPI(
+    __name__,
+    info=info,
+    security_schemes=security_schemes,
+    responses={"404": NotFoundResponse},
+    operation_id_callback=get_operation_id_for_path_callback,
+    
+)
 app.config["TESTING"] = True
 security = [{"jwt": []}]
 book_tag = Tag(name='book', description='Book')
@@ -121,7 +131,7 @@ def update_book1(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@app.delete('/book/<int:bid>', tags=[book_tag])
+@app.delete('/book/<int:bid>', tags=[book_tag], operation_id="delete")
 def delete_book(path: BookPath):
     assert path.bid == 1
     return {"code": 0, "message": "ok"}
@@ -132,6 +142,8 @@ def test_openapi(client):
     print(resp.json)
     assert resp.status_code == 200
     assert resp.json == app.api_doc
+    assert resp.json["paths"]["/book"]["get"]["operationId"] == "get_books"
+    assert resp.json["paths"]["/book/{bid}"]["delete"]["operationId"] == "delete"
 
 
 def test_get(client):

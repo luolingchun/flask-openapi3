@@ -26,6 +26,7 @@ class APIBlueprint(Blueprint):
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
             abp_responses: Optional[Dict[str, Type[BaseModel]]] = None,
             doc_ui: bool = True,
+            operation_id_callback: Callable = get_operation_id_for_path,
             **kwargs: Any
     ) -> None:
         """
@@ -39,6 +40,9 @@ class APIBlueprint(Blueprint):
             abp_security: APIBlueprint security for every api
             abp_responses: APIBlueprint response model
             doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+            operation_id_callback: Callback function for custom operation_id generation.
+                Receives name (str), path (str) and method (str) parameters.
+                Defaults to `get_operation_id_for_path` from utils
             kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -52,6 +56,7 @@ class APIBlueprint(Blueprint):
         self.abp_security = abp_security or []
         self.abp_responses = abp_responses or {}
         self.doc_ui = doc_ui
+        self.operation_id_callback: Callable = operation_id_callback
 
     def _do_decorator(
             self,
@@ -112,10 +117,9 @@ class APIBlueprint(Blueprint):
             if deprecated:
                 operation.deprecated = True
             # Unique string used to identify the operation.
-            if operation_id:
-                operation.operationId = operation_id
-            else:
-                operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
+            operation.operationId = operation_id or self.operation_id_callback(
+                name=func.__name__, path=rule, method=method
+            )
             # store tags
             tags = tags + self.abp_tags if tags else self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
