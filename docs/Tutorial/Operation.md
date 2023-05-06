@@ -106,6 +106,23 @@ def get_book(path: BookPath):
     ...
 ```
 
+## operation_id_callback
+
+You can set a custom callback to automatically set `operation_id` for an api (operation).
+Just add a `operation_id_callback` param to the constructor of  `OpenAPI` or `APIBlueprint` or `APIView`.
+The example shows setting the default `operation_id` to be the function name, in this case `create_book`.
+
+```python hl_lines="6"
+def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
+    return function_name
+
+api = APIBlueprint('book', __name__, url_prefix='/api', operation_id_callback=get_operation_id_for_path)
+
+@api.post('/book/')
+def create_book(body: BookBody):
+    ...
+```
+
 ## extra_form
 
 *new in v2.1.0*

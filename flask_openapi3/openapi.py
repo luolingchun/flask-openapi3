@@ -43,6 +43,7 @@ class OpenAPI(APIScaffold, Flask):
             ui_templates: Optional[Dict[str, str]] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
+            operation_id_callback: Callable = get_operation_id_for_path,
             **kwargs: Any
     ) -> None:
         """
@@ -70,6 +71,9 @@ class OpenAPI(APIScaffold, Flask):
             servers: An array of Server Objects, which provide connectivity information to a target server.
             external_docs: Allows referencing an external resource for extended documentation.
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
+            operation_id_callback: Callback function for custom operation_id generation.
+                          Receives name (str), path (str) and method (str) parameters.
+                          Defaults to `get_operation_id_for_path` from utils
             **kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -92,6 +96,7 @@ class OpenAPI(APIScaffold, Flask):
         self.ui_templates = ui_templates or dict()
         self.severs = servers
         self.external_docs = external_docs
+        self.operation_id_callback: Callable = operation_id_callback
         if doc_ui:
             self._init_doc()
         # add openapi command
@@ -234,10 +239,9 @@ class OpenAPI(APIScaffold, Flask):
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
-            if operation_id:
-                operation.operationId = operation_id
-            else:
-                operation.operationId = get_operation_id_for_path(name=func.__name__, path=rule, method=method)
+            operation.operationId = operation_id or self.operation_id_callback(
+                name=func.__name__, path=rule, method=method
+            )
             # only set `deprecated` if True otherwise leave it as None
             operation.deprecated = deprecated
             # add security
