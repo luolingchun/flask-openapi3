@@ -21,6 +21,7 @@ class NotFoundResponse(BaseModel):
     code: int = Field(-1, description="Status Code")
     message: str = Field("Resource not found!", description="Exception Information")
 
+
 def get_operation_id_for_path_callback(*, name: str, path: str, method: str) -> str:
     return name
 
@@ -30,8 +31,7 @@ app = OpenAPI(
     info=info,
     security_schemes=security_schemes,
     responses={"404": NotFoundResponse},
-    operation_id_callback=get_operation_id_for_path_callback,
-    
+    operation_id_callback=get_operation_id_for_path_callback
 )
 app.config["TESTING"] = True
 security = [{"jwt": []}]

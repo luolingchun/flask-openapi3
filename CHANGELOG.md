@@ -1,3 +1,7 @@
+## v1.1.5 2023-05-06
+
+- feat: Add operation_id_callback to v1.x (#69)
+
 ## v1.1.4 2022-05-05
 
 - fix: Trailing slash in APIBlueprint
