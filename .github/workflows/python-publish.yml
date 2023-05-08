@@ -6,6 +6,7 @@ name: Upload Python Package
 on:
   release:
     types: [ created ]
+    branches: [ v1.x ]
 
 jobs:
   deploy:
