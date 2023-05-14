@@ -6,8 +6,16 @@ name: test
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.rst'
 
 jobs:
   test:
