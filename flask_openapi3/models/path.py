@@ -25,7 +25,7 @@ class Link(BaseModel):
 class RequestBody(BaseModel):
     description: Optional[str] = None
     content: Dict[str, MediaType]
-    required: Optional[bool] = None
+    required: Optional[bool] = True
 
     class Config:
         extra = "allow"

@@ -9,12 +9,17 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
 
 info = Info(title='book API', version='1.0.0')
-security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+security_schemes = {"jwt": jwt}
 
 
 class NotFoundResponse(BaseModel):
@@ -81,8 +86,8 @@ def client():
     security=security
 )
 def get_book(path: BookPath):
-    """Get book
-    Get some book by id, like:
+    """Get a book
+    to get some book by id, like:
     http://localhost:5000/book/3
     """
     if path.bid == 4:
@@ -93,7 +98,7 @@ def get_book(path: BookPath):
 @app.get('/book', tags=[book_tag])
 def get_books(query: BookBody):
     """get books
-    get all books
+    to get all books
     """
     assert query.age == 3
     assert query.author == 'joy'

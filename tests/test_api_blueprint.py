@@ -8,11 +8,16 @@ import pytest
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Tag, Info
 
 info = Info(title='book API', version='1.0.0')
-security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+security_schemes = {"jwt": jwt}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True

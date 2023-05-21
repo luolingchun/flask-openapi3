@@ -14,7 +14,7 @@ from .blueprint import APIBlueprint
 from .commands import openapi_command
 from .http import HTTPMethod
 from .models import Info, APISpec, Tag, Components, Server
-from .models.common import Reference, ExternalDocumentation, ExtraRequestBody
+from .models.common import ExternalDocumentation, ExtraRequestBody
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
 from .scaffold import APIScaffold
@@ -30,7 +30,7 @@ class OpenAPI(APIScaffold, Flask):
             import_name: str,
             *,
             info: Optional[Info] = None,
-            security_schemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None,
+            security_schemes: Optional[Dict[str, Union[SecurityScheme, Dict[str, Any]]]] = None,
             oauth_config: Optional[OAuthConfig] = None,
             responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
             doc_ui: bool = True,
@@ -73,7 +73,7 @@ class OpenAPI(APIScaffold, Flask):
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object
             operation_id_callback: Callback function for custom operation_id generation.
                           Receives name (str), path (str) and method (str) parameters.
-                          Defaults to `get_operation_id_for_path` from utils
+                          Default to `get_operation_id_for_path` from utils
             **kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)

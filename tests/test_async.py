@@ -48,7 +48,7 @@ class BookListAPIView:
 
     @api_view.doc(summary="create book")
     async def post(self, body: BookBody):
-        """description for create book"""
+        """description for a created book"""
         return body.json()
 
 

@@ -6,23 +6,42 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
+from flask_openapi3 import ExternalDocumentation, ExtraRequestBody, Example
 from flask_openapi3 import Info, Tag, Server
 from flask_openapi3 import OpenAPI
-from flask_openapi3 import ExternalDocumentation, ExtraRequestBody, Example
-from flask_openapi3 import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit, APIKey, HTTPBase
 
 info = Info(title='book API', version='1.0.0')
-basic = HTTPBase()
-jwt = HTTPBearer()
-api_key = APIKey(name='api key')
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
+
+# Basic Authentication Sample
+basic = {
+    "type": "http",
+    "scheme": "basic"
+}
+# JWT Bearer Sample
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+# API Key Sample
+api_key = {
+    "type": "apiKey",
+    "name": "api_key",
+    "in": "header"
+}
+# Implicit OAuth2 Sample
+oauth2 = {
+    "type": "oauth2",
+    "flows": {
+        "implicit": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
         }
-    )))
+    }
+}
 security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
 
@@ -83,8 +102,8 @@ class BookResponse(BaseModel):
     servers=[Server(url="https://www.openapis.org/", description="openapi")]
 )
 def get_book(path: BookPath):
-    """Get book
-    Get some book by id, like:
+    """Get a book
+    to Get some book by id, like:
     http://localhost:5000/book/3
     """
     if path.bid == 4:
@@ -96,7 +115,7 @@ def get_book(path: BookPath):
 @app.get('/book', doc_ui=True, deprecated=True)
 def get_books(query: BookQuery):
     """get books
-    get all books
+    to get all books
     """
     print(query)
     return {

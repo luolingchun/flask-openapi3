@@ -3,19 +3,38 @@
 # @Time    : 2022/9/2 15:20
 import pytest
 
-from flask_openapi3 import OpenAPI, HTTPBase, HTTPBearer, APIKey, OAuth2, OAuthFlows, OAuthFlowImplicit
+from flask_openapi3 import OpenAPI
 
-basic = HTTPBase()
-jwt = HTTPBearer()
-api_key = APIKey(name='api key')
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
+# Basic Authentication Sample
+basic = {
+    "type": "http",
+    "scheme": "basic"
+}
+# JWT Bearer Sample
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+# API Key Sample
+api_key = {
+    "type": "apiKey",
+    "name": "api_key",
+    "in": "header"
+}
+# Implicit OAuth2 Sample
+oauth2 = {
+    "type": "oauth2",
+    "flows": {
+        "implicit": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
         }
-    )))
+    }
+}
 security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 security = [{"jwt": []}]
 
@@ -35,9 +54,3 @@ def test_openapi(client):
     print(resp.json)
     assert resp.status_code == 200
     assert resp.json == app.api_doc
-
-
-try:
-    app2 = OpenAPI(__name__, oauth_config="error config")
-except TypeError as e:
-    assert str(e) == "`initOAuth` must be `OAuthConfig`"

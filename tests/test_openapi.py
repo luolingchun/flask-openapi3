@@ -305,7 +305,8 @@ def test_body_examples_are_not_replicated_with_form(request):
                 "multipart/form-data": {
                     "schema": {"$ref": "#/components/schemas/BaseRequest"}
                 }
-            }
+            },
+            "required": True
         }
 
 

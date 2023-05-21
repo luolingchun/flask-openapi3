@@ -154,7 +154,7 @@ swagger_html_string = """
             docExpansion: "{{ doc_expansion }}"
         })
         // End Swagger UI call region
-        const oauthConfig = JSON.parse("{{ oauth_config|tojson }}");
+        const oauthConfig = JSON.parse(`{{ oauth_config|tojson }}`);
         if (oauthConfig != null) {
             window.ui.initOAuth({
                 clientId: oauthConfig.clientId,

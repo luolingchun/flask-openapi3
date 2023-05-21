@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/6/21 11:23
-from flask_openapi3 import OpenAPI, OAuthConfig
 from flask_openapi3 import Info
-from flask_openapi3 import OAuth2, OAuthFlows, OAuthFlowImplicit
+from flask_openapi3 import OpenAPI, OAuthConfig
 
 info = Info(title='oauth API', version='1.0.0')
 
@@ -12,14 +11,18 @@ oauth_config = OAuthConfig(
     clientSecret="xxx"
 )
 
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
+oauth2 = {
+    "type": "oauth2",
+    "flows": {
+        "implicit": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
         }
-    )))
+    }
+}
 security_schemes = {"oauth2": oauth2}
 
 app = OpenAPI(__name__, info=info, oauth_config=oauth_config, security_schemes=security_schemes)

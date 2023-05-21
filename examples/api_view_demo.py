@@ -6,9 +6,13 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIView
-from flask_openapi3 import OpenAPI, Tag, Info, HTTPBearer
+from flask_openapi3 import OpenAPI, Tag, Info
 
-jwt = HTTPBearer()
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
 security_schemes = {"jwt": jwt}
 info = Info(title='book API', version='1.0.0')
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
@@ -42,7 +46,7 @@ class BookListAPIView:
 
     @api_view.doc(summary="create book")
     def post(self, body: BookBody):
-        """description for create book"""
+        """description for a created book"""
         return body.json()
 
 

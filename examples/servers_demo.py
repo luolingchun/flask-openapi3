@@ -24,7 +24,7 @@ class BookQuery(BaseModel):
 @app.get('/book', tags=[book_tag])
 def get_book(query: BookQuery):
     """get books
-    get all books
+    to get all books
     """
     return {
         "code": 0,
