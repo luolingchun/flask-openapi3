@@ -209,17 +209,36 @@ def get_book(path: Path, query: BookBody):
 There are many kinds of security supported here:
 
 ```python
-basic = HTTPBase()
-jwt = HTTPBearer()
-api_key = APIKey(name='api key')
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
-        }
-    )))
+# Basic Authentication Sample
+basic = {
+  "type": "http",
+  "scheme": "basic"
+}
+# JWT Bearer Sample
+jwt = {
+  "type": "http",
+  "scheme": "bearer",
+  "bearerFormat": "JWT"
+}
+# API Key Sample
+api_key = {
+  "type": "apiKey",
+  "name": "api_key",
+  "in": "header"
+}
+# Implicit OAuth2 Sample
+oauth2 = {
+  "type": "oauth2",
+  "flows": {
+    "implicit": {
+      "authorizationUrl": "https://example.com/api/oauth/dialog",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    }
+  }
+}
 security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)

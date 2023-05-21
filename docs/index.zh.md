@@ -27,7 +27,7 @@
 主要特点有：
 
 - **编码简单：** 使用简单易于学习
-- **标准的文档规范：** 基于[开放 API 规范](https://github.com/OAI/OpenAPI-Specification)
+- **标准的文档规范：** 基于[开放 API 规范](https://spec.openapis.org/oas/v3.0.3)
 - **交互式 OpenAPI 文档：** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) 和 [RapiDoc](https://github.com/rapi-doc/RapiDoc)
 - **数据验证：** 基于 [Pydantic](https://github.com/pydantic/pydantic) 的快速数据验证
 - **认证：** 支持在 Swagger UI 中重新加载认证信息

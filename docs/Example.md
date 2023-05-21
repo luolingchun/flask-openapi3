@@ -46,19 +46,40 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import Info, Tag
 from flask_openapi3 import OpenAPI
-from flask_openapi3.models.security import HTTPBearer, OAuth2, OAuthFlows, OAuthFlowImplicit
+
 
 info = Info(title='book API', version='1.0.0')
-jwt = HTTPBearer(bearerFormat="JWT")
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
-        }
-    )))
-security_schemes = {"jwt": jwt, "oauth2": oauth2}
+# Basic Authentication Sample
+basic = {
+  "type": "http",
+  "scheme": "basic"
+}
+# JWT Bearer Sample
+jwt = {
+  "type": "http",
+  "scheme": "bearer",
+  "bearerFormat": "JWT"
+}
+# API Key Sample
+api_key = {
+  "type": "apiKey",
+  "name": "api_key",
+  "in": "header"
+}
+# Implicit OAuth2 Sample
+oauth2 = {
+  "type": "oauth2",
+  "flows": {
+    "implicit": {
+      "authorizationUrl": "https://example.com/api/oauth/dialog",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    }
+  }
+}
+security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
 
 class NotFoundResponse(BaseModel):
@@ -111,8 +132,8 @@ class BookResponse(BaseModel):
     security=security
 )
 def get_book(path: BookPath):
-    """Get book
-    Get some book by id, like:
+    """Get a book
+    to get some book by id, like:
     http://localhost:5000/book/3
     """
     if path.bid == 4:
@@ -172,7 +193,13 @@ from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Tag, Info
 
 info = Info(title='book API', version='1.0.0')
-security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+security_schemes = {"jwt": jwt}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 

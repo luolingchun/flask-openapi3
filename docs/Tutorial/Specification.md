@@ -77,12 +77,53 @@ run it, and go to http://127.0.0.1:5000/openapi, you will see the documentation.
 
 ## security_schemes
 
-Like [Info](#info), import **`HTTPBearer`** from **`flask_openapi3`**, more features see the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
+There are some examples for Security Scheme Object,
+more features see the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
+
+```python
+# Basic Authentication Sample
+basic = {
+  "type": "http",
+  "scheme": "basic"
+}
+# JWT Bearer Sample
+jwt = {
+  "type": "http",
+  "scheme": "bearer",
+  "bearerFormat": "JWT"
+}
+# API Key Sample
+api_key = {
+  "type": "apiKey",
+  "name": "api_key",
+  "in": "header"
+}
+# Implicit OAuth2 Sample
+oauth2 = {
+  "type": "oauth2",
+  "flows": {
+    "implicit": {
+      "authorizationUrl": "https://example.com/api/oauth/dialog",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    }
+  }
+}
+security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
+```
 
 First, you need to define the **security_schemes** and **security** variable:
 
 ```python
-security_schemes = {"jwt": HTTPBearer(bearerFormat="JWT")}
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
+security_schemes = {"jwt": jwt}
+
 security = [{"jwt": []}]
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
@@ -126,7 +167,6 @@ You can pass `oauth_config` when initializing `OpenAPI`:
 ```python
 from flask_openapi3 import OpenAPI, OAuthConfig
 from flask_openapi3 import Info
-from flask_openapi3 import OAuth2, OAuthFlows, OAuthFlowImplicit
 
 info = Info(title='oauth API', version='1.0.0')
 
@@ -135,14 +175,19 @@ oauth_config = OAuthConfig(
     clientSecret="xxx"
 )
 
-oauth2 = OAuth2(flows=OAuthFlows(
-    implicit=OAuthFlowImplicit(
-        authorizationUrl="https://example.com/api/oauth/dialog",
-        scopes={
-            "write:pets": "modify pets in your account",
-            "read:pets": "read your pets"
-        }
-    )))
+oauth2 = {
+  "type": "oauth2",
+  "flows": {
+    "implicit": {
+      "authorizationUrl": "https://example.com/api/oauth/dialog",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    }
+  }
+}
+
 security_schemes = {"oauth2": oauth2}
 
 app = OpenAPI(__name__, info=info, oauth_config=oauth_config, security_schemes=security_schemes)
