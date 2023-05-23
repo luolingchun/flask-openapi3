@@ -59,7 +59,7 @@ class APIScaffold(Scaffold, ABC):
         raise NotImplementedError
 
     @staticmethod
-    def create_view_func(func, header, cookie, path, query, form, body, view_class=None):
+    def create_view_func(func, header, cookie, path, query, form, body, view_class=None, view_class_kwargs={}):
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)
@@ -78,7 +78,10 @@ class APIScaffold(Scaffold, ABC):
                     return result
                 # handle async request
                 if view_class:
-                    response = await func(view_class, **result)
+                    view_fn = view_class.as_view(
+                        view_class.__name__.lower(), **view_class_kwargs
+                    )
+                    response = await view_fn(**result)
                 else:
                     response = await func(**result)
                 return response
@@ -99,7 +102,10 @@ class APIScaffold(Scaffold, ABC):
                     return result
                 # handle request
                 if view_class:
-                    response = func(view_class, **result)
+                    view_fn = view_class.as_view(
+                        view_class.__name__.lower(), **view_class_kwargs
+                    )
+                    response = view_fn(**result)
                 else:
                     response = func(**result)
                 return response

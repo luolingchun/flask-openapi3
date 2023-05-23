@@ -177,12 +177,12 @@ class APIView:
 
         return decorator
 
-    def register(self, app: "OpenAPI"):
+    def register(self, app: "OpenAPI", view_class_kwargs: dict = None):
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
                 header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-                view_func = app.create_view_func(func, header, cookie, path, query, form, body, view_class=cls)
+                view_func = app.create_view_func(func, header, cookie, path, query, form, body, view_class=cls, view_class_kwargs=view_class_kwargs)
                 options = {
                     "endpoint": cls.__name__ + "." + method.lower(),
                     "methods": [method.upper()]
