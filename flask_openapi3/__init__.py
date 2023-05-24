@@ -47,5 +47,4 @@ from .models.server import ServerVariable
 from .models.tag import Tag
 from .models.validation_error import UnprocessableEntity
 from .openapi import OpenAPI
-from .openapi import MethodView
 from .view import APIView

@@ -8,7 +8,6 @@ from copy import deepcopy
 from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 
 from flask import Flask, Blueprint, render_template_string
-from flask.views import MethodView as FlaskMethodView
 from pydantic import BaseModel
 
 from .blueprint import APIBlueprint
@@ -24,9 +23,6 @@ from .utils import get_operation, get_responses, parse_and_store_tags, parse_par
     get_operation_id_for_path
 from .view import APIView
 
-
-class MethodView(FlaskMethodView):
-    pass
 
 class OpenAPI(APIScaffold, Flask):
     def __init__(
@@ -186,7 +182,7 @@ class OpenAPI(APIScaffold, Flask):
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
 
-    def register_api_view(self, api_view: APIView, view_class_kwargs= {}) -> None:
+    def register_api_view(self, api_view: APIView, view_args=[], view_kwargs={}) -> None:
         """Register APIView"""
         for tag in api_view.tags:
             if tag.name not in self.tag_names:
@@ -194,7 +190,7 @@ class OpenAPI(APIScaffold, Flask):
                 self.tag_names.append(tag.name)
         self.paths.update(**api_view.paths)
         self.components_schemas.update(**api_view.components_schemas)
-        api_view.register(self, view_class_kwargs=view_class_kwargs)
+        api_view.register(self, view_args=view_args, view_kwargs=view_kwargs)
 
     def _do_decorator(
             self,
