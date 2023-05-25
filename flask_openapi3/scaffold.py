@@ -60,16 +60,15 @@ class APIScaffold(Scaffold, ABC):
 
     @staticmethod
     def create_view_func(
-        func,
-        header,
-        cookie,
-        path,
-        query,
-        form,
-        body,
-        view_class=None,
-        view_args=[],
-        view_kwargs={}
+            func,
+            header,
+            cookie,
+            path,
+            query,
+            form,
+            body,
+            view_class=None,
+            view_kwargs: Dict[Any, Any] = None
     ):
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
@@ -89,7 +88,12 @@ class APIScaffold(Scaffold, ABC):
                     return result
                 # handle async request
                 if view_class:
-                    view_object = view_class(*view_args, **view_kwargs)
+                    signature = inspect.signature(view_class.__init__)
+                    parameters = signature.parameters
+                    if parameters.get("view_kwargs"):
+                        view_object = view_class(view_kwargs=view_kwargs)
+                    else:
+                        view_object = view_class()
                     response = await func(view_object, **result)
                 else:
                     response = await func(**result)
@@ -111,7 +115,12 @@ class APIScaffold(Scaffold, ABC):
                     return result
                 # handle request
                 if view_class:
-                    view_object = view_class(*view_args, **view_kwargs)
+                    signature = inspect.signature(view_class.__init__)
+                    parameters = signature.parameters
+                    if parameters.get("view_kwargs"):
+                        view_object = view_class(view_kwargs=view_kwargs)
+                    else:
+                        view_object = view_class()
                     response = func(view_object, **result)
                 else:
                     response = func(**result)

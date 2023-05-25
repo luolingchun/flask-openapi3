@@ -177,7 +177,9 @@ class APIView:
 
         return decorator
 
-    def register(self, app: "OpenAPI", view_args: List[Any] = [], view_kwargs: Dict[str, Any] = {}):
+    def register(self, app: "OpenAPI", view_kwargs: Dict[Any, Any] = None):
+        if view_kwargs is None:
+            view_kwargs = {}
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
@@ -191,7 +193,6 @@ class APIView:
                     form,
                     body,
                     view_class=cls,
-                    view_args=view_args,
                     view_kwargs=view_kwargs
                 )
                 options = {
