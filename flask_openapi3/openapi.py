@@ -182,7 +182,7 @@ class OpenAPI(APIScaffold, Flask):
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
 
-    def register_api_view(self, api_view: APIView, view_kwargs: Dict[Any, Any] = None) -> None:
+    def register_api_view(self, api_view: APIView, view_kwargs: Optional[Dict[Any, Any]] = None) -> None:
         """
         Register APIView
 

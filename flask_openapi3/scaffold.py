@@ -68,7 +68,7 @@ class APIScaffold(Scaffold, ABC):
             form,
             body,
             view_class=None,
-            view_kwargs: Dict[Any, Any] = None
+            view_kwargs=None
     ):
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:

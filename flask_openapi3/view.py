@@ -177,7 +177,7 @@ class APIView:
 
         return decorator
 
-    def register(self, app: "OpenAPI", view_kwargs: Dict[Any, Any] = None):
+    def register(self, app: "OpenAPI", view_kwargs: Optional[Dict[Any, Any]] = None):
         if view_kwargs is None:
             view_kwargs = {}
         for rule, (cls, methods) in self.views.items():
