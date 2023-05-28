@@ -147,6 +147,45 @@ class BookListAPIView:
         return body.json()
 ```
 
+*New in v2.4.0*
+
+You can define a parameter named `view_kwargs` (the only parameter of the `__init__` function),
+and using `view_kwargs.pop` get the required keys for each.
+
+```python
+@api_view.route("/book")
+class BookListAPIView:
+    def __init__(self, view_kwargs=None):
+        self.a = view_kwargs.pop("a")
+    
+    def get(self):
+        ...
+    
+    def post(self):
+        ...
+
+@api_view.route("/book/<id>")
+class BookAPIView:
+    def __init__(self, view_kwargs=None):
+        self.b = view_kwargs.pop("b")
+    
+    def get(self):
+        ...
+    
+    def put(self):
+        ...
+    
+    def delete(self):
+        ...
+
+app.register_api_view(
+    api_view,
+    view_kwargs={
+        "a": 1,
+        "b": 2
+    }
+)
+```
 
 ## Async API
 
