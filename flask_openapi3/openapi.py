@@ -182,15 +182,23 @@ class OpenAPI(APIScaffold, Flask):
         self.components_schemas.update(**api.components_schemas)
         self.register_blueprint(api)
 
-    def register_api_view(self, api_view: APIView) -> None:
-        """Register APIView"""
+    def register_api_view(self, api_view: APIView, view_kwargs: Optional[Dict[Any, Any]] = None) -> None:
+        """
+        Register APIView
+
+        Arguments:
+            api_view: APIView
+            view_kwargs: extra view kwargs
+        """
+        if view_kwargs is None:
+            view_kwargs = {}
         for tag in api_view.tags:
             if tag.name not in self.tag_names:
                 self.tags.append(tag)
                 self.tag_names.append(tag.name)
         self.paths.update(**api_view.paths)
         self.components_schemas.update(**api_view.components_schemas)
-        api_view.register(self)
+        api_view.register(self, view_kwargs=view_kwargs)
 
     def _do_decorator(
             self,
