@@ -150,13 +150,13 @@ class BookListAPIView:
 *New in v2.4.0*
 
 You can define a parameter named `view_kwargs` (the only parameter of the `__init__` function),
-and using `view_kwargs.pop` get the required keys for each.
+and using `view_kwargs.get` get the required keys for each.
 
 ```python
 @api_view.route("/book")
 class BookListAPIView:
     def __init__(self, view_kwargs=None):
-        self.a = view_kwargs.pop("a")
+        self.a = view_kwargs.get("a")
     
     def get(self):
         ...
@@ -167,7 +167,7 @@ class BookListAPIView:
 @api_view.route("/book/<id>")
 class BookAPIView:
     def __init__(self, view_kwargs=None):
-        self.b = view_kwargs.pop("b")
+        self.b = view_kwargs.get("b")
     
     def get(self):
         ...

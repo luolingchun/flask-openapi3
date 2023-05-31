@@ -21,7 +21,7 @@ class BookPath(BaseModel):
 @api_view.route("/book")
 class BookListAPIView:
     def __init__(self, view_kwargs=None):
-        self.a = view_kwargs.pop("a")
+        self.a = view_kwargs.get("a")
 
     @api_view.doc(summary="get book list")
     def get(self):
@@ -31,7 +31,7 @@ class BookListAPIView:
 @api_view.route("/book/<id>")
 class BookAPIView:
     def __init__(self, view_kwargs=None):
-        self.b = view_kwargs.pop("b")
+        self.b = view_kwargs.get("b")
 
     @api_view.doc(summary="get book list")
     def get(self, path: BookPath):
