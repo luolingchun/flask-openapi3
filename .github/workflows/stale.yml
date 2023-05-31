@@ -1,0 +1,16 @@
+name: stale
+on:
+  schedule:
+    # Executed on the 1st day of each month
+    - cron: "0 0 1 * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v8
+        with:
+          days-before-issue-close: 365
+          close-issue-message: >
+            This issue has been automatically closed because we haven't heard back for more than 365 days, 
+            please reopen this issue if necessary.
