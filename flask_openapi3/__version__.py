@@ -2,4 +2,4 @@
 # @Author  : llc
 # @Time    : 2022/4/30 9:20
 
-__version__ = "2.3.2"
+__version__ = "2.4.0rc1"
