@@ -97,22 +97,29 @@ class APIBlueprint(APIScaffold, Blueprint):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collect openapi specification information
-        :param rule: flask route
-        :param func: flask view_func
-        :param tags: api tag
-        :param responses: response model
-        :param extra_responses: extra response dict
-        :param security: security name
-        :param doc_ui: adds openapi document UI(swagger and redoc). defaults to True.
-        :param deprecated: mark as deprecated support. default to not True.
-        :param operation_id: unique string used to identify the operation.
-        :param method: api method
-        :return:
+        Arguments:
+            rule: Flask route
+            func: Flask view_func
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: response's model must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
         if self.doc_ui is True and doc_ui is True:
             if responses is None:
@@ -123,7 +130,12 @@ class APIBlueprint(APIScaffold, Blueprint):
             combine_responses = deepcopy(self.abp_responses)
             combine_responses.update(**responses)
             # create operation
-            operation = get_operation(func, summary=summary, description=description)
+            operation = get_operation(
+                func,
+                summary=summary,
+                description=description,
+                openapi_extensions=openapi_extensions
+            )
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.

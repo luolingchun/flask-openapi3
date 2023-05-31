@@ -151,7 +151,9 @@ swagger_html_string = """
                 SwaggerUIBundle.plugins.DownloadUrl
             ],
             layout: "StandaloneLayout",
-            docExpansion: "{{ doc_expansion }}"
+            docExpansion: "{{ doc_expansion }}",
+            showExtensions: true,
+            showCommonExtensions: true
         })
         // End Swagger UI call region
         const oauthConfig = JSON.parse(`{{ oauth_config|tojson }}`);

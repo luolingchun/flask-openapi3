@@ -338,3 +338,33 @@ external_docs=ExternalDocumentation(
 app = OpenAPI(__name__, info=info, external_docs=external_docs)
 ```
 
+## openapi_extensions
+
+*new in v2.4.0*
+
+While the OpenAPI Specification tries to accommodate most use cases, 
+additional data can be added to extend the specification at certain points.
+See [Specification Extensions](https://spec.openapis.org/oas/v3.0.3#specification-extensions).
+
+It can also be available in **APIBlueprint** and **APIView**, goto [Operation](Operation.md#openapi_extensions).
+
+```python hl_lines="3"
+from flask_openapi3 import OpenAPI
+
+app = OpenAPI(__name__, openapi_extensions={
+    "x-google-endpoints": [
+        {
+            "name": "my-cool-api.endpoints.my-project-id.cloud.goog",
+            "allowCors": True
+        }
+    ]
+})
+
+@app.get("/")
+def hello():
+    return "ok"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```

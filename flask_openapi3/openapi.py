@@ -44,6 +44,7 @@ class OpenAPI(APIScaffold, Flask):
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id_callback: Callable = get_operation_id_for_path,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -74,6 +75,8 @@ class OpenAPI(APIScaffold, Flask):
             operation_id_callback: Callback function for custom operation_id generation.
                           Receives name (str), path (str) and method (str) parameters.
                           Default to `get_operation_id_for_path` from utils
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+                                See https://spec.openapis.org/oas/v3.0.3#specification-extensions
             **kwargs: Flask kwargs
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -97,6 +100,7 @@ class OpenAPI(APIScaffold, Flask):
         self.severs = servers
         self.external_docs = external_docs
         self.operation_id_callback: Callable = operation_id_callback
+        self.openapi_extensions = openapi_extensions or dict()
         if doc_ui:
             self._init_doc()
         # add openapi command
@@ -170,7 +174,11 @@ class OpenAPI(APIScaffold, Flask):
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.security_schemes
         spec.components = self.components
-        return json.loads(spec.json(by_alias=True, exclude_none=True))
+
+        spec_json = json.loads(spec.json(by_alias=True, exclude_none=True))
+        spec_json.update(**self.openapi_extensions)
+
+        return spec_json
 
     def register_api(self, api: APIBlueprint) -> None:
         """Register APIBlueprint"""
@@ -217,22 +225,29 @@ class OpenAPI(APIScaffold, Flask):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collect openapi specification information
-        :param rule: Flask route
-        :param func: Flask view_func
-        :param tags: API tag
-        :param responses: Response model
-        :param extra_responses: Extra response dict
-        :param security: Security name
-        :param deprecated: Mark as deprecated support. Default to not True.
-        :param doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
-        :param operation_id: Unique string used to identify the operation.
-        :param method: API method
-        :return:
+        Arguments:
+            rule: Flask route
+            func: Flask view_func
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            extra_form: Extra information describing the request body(application/form).
+            extra_body: Extra information describing the request body(application/json).
+            responses: response's model must be pydantic BaseModel.
+            extra_responses: Extra information for responses.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
         if doc_ui is True:
             if responses is None:
@@ -243,7 +258,12 @@ class OpenAPI(APIScaffold, Flask):
             combine_responses = deepcopy(self.responses)
             combine_responses.update(**responses)
             # create operation
-            operation = get_operation(func, summary=summary, description=description)
+            operation = get_operation(
+                func,
+                summary=summary,
+                description=description,
+                openapi_extensions=openapi_extensions
+            )
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.

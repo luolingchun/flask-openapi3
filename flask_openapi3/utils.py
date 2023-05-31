@@ -4,7 +4,7 @@
 
 import inspect
 import re
-from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional
+from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any
 
 from pydantic import BaseModel
 
@@ -16,7 +16,12 @@ from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity
 
 
-def get_operation(func: Callable, *, summary: Optional[str] = None, description: Optional[str] = None) -> Operation:
+def get_operation(
+        func: Callable, *,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        openapi_extensions: Optional[Dict[str, Any]] = None,
+) -> Operation:
     """Return an Operation object with summary and description."""
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
@@ -26,10 +31,16 @@ def get_operation(func: Callable, *, summary: Optional[str] = None, description:
         doc_description = lines[0] if len(lines) == 0 else "</br>".join(lines[1:]) or None
     else:
         doc_description = "</br>".join(lines) or None
-    operation = Operation(
+
+    operation_dict = dict(
         summary=summary or doc_summary,
         description=description or doc_description
     )
+    # update openapi_extensions
+    openapi_extensions = openapi_extensions or {}
+    operation_dict.update(**openapi_extensions)
+
+    operation = Operation(**operation_dict)
 
     return operation
 

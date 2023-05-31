@@ -280,6 +280,65 @@ def get_book(path: BookPath):
     ...
 ```
 
+## openapi_extensions
+
+*new in v2.4.0*
+
+While the OpenAPI Specification tries to accommodate most use cases, 
+additional data can be added to extend the specification at certain points.
+See [Specification Extensions](https://spec.openapis.org/oas/v3.0.3#specification-extensions).
+
+
+```python  hl_lines="3 12 19 28 42"
+from flask_openapi3 import OpenAPI, APIBlueprint, APIView
+
+app = OpenAPI(__name__, openapi_extensions={
+    "x-google-endpoints": [
+        {
+            "name": "my-cool-api.endpoints.my-project-id.cloud.goog",
+            "allowCors": True
+        }
+    ]
+})
+
+openapi_extensions = {
+    "x-google-backend": {
+        "address": "https://<NODE_SERVICE_ID>-<HASH>.a.run.app",
+        "protocol": "h2"
+    }
+}
+
+@app.get("/", openapi_extensions=openapi_extensions)
+def hello():
+    return "ok"
+
+
+# APIBlueprint
+api = APIBlueprint("book", __name__, url_prefix="/api")
+
+
+@api.get('/book', openapi_extensions=openapi_extensions)
+def get_book():
+    return {"code": 0, "message": "ok"}
+
+
+app.register_api(api)
+
+# APIView
+api_view = APIView()
+
+
+@api_view.route("/view/book")
+class BookListAPIView:
+
+    @api_view.doc(openapi_extensions=openapi_extensions)
+    def post(self):
+        return "ok"
+
+
+app.register_api_view(api_view)
+```
+
 ## doc_ui
 
 You can pass `doc_ui=False` to disable the `OpenAPI spec` when init `OpenAPI `.

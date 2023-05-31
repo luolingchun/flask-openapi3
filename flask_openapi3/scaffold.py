@@ -50,6 +50,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
@@ -147,6 +148,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -168,6 +170,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
 
@@ -188,6 +191,7 @@ class APIScaffold(Scaffold, ABC):
                     deprecated=deprecated,
                     security=security,
                     servers=servers,
+                    openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
                     method=HTTPMethod.GET
                 )
@@ -216,6 +220,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -237,6 +242,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
 
@@ -257,6 +263,7 @@ class APIScaffold(Scaffold, ABC):
                     deprecated=deprecated,
                     security=security,
                     servers=servers,
+                    openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
                     method=HTTPMethod.POST
                 )
@@ -285,6 +292,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -306,6 +314,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
 
@@ -326,6 +335,7 @@ class APIScaffold(Scaffold, ABC):
                     deprecated=deprecated,
                     security=security,
                     servers=servers,
+                    openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PUT
                 )
@@ -354,6 +364,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -375,6 +386,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
 
@@ -395,6 +407,7 @@ class APIScaffold(Scaffold, ABC):
                     deprecated=deprecated,
                     security=security,
                     servers=servers,
+                    openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
                     method=HTTPMethod.DELETE
                 )
@@ -423,6 +436,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -444,6 +458,7 @@ class APIScaffold(Scaffold, ABC):
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
 
@@ -464,6 +479,7 @@ class APIScaffold(Scaffold, ABC):
                     deprecated=deprecated,
                     security=security,
                     servers=servers,
+                    openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
                     method=HTTPMethod.PATCH
                 )

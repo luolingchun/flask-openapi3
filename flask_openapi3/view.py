@@ -111,6 +111,7 @@ class APIView:
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
+            openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True
     ) -> Callable:
         """
@@ -130,7 +131,8 @@ class APIView:
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
-            doc_ui: Declares this operation to be shown.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
 
         if responses is None:
@@ -148,7 +150,12 @@ class APIView:
             combine_responses = deepcopy(self.view_responses)
             combine_responses.update(**responses)
             # create operation
-            operation = get_operation(func, summary=summary, description=description)
+            operation = get_operation(
+                func,
+                summary=summary,
+                description=description,
+                openapi_extensions=openapi_extensions
+            )
             # set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
