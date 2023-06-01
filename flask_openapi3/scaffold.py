@@ -4,6 +4,7 @@
 import functools
 import inspect
 import sys
+import warnings
 from abc import ABC
 from functools import wraps
 from typing import Callable, List, Optional, Dict, Type, Any, Tuple
@@ -30,6 +31,8 @@ else:
             func = func.func
 
         return inspect.iscoroutinefunction(func)
+
+warnings.simplefilter("once")
 
 
 class APIScaffold(Scaffold, ABC):
@@ -174,6 +177,15 @@ class APIScaffold(Scaffold, ABC):
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
 
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
                 self._do_decorator(
@@ -245,6 +257,14 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -317,6 +337,14 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -389,6 +417,14 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
@@ -461,6 +497,14 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
         """
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \

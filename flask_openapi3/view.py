@@ -3,6 +3,7 @@
 # @Time    : 2022/10/14 16:09
 import re
 import typing
+import warnings
 
 if typing.TYPE_CHECKING:
     from .openapi import OpenAPI
@@ -18,6 +19,8 @@ from .models.server import Server
 from .models.tag import Tag
 from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
     get_operation_id_for_path
+
+warnings.simplefilter("once")
 
 
 class APIView:
@@ -134,6 +137,15 @@ class APIView:
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
+
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
 
         if responses is None:
             responses = {}

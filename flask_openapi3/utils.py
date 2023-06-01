@@ -298,6 +298,17 @@ def get_responses(
                     )
                 }
             )
+
+            model_config = response.Config
+            if hasattr(model_config, "openapi_extra"):
+                _responses[key].description = model_config.openapi_extra.get("description")
+                _responses[key].headers = model_config.openapi_extra.get("headers")
+                _responses[key].links = model_config.openapi_extra.get("links")
+                _content = _responses[key].content
+                _content["application/json"].example = model_config.openapi_extra.get("example")  # type: ignore
+                _content["application/json"].examples = model_config.openapi_extra.get("examples")  # type: ignore
+                _content["application/json"].encoding = model_config.openapi_extra.get("encoding")  # type: ignore
+
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")
             if definitions:
@@ -407,6 +418,13 @@ def parse_parameters(
             request_body = RequestBody(**{
                 "content": _content,
             })
+        model_config = form.Config
+        if hasattr(model_config, "openapi_extra"):
+            request_body.description = model_config.openapi_extra.get("description")
+            request_body.content["multipart/form-data"].example = model_config.openapi_extra.get("example")
+            request_body.content["multipart/form-data"].examples = model_config.openapi_extra.get("examples")
+            if model_config.openapi_extra.get("encoding"):
+                request_body.content["multipart/form-data"].encoding = model_config.openapi_extra.get("encoding")
         operation.requestBody = request_body
     if body:
         _content, _components_schemas = parse_body(body, extra_body)
@@ -419,6 +437,12 @@ def parse_parameters(
             )
         else:
             request_body = RequestBody(content=_content)
+        model_config = body.Config
+        if hasattr(model_config, "openapi_extra"):
+            request_body.description = model_config.openapi_extra.get("description")
+            request_body.content["application/json"].example = model_config.openapi_extra.get("example")
+            request_body.content["application/json"].examples = model_config.openapi_extra.get("examples")
+            request_body.content["application/json"].encoding = model_config.openapi_extra.get("encoding")
         operation.requestBody = request_body
     operation.parameters = parameters if parameters else None
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Author  : [martinatseequent](https://github.com/martinatseequent)
+# @Author  : llc
 # @Time    : 2021/6/22 9:32
 
 import json
@@ -22,6 +22,25 @@ class HelloPath(BaseModel):
 
 class Message(BaseModel):
     message: str = Field(..., description="The message")
+
+    class Config:
+        openapi_extra = {
+            # "example": {"message": "aaa"},
+            "examples": {
+                "example1": {
+                    "summary": "example1 summary",
+                    "value": {
+                        "message": "bbb"
+                    }
+                },
+                "example2": {
+                    "summary": "example2 summary",
+                    "value": {
+                        "message": "ccc"
+                    }
+                }
+            }
+        }
 
 
 @bp.get("/hello/<string:name>", responses={"200": Message})

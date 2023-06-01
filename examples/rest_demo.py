@@ -6,7 +6,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import ExternalDocumentation, ExtraRequestBody, Example
+from flask_openapi3 import ExternalDocumentation
 from flask_openapi3 import Info, Tag, Server
 from flask_openapi3 import OpenAPI
 
@@ -128,32 +128,7 @@ def get_books(query: BookQuery):
     }
 
 
-extra_body = ExtraRequestBody(
-    description="This is post RequestBody",
-    required=True,
-    example="ttt",
-    examples={
-        "example1": Example(
-            summary="example summary1",
-            description="example description1",
-            value={
-                "age": 24,
-                "author": "author1"
-            }
-        ),
-        "example2": Example(
-            summary="example summary2",
-            description="example description2",
-            value={
-                "age": 48,
-                "author": "author2"
-            }
-        )
-    }
-)
-
-
-@app.post('/book', tags=[book_tag], responses={"200": BookResponse}, extra_body=extra_body)
+@app.post('/book', tags=[book_tag], responses={"200": BookResponse})
 def create_book(body: BookBody):
     print(body)
     return {"code": 0, "message": "ok"}, HTTPStatus.OK
