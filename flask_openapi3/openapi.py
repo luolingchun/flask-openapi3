@@ -32,7 +32,7 @@ class OpenAPI(APIScaffold, Flask):
             info: Optional[Info] = None,
             security_schemes: Optional[Dict[str, Union[SecurityScheme, Dict[str, Any]]]] = None,
             oauth_config: Optional[OAuthConfig] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
@@ -56,7 +56,7 @@ class OpenAPI(APIScaffold, Flask):
             security_schemes: See https://spec.openapis.org/oas/v3.0.3#security-scheme-object
             oauth_config: OAuth 2.0 configuration,
                           see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md
-            responses: OpenAPI response model
+            responses: API responses, should be BaseModel, dict or None.
             doc_ui: Add openapi document UI(swagger and redoc). Defaults to True.
             doc_expansion: String=["list"*, "full", "none"].
                           Controls the default expansion setting for the operations and tags.
@@ -220,7 +220,7 @@ class OpenAPI(APIScaffold, Flask):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, Dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -241,7 +241,7 @@ class OpenAPI(APIScaffold, Flask):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.

@@ -70,6 +70,13 @@ class BookResponse(BaseModel):
     message: str = Field("ok", description="Exception Information")
     data: BookBodyWithID
 
+    class Config:
+        openapi_extra = {
+            "content": {
+                "text/csv": {"schema": {"type": "string"}}
+            }
+        }
+
 
 @pytest.fixture
 def client():
@@ -82,7 +89,6 @@ def client():
     '/book/<int:bid>',
     tags=[book_tag],
     responses={"200": BookResponse},
-    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
 )
 def get_book(path: BookPath):

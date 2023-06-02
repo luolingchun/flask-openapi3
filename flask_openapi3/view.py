@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from .openapi import OpenAPI
 
 from copy import deepcopy
-from typing import Optional, List, Dict, Type, Any, Callable
+from typing import Optional, List, Dict, Type, Any, Callable, Union
 
 from pydantic import BaseModel
 
@@ -29,7 +29,7 @@ class APIView:
             url_prefix: Optional[str] = None,
             view_tags: Optional[List[Tag]] = None,
             view_security: Optional[List[Dict[str, List[str]]]] = None,
-            view_responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            view_responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
     ):
@@ -40,7 +40,7 @@ class APIView:
             url_prefix: A path to prepend to all the APIView's urls
             view_tags: APIView tags for every api
             view_security: APIView security for every api
-            view_responses: APIView response models
+            view_responses: API responses, should be BaseModel, dict or None.
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
                 Receives name (str), path (str) and method (str) parameters.
@@ -109,7 +109,7 @@ class APIView:
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -129,7 +129,7 @@ class APIView:
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -145,6 +145,10 @@ class APIView:
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         if responses is None:

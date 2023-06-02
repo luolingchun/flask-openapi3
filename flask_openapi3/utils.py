@@ -4,7 +4,7 @@
 
 import inspect
 import re
-from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any
+from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, Union
 
 from pydantic import BaseModel
 
@@ -248,13 +248,13 @@ def parse_body(
 
 
 def get_responses(
-        responses: dict,
+        responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]],
         extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
 ) -> None:
     """
-    :param responses: Dict[str, BaseModel]
+    :param responses: API responses, should be BaseModel, dict or None.
     :param extra_responses: Dict[str, dict]
     :param components_schemas: `models.component.py` `Components.schemas`
     :param operation: `models.path.py` Operation
@@ -281,8 +281,13 @@ def get_responses(
         )
         _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
     for key, response in responses.items():
-        # Verify that the response is a class and that class is a subclass of `pydantic.BaseModel`
-        if inspect.isclass(response) and issubclass(response, BaseModel):
+        if response is None:
+            # Verify that if the response is None, because http status code "204" means return "No Content"
+            _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
+            continue
+        if isinstance(response, dict):
+            _responses[key] = response  # type: ignore
+        else:
             schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
@@ -308,19 +313,15 @@ def get_responses(
                 _content["application/json"].example = model_config.openapi_extra.get("example")  # type: ignore
                 _content["application/json"].examples = model_config.openapi_extra.get("examples")  # type: ignore
                 _content["application/json"].encoding = model_config.openapi_extra.get("encoding")  # type: ignore
+                if model_config.openapi_extra.get("content"):
+                    _responses[key].content.update(model_config.openapi_extra.get("content"))
 
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")
             if definitions:
                 for name, value in definitions.items():
                     _schemas[name] = Schema(**value)
-        # Verify that if the response is None, because http status code "204" means return "No Content"
-        elif response is None:
-            _responses[key] = Response(
-                description=HTTP_STATUS.get(key, ""),
-            )
-        else:
-            raise TypeError(f"{response} is invalid `pydantic.BaseModel`.")
+
     # handle extra_responses
     for key, value in extra_responses.items():
         # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}

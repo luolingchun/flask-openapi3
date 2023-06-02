@@ -55,7 +55,7 @@ def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@api.post('/book', responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}

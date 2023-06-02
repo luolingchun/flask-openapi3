@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from flask_openapi3 import Info
 from flask_openapi3 import OpenAPI, APIBlueprint
 
-app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"), )
+app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"))
 
 bp = APIBlueprint("Hello BP", __name__)
 
@@ -43,7 +43,8 @@ class Message(BaseModel):
         }
 
 
-@bp.get("/hello/<string:name>", responses={"200": Message})
+@bp.get("/hello/<string:name>",
+        responses={"200": Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 

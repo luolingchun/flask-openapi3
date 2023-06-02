@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from flask_openapi3 import OpenAPI
 
 
-def test_responses_and_extra_responses_are_replicated_in_open_api(request):
+def test_responses_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
@@ -13,11 +13,8 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
         """Base description"""
         test: int
 
-    @test_app.get(
-        "/test",
-        responses={"201": BaseResponse},
-        extra_responses={
-            "201": {
+        class Config:
+            openapi_extra = {
                 "description": "Custom description",
                 "headers": {
                     "location": {
@@ -36,8 +33,8 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
                     }
                 }
             }
-        }
-    )
+
+    @test_app.get("/test", responses={"201": BaseResponse})
     def endpoint_test():
         return b'', 201
 
@@ -57,7 +54,7 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
                 "application/json": {
                     "schema": {"$ref": "#/components/schemas/BaseResponse"}
                 },
-                # While this one comes from extra_responses
+                # While this one comes from responses
                 "text/plain": {
                     "schema": {"type": "string"}
                 }
@@ -70,14 +67,13 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_none_responses_and_extra_responses_are_replicated_in_open_api(request):
+def test_none_responses_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        responses={"204": None},
-        extra_responses={
+        responses={
             "204": {
                 "description": "Custom description",
                 "headers": {
@@ -126,13 +122,13 @@ def test_none_responses_and_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_extra_responses_are_replicated_in_open_api(request):
+def test_responses_are_replicated_in_open_api2(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        extra_responses={
+        responses={
             "201": {
                 "description": "Custom description",
                 "headers": {
@@ -181,13 +177,13 @@ def test_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_extra_responses_without_content_are_replicated_in_open_api(request):
+def test_responses_without_content_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        extra_responses={
+        responses={
             "201": {
                 "description": "Custom description",
                 "headers": {

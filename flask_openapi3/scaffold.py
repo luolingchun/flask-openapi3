@@ -7,7 +7,7 @@ import sys
 import warnings
 from abc import ABC
 from functools import wraps
-from typing import Callable, List, Optional, Dict, Type, Any, Tuple
+from typing import Callable, List, Optional, Dict, Type, Any, Tuple, Union
 
 from flask.scaffold import Scaffold
 from flask.wrappers import Response
@@ -48,7 +48,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -146,7 +146,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -168,7 +168,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -184,6 +184,10 @@ class APIScaffold(Scaffold, ABC):
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         def decorator(func) -> Callable:
@@ -227,7 +231,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -249,7 +253,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -264,6 +268,10 @@ class APIScaffold(Scaffold, ABC):
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         def decorator(func) -> Callable:
@@ -307,7 +315,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -329,7 +337,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -344,6 +352,10 @@ class APIScaffold(Scaffold, ABC):
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         def decorator(func) -> Callable:
@@ -387,7 +399,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -409,7 +421,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -424,6 +436,10 @@ class APIScaffold(Scaffold, ABC):
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         def decorator(func) -> Callable:
@@ -467,7 +483,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -489,7 +505,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses, should be BaseModel, dict or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -504,6 +520,10 @@ class APIScaffold(Scaffold, ABC):
         if extra_body is not None:
             warnings.warn(
                 """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
                 DeprecationWarning)
 
         def decorator(func) -> Callable:
