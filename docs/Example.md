@@ -127,8 +127,7 @@ class BookResponse(BaseModel):
     tags=[book_tag],
     summary='new summary',
     description='new description',
-    responses={"200": BookResponse},
-    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    responses={"200": BookResponse, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
 )
 def get_book(path: BookPath):
@@ -189,7 +188,6 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3 import HTTPBearer
 from flask_openapi3 import Tag, Info
 
 info = Info(title='book API', version='1.0.0')
@@ -238,7 +236,7 @@ def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@api.post('/book', responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/30 11:46
+import warnings
 from typing import Optional, List, Any, Union, Dict
 
 from pydantic import BaseModel, Field
+
+warnings.simplefilter("once")
 
 
 class ExternalDocumentation(BaseModel):
@@ -129,3 +132,7 @@ class ExtraRequestBody(BaseModel):
     example: Optional[Any] = None
     examples: Optional[Dict[str, Union[Example, Reference]]] = None
     encoding: Optional[Dict[str, Encoding]] = None
+
+    def __new__(cls, *args, **kwargs):
+        warnings.warn(f"""\n{cls.__name__} will be deprecated in v3.x.""", DeprecationWarning)
+        return super().__new__(cls)

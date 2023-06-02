@@ -314,7 +314,7 @@ def get_responses(
                 _content["application/json"].examples = model_config.openapi_extra.get("examples")  # type: ignore
                 _content["application/json"].encoding = model_config.openapi_extra.get("encoding")  # type: ignore
                 if model_config.openapi_extra.get("content"):
-                    _responses[key].content.update(model_config.openapi_extra.get("content"))
+                    _responses[key].content.update(model_config.openapi_extra.get("content"))  # type: ignore
 
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")

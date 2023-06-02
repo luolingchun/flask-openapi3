@@ -127,6 +127,12 @@ def create_book(body: BookBody):
 
 ## extra_form
 
+*new in v2.4.0*
+
+!!! Deprecated-Warning warning
+
+    `extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.
+
 *new in v2.1.0*
 
 Extra form information can be provided using `extra_form` as in the following sample:
@@ -147,6 +153,12 @@ def create_book(body: BookForm):
 ```
 
 ## extra_body
+
+*new in v2.4.0*
+
+!!! Deprecated-Warning warning
+
+    `extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.
 
 *new in v2.1.0*
 
