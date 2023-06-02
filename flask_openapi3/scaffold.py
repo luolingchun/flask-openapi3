@@ -74,22 +74,40 @@ class APIScaffold(Scaffold, ABC):
             view_class=None,
             view_kwargs=None
     ):
+        """
+        Create a view function that can be used with Flask to handle API requests.
+
+        Arguments:
+            func: The original function to be called when handling the API request.
+            header: The header parameter for the API request.
+            cookie: The cookie parameter for the API request.
+            path: The path parameter for the API request.
+            query: The query parameter for the API request.
+            form: The form parameter for the API request.
+            body: The body parameter for the API request.
+            view_class: The class of the API view (if applicable).
+            view_kwargs: Additional keyword arguments to pass to the API view.
+
+        Returns:
+            The view function that can be registered with Flask.
+
+        """
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)
             async def view_func(**kwargs) -> Response:
-                result = _do_request(
+                func_kwargs = _do_request(
                     header=header,
                     cookie=cookie,
                     path=path,
                     query=query,
                     form=form,
                     body=body,
-                    **kwargs
+                    path_kwargs=kwargs
                 )
-                if isinstance(result, Response):
+                if isinstance(func_kwargs, Response):
                     # 422
-                    return result
+                    return func_kwargs
                 # handle async request
                 if view_class:
                     signature = inspect.signature(view_class.__init__)
@@ -98,9 +116,9 @@ class APIScaffold(Scaffold, ABC):
                         view_object = view_class(view_kwargs=view_kwargs)
                     else:
                         view_object = view_class()
-                    response = await func(view_object, **result)
+                    response = await func(view_object, **func_kwargs)
                 else:
-                    response = await func(**result)
+                    response = await func(**func_kwargs)
                 return response
         else:
             @wraps(func)
@@ -112,7 +130,7 @@ class APIScaffold(Scaffold, ABC):
                     query=query,
                     form=form,
                     body=body,
-                    **kwargs
+                    path_kwargs=kwargs
                 )
                 if isinstance(result, Response):
                     # 422
@@ -156,7 +174,7 @@ class APIScaffold(Scaffold, ABC):
             **options: Any
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["GET"])
+        Decorator for defining a REST API endpoint with the HTTP GET method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
@@ -168,7 +186,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: API responses, should be BaseModel, dict or None.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -241,7 +259,7 @@ class APIScaffold(Scaffold, ABC):
             **options: Any
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["POST"])
+        Decorator for defining a REST API endpoint with the HTTP POST method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
@@ -253,7 +271,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: API responses, should be BaseModel, dict or None.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -325,7 +343,7 @@ class APIScaffold(Scaffold, ABC):
             **options: Any
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["PUT"])
+        Decorator for defining a REST API endpoint with the HTTP PUT method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
@@ -337,7 +355,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: API responses, should be BaseModel, dict or None.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -409,7 +427,7 @@ class APIScaffold(Scaffold, ABC):
             **options: Any
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["DELETE"])
+        Decorator for defining a REST API endpoint with the HTTP DELETE method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
@@ -421,7 +439,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: API responses, should be BaseModel, dict or None.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -493,7 +511,7 @@ class APIScaffold(Scaffold, ABC):
             **options: Any
     ) -> Callable:
         """
-        Decorator for rest api, like: app.route(methods=["PATCH"])
+        Decorator for defining a REST API endpoint with the HTTP PATCH method.
         More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
 
         Arguments:
@@ -505,7 +523,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: API responses, should be BaseModel, dict or None.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.

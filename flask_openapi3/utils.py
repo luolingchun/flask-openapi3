@@ -22,38 +22,70 @@ def get_operation(
         description: Optional[str] = None,
         openapi_extensions: Optional[Dict[str, Any]] = None,
 ) -> Operation:
-    """Return an Operation object with summary and description."""
+    """
+    Return an Operation object with the specified summary and description.
+
+    Arguments:
+        func: The function or method for which the operation is being defined.
+        summary: A short summary of what the operation does.
+        description: A verbose explanation of the operation behavior.
+        openapi_extensions: Additional extensions to the OpenAPI Schema.
+
+    Returns:
+        An Operation object representing the operation.
+
+    """
+    # Get the docstring of the function
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
     lines = doc.split("\n")
     doc_summary = lines[0] or None
+
+    # Determine the summary and description based on provided arguments or docstring
     if summary is None:
         doc_description = lines[0] if len(lines) == 0 else "</br>".join(lines[1:]) or None
     else:
         doc_description = "</br>".join(lines) or None
 
+    # Create the operation dictionary with summary and description
     operation_dict = dict(
         summary=summary or doc_summary,
         description=description or doc_description
     )
-    # update openapi_extensions
+
+    # Add any additional openapi_extensions to the operation dictionary
     openapi_extensions = openapi_extensions or {}
     operation_dict.update(**openapi_extensions)
 
+    # Create and return the Operation object
     operation = Operation(**operation_dict)
 
     return operation
 
 
 def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
+    """
+    Generate a unique operation ID based on the name, path, and method.
+
+    Arguments:
+        name: The name or identifier for the operation.
+        path: The URL path for the operation.
+        method: The HTTP method for the operation.
+
+    Returns:
+        A unique operation ID generated based on the provided name, path, and method.
+
+    """
     operation_id = name + path
+    # Replace non-word characters with underscores
     operation_id = re.sub(r"\W", "_", operation_id)
     operation_id = operation_id + "_" + method.lower()
     return operation_id
 
 
 def get_schema(obj: Type[BaseModel]) -> dict:
-    """Pydantic model conversion to openapi schema"""
+    """Converts a Pydantic model to an OpenAPI schema."""
+
     assert inspect.isclass(obj) and issubclass(obj, BaseModel), \
         f"{obj} is invalid `pydantic.BaseModel`"
 
@@ -61,7 +93,7 @@ def get_schema(obj: Type[BaseModel]) -> dict:
 
 
 def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
-    """Parse header model"""
+    """Parses a header model and returns a list of parameters and component schemas."""
     schema = get_schema(header)
     parameters = []
     components_schemas: Dict = dict()
@@ -75,11 +107,11 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
-        # parse extra values
+        # Parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -88,7 +120,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 
 def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
-    """Parse cookie model"""
+    """Parses a cookie model and returns a list of parameters and component schemas."""
     schema = get_schema(cookie)
     parameters = []
     components_schemas: Dict = dict()
@@ -102,11 +134,11 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
-        # parse extra values
+        # Parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -115,7 +147,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 
 def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
-    """Parse path model"""
+    """Parses a path model and returns a list of parameters and component schemas."""
     schema = get_schema(path)
     parameters = []
     components_schemas: Dict = dict()
@@ -129,11 +161,11 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": True,
             "schema": Schema(**value)
         }
-        # parse extra values
+        # Parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -142,7 +174,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 
 def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
-    """Parse query model"""
+    """Parses a query model and returns a list of parameters and component schemas."""
     schema = get_schema(query)
     parameters = []
     components_schemas: Dict = dict()
@@ -156,11 +188,11 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
-        # parse extra values
+        # Parse extra values
         data.update(**value)
         parameters.append(Parameter(**data))
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -172,7 +204,7 @@ def parse_form(
         form: Type[BaseModel],
         extra_form: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
-    """Parse form model"""
+    """Parses a form model and returns a list of parameters and component schemas."""
     schema = get_schema(form)
     components_schemas = dict()
     properties = schema.get("properties", {})
@@ -186,7 +218,7 @@ def parse_form(
         if v.get("type") == "array":
             encoding[k] = Encoding(style="form")
     if extra_form:
-        # update encoding
+        # Update encoding
         if extra_form.encoding:
             encoding.update(**extra_form.encoding)
         content = {
@@ -205,7 +237,7 @@ def parse_form(
             )
         }
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -217,7 +249,7 @@ def parse_body(
         body: Type[BaseModel],
         extra_body: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
-    """Parse body model"""
+    """Parses a body model and returns a list of parameters and component schemas."""
     schema = get_schema(body)
     components_schemas = dict()
 
@@ -239,7 +271,7 @@ def parse_body(
             )
         }
 
-    # parse definitions
+    # Parse definitions
     definitions = schema.get("definitions", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
@@ -253,17 +285,12 @@ def get_responses(
         components_schemas: dict,
         operation: Operation
 ) -> None:
-    """
-    :param responses: API responses, should be BaseModel, dict or None.
-    :param extra_responses: Dict[str, dict]
-    :param components_schemas: `models.component.py` `Components.schemas`
-    :param operation: `models.path.py` Operation
-    """
     if responses is None:
         responses = {}
     _responses = {}
     _schemas = {}
     if not responses.get("422"):
+        # Handle 422 response for Unprocessable Entity
         _responses["422"] = Response(
             description=HTTP_STATUS["422"],
             content={
@@ -282,7 +309,7 @@ def get_responses(
         _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
     for key, response in responses.items():
         if response is None:
-            # Verify that if the response is None, because http status code "204" means return "No Content"
+            # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
             continue
         if isinstance(response, dict):
@@ -306,6 +333,7 @@ def get_responses(
 
             model_config = response.Config
             if hasattr(model_config, "openapi_extra"):
+                # Add additional information from model_config to the response
                 _responses[key].description = model_config.openapi_extra.get("description")
                 _responses[key].headers = model_config.openapi_extra.get("headers")
                 _responses[key].links = model_config.openapi_extra.get("links")
@@ -319,6 +347,7 @@ def get_responses(
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")
             if definitions:
+                # Add schema definitions to _schemas
                 for name, value in definitions.items():
                     _schemas[name] = Schema(**value)
 
@@ -342,18 +371,30 @@ def parse_and_store_tags(
         old_tag_names: List[str],
         operation: Operation
 ) -> None:
-    """Store tags
-    :param new_tags: api tag
-    :param old_tags: openapi doc tags
-    :param old_tag_names: openapi doc tag names
-    :param operation: `models.path.py` Operation
+    """
+    Parses new tags, stores them in old_tags list if they are not already present,
+    and updates the tags attribute of the operation object.
+
+    Arguments:
+        new_tags: A list of new Tag objects to be parsed and stored.
+        old_tags: The list of existing Tag objects.
+        old_tag_names: The list of names of existing tags.
+        operation: The operation object whose tags attribute needs to be updated.
+
+    Returns:
+        None
     """
     if new_tags is None:
         new_tags = []
+
+    # Iterate over each tag in new_tags
     for tag in new_tags:
         if tag.name not in old_tag_names:
             old_tag_names.append(tag.name)
             old_tags.append(tag)
+
+    # Set the tags attribute of the operation object to a list of unique tag names from new_tags
+    # If the resulting list is empty, set it to None
     operation.tags = list(set([tag.name for tag in new_tags])) or None
 
 
@@ -367,45 +408,67 @@ def parse_parameters(
         doc_ui: bool = True,
 ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
     """
-    :param func: Flask view func
-    :param extra_form: Extra information describing the request body(application/form).
-    :param extra_body: Extra information describing the request body(application/json).
-    :param components_schemas: `models.component.py` Components.schemas
-    :param operation: `models.path.py` Operation
-    :param doc_ui: add openapi document UI(swagger and redoc). Defaults to True.
+    Parses the parameters of a given function and returns the types for header, cookie, path,
+    query, form, and body parameters. Also populates the Operation object with the parsed parameters.
+
+    Arguments:
+        func: The function to parse the parameters from.
+        extra_form: Additional form data for the request body (default: None).
+        extra_body: Additional body data for the request body (default: None).
+        components_schemas: Dictionary to store the parsed components schemas (default: None).
+        operation: Operation object to populate with parsed parameters (default: None).
+        doc_ui: Flag indicating whether to return types for documentation UI (default: True).
+
+    Returns:
+        Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
+        The types for header, cookie, path, query, form, and body parameters respectively.
+
     """
+    # Get the type hints from the function
     annotations = get_type_hints(func)
+
+    # Get the types for header, cookie, path, query, form, and body parameters
     header = annotations.get("header")
     cookie = annotations.get("cookie")
     path = annotations.get("path")
     query = annotations.get("query")
     form = annotations.get("form")
     body = annotations.get("body")
+
+    # If doc_ui is False, return the types without further processing
     if doc_ui is False:
         return header, cookie, path, query, form, body  # type: ignore
+
     parameters = []
+
+    # If components_schemas is None, initialize it as an empty dictionary
     if components_schemas is None:
         components_schemas = dict()
+
+    # If operation is None, initialize it as an Operation object
     if operation is None:
         operation = Operation()
+
     if header:
         _parameters, _components_schemas = parse_header(header)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
+
     if cookie:
         _parameters, _components_schemas = parse_cookie(cookie)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
+
     if path:
-        # get args from a route path
         _parameters, _components_schemas = parse_path(path)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
+
     if query:
-        # get args from route query
         _parameters, _components_schemas = parse_query(query)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
+
     if form:
         _content, _components_schemas = parse_form(form, extra_form)
         components_schemas.update(**_components_schemas)
@@ -427,6 +490,7 @@ def parse_parameters(
             if model_config.openapi_extra.get("encoding"):
                 request_body.content["multipart/form-data"].encoding = model_config.openapi_extra.get("encoding")
         operation.requestBody = request_body
+
     if body:
         _content, _components_schemas = parse_body(body, extra_body)
         components_schemas.update(**_components_schemas)
@@ -445,6 +509,8 @@ def parse_parameters(
             request_body.content["application/json"].examples = model_config.openapi_extra.get("examples")
             request_body.content["application/json"].encoding = model_config.openapi_extra.get("encoding")
         operation.requestBody = request_body
+
+    # Set the parsed parameters in the operation object
     operation.parameters = parameters if parameters else None
 
     return header, cookie, path, query, form, body  # type: ignore
@@ -452,11 +518,18 @@ def parse_parameters(
 
 def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:
     """
-    :param uri: api route path
-    :param method: get post put delete patch
-    :param paths: openapi doc paths
-    :param operation: `models.path.py` Operation
+    Parses the HTTP method and updates the corresponding PathItem object in the paths' dictionary.
+
+    Arguments:
+        uri: The URI of the API endpoint.
+        method: The HTTP method for the API endpoint.
+        paths: A dictionary containing the API paths and their corresponding PathItem objects.
+        operation: The Operation object to assign to the PathItem.
+
+    Returns:
+        None
     """
+    # Check the HTTP method and update the PathItem object in the paths dictionary
     if method == HTTPMethod.GET:
         if not paths.get(uri):
             paths[uri] = PathItem(get=operation)
