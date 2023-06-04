@@ -89,6 +89,7 @@ nav:
       - Operation: Tutorial/Operation.md
       - Request: Tutorial/Request.md
       - Response: Tutorial/Response.md
+      - OpenAPI Extra: Tutorial/Openapi_extra.md
       - UI Templates: Tutorial/UI_Templates.md
       - JSON: Tutorial/JSON.md
   - Example: Example.md

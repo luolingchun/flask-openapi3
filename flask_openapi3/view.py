@@ -3,12 +3,13 @@
 # @Time    : 2022/10/14 16:09
 import re
 import typing
+import warnings
 
 if typing.TYPE_CHECKING:
     from .openapi import OpenAPI
 
 from copy import deepcopy
-from typing import Optional, List, Dict, Type, Any, Callable
+from typing import Optional, List, Dict, Type, Any, Callable, Union
 
 from pydantic import BaseModel
 
@@ -19,6 +20,8 @@ from .models.tag import Tag
 from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
     get_operation_id_for_path
 
+warnings.simplefilter("once")
+
 
 class APIView:
     def __init__(
@@ -26,7 +29,7 @@ class APIView:
             url_prefix: Optional[str] = None,
             view_tags: Optional[List[Tag]] = None,
             view_security: Optional[List[Dict[str, List[str]]]] = None,
-            view_responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            view_responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
     ):
@@ -35,13 +38,13 @@ class APIView:
 
         Arguments:
             url_prefix: A path to prepend to all the APIView's urls
-            view_tags: APIView tags for every api
-            view_security: APIView security for every api
-            view_responses: APIView response models
-            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            view_tags: APIView tags for every API.
+            view_security: APIView security for every API.
+            view_responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
-                Receives name (str), path (str) and method (str) parameters.
-                Defaults to `get_operation_id_for_path` from utils
+                                   Receives name (str), path (str) and method (str) parameters.
+                                   Defaults to `get_operation_id_for_path` from utils
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
@@ -63,10 +66,10 @@ class APIView:
             if self.views.get(rule):
                 raise ValueError(f"malformed url rule: {rule!r}")
             methods = []
-            # /pet/<petId> --> /pet/{petId}
+            # Convert route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             trail_slash = uri.endswith("/")
-            # merge url_prefix and uri
+            # Merge url_prefix and uri
             uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
             if not trail_slash:
                 uri = uri.rstrip("/")
@@ -79,16 +82,16 @@ class APIView:
                     continue
                 if not getattr(cls_method, "operation", None):
                     continue
-                # parse method
+                # Parse method
                 parse_method(uri, method, self.paths, cls_method.operation)
-                # update operation_id
+                # Update operation_id
                 if not cls_method.operation.operationId:
                     cls_method.operation.operationId = self.operation_id_callback(
                         name=cls_method.__qualname__,
                         path=rule,
                         method=method
                     )
-            # /pet/{petId} --> /pet/<petId>
+            # Convert route parameters from <param> to {param}
             _rule = uri.replace("{", "<").replace("}", ">")
             self.views[_rule] = (cls, methods)
 
@@ -106,7 +109,7 @@ class APIView:
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Optional[Type[BaseModel]]]] = None,
+            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -126,7 +129,7 @@ class APIView:
             operation_id: Unique string used to identify the operation.
             extra_form: Extra information describing the request body(application/form).
             extra_body: Extra information describing the request body(application/json).
-            responses: response's model must be pydantic BaseModel.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             extra_responses: Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -134,6 +137,19 @@ class APIView:
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
         """
+
+        if extra_form is not None:
+            warnings.warn(
+                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_body is not None:
+            warnings.warn(
+                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
+                DeprecationWarning)
+        if extra_responses is not None:
+            warnings.warn(
+                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
+                DeprecationWarning)
 
         if responses is None:
             responses = {}
@@ -146,29 +162,29 @@ class APIView:
         def decorator(func):
             if self.doc_ui is False or doc_ui is False:
                 return
-            # global response combine api responses
+            # Global response combines API responses
             combine_responses = deepcopy(self.view_responses)
             combine_responses.update(**responses)
-            # create operation
+            # Create operation
             operation = get_operation(
                 func,
                 summary=summary,
                 description=description,
                 openapi_extensions=openapi_extensions
             )
-            # set external docs
+            # Set external docs
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
             operation.operationId = operation_id
-            # only set `deprecated` if True otherwise leave it as None
+            # Only set `deprecated` if True, otherwise leave it as None
             operation.deprecated = deprecated
-            # add security
+            # Add security
             operation.security = security + self.view_security or None
-            # add servers
+            # Add servers
             operation.servers = servers
-            # store tags
+            # Store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
-            # parse parameters
+            # Parse parameters
             parse_parameters(
                 func,
                 extra_form=extra_form,
@@ -176,7 +192,7 @@ class APIView:
                 components_schemas=self.components_schemas,
                 operation=operation
             )
-            # parse response
+            # Parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             func.operation = operation
 
@@ -185,6 +201,16 @@ class APIView:
         return decorator
 
     def register(self, app: "OpenAPI", view_kwargs: Optional[Dict[Any, Any]] = None):
+        """
+        Register the API views with the given OpenAPI app.
+
+        Args:
+            app: An instance of the OpenAPI app.
+            view_kwargs: Additional keyword arguments to pass to the API views.
+
+        Returns:
+            None
+        """
         if view_kwargs is None:
             view_kwargs = {}
         for rule, (cls, methods) in self.views.items():

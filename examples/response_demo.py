@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Author  : [martinatseequent](https://github.com/martinatseequent)
+# @Author  : llc
 # @Time    : 2021/6/22 9:32
 
 import json
@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from flask_openapi3 import Info
 from flask_openapi3 import OpenAPI, APIBlueprint
 
-app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"), )
+app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"))
 
 bp = APIBlueprint("Hello BP", __name__)
 
@@ -23,8 +23,28 @@ class HelloPath(BaseModel):
 class Message(BaseModel):
     message: str = Field(..., description="The message")
 
+    class Config:
+        openapi_extra = {
+            # "example": {"message": "aaa"},
+            "examples": {
+                "example1": {
+                    "summary": "example1 summary",
+                    "value": {
+                        "message": "bbb"
+                    }
+                },
+                "example2": {
+                    "summary": "example2 summary",
+                    "value": {
+                        "message": "ccc"
+                    }
+                }
+            }
+        }
 
-@bp.get("/hello/<string:name>", responses={"200": Message})
+
+@bp.get("/hello/<string:name>",
+        responses={"200": Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 

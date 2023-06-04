@@ -106,7 +106,6 @@ def client():
         url="https://www.openapis.org/",
         description="Something great got better, get excited!"),
     responses={"200": BookResponse},
-    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
 )
 def get_book(path: BookPath):

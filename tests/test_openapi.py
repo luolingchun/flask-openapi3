@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from flask_openapi3 import Example
-from flask_openapi3 import OpenAPI, ExtraRequestBody
+from flask_openapi3 import OpenAPI
 
 
-def test_responses_and_extra_responses_are_replicated_in_open_api(request):
+def test_responses_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
@@ -14,11 +13,8 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
         """Base description"""
         test: int
 
-    @test_app.get(
-        "/test",
-        responses={"201": BaseResponse},
-        extra_responses={
-            "201": {
+        class Config:
+            openapi_extra = {
                 "description": "Custom description",
                 "headers": {
                     "location": {
@@ -37,8 +33,8 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
                     }
                 }
             }
-        }
-    )
+
+    @test_app.get("/test", responses={"201": BaseResponse})
     def endpoint_test():
         return b'', 201
 
@@ -58,7 +54,7 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
                 "application/json": {
                     "schema": {"$ref": "#/components/schemas/BaseResponse"}
                 },
-                # While this one comes from extra_responses
+                # While this one comes from responses
                 "text/plain": {
                     "schema": {"type": "string"}
                 }
@@ -71,14 +67,13 @@ def test_responses_and_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_none_responses_and_extra_responses_are_replicated_in_open_api(request):
+def test_none_responses_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        responses={"204": None},
-        extra_responses={
+        responses={
             "204": {
                 "description": "Custom description",
                 "headers": {
@@ -127,13 +122,13 @@ def test_none_responses_and_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_extra_responses_are_replicated_in_open_api(request):
+def test_responses_are_replicated_in_open_api2(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        extra_responses={
+        responses={
             "201": {
                 "description": "Custom description",
                 "headers": {
@@ -182,13 +177,13 @@ def test_extra_responses_are_replicated_in_open_api(request):
         }
 
 
-def test_extra_responses_without_content_are_replicated_in_open_api(request):
+def test_responses_without_content_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
     @test_app.get(
         "/test",
-        extra_responses={
+        responses={
             "201": {
                 "description": "Custom description",
                 "headers": {
@@ -237,26 +232,28 @@ def test_body_examples_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
-    @test_app.post(
-        "/test",
-        extra_body=ExtraRequestBody(
-            examples={
-                "Example 01": Example(
-                    summary="An example",
-                    value={
+    class Config:
+        openapi_extra = {
+            "examples": {
+                "Example 01": {
+                    "summary": "An example",
+                    "value": {
                         "test_int": -1,
                         "test_str": "negative",
                     }
-                ),
-                "Example 02": Example(
-                    externalValue="https://example.org/examples/second-example.xml"
-                ),
-                "Example 03": Example(**{
+                },
+                "Example 02": {
+                    "externalValue": "https://example.org/examples/second-example.xml"
+                },
+                "Example 03": {
                     "$ref": "#/components/examples/third-example"
-                })
+                }
             }
-        )
-    )
+        }
+
+    BaseRequest.Config = Config
+
+    @test_app.post("/test")
     def endpoint_test(body: BaseRequest):
         return body.json(), 200
 
@@ -278,54 +275,26 @@ def test_body_examples_are_replicated_in_open_api(request):
         }
 
 
-def test_body_examples_are_not_replicated_with_form(request):
-    test_app = OpenAPI(request.node.name)
-    test_app.config["TESTING"] = True
-
-    @test_app.post(
-        "/test",
-        extra_body=ExtraRequestBody(example={
-            "Example 01": Example(**{
-                "summary": "An example",
-                "value": {
-                    "test_int": -1,
-                    "test_str": "negative",
-                }
-            }),
-        })
-    )
-    def endpoint_test(form: BaseRequest):
-        return form.json(), 200
-
-    with test_app.test_client() as client:
-        resp = client.get("/openapi/openapi.json")
-        assert resp.status_code == 200
-        assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
-            "content": {
-                "multipart/form-data": {
-                    "schema": {"$ref": "#/components/schemas/BaseRequest"}
-                }
-            },
-            "required": True
-        }
-
-
 def test_form_examples(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
-    @test_app.post(
-        "/test",
-        extra_form=ExtraRequestBody(examples={
-            "Example 01": Example(**{
-                "summary": "An example",
-                "value": {
-                    "test_int": -1,
-                    "test_str": "negative",
+    class Config:
+        openapi_extra = {
+            "examples": {
+                "Example 01": {
+                    "summary": "An example",
+                    "value": {
+                        "test_int": -1,
+                        "test_str": "negative",
+                    }
                 }
-            }),
-        })
-    )
+            }
+        }
+
+    BaseRequest.Config = Config
+
+    @test_app.post("/test")
     def endpoint_test(form: BaseRequest):
         return form.json(), 200
 

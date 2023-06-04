@@ -15,7 +15,13 @@ class BookResponse(BaseModel):
     data: BookBodyWithID
 
 
-@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse})
+@app.get('/book/<int:bid>', 
+         tags=[book_tag], 
+         responses={
+             "200": BookResponse, 
+             # Version 2.4.0 starts supporting response for dictionary types
+             "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}
+         })
 def get_book(path: BookPath, query: BookBody):
     """get a book
     get book by id, age or author
@@ -26,8 +32,13 @@ def get_book(path: BookPath, query: BookBody):
 
 ![image-20210526104627124](../assets/image-20210526104627124.png)
 
-
 ## extra_responses
+
+*New in v2.4.0*
+
+!!! Deprecated-Warning warning
+
+    `extra_responses` have been merged into the `responses`, and `extra_responses` will be deprecated in v3.x.
 
 *New in v1.0.0*
 
@@ -43,14 +54,14 @@ Like this:
     '/book/<int:bid>',
     tags=[book_tag],
     responses={"200": BookResponse},
-    extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    extra_responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
 )
 def get_book(path: BookPath):
     ...
 
 
-@api.post('/book', extra_responses={"200": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@api.post('/book', extra_responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     ...
 ```
