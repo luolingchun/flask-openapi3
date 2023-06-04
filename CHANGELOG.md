@@ -1,8 +1,17 @@
-## v2.4.0 2023-??-??
+## v2.4.0 2023-06-04
 
 - [#72](https://github.com/luolingchun/flask-openapi3/pull/72) security_schemes(SecurityScheme) supports a json format.
 - [#68](https://github.com/luolingchun/flask-openapi3/pull/68) feat: Add operation_id_callback. Thanks, @BoyanYK.
-- Add DeprecationWarning to APIKey, HTTPBase, OAuth2, OpenIdConnect, HTTPBearer that will be deprecated in v3.0.
+- [#64](https://github.com/luolingchun/flask-openapi3/pull/64) Explains the usage of flask openapi command more clearly. Thanks, @candleindark.
+- [#75](https://github.com/luolingchun/flask-openapi3/pull/75) Init view_class and pass view_kwargs. Thanks, @stufisher.
+- [#70](https://github.com/luolingchun/flask-openapi3/issues/70) Support for Specification Extensions in OpenAPI Object and Operation Object. Thanks, @simonblund.
+- [#73](https://github.com/luolingchun/flask-openapi3/issues/73) BaseModel Config support openapi_extra.
+- Merge `extra_responses` to `responses` and deprecate `extra_responses`.
+
+**DeprecationWarning:**
+
+- Add DeprecationWarning to `APIKey`, `HTTPBase`, `OAuth2`, `OpenIdConnect`, `HTTPBearer` that will be deprecated in v3.0.
+- Add DeprecationWarning to `extra_form`, `extra_body` and `extra_responses` that will be deprecated in v3.0.
 
 
 ## v2.3.2 2023-04-03
