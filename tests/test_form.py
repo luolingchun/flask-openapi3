@@ -57,7 +57,7 @@ class FormParameters(BaseModel):
 
 @app.post("/example")
 def complex_form_example(form: FormParameters):
-    print(form.dict())
+    print(form.model_dump())
     return "ok"
 
 

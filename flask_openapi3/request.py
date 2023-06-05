@@ -3,56 +3,54 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Any, Type, Optional, Dict
+from typing import Any, Type, Optional, Dict, Union
 
 from flask import request, current_app, abort
 from pydantic import ValidationError, BaseModel
-from pydantic.error_wrappers import ErrorWrapper
 
 
-def _do_header(header, func_kwargs):
+def _do_header(header: Type[BaseModel], func_kwargs):
     request_headers = dict(request.headers) or {}
-    for key, value in header.schema().get("properties", {}).items():
+    for key, value in header.model_json_schema().get("properties", {}).items():
         key_title = key.replace("_", "-").title()
         # Add original key
         if key_title in request_headers.keys():
             request_headers[key] = request_headers[key_title]
-    func_kwargs.update({"header": header(**request_headers)})
+    func_kwargs.update({"header": header.model_validate(obj=request_headers)})
 
 
-def _do_cookie(cookie, func_kwargs):
-    request_cookies = cookie(**request.cookies or {})
-    func_kwargs.update({"cookie": request_cookies})
+def _do_cookie(cookie: Type[BaseModel], func_kwargs):
+    request_cookies = dict(request.cookies) or {}
+    func_kwargs.update({"cookie": cookie.model_validate(obj=request_cookies)})
 
 
-def _do_path(path, path_kwargs, func_kwargs):
-    request_path = path(**path_kwargs)
-    func_kwargs.update({"path": request_path})
+def _do_path(path: Type[BaseModel], path_kwargs, func_kwargs):
+    func_kwargs.update({"path": path.model_validate(obj=path_kwargs)})
 
 
-def _do_query(query, func_kwargs):
+def _do_query(query: Type[BaseModel], func_kwargs):
     request_args = request.args
     query_dict = {}
-    for k, v in query.schema().get("properties", {}).items():
+    for k, v in query.model_json_schema().get("properties", {}).items():
+        value: Union[list, Optional[str]]
         if v.get("type") == "array":
             value = request_args.getlist(k)
         else:
             value = request_args.get(k)
         if value is not None:
             query_dict[k] = value
-    func_kwargs.update({"query": query(**query_dict)})
+    func_kwargs.update({"query": query.model_validate(obj=query_dict)})
 
 
-def _do_form(form, func_kwargs):
+def _do_form(form: Type[BaseModel], func_kwargs):
     request_form = request.form
     request_files = request.files
     form_dict = {}
-    for k, v in form.schema().get("properties", {}).items():
+    for k, v in form.model_json_schema().get("properties", {}).items():
         if v.get("type") == "array":
             items = v.get("items", {})
             if items.get("type") == "string" and items.get("format") == "binary":
                 # List[FileStorage]
-                # eg: {"title": "Files", "type": "array", "items": {"format": "binary", "type": "string"}
                 value = request_files.getlist(k)
             elif items.get("type") in ["object", "null", None]:
                 # list object, None, $ref, anyOf
@@ -65,38 +63,31 @@ def _do_form(form, func_kwargs):
                     value.append(json_loads_result)
             else:
                 # List[str], List[int] ...
-                # eg: {"title": "Files", "type": "array", "items": {"type": "string"}
-                value = request_form.getlist(k)
+                value = request_form.getlist(k)  # type:ignore
         elif v.get("type") in ["object", "null", None]:
             # list object, None, $ref, anyOf
             try:
-                value = json.loads(request_form.get(k)) if request_form.get(k) else None
+                value = json.loads(request_form.get(k)) if request_form.get(k) else None  # type:ignore
             except JSONDecodeError:
-                value = request_form.get(k)
+                value = request_form.get(k)  # type:ignore
         else:
             if v.get("format") == "binary":
                 # FileStorage
-                value = request_files.get(k)
+                value = request_files.get(k)  # type:ignore
             else:
                 # str, int ...
-                value = request_form.get(k)
+                value = request_form.get(k)  # type:ignore
         form_dict[k] = value
-    func_kwargs.update({"form": form(**form_dict)})
+    func_kwargs.update({"form": form.model_validate(obj=form_dict)})
 
 
-def _do_body(body, func_kwargs):
+def _do_body(body: Type[BaseModel], func_kwargs):
     obj = request.get_json(silent=True) or {}
     if isinstance(obj, str):
-        try:
-            obj = json.loads(obj)
-        except JSONDecodeError as e:
-            raise ValidationError([ErrorWrapper(e, loc="__root__")], body)
-    if body.__custom_root_type__:
-        # https://docs.pydantic.dev/latest/usage/models/#custom-root-types
-        body_ = body(__root__=obj)
+        body_model = body.model_validate_json(json_data=obj)
     else:
-        body_ = body(**obj)
-    func_kwargs.update({"body": body_})
+        body_model = body.model_validate(obj=obj)
+    func_kwargs.update({"body": body_model})
 
 
 def _do_request(

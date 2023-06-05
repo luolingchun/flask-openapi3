@@ -209,7 +209,7 @@ class APIView:
 
         return decorator
 
-    def register(self, app: "OpenAPI", view_kwargs: Optional[Dict[Any, Any]] = None):
+    def register(self, app: "OpenAPI", view_kwargs: Optional[Dict[Any, Any]] = None) -> None:
         """
         Register the API views with the given OpenAPI app.
 

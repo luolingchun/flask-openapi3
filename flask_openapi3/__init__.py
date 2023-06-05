@@ -37,17 +37,5 @@ from .models import Tag
 from .models import UnprocessableEntity
 from .models import ValidationErrorModel
 from .models import XML
-from .models.security import APIKey
-from .models.security import APIKeyIn
-from .models.security import HTTPBase
-from .models.security import HTTPBearer
-from .models.security import OAuth2
-from .models.security import OAuthFlowAuthorizationCode
-from .models.security import OAuthFlowClientCredentials
-from .models.security import OAuthFlowImplicit
-from .models.security import OAuthFlowPassword
-from .models.security import OpenIdConnect
-from .models.security import SecurityBase
-from .models.security import SecuritySchemeType
 from .openapi import OpenAPI
 from .view import APIView

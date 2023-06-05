@@ -23,5 +23,6 @@ class SecurityScheme(BaseModel):
     flows: Optional[OAuthFlows] = None
     openIdConnectUrl: Optional[str] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

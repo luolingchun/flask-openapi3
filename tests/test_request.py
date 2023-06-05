@@ -36,7 +36,7 @@ class BookBody(BaseModel):
 
 
 class BookCookie(BaseModel):
-    token: Optional[str]
+    token: Optional[str] = None
 
 
 class BookHeader(BaseModel):
@@ -76,7 +76,7 @@ def api_error_json(body: BookBody):
 
 @app.get("/header")
 def get_book(header: BookHeader):
-    return header.dict(by_alias=True)
+    return header.model_dump(by_alias=True)
 
 
 @app.post("/cookie")

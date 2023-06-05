@@ -34,5 +34,6 @@ class Components(BaseModel):
     callbacks: Optional[Dict[str, Union[Callback, Reference]]] = None
     pathItems: Optional[Dict[str, Union[PathItem, Reference]]] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

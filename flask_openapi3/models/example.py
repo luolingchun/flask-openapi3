@@ -16,5 +16,6 @@ class Example(BaseModel):
     value: Optional[Any] = None
     externalValue: Optional[str] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

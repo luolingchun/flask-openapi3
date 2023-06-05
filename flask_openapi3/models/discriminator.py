@@ -14,5 +14,6 @@ class Discriminator(BaseModel):
     propertyName: str
     mapping: Optional[Dict[str, str]] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

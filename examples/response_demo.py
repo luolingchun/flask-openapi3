@@ -23,8 +23,8 @@ class HelloPath(BaseModel):
 class Message(BaseModel):
     message: str = Field(..., description="The message")
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             # "example": {"message": "aaa"},
             "examples": {
                 "example1": {
@@ -41,6 +41,7 @@ class Message(BaseModel):
                 }
             }
         }
+    )
 
 
 @bp.get("/hello/<string:name>",

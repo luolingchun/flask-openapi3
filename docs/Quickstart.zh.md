@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
 ## APIBlueprint
 
-APIBlueprint
+[APIBlueprint](./Reference/APIBlueprint.md)
 基于 [Flask Blueprint](https://flask.palletsprojects.com/en/latest/tutorial/views/#create-a-blueprint)，
 你应该使用 **`register_api`** 来代替 **`register_blueprint`**。
 
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
 *v2.2.0 新增*
 
-基于类的 API 视图， 点击[这里](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) 查看完整示例:
+[基于类的 API 视图](./Reference/APIView.md)， 点击[这里](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) 查看完整示例:
 
 ```python
 @api_view.route("/book")

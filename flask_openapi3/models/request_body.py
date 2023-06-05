@@ -17,5 +17,6 @@ class RequestBody(BaseModel):
     content: Dict[str, MediaType]
     required: Optional[bool] = True
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

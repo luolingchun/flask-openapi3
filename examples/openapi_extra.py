@@ -14,8 +14,8 @@ class UploadFilesForm(BaseModel):
     file: FileStorage
     str_list: List[str]
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             # "example": {"a": 123},
             "examples": {
                 "Example 01": {
@@ -33,14 +33,15 @@ class UploadFilesForm(BaseModel):
                 }
             }
         }
+    )
 
 
 class BookBody(BaseModel):
     age: int
     author: str
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             "description": "This is post RequestBody",
             "example": {"age": 12, "author": "author1"},
             "examples": {
@@ -62,6 +63,7 @@ class BookBody(BaseModel):
                 }
 
             }}
+    )
 
 
 @app.post('/upload/files')

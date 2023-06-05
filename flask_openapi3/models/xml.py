@@ -17,5 +17,6 @@ class XML(BaseModel):
     attribute: bool = False
     wrapped: bool = False
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

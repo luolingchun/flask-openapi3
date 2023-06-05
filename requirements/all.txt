@@ -14,5 +14,4 @@ mypy
 
 # test
 pytest
-openapi-python-client
 asgiref

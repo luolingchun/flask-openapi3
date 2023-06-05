@@ -11,5 +11,6 @@ class Reference(BaseModel):
 
     ref: str = Field(..., alias="$ref")
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

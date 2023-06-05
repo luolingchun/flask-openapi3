@@ -95,16 +95,14 @@ class BookQuery(BaseModel):
 
 More information to see [BaseModel](https://pydantic-docs.helpmanual.io/usage/models/), and you can [Customize the Field](https://pydantic-docs.helpmanual.io/usage/schema/#field-customization).
 
-*New in v2.1.0*
-
 However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.0.3#parameter-object). Here is an example:
 
 `age` with **`example`** and `author` with **`deprecated`**.
 
 ```python
 class BookQuery(BaseModel):
-    age: int = Field(..., ge=2, le=4, description='Age', example=3)
-    author: str = Field(None, description='Author', deprecated=True)
+    age: int = Field(..., ge=2, le=4, description='Age', json_schema_extra={"example": 3})
+    author: str = Field(None, description='Author', json_schema_extra={"deprecated": True})
 ```
 
 Magic:

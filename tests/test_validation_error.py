@@ -16,7 +16,7 @@ class ValidationErrorModel(BaseModel):
 
 def validation_error_callback(e: ValidationError):
     validation_error_object = ValidationErrorModel(code="400", message=e.json())
-    response = make_response(validation_error_object.json())
+    response = make_response(validation_error_object.model_dump_json())
     response.headers["Content-Type"] = "application/json"
     response.status_code = getattr(current_app, "validation_error_status", 422)
     return response
@@ -50,7 +50,7 @@ def api_query(query: BookQuery):
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
-    assert resp.json["components"]["schemas"]["ValidationErrorModel"] == ValidationErrorModel.schema()
+    assert resp.json["components"]["schemas"]["ValidationErrorModel"] == ValidationErrorModel.model_json_schema()
 
 
 def test_api_query(client):

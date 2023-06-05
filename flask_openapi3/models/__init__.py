@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/28 10:58
+"""
+OpenAPI v3.1.0 schema types, created according to the specification:
+https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md
+
+The type orders are according to the contents of the specification:
+https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#table-of-contents
+"""
 
 from typing import Optional, List, Any, Dict, Union
 
@@ -56,8 +63,9 @@ class APISpec(BaseModel):
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }
 
 
 class ExtraRequestBody(BaseModel):
@@ -84,4 +92,10 @@ class OAuthConfig(BaseModel):
     usePkceWithAuthorizationCodeGrant: Optional[bool] = False
 
 
-PathItem.update_forward_refs(Operation=Operation)
+Components.model_rebuild()
+Encoding.model_rebuild()
+MediaType.model_rebuild()
+Operation.model_rebuild()
+Parameter.model_rebuild()
+PathItem.model_rebuild()
+RequestBody.model_rebuild()

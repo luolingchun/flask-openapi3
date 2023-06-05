@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/2/27 15:26
-
 from typing import List, Dict, Any
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, RootModel
 
 from flask_openapi3 import OpenAPI, Tag
 
@@ -16,21 +15,22 @@ class Sellout(BaseModel):
     b: int
 
 
-class SelloutList(BaseModel):
-    __root__: List[Sellout]
+class SelloutList(RootModel):
+    root: List[Sellout]
 
 
-class SelloutDict(BaseModel):
-    __root__: Dict[str, Sellout]
+class SelloutDict(RootModel):
+    root: Dict[str, Sellout]
 
 
-class SelloutDict2(BaseModel):
-    __root__: Dict[Any, Any]
+class SelloutDict2(RootModel):
+    root: Dict[Any, Any]
 
 
 class SelloutDict3(BaseModel):
-    class Config:
-        extra: Extra = Extra.allow
+    model_config = {
+        "extra": "allow"
+    }
 
 
 @app.post('/api/v1/sellouts',
@@ -39,7 +39,7 @@ class SelloutDict3(BaseModel):
           )
 def post_sellout(body: SelloutList):
     print(body)
-    return body.json()
+    return body.model_dump()
 
 
 @app.post('/api/v2/sellouts',
@@ -48,7 +48,7 @@ def post_sellout(body: SelloutList):
           )
 def post_sellout2(body: SelloutDict):
     print(body)
-    return body.json()
+    return body.model_dump()
 
 
 @app.post('/api/v3/sellouts',
@@ -56,7 +56,7 @@ def post_sellout2(body: SelloutDict):
           )
 def post_sellout3(body: SelloutDict2):
     print(body)
-    return body.json()
+    return body.model_dump()
 
 
 @app.post('/api/v4/sellouts',
@@ -64,7 +64,7 @@ def post_sellout3(body: SelloutDict2):
           )
 def post_sellout4(body: SelloutDict3):
     print(body)
-    return body.json()
+    return body.model_dump()
 
 
 if __name__ == '__main__':

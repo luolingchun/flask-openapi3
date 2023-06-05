@@ -42,12 +42,12 @@ class BookListAPIView:
     @api_view.doc(summary="get book list")
     def get(self, query: BookQuery):
         print(self.a)
-        return query.json()
+        return query.model_dump_json()
 
     @api_view.doc(summary="create book")
     def post(self, body: BookBody):
         """description for a created book"""
-        return body.json()
+        return body.model_dump_json()
 
 
 @api_view.route("/book/<id>")

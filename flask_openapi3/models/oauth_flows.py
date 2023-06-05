@@ -18,5 +18,6 @@ class OAuthFlows(BaseModel):
     clientCredentials: Optional[OAuthFlow] = None
     authorizationCode: Optional[OAuthFlow] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

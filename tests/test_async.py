@@ -44,12 +44,12 @@ class BookListAPIView:
 
     @api_view.doc(summary="get book list")
     async def get(self, query: BookQuery):
-        return query.json()
+        return query.model_dump_json()
 
     @api_view.doc(summary="create book")
     async def post(self, body: BookBody):
         """description for a created book"""
-        return body.json()
+        return body.model_dump_json()
 
 
 app.register_api_view(api_view)

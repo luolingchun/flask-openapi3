@@ -209,7 +209,7 @@ class OpenAPI(APIScaffold, Flask):
                     api_doc_url=self.api_doc_url.lstrip("/"),
                     # The following parameters are only for swagger ui
                     doc_expansion=self.doc_expansion,
-                    oauth_config=self.oauth_config.dict() if self.oauth_config else None
+                    oauth_config=self.oauth_config.model_dump() if self.oauth_config else None
                 )
             )
 
@@ -251,7 +251,8 @@ class OpenAPI(APIScaffold, Flask):
         spec.tags = self.tags or None
 
         # Add ValidationErrorModel to components schemas
-        self.components_schemas[self.validation_error_model.__name__] = Schema(**self.validation_error_model.schema())
+        self.components_schemas[self.validation_error_model.__name__] = \
+            Schema(**self.validation_error_model.model_json_schema())
 
         # Set components
         self.components.schemas = self.components_schemas
@@ -259,7 +260,7 @@ class OpenAPI(APIScaffold, Flask):
         spec.components = self.components
 
         # Convert spec to JSON
-        self.spec_json = json.loads(spec.json(by_alias=True, exclude_none=True))
+        self.spec_json = json.loads(spec.model_dump_json(by_alias=True, exclude_none=True, warnings=False))
 
         # Update with OpenAPI extensions
         self.spec_json.update(**self.openapi_extensions)

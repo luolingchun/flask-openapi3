@@ -21,8 +21,9 @@ class Response(BaseModel):
     content: Optional[Dict[str, MediaType]] = None
     links: Optional[Dict[str, Union[Link, Reference]]] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }
 
     def merge_with(self, other_response: Optional["Response"]) -> "Response":
         """Merge content from both responses."""

@@ -14,5 +14,6 @@ class ExternalDocumentation(BaseModel):
     description: Optional[str] = None
     url: str
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

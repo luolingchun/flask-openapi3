@@ -24,5 +24,6 @@ class Encoding(BaseModel):
     explode: Optional[bool] = None
     allowReserved: bool = False
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

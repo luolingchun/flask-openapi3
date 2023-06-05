@@ -15,5 +15,6 @@ class Contact(BaseModel):
     url: Optional[str] = None
     email: Optional[str] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

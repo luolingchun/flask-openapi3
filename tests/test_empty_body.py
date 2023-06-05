@@ -3,7 +3,7 @@
 # @Time    : 2021/12/1 9:39
 
 import pytest
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel
 
 from flask_openapi3 import Info, OpenAPI
 
@@ -16,8 +16,9 @@ app.config["TESTING"] = True
 class CreateBookBody(BaseModel):
     pass
 
-    class Config:
-        extra = Extra.allow
+    model_config = {
+        "extra": "allow",
+    }
 
 
 @pytest.fixture
@@ -29,7 +30,7 @@ def client():
 
 @app.post('/book')
 def create_book(body: CreateBookBody):
-    print(body.dict())
+    print(body.model_dump())
     return {"code": 0, "message": "ok"}
 
 

@@ -13,8 +13,8 @@ def test_responses_are_replicated_in_open_api(request):
         """Base description"""
         test: int
 
-        class Config:
-            openapi_extra = {
+        model_config = dict(
+            openapi_extra={
                 "description": "Custom description",
                 "headers": {
                     "location": {
@@ -33,6 +33,7 @@ def test_responses_are_replicated_in_open_api(request):
                     }
                 }
             }
+        )
 
     @test_app.get("/test", responses={"201": BaseResponse})
     def endpoint_test():
@@ -232,8 +233,8 @@ def test_body_examples_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             "examples": {
                 "Example 01": {
                     "summary": "An example",
@@ -250,12 +251,12 @@ def test_body_examples_are_replicated_in_open_api(request):
                 }
             }
         }
-
-    BaseRequest.Config = Config
+    )
+    BaseRequest.model_config = model_config
 
     @test_app.post("/test")
     def endpoint_test(body: BaseRequest):
-        return body.json(), 200
+        return body.model_dump(), 200
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -279,8 +280,8 @@ def test_form_examples(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             "examples": {
                 "Example 01": {
                     "summary": "An example",
@@ -291,12 +292,12 @@ def test_form_examples(request):
                 }
             }
         }
-
-    BaseRequest.Config = Config
+    )
+    BaseRequest.model_config = model_config
 
     @test_app.post("/test")
     def endpoint_test(form: BaseRequest):
-        return form.json(), 200
+        return form.model_dump(), 200
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")

@@ -70,12 +70,13 @@ class BookResponse(BaseModel):
     message: str = Field("ok", description="Exception Information")
     data: BookBodyWithID
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             "content": {
                 "text/csv": {"schema": {"type": "string"}}
             }
         }
+    )
 
 
 @pytest.fixture

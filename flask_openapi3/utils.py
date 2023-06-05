@@ -5,7 +5,7 @@
 import inspect
 import re
 from http import HTTPStatus
-from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any
+from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, DefaultDict
 
 from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
@@ -103,10 +103,10 @@ def get_model_schema(model: Type[BaseModel]) -> dict:
     assert inspect.isclass(model) and issubclass(model, BaseModel), \
         f"{model} is invalid `pydantic.BaseModel`"
 
-    model_config = model.Config
-    by_alias = getattr(model_config, "by_alias", True)
+    model_config = model.model_config
+    by_alias = bool(model_config.get("by_alias", True))
 
-    return model.schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE)
+    return model.model_json_schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE)
 
 
 def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
@@ -129,7 +129,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         parameters.append(Parameter(**data))
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -156,7 +156,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         parameters.append(Parameter(**data))
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -183,7 +183,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         parameters.append(Parameter(**data))
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -210,7 +210,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         parameters.append(Parameter(**data))
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -255,7 +255,7 @@ def parse_form(
         }
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -289,7 +289,7 @@ def parse_body(
         }
 
     # Parse definitions
-    definitions = schema.get("definitions", {})
+    definitions = schema.get("$defs", {})
     for name, value in definitions.items():
         components_schemas[name] = Schema(**value)
 
@@ -322,9 +322,9 @@ def get_responses(
                         schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"})
                     )})
 
-            model_config = response.Config
-            openapi_extra = getattr(model_config, "openapi_extra", None)
-            if openapi_extra is not None:
+            model_config: DefaultDict[str, Any] = response.model_config  # type: ignore
+            openapi_extra = model_config.get("openapi_extra")
+            if openapi_extra:
                 # Add additional information from model_config to the response
                 _responses[key].description = openapi_extra.get("description")
                 _responses[key].headers = openapi_extra.get("headers")
@@ -337,7 +337,7 @@ def get_responses(
                     _content.update(openapi_extra.get("content", {}))
 
             _schemas[response.__name__] = Schema(**schema)
-            definitions = schema.get("definitions")
+            definitions = schema.get("$defs")
             if definitions:
                 # Add schema definitions to _schemas
                 for name, value in definitions.items():
@@ -469,8 +469,8 @@ def parse_parameters(
             )
         else:
             request_body = RequestBody(content=_content)
-        model_config = form.Config
-        openapi_extra = getattr(model_config, "openapi_extra", None)
+        model_config: DefaultDict[str, Any] = form.model_config  # type: ignore
+        openapi_extra = model_config.get("openapi_extra")
         if openapi_extra:
             request_body.description = openapi_extra.get("description")
             request_body.content["multipart/form-data"].example = openapi_extra.get("example")
@@ -490,8 +490,8 @@ def parse_parameters(
             )
         else:
             request_body = RequestBody(content=_content)
-        model_config = body.Config
-        openapi_extra = getattr(model_config, "openapi_extra", None)
+        model_config: DefaultDict[str, Any] = body.model_config  # type: ignore
+        openapi_extra = model_config.get("openapi_extra")
         if openapi_extra:
             request_body.description = openapi_extra.get("description")
             request_body.content["application/json"].example = openapi_extra.get("example")

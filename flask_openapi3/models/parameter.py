@@ -31,5 +31,6 @@ class Parameter(BaseModel):
     examples: Optional[Dict[str, Union[Example, Reference]]] = None
     content: Optional[Dict[str, MediaType]] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

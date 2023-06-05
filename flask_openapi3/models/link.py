@@ -20,5 +20,6 @@ class Link(BaseModel):
     description: Optional[str] = None
     server: Optional[Server] = None
 
-    class Config:
-        extra = "allow"
+    model_config = {
+        "extra": "allow"
+    }

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/11 16:17
-from typing import Any, Dict, Generator
+from typing import Any
 
+from pydantic.json_schema import JsonSchemaValue
+from pydantic_core import core_schema
 from werkzeug.datastructures import FileStorage as _FileStorage
 
 
@@ -12,16 +14,14 @@ class FileStorage(_FileStorage):
     """
 
     @classmethod
-    def __get_validators__(cls) -> Generator:
-        # one or more validators may be yielded which will be called in the
-        # order to validate the input, each validator will receive as an input
-        # the value returned from the previous validator
-        yield cls.validate
+    def __get_pydantic_json_schema__(cls, _core_schema, _handler) -> JsonSchemaValue:
+        field_schema = {"format": "binary", "type": "string"}
+        return field_schema
 
     @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(format="binary", type="string")
+    def __get_pydantic_core_schema__(cls, _source: Any) -> core_schema.CoreSchema:
+        return core_schema.general_plain_validator_function(cls.validate)
 
     @classmethod
-    def validate(cls, value: Any) -> "_FileStorage":
+    def validate(cls, value: _FileStorage, _info: core_schema.ValidationInfo) -> _FileStorage:
         return value
