@@ -47,7 +47,12 @@ theme:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_root_full_path: false
   - glightbox
   - i18n:
       default_language: en
@@ -99,17 +104,7 @@ nav:
       - OpenAPI: Reference/OpenAPI.md
       - APIBlueprint: Reference/APIBlueprint.md
       - APIView: Reference/APIView.md
-      - Model:
-          - APISpec: Reference/Model/APISpec.md
-          - common: Reference/Model/common.md
-          - component: Reference/Model/component.md
-          - file: Reference/Model/file.md
-          - info: Reference/Model/info.md
-          - oauth: Reference/Model/oauth.md
-          - path: Reference/Model/path.md
-          - security: Reference/Model/security.md
-          - tag: Reference/Model/tag.md
-          - validation_error: Reference/Model/validation_error.md
+      - Models: Reference/Models.md
   - LICENSE: LICENSE.md
   - Changelog: Changelog.md
   - Contributing: Contributing.md
