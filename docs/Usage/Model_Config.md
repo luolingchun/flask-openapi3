@@ -1,12 +1,15 @@
-*New in v2.4.0*
-
 The [BaseModel](https://docs.pydantic.dev/latest/usage/models/) in [Pydantic](https://github.com/pydantic/pydantic) 
 supports some custom configurations([Model Config](https://docs.pydantic.dev/latest/usage/model_config/)), 
 so we can use the `openapi_extra` to extend OpenAPI Specification.
 
+## openapi_extra
+
+*New in v2.4.0*
+
+
 The `openapi_extra` will be merged with the automatically generated OpenAPI schema.
 
-## form
+### form
 
 ```python
 class UploadFilesForm(BaseModel):
@@ -38,7 +41,7 @@ Effect in Redoc:
 
 ![](../assets/Snipaste_2023-06-02_11-05-11.png)
 
-## body
+### body
 
 ```python
 class BookBody(BaseModel):
@@ -74,7 +77,7 @@ Effect in swagger:
 
 ![](../assets/Snipaste_2023-06-02_11-06-59.png)
 
-## responses
+### responses
 
 ```python
 class Message(BaseModel):

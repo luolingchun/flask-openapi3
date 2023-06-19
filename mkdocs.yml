@@ -59,11 +59,12 @@ plugins:
         zh:
           Home: 简介
           Quickstart: 快速开始
-          Tutorial: 教程
+          Usage: 教程
           Specification: 规范
-          Operation: 路由操作
           Request: 请求
           Response: 响应
+          Route Operation: 路由操作
+          Model Config: 模型配置
           UI Templates: 自定义模板
           Example: 示例
           API Reference: API 参考
@@ -84,14 +85,14 @@ extra_css:
 nav:
   - Home: index.md
   - Quickstart: Quickstart.md
-  - Tutorial:
-      - Specification: Tutorial/Specification.md
-      - Operation: Tutorial/Operation.md
-      - Request: Tutorial/Request.md
-      - Response: Tutorial/Response.md
-      - OpenAPI Extra: Tutorial/Openapi_extra.md
-      - UI Templates: Tutorial/UI_Templates.md
-      - JSON: Tutorial/JSON.md
+  - Usage:
+      - Specification: Usage/Specification.md
+      - Request: Usage/Request.md
+      - Response: Usage/Response.md
+      - Route Operation: Usage/Route_Operation.md
+      - Model Config: Usage/Model_Config.md
+      - UI Templates: Usage/UI_Templates.md
+      - JSON: Usage/JSON.md
   - Example: Example.md
   - API Reference:
       - APIScaffold: Reference/Scaffold.md

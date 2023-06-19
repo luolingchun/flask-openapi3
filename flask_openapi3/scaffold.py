@@ -74,24 +74,6 @@ class APIScaffold(Scaffold, ABC):
             view_class=None,
             view_kwargs=None
     ):
-        """
-        Create a view function that can be used with Flask to handle API requests.
-
-        Arguments:
-            func: The original function to be called when handling the API request.
-            header: The header parameter for the API request.
-            cookie: The cookie parameter for the API request.
-            path: The path parameter for the API request.
-            query: The query parameter for the API request.
-            form: The form parameter for the API request.
-            body: The body parameter for the API request.
-            view_class: The class of the API view (if applicable).
-            view_kwargs: Additional keyword arguments to pass to the API view.
-
-        Returns:
-            The view function that can be registered with Flask.
-
-        """
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)

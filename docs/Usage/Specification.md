@@ -354,7 +354,7 @@ While the OpenAPI Specification tries to accommodate most use cases,
 additional data can be added to extend the specification at certain points.
 See [Specification Extensions](https://spec.openapis.org/oas/v3.0.3#specification-extensions).
 
-It can also be available in **APIBlueprint** and **APIView**, goto [Operation](Operation.md#openapi_extensions).
+It can also be available in **APIBlueprint** and **APIView**, goto [Operation](Route_Operation.md#openapi_extensions).
 
 ```python hl_lines="3"
 from flask_openapi3 import OpenAPI

@@ -207,9 +207,6 @@ class APIView:
         Args:
             app: An instance of the OpenAPI app.
             view_kwargs: Additional keyword arguments to pass to the API views.
-
-        Returns:
-            None
         """
         if view_kwargs is None:
             view_kwargs = {}
