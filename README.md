@@ -8,8 +8,8 @@
     <em>Generate REST API and OpenAPI documentation for your Flask project.</em>
 </p>
 <p align="center">
-    <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/test.yml" target="_blank">
-        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/test.yml?branch=master" alt="test">
+    <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/tests.yml" target="_blank">
+        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/tests.yml?branch=master" alt="test">
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
         <img class="off-glb" src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
