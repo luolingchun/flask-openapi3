@@ -62,7 +62,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             doc_expansion: Default expansion setting for operations and tags ("list", "full", or "none").
                            See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
-            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi".
+            doc_prefix: URL prefix used for OpenAPI document and UI. Default to "/openapi"
             api_doc_url: URL for accessing the OpenAPI specification document in JSON format.
                          Defaults to "/openapi.json".
             swagger_url: URL for accessing the Swagger UI documentation. Defaults to "/swagger".
@@ -74,7 +74,7 @@ class OpenAPI(APIScaffold, Flask):
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object.
             operation_id_callback: Callback function for custom operation ID generation.
                                    Receives name (str), path (str), and method (str) parameters.
-                                   Defaults to `get_operation_id_for_path` from utils.
+                                   Default to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
                                 See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
             **kwargs: Additional kwargs to be passed to Flask.
@@ -241,7 +241,7 @@ class OpenAPI(APIScaffold, Flask):
         # Update paths with the APIBlueprint's paths
         self.paths.update(**api.paths)
 
-        # Update components schemas with the APIBlueprint's components schemas
+        # Update component schemas with the APIBlueprint's component schemas
         self.components_schemas.update(**api.components_schemas)
 
         # Register the APIBlueprint with the current instance
@@ -269,7 +269,7 @@ class OpenAPI(APIScaffold, Flask):
         # Update paths with the APIView's paths
         self.paths.update(**api_view.paths)
 
-        # Update components schemas with the APIView's components schemas
+        # Update component schemas with the APIView's component schemas
         self.components_schemas.update(**api_view.components_schemas)
 
         # Register the APIView with the current instance

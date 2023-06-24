@@ -290,7 +290,7 @@ def get_responses(
     _responses = {}
     _schemas = {}
     if not responses.get("422"):
-        # Handle 422 response for Unprocessable Entity
+        # Handle response 422 for Unprocessable Entity
         _responses["422"] = Response(
             description=HTTP_STATUS["422"],
             content={
@@ -372,14 +372,14 @@ def parse_and_store_tags(
         operation: Operation
 ) -> None:
     """
-    Parses new tags, stores them in old_tags list if they are not already present,
+    Parses new tags, stores them in an old_tags list if they are not already present,
     and updates the tags attribute of the operation object.
 
     Arguments:
         new_tags: A list of new Tag objects to be parsed and stored.
         old_tags: The list of existing Tag objects.
-        old_tag_names: The list of names of existing tags.
-        operation: The operation object whose tags attribute needs to be updated.
+        old_tag_names: The list that names of existing tags.
+        operation: The operation object whose tag attribute needs to be updated.
 
     Returns:
         None
@@ -529,7 +529,7 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
     Returns:
         None
     """
-    # Check the HTTP method and update the PathItem object in the paths dictionary
+    # Check the HTTP method and update the PathItem object in the path dictionary
     if method == HTTPMethod.GET:
         if not paths.get(uri):
             paths[uri] = PathItem(get=operation)

@@ -40,10 +40,10 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_tags: APIBlueprint tags for every API.
             abp_security: APIBlueprint security for every API.
             abp_responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            doc_ui: Enable OpenAPI document UI (Swagger UI, Redoc and Rapidoc). Defaults to True.
+            doc_ui: Enable OpenAPI document UI (Swagger UI, Redoc, and Rapidoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
-                                   Defaults to `get_operation_id_for_path` from utils
+                                   Default to `get_operation_id_for_path` from utils
             **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -134,7 +134,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            doc_ui: Add openapi document UI (swagger, rapidoc and redoc).
+                    Defaults to True.
         """
         if self.doc_ui is True and doc_ui is True:
             if responses is None:

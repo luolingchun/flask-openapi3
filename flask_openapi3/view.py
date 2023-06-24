@@ -44,7 +44,7 @@ class APIView:
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
-                                   Defaults to `get_operation_id_for_path` from utils
+                                   Default to `get_operation_id_for_path` from utils
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
@@ -135,7 +135,8 @@ class APIView:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            doc_ui: Add openapi document UI (swagger, rapidoc, and redoc).
+                    Default to True.
         """
 
         if extra_form is not None:

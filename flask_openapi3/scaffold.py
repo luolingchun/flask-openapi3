@@ -174,7 +174,8 @@ class APIScaffold(Scaffold, ABC):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add openapi document UI(swagger, rapidoc and redoc). Defaults to True.
+            doc_ui: Add openapi document UI (swagger, rapidoc and redoc).
+                    Default to True.
         """
 
         if extra_form is not None:
