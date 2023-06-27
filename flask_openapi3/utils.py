@@ -83,18 +83,21 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     return operation_id
 
 
-def get_schema(obj: Type[BaseModel]) -> dict:
+def get_model_schema(model: Type[BaseModel]) -> dict:
     """Converts a Pydantic model to an OpenAPI schema."""
 
-    assert inspect.isclass(obj) and issubclass(obj, BaseModel), \
-        f"{obj} is invalid `pydantic.BaseModel`"
+    assert inspect.isclass(model) and issubclass(model, BaseModel), \
+        f"{model} is invalid `pydantic.BaseModel`"
 
-    return obj.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+    model_config = model.Config
+    by_alias = getattr(model_config, "by_alias", True)
+
+    return model.schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE)
 
 
 def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parses a header model and returns a list of parameters and component schemas."""
-    schema = get_schema(header)
+    schema = get_model_schema(header)
     parameters = []
     components_schemas: Dict = dict()
     properties = schema.get("properties", {})
@@ -121,7 +124,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parses a cookie model and returns a list of parameters and component schemas."""
-    schema = get_schema(cookie)
+    schema = get_model_schema(cookie)
     parameters = []
     components_schemas: Dict = dict()
     properties = schema.get("properties", {})
@@ -148,7 +151,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parses a path model and returns a list of parameters and component schemas."""
-    schema = get_schema(path)
+    schema = get_model_schema(path)
     parameters = []
     components_schemas: Dict = dict()
     properties = schema.get("properties", {})
@@ -175,7 +178,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     """Parses a query model and returns a list of parameters and component schemas."""
-    schema = get_schema(query)
+    schema = get_model_schema(query)
     parameters = []
     components_schemas: Dict = dict()
     properties = schema.get("properties", {})
@@ -205,7 +208,7 @@ def parse_form(
         extra_form: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a form model and returns a list of parameters and component schemas."""
-    schema = get_schema(form)
+    schema = get_model_schema(form)
     components_schemas = dict()
     properties = schema.get("properties", {})
 
@@ -250,7 +253,7 @@ def parse_body(
         extra_body: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a body model and returns a list of parameters and component schemas."""
-    schema = get_schema(body)
+    schema = get_model_schema(body)
     components_schemas = dict()
 
     title = schema.get("title")
@@ -315,7 +318,7 @@ def get_responses(
         if isinstance(response, dict):
             _responses[key] = response  # type: ignore
         else:
-            schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)
+            schema = get_model_schema(response)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
