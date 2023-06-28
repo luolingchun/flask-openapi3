@@ -555,3 +555,18 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
             paths[uri] = PathItem(delete=operation)
         else:
             paths[uri].delete = operation
+
+
+def parse_rule(rule: str, url_prefix=None) -> str:
+    trail_slash = rule.endswith("/")
+
+    # Merge url_prefix and uri
+    uri = url_prefix.rstrip("/") + "/" + rule.lstrip("/") if url_prefix else rule
+
+    if not trail_slash:
+        uri = uri.rstrip("/")
+
+    # Convert route parameter format from /pet/<petId> to /pet/{petId}
+    uri = re.sub(r"<([^<:]+:)?", "{", uri).replace(">", "}")
+
+    return uri

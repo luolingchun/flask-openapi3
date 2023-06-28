@@ -22,11 +22,12 @@ app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 security = [{"jwt": []}]
 
-api_view = APIView(url_prefix="/api/v1", view_tags=[Tag(name="book")], view_security=security)
+api_view = APIView(url_prefix="/api/v1/<name>", view_tags=[Tag(name="book")], view_security=security)
 
 
 class BookPath(BaseModel):
     id: int = Field(..., description="book ID")
+    name: str
 
 
 class BookQuery(BaseModel):
@@ -85,30 +86,31 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     assert resp.json == app.api_doc
-    assert resp.json["paths"]["/api/v1/book/{id}"]["put"]["operationId"] == "update"
-    assert resp.json["paths"]["/api/v1/book/{id}"]["delete"]["operationId"] == "BookAPIView_delete_book__id__delete"
+    assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["put"]["operationId"] == "update"
+    assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["delete"][
+               "operationId"] == "BookAPIView_delete_book__id__delete"
 
 
 def test_get_list(client):
-    resp = client.get("/api/v1/book")
+    resp = client.get("/api/v1/name1/book")
     assert resp.status_code == 200
 
 
 def test_post(client):
-    resp = client.post("/api/v1/book", json={"age": 3})
+    resp = client.post("/api/v1/name1/book", json={"age": 3})
     assert resp.status_code == 200
 
 
 def test_put(client):
-    resp = client.put("/api/v1/book/1", json={"age": 3})
+    resp = client.put("/api/v1/name1/book/1", json={"age": 3})
     assert resp.status_code == 200
 
 
 def test_get(client):
-    resp = client.get("/api/v1/book/1")
+    resp = client.get("/api/v1/name1/book/1")
     assert resp.status_code == 200
 
 
 def test_delete(client):
-    resp = client.delete("/api/v1/book/1")
+    resp = client.delete("/api/v1/name1/book/1")
     assert resp.status_code == 200
