@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
-import re
 from copy import deepcopy
 from typing import Optional, List, Dict, Any, Type, Callable, Tuple, Union
 
@@ -14,7 +13,7 @@ from .models.common import ExtraRequestBody
 from .models.server import Server
 from .scaffold import APIScaffold
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path
+    get_operation_id_for_path, parse_rule
 
 
 class APIBlueprint(APIScaffold, Blueprint):
@@ -77,14 +76,8 @@ class APIBlueprint(APIScaffold, Blueprint):
 
         # Merge paths from the nested APIBlueprint
         for path_url, path_item in api.paths.items():
-            trail_slash = path_url.endswith("/")
-
-            # Merge url_prefix and new API blueprint path url
-            uri = self.url_prefix.rstrip("/") + "/" + path_url.lstrip("/") if self.url_prefix else path_url
-
-            # Strip the right slash
-            if not trail_slash:
-                uri = uri.rstrip("/")
+            # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
+            uri = parse_rule(path_url, url_prefix=self.url_prefix)
 
             self.paths[uri] = path_item
 
@@ -179,13 +172,10 @@ class APIBlueprint(APIScaffold, Blueprint):
             )
             # Parse response
             get_responses(combine_responses, extra_responses, self.components_schemas, operation)
-            # Convert route parameter format from /pet/<petId> to /pet/{petId}
-            uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
-            trail_slash = uri.endswith("/")
-            # Merge url_prefix and uri
-            uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
-            if not trail_slash:
-                uri = uri.rstrip("/")
+
+            # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
+            uri = parse_rule(rule, url_prefix=self.url_prefix)
+
             # Parse method
             parse_method(uri, method, self.paths, operation)
             return header, cookie, path, query, form, body
