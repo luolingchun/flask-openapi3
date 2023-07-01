@@ -55,7 +55,8 @@ class APIScaffold(Scaffold, ABC):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
-            method: str = HTTPMethod.GET
+            method: str = HTTPMethod.GET,
+            validation_error_status: str = "422"
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         raise NotImplementedError
 
@@ -71,8 +72,9 @@ class APIScaffold(Scaffold, ABC):
             query,
             form,
             body,
+            validation_error_status="422",
             view_class=None,
-            view_kwargs=None
+            view_kwargs=None,
     ):
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
@@ -85,10 +87,11 @@ class APIScaffold(Scaffold, ABC):
                     query=query,
                     form=form,
                     body=body,
+                    validation_error_status=validation_error_status,
                     path_kwargs=kwargs
                 )
                 if isinstance(func_kwargs, Response):
-                    # 422
+                    # validation_error_status from OpenAPI Initialization
                     return func_kwargs
                 # handle async request
                 if view_class:
@@ -112,10 +115,11 @@ class APIScaffold(Scaffold, ABC):
                     query=query,
                     form=form,
                     body=body,
-                    path_kwargs=kwargs
+                    path_kwargs=kwargs,
+                    validation_error_status=validation_error_status
                 )
                 if isinstance(result, Response):
-                    # 422
+                    # validation_error_status from OpenAPI initialization
                     return result
                 # handle request
                 if view_class:
@@ -153,6 +157,7 @@ class APIScaffold(Scaffold, ABC):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            validation_error_status: str = "422",
             **options: Any
     ) -> Callable:
         """
@@ -176,6 +181,8 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI (swagger, rapidoc and redoc).
                     Default to True.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Defaults to 422
         """
 
         if extra_form is not None:
@@ -210,10 +217,11 @@ class APIScaffold(Scaffold, ABC):
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
-                    method=HTTPMethod.GET
+                    method=HTTPMethod.GET,
+                    validation_error_status=validation_error_status
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, validation_error_status)
             options.update({"methods": [HTTPMethod.GET]})
             self.add_url_rule(rule, view_func=view_func, **options)
 
@@ -239,6 +247,7 @@ class APIScaffold(Scaffold, ABC):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            validation_error_status: str = "422",
             **options: Any
     ) -> Callable:
         """
@@ -261,6 +270,8 @@ class APIScaffold(Scaffold, ABC):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Defaults to 422
         """
         if extra_form is not None:
             warnings.warn(
@@ -294,10 +305,11 @@ class APIScaffold(Scaffold, ABC):
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
-                    method=HTTPMethod.POST
+                    method=HTTPMethod.POST,
+                    validation_error_status=validation_error_status
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, validation_error_status)
             options.update({"methods": [HTTPMethod.POST]})
             self.add_url_rule(rule, view_func=view_func, **options)
 
@@ -323,6 +335,7 @@ class APIScaffold(Scaffold, ABC):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            validation_error_status: str = "422",
             **options: Any
     ) -> Callable:
         """
@@ -345,6 +358,8 @@ class APIScaffold(Scaffold, ABC):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Defaults to 422
         """
         if extra_form is not None:
             warnings.warn(
@@ -378,10 +393,11 @@ class APIScaffold(Scaffold, ABC):
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
-                    method=HTTPMethod.PUT
+                    method=HTTPMethod.PUT,
+                    validation_error_status=validation_error_status
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, validation_error_status)
             options.update({"methods": [HTTPMethod.PUT]})
             self.add_url_rule(rule, view_func=view_func, **options)
 
@@ -406,6 +422,7 @@ class APIScaffold(Scaffold, ABC):
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
+            validation_error_status: str = "422",
             doc_ui: bool = True,
             **options: Any
     ) -> Callable:
@@ -429,6 +446,8 @@ class APIScaffold(Scaffold, ABC):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Defaults to 422
         """
         if extra_form is not None:
             warnings.warn(
@@ -462,10 +481,11 @@ class APIScaffold(Scaffold, ABC):
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
-                    method=HTTPMethod.DELETE
+                    method=HTTPMethod.DELETE,
+                    validation_error_status=validation_error_status
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, validation_error_status)
             options.update({"methods": [HTTPMethod.DELETE]})
             self.add_url_rule(rule, view_func=view_func, **options)
 
@@ -491,6 +511,7 @@ class APIScaffold(Scaffold, ABC):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            validation_error_status: str = "422",
             **options: Any
     ) -> Callable:
         """
@@ -513,6 +534,8 @@ class APIScaffold(Scaffold, ABC):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                    Defaults to 422
         """
         if extra_form is not None:
             warnings.warn(
@@ -546,10 +569,12 @@ class APIScaffold(Scaffold, ABC):
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
-                    method=HTTPMethod.PATCH
+                    method=HTTPMethod.PATCH,
+                    validation_error_status=validation_error_status
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body,
+                                              validation_error_status=validation_error_status)
             options.update({"methods": [HTTPMethod.PATCH]})
             self.add_url_rule(rule, view_func=view_func, **options)
 

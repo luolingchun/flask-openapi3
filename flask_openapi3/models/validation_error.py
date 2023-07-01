@@ -6,7 +6,7 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 
-class UnprocessableEntity(BaseModel):
+class ErrorResponseModel(BaseModel):
     # More information: https://pydantic-docs.helpmanual.io/usage/models/#error-handling
     loc: Optional[List[str]] = Field(None, title="Location", description="the error's location as a list. ")
     msg: Optional[str] = Field(None, title="Message", description="a computer-readable identifier of the error type.")

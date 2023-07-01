@@ -93,7 +93,8 @@ def _do_request(
         query: Optional[Type[BaseModel]] = None,
         form: Optional[Type[BaseModel]] = None,
         body: Optional[Type[BaseModel]] = None,
-        path_kwargs: Optional[Dict[Any, Any]] = None
+        validation_error_status: str = "422",
+        path_kwargs: Optional[Dict[Any, Any]] = None,
 ) -> Union[Response, Dict]:
     """
     Validate requests and responses.
@@ -105,6 +106,7 @@ def _do_request(
         query: Query model.
         form: Form model.
         body: Body model.
+        validation_error_status: HTTP Status of the response upon validation failure
         path_kwargs: Path parameters.
 
     Returns:
@@ -135,7 +137,7 @@ def _do_request(
         # Create a JSON response with validation error details
         response = make_response(e.json())
         response.headers["Content-Type"] = "application/json"
-        response.status_code = 422
+        response.status_code = int(validation_error_status)
         return response
 
     return func_kwargs

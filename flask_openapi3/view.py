@@ -115,7 +115,8 @@ class APIView:
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            validation_error_status: Optional[str] = "422"
     ) -> Callable:
         """
         Decorator for view method.
@@ -137,6 +138,8 @@ class APIView:
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI (swagger, rapidoc, and redoc).
                     Default to True.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Defaults to 422
         """
 
         if extra_form is not None:
@@ -194,7 +197,8 @@ class APIView:
                 operation=operation
             )
             # Parse response
-            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation,
+                          validation_error_status)
             func.operation = operation
 
             return func
@@ -223,8 +227,9 @@ class APIView:
                     query,
                     form,
                     body,
+                    app.validation_error_status,
                     view_class=cls,
-                    view_kwargs=view_kwargs
+                    view_kwargs=view_kwargs,
                 )
                 options = {
                     "endpoint": cls.__name__ + "." + method.lower(),

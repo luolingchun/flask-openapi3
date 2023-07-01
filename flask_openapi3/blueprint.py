@@ -113,7 +113,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
-            method: str = HTTPMethod.GET
+            method: str = HTTPMethod.GET,
+            validation_error_status: str = "422"
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
@@ -136,6 +137,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add openapi document UI (swagger, rapidoc and redoc).
                     Defaults to True.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic
+                                    Defaults to 422
         """
         if self.doc_ui is True and doc_ui is True:
             if responses is None:
@@ -178,7 +181,8 @@ class APIBlueprint(APIScaffold, Blueprint):
                 operation=operation
             )
             # Parse response
-            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation,
+                          validation_error_status)
             # Convert route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             trail_slash = uri.endswith("/")

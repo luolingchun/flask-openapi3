@@ -45,6 +45,6 @@ from .models.security import SecuritySchemeType
 from .models.server import Server
 from .models.server import ServerVariable
 from .models.tag import Tag
-from .models.validation_error import UnprocessableEntity
+from .models.validation_error import ErrorResponseModel
 from .openapi import OpenAPI
 from .view import APIView
