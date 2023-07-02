@@ -131,7 +131,7 @@ def create_book(body: BookBody):
 
 !!! Deprecated-Warning warning
 
-    `extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.
+    `extra_form` will be deprecated in v3.x, please use [openapi_extra](./Model_Config.md#openapi_extra) instead.
 
 *new in v2.1.0*
 
@@ -158,7 +158,7 @@ def create_book(body: BookForm):
 
 !!! Deprecated-Warning warning
 
-    `extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.
+    `extra_body` will be deprecated in v3.x, please use [openapi_extra](./Model_Config.md#openapi_extra) instead.
 
 *new in v2.1.0*
 

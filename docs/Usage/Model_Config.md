@@ -80,7 +80,7 @@ Effect in swagger:
 ### responses
 
 ```python
-class Message(BaseModel):
+class MessageResponse(BaseModel):
     message: str = Field(..., description="The message")
 
     class Config:
@@ -109,6 +109,8 @@ Effect in swagger:
 
 
 ## by_alias
+
+*New in v2.5.0*
 
 Sometimes you may not want to use aliases (such as in the responses model). In that case, `by_alias` will be convenient:
 
