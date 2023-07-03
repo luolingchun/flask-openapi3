@@ -45,7 +45,6 @@ class OpenAPI(APIScaffold, Flask):
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id_callback: Callable = get_operation_id_for_path,
             openapi_extensions: Optional[Dict[str, Any]] = None,
-            validation_error_status: Optional[str] = "422",
             **kwargs: Any
     ) -> None:
         """
@@ -78,8 +77,6 @@ class OpenAPI(APIScaffold, Flask):
                                    Default to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
                                 See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
-            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
-                                    Defaults to 422
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -122,9 +119,6 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set OpenAPI extensions
         self.openapi_extensions = openapi_extensions or dict()
-
-        # Set HTTP Response of validation errors within OpenAPI
-        self.validation_error_status = validation_error_status
 
         # Initialize the OpenAPI documentation UI
         if doc_ui:
@@ -300,8 +294,7 @@ class OpenAPI(APIScaffold, Flask):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
-            method: str = HTTPMethod.GET,
-            validation_error_status: str = "422"
+            method: str = HTTPMethod.GET
     ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
@@ -324,8 +317,6 @@ class OpenAPI(APIScaffold, Flask):
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Add OpenAPI document UI (swagger, rapidoc, and redoc). Defaults to True.
             method: HTTP method for the operation. Defaults to GET.
-            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic
-                                    Defaults to 422
         """
         if doc_ui is True:
             if responses is None:
@@ -367,8 +358,7 @@ class OpenAPI(APIScaffold, Flask):
                 operation=operation
             )
             # Parse response
-            get_responses(combine_responses, extra_responses, self.components_schemas, operation,
-                          validation_error_status)
+            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
             # Convert route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             # Parse method
