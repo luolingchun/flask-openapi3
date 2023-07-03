@@ -5,7 +5,7 @@ import json
 from json import JSONDecodeError
 from typing import Any, Type, Optional, Dict, Union
 
-from flask import request, make_response
+from flask import request, make_response, current_app
 from flask.wrappers import Response
 from pydantic import ValidationError, BaseModel
 from pydantic.error_wrappers import ErrorWrapper
@@ -135,7 +135,7 @@ def _do_request(
         # Create a JSON response with validation error details
         response = make_response(e.json())
         response.headers["Content-Type"] = "application/json"
-        response.status_code = 422
+        response.status_code = getattr(current_app, "validation_error_status", 422)
         return response
 
     return func_kwargs

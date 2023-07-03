@@ -248,9 +248,10 @@ class OpenAPI(APIScaffold, Flask):
                     "description": HTTP_STATUS[self.validation_error_status],
                     "content": {
                         "application/json": {
-                            "schema": {"type": "array", "items": {
-                                "$ref": f"{OPENAPI3_REF_PREFIX}/{ValidationErrorResponseModel.__name__}"}
-                                       }
+                            "schema": {
+                                "type": "array",
+                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{ValidationErrorResponseModel.__name__}"}
+                            }
                         }
                     }
                 }
