@@ -30,5 +30,4 @@
 ::: flask_openapi3.models.path.Operation
 ::: flask_openapi3.models.path.PathItem
 
-
-::: flask_openapi3.models.validation_error.UnprocessableEntity
+::: flask_openapi3.models.validation_error.ValidationErrorResponseModel

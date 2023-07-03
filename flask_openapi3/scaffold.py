@@ -88,7 +88,7 @@ class APIScaffold(Scaffold, ABC):
                     path_kwargs=kwargs
                 )
                 if isinstance(func_kwargs, Response):
-                    # 422
+                    # Validation error response
                     return func_kwargs
                 # handle async request
                 if view_class:
@@ -115,7 +115,7 @@ class APIScaffold(Scaffold, ABC):
                     path_kwargs=kwargs
                 )
                 if isinstance(result, Response):
-                    # 422
+                    # Validation error response
                     return result
                 # handle request
                 if view_class:

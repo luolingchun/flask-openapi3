@@ -13,7 +13,6 @@ from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
-from .models.validation_error import UnprocessableEntity
 
 
 def get_operation(
@@ -280,39 +279,19 @@ def parse_body(
 
 
 def get_responses(
-        responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]],
+        responses: Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]],
         extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
 ) -> None:
-    if responses is None:
-        responses = {}
     _responses = {}
     _schemas = {}
-    if not responses.get("422"):
-        # Handle response 422 for Unprocessable Entity
-        _responses["422"] = Response(
-            description=HTTP_STATUS["422"],
-            content={
-                "application/json": MediaType(
-                    **{
-                        "schema": Schema(
-                            **{
-                                "type": "array",
-                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{UnprocessableEntity.__name__}"}
-                            }
-                        )
-                    }
-                )
-            }
-        )
-        _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
+
     for key, response in responses.items():
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
-            continue
-        if isinstance(response, dict):
+        elif isinstance(response, dict):
             _responses[key] = response  # type: ignore
         else:
             schema = response.schema(ref_template=OPENAPI3_REF_TEMPLATE)

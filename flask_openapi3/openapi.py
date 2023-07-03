@@ -10,11 +10,12 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
 
+from . import ValidationErrorResponseModel
 from .blueprint import APIBlueprint
 from .commands import openapi_command
-from .http import HTTPMethod
-from .models import Info, APISpec, Tag, Components, Server
-from .models.common import ExternalDocumentation, ExtraRequestBody
+from .http import HTTPMethod, HTTP_STATUS
+from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
+from .models.common import ExternalDocumentation, ExtraRequestBody, Schema
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
 from .scaffold import APIScaffold
@@ -45,6 +46,7 @@ class OpenAPI(APIScaffold, Flask):
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id_callback: Callable = get_operation_id_for_path,
             openapi_extensions: Optional[Dict[str, Any]] = None,
+            validation_error_status: Union[str, int] = 422,
             **kwargs: Any
     ) -> None:
         """
@@ -77,6 +79,8 @@ class OpenAPI(APIScaffold, Flask):
                                    Default to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
                                 See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
+            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+                                    Default to 422.
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -120,12 +124,18 @@ class OpenAPI(APIScaffold, Flask):
         # Set OpenAPI extensions
         self.openapi_extensions = openapi_extensions or dict()
 
+        # Set HTTP Response of validation errors within OpenAPI
+        self.validation_error_status = str(validation_error_status)
+
         # Initialize the OpenAPI documentation UI
         if doc_ui:
             self._init_doc()
 
         # Add the OpenAPI command
         self.cli.add_command(openapi_command)
+
+        # Initialize specification JSON
+        self.spec_json: Dict = dict()
 
     def _init_doc(self) -> None:
         """
@@ -198,6 +208,9 @@ class OpenAPI(APIScaffold, Flask):
             The OpenAPI specification JSON as a dictionary.
 
         """
+        if self.spec_json:
+            return self.spec_json
+
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,
@@ -210,18 +223,39 @@ class OpenAPI(APIScaffold, Flask):
         # Set paths
         spec.paths = self.paths
 
+        # Add ValidationErrorResponseModel to components schemas
+        self.components_schemas[ValidationErrorResponseModel.__name__] = Schema(**ValidationErrorResponseModel.schema())
+
         # Set components
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.security_schemes
         spec.components = self.components
 
         # Convert spec to JSON
-        spec_json = json.loads(spec.json(by_alias=True, exclude_none=True))
+        self.spec_json = json.loads(spec.json(by_alias=True, exclude_none=True))
 
         # Update with OpenAPI extensions
-        spec_json.update(**self.openapi_extensions)
+        self.spec_json.update(**self.openapi_extensions)
 
-        return spec_json
+        # Handle validation error response
+        for rule, path_item in self.spec_json["paths"].items():
+            for http_method, operation in path_item.items():
+                if not operation.get("responses"):
+                    operation["responses"] = {}
+                if operation["responses"].get(self.validation_error_status):
+                    continue
+                operation["responses"][self.validation_error_status] = {
+                    "description": HTTP_STATUS[self.validation_error_status],
+                    "content": {
+                        "application/json": {
+                            "schema": {"type": "array", "items": {
+                                "$ref": f"{OPENAPI3_REF_PREFIX}/{ValidationErrorResponseModel.__name__}"}
+                                       }
+                        }
+                    }
+                }
+
+        return self.spec_json
 
     def register_api(self, api: APIBlueprint) -> None:
         """
