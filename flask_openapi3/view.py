@@ -13,9 +13,9 @@ from copy import deepcopy
 from typing import Optional, List, Dict, Any, Callable
 
 from ._http import HTTPMethod
-from .models.common import ExternalDocumentation, ExtraRequestBody
-from .models.server import Server
-from .models.tag import Tag
+from .models import ExternalDocumentation, ExtraRequestBody
+from .models import Server
+from .models import Tag
 from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
     get_operation_id_for_path, parse_rule, convert_responses_key_to_string
 

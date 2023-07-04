@@ -5,11 +5,14 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from .common import ExternalDocumentation
+from .external_documentation import ExternalDocumentation
 
 
 class Tag(BaseModel):
-    """https://spec.openapis.org/oas/v3.0.3#tag-object"""
+    """
+    https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#tag-object
+    """
+
     name: str
     description: Optional[str] = None
     externalDocs: Optional[ExternalDocumentation] = None

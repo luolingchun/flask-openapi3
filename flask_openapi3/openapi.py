@@ -14,9 +14,9 @@ from ._http import HTTP_STATUS, HTTPMethod
 from .blueprint import APIBlueprint
 from .commands import openapi_command
 from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
-from .models.common import ExternalDocumentation, ExtraRequestBody, Schema
-from .models.oauth import OAuthConfig
-from .models.validation_error import ValidationErrorModel
+from .models import ExternalDocumentation, ExtraRequestBody, Schema
+from .models import OAuthConfig
+from .models import ValidationErrorModel
 from .scaffold import APIScaffold
 from .templates import openapi_html_string, redoc_html_string, rapidoc_html_string, swagger_html_string
 from .types import ResponseDict, SecuritySchemesDict

@@ -13,9 +13,9 @@ from pydantic import BaseModel, ValidationError
 
 from ._http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
-from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
-from .models.path import Operation, RequestBody, PathItem, Response
-from .models.path import ParameterInType, Parameter
+from .models import Schema, MediaType, Encoding, ExtraRequestBody
+from .models import Operation, RequestBody, PathItem, Response
+from .models import ParameterInType, Parameter
 from .types import ResponseDict, ResponseStrKeyDict
 
 
@@ -108,7 +108,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.header,
+            "in": ParameterInType.HEADER,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -135,7 +135,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.cookie,
+            "in": ParameterInType.COOKIE,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -162,7 +162,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.path,
+            "in": ParameterInType.PATH,
             "description": value.get("description"),
             "required": True,
             "schema": Schema(**value)
@@ -189,7 +189,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.query,
+            "in": ParameterInType.QUERY,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -298,8 +298,6 @@ def get_responses(
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
-        elif isinstance(response, dict):
-            _responses[key] = response  # type: ignore
         elif isinstance(response, dict):
             _responses[key] = Response(**response)
         else:
