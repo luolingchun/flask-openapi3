@@ -4,16 +4,18 @@
 
 import inspect
 import re
+from http import HTTPStatus
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, Union
 
 from pydantic import BaseModel
 
-from .http import HTTP_STATUS, HTTPMethod
+from ._http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
 from .models.validation_error import UnprocessableEntity
+from .types import ResponseDict, ResponseStrKeyDict
 
 
 def get_operation(
@@ -283,13 +285,11 @@ def parse_body(
 
 
 def get_responses(
-        responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]],
+        responses: Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]],
         extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
 ) -> None:
-    if responses is None:
-        responses = {}
     _responses = {}
     _schemas = {}
     if not responses.get("422"):
@@ -314,9 +314,8 @@ def get_responses(
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
-            continue
-        if isinstance(response, dict):
-            _responses[key] = response  # type: ignore
+        elif isinstance(response, dict):
+            _responses[key] = Response(**response)
         else:
             schema = get_model_schema(response)
             _responses[key] = Response(
@@ -387,9 +386,6 @@ def parse_and_store_tags(
     Returns:
         None
     """
-    if new_tags is None:
-        new_tags = []
-
     # Iterate over each tag in new_tags
     for tag in new_tags:
         if tag.name not in old_tag_names:
@@ -573,3 +569,16 @@ def parse_rule(rule: str, url_prefix=None) -> str:
     uri = re.sub(r"<([^<:]+:)?", "{", uri).replace(">", "}")
 
     return uri
+
+
+def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDict:
+    """Convert key to string"""
+    _responses = {}
+    for key, value in responses.items():
+        if isinstance(key, HTTPStatus):
+            key = str(key.value)
+        elif isinstance(key, int):
+            key = str(key)
+        _responses[key] = value
+
+    return _responses

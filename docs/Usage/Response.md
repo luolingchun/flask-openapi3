@@ -29,6 +29,28 @@ def get_book(path: BookPath, query: BookBody):
     return {"code": 0, "message": "ok", "data": {}}
 ```
 
+*New in v2.5.0*
+
+Now you can use `string`, `int`, and `HTTPStatus` as response's key.
+
+```python hl_lines="5 7"
+from http import HTTPStatus
+
+@api.get("/hello/<string:name>",
+        responses={
+            HTTPStatus.OK: Message, 
+            "201": {"content": {"text/csv": {"schema": {"type": "string"}}}},
+            204: None
+        })
+def hello(path: HelloPath):
+    message = {"message": f"""Hello {path.name}!"""}
+
+    response = make_response(json.dumps(message), HTTPStatus.OK)
+    # response = make_response("sss", HTTPStatus.OK)
+    response.mimetype = "application/json"
+    return response
+```
+
 
 ![image-20210526104627124](../assets/image-20210526104627124.png)
 

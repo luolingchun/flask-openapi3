@@ -7,18 +7,19 @@ import sys
 import warnings
 from abc import ABC
 from functools import wraps
-from typing import Callable, List, Optional, Dict, Type, Any, Tuple, Union
+from typing import Callable, List, Optional, Dict, Type, Any, Tuple
 
 from flask.scaffold import Scaffold
 from flask.wrappers import Response
 from pydantic import BaseModel
 
-from .http import HTTPMethod
+from ._http import HTTPMethod
 from .models import ExternalDocumentation
 from .models.common import ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
 from .request import _do_request
+from .types import ResponseDict
 
 if sys.version_info >= (3, 8):
     iscoroutinefunction = inspect.iscoroutinefunction
@@ -48,7 +49,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -146,7 +147,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -232,7 +233,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -316,7 +317,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -400,7 +401,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -484,7 +485,7 @@ class APIScaffold(Scaffold, ABC):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,

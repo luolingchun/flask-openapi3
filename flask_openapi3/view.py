@@ -4,20 +4,20 @@
 import typing
 import warnings
 
+from .types import ResponseDict
+
 if typing.TYPE_CHECKING:
     from .openapi import OpenAPI
 
 from copy import deepcopy
-from typing import Optional, List, Dict, Type, Any, Callable, Union
+from typing import Optional, List, Dict, Any, Callable
 
-from pydantic import BaseModel
-
-from .http import HTTPMethod
+from ._http import HTTPMethod
 from .models.common import ExternalDocumentation, ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
 from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
-    get_operation_id_for_path, parse_rule
+    get_operation_id_for_path, parse_rule, convert_responses_key_to_string
 
 warnings.simplefilter("once")
 
@@ -28,7 +28,7 @@ class APIView:
             url_prefix: Optional[str] = None,
             view_tags: Optional[List[Tag]] = None,
             view_security: Optional[List[Dict[str, List[str]]]] = None,
-            view_responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            view_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
     ):
@@ -48,7 +48,11 @@ class APIView:
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
         self.view_security = view_security or []
-        self.view_responses = view_responses or {}
+
+        view_responses = view_responses or {}
+        # Convert key to string
+        self.view_responses = convert_responses_key_to_string(view_responses)
+
         self.doc_ui = doc_ui
         self.operation_id_callback: Callable = operation_id_callback
 
@@ -106,7 +110,7 @@ class APIView:
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -150,7 +154,10 @@ class APIView:
                 DeprecationWarning)
 
         if responses is None:
-            responses = {}
+            new_responses = {}
+        else:
+            # Convert key to string
+            new_responses = convert_responses_key_to_string(responses)
         if extra_responses is None:
             extra_responses = {}
         if security is None:
@@ -162,7 +169,7 @@ class APIView:
                 return
             # Global response combines API responses
             combine_responses = deepcopy(self.view_responses)
-            combine_responses.update(**responses)
+            combine_responses.update(**new_responses)
             # Create operation
             operation = get_operation(
                 func,

@@ -2,18 +2,19 @@
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
 from copy import deepcopy
-from typing import Optional, List, Dict, Any, Type, Callable, Tuple, Union
+from typing import Optional, List, Dict, Any, Type, Callable, Tuple
 
 from flask import Blueprint
 from pydantic import BaseModel
 
-from .http import HTTPMethod
+from ._http import HTTPMethod
 from .models import Tag, ExternalDocumentation
 from .models.common import ExtraRequestBody
 from .models.server import Server
 from .scaffold import APIScaffold
+from .types import ResponseDict
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, parse_rule
+    get_operation_id_for_path, parse_rule, convert_responses_key_to_string
 
 
 class APIBlueprint(APIScaffold, Blueprint):
@@ -24,7 +25,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             *,
             abp_tags: Optional[List[Tag]] = None,
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
-            abp_responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            abp_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
             **kwargs: Any
@@ -56,7 +57,11 @@ class APIBlueprint(APIScaffold, Blueprint):
         # Set values from arguments or default values
         self.abp_tags = abp_tags or []
         self.abp_security = abp_security or []
-        self.abp_responses = abp_responses or {}
+
+        abp_responses = abp_responses or {}
+        # Convert key to string
+        self.abp_responses = convert_responses_key_to_string(abp_responses)
+
         self.doc_ui = doc_ui
 
         # Set the operation ID callback function
@@ -99,7 +104,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, Dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -132,12 +137,15 @@ class APIBlueprint(APIScaffold, Blueprint):
         """
         if self.doc_ui is True and doc_ui is True:
             if responses is None:
-                responses = {}
+                new_responses = {}
+            else:
+                # Convert key to string
+                new_responses = convert_responses_key_to_string(responses)
             if extra_responses is None:
                 extra_responses = {}
             # Global response: combine API responses
             combine_responses = deepcopy(self.abp_responses)
-            combine_responses.update(**responses)
+            combine_responses.update(**new_responses)
             # Create operation
             operation = get_operation(
                 func,
