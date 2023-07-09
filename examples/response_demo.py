@@ -23,6 +23,25 @@ class HelloPath(BaseModel):
 class Message(BaseModel):
     message: str = Field(..., description="The message")
 
+    class Config:
+        openapi_extra = {
+            # "example": {"message": "aaa"},
+            "examples": {
+                "example1": {
+                    "summary": "example1 summary",
+                    "value": {
+                        "message": "bbb"
+                    }
+                },
+                "example2": {
+                    "summary": "example2 summary",
+                    "value": {
+                        "message": "ccc"
+                    }
+                }
+            }
+        }
+
 
 @bp.get("/hello/<string:name>",
         responses={HTTPStatus.OK: Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
