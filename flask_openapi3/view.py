@@ -43,7 +43,7 @@ class APIView:
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
-                                   Default to `get_operation_id_for_path` from utils
+                                   Defaults to `get_operation_id_for_path` from utils
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
@@ -128,16 +128,15 @@ class APIView:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
-            extra_form: Extra information describing the request body(application/form).
-            extra_body: Extra information describing the request body(application/json).
+            extra_form: **Deprecated in v3.x**. Extra information describing the request body(application/form).
+            extra_body: **Deprecated in v3.x**. Extra information describing the request body(application/json).
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            extra_responses: Extra information for responses.
+            extra_responses: **Deprecated in v3.x**. Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add openapi document UI (swagger, rapidoc, and redoc).
-                    Default to True.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         if extra_form is not None:
