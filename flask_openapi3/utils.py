@@ -5,7 +5,7 @@
 import inspect
 import re
 from http import HTTPStatus
-from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, Union
+from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any
 
 from pydantic import BaseModel
 
@@ -285,7 +285,7 @@ def parse_body(
 
 
 def get_responses(
-        responses: Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]],
+        responses: ResponseStrKeyDict,
         extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
