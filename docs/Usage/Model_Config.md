@@ -80,7 +80,7 @@ Effect in swagger:
 ### responses
 
 ```python
-class Message(BaseModel):
+class MessageResponse(BaseModel):
     message: str = Field(..., description="The message")
 
     class Config:
@@ -106,3 +106,19 @@ class Message(BaseModel):
 Effect in swagger:
 
 ![](../assets/Snipaste_2023-06-02_11-08-40.png)
+
+
+## by_alias
+
+*New in v2.5.0*
+
+Sometimes you may not want to use aliases (such as in the responses model). In that case, `by_alias` will be convenient:
+
+```python
+class MessageResponse(BaseModel):
+    message: str = Field(..., description="The message")
+    metadata: Dict[str, str] = Field(alias="metadata_")
+
+    class Config:
+        by_alias = False
+```

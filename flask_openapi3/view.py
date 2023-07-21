@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
-import re
 import typing
 import warnings
 
@@ -18,7 +17,7 @@ from .models.common import ExternalDocumentation, ExtraRequestBody
 from .models.server import Server
 from .models.tag import Tag
 from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
-    get_operation_id_for_path
+    get_operation_id_for_path, parse_rule
 
 warnings.simplefilter("once")
 
@@ -66,13 +65,10 @@ class APIView:
             if self.views.get(rule):
                 raise ValueError(f"malformed url rule: {rule!r}")
             methods = []
-            # Convert route parameter format from /pet/<petId> to /pet/{petId}
-            uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
-            trail_slash = uri.endswith("/")
-            # Merge url_prefix and uri
-            uri = self.url_prefix.rstrip("/") + "/" + uri.lstrip("/") if self.url_prefix else uri
-            if not trail_slash:
-                uri = uri.rstrip("/")
+
+            # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
+            uri = parse_rule(rule, url_prefix=self.url_prefix)
+
             for method in HTTPMethod:
                 cls_method = getattr(cls, method.lower(), None)
                 if not cls_method:
@@ -91,7 +87,8 @@ class APIView:
                         path=rule,
                         method=method
                     )
-            # Convert route parameters from <param> to {param}
+
+            # Convert route parameters from {param} to <param>
             _rule = uri.replace("{", "<").replace("}", ">")
             self.views[_rule] = (cls, methods)
 
