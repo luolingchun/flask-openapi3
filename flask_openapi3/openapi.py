@@ -10,7 +10,6 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
 
-from . import ValidationErrorResponseModel
 from .blueprint import APIBlueprint
 from .commands import openapi_command
 from .http import HTTPMethod, HTTP_STATUS
@@ -18,10 +17,11 @@ from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
 from .models.common import ExternalDocumentation, ExtraRequestBody, Schema
 from .models.oauth import OAuthConfig
 from .models.security import SecurityScheme
+from .models.validation_error import ValidationErrorModel
 from .scaffold import APIScaffold
 from .templates import openapi_html_string, redoc_html_string, rapidoc_html_string, swagger_html_string
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path
+    get_operation_id_for_path, make_validation_error_response
 from .view import APIView
 
 
@@ -47,6 +47,8 @@ class OpenAPI(APIScaffold, Flask):
             operation_id_callback: Callable = get_operation_id_for_path,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             validation_error_status: Union[str, int] = 422,
+            validation_error_model: Type[BaseModel] = ValidationErrorModel,
+            validation_error_callback: Callable = make_validation_error_response,
             **kwargs: Any
     ) -> None:
         """
@@ -80,7 +82,10 @@ class OpenAPI(APIScaffold, Flask):
             openapi_extensions: Extensions to the OpenAPI Schema.
                                 See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
             validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
-                                    Default to 422.
+                                    Defaults to 422.
+            validation_error_model: Validation error response model for OpenAPI Specification.
+            validation_error_callback: Validation error response callback, the return format corresponds to
+                                       the validation_error_model.
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -126,6 +131,8 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set HTTP Response of validation errors within OpenAPI
         self.validation_error_status = str(validation_error_status)
+        self.validation_error_model = validation_error_model
+        self.validation_error_callback = validation_error_callback
 
         # Initialize the OpenAPI documentation UI
         if doc_ui:
@@ -223,8 +230,8 @@ class OpenAPI(APIScaffold, Flask):
         # Set paths
         spec.paths = self.paths
 
-        # Add ValidationErrorResponseModel to components schemas
-        self.components_schemas[ValidationErrorResponseModel.__name__] = Schema(**ValidationErrorResponseModel.schema())
+        # Add ValidationErrorModel to components schemas
+        self.components_schemas[self.validation_error_model.__name__] = Schema(**self.validation_error_model.schema())
 
         # Set components
         self.components.schemas = self.components_schemas
@@ -250,7 +257,7 @@ class OpenAPI(APIScaffold, Flask):
                         "application/json": {
                             "schema": {
                                 "type": "array",
-                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{ValidationErrorResponseModel.__name__}"}
+                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{self.validation_error_model.__name__}"}
                             }
                         }
                     }

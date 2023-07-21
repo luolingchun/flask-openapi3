@@ -5,8 +5,8 @@ import json
 from json import JSONDecodeError
 from typing import Any, Type, Optional, Dict, Union
 
-from flask import request, make_response, current_app
-from flask.wrappers import Response
+from flask import request, current_app
+from flask.wrappers import Response as FlaskResponse
 from pydantic import ValidationError, BaseModel
 from pydantic.error_wrappers import ErrorWrapper
 
@@ -94,7 +94,7 @@ def _do_request(
         form: Optional[Type[BaseModel]] = None,
         body: Optional[Type[BaseModel]] = None,
         path_kwargs: Optional[Dict[Any, Any]] = None
-) -> Union[Response, Dict]:
+) -> Union[FlaskResponse, Dict]:
     """
     Validate requests and responses.
 
@@ -132,10 +132,8 @@ def _do_request(
         if body:
             _do_body(body, func_kwargs)
     except ValidationError as e:
-        # Create a JSON response with validation error details
-        response = make_response(e.json())
-        response.headers["Content-Type"] = "application/json"
-        response.status_code = getattr(current_app, "validation_error_status", 422)
-        return response
+        # Create a response with validation error details
+        validation_error_callback = getattr(current_app, "validation_error_callback")
+        return validation_error_callback(e)
 
     return func_kwargs

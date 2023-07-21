@@ -6,7 +6,9 @@ import inspect
 import re
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, Union
 
-from pydantic import BaseModel
+from flask import make_response, current_app
+from flask.wrappers import Response as FlaskResponse
+from pydantic import BaseModel, ValidationError
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
@@ -534,3 +536,19 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
             paths[uri] = PathItem(delete=operation)
         else:
             paths[uri].delete = operation
+
+
+def make_validation_error_response(e: ValidationError) -> FlaskResponse:
+    """
+    Create a Flask response for a validation error.
+
+    Args:
+        e: The ValidationError object containing the details of the error.
+
+    Returns:
+        FlaskResponse: A Flask Response object with the JSON representation of the error.
+    """
+    response = make_response(e.json())
+    response.headers["Content-Type"] = "application/json"
+    response.status_code = getattr(current_app, "validation_error_status", 422)
+    return response
