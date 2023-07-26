@@ -1,7 +1,0 @@
-include LICENSE.rst
-include requirements.txt
-include CONTRIBUTING.md
-include CHANGELOG.md
-
-recursive-include flask_openapi3/templates *
-recursive-include examples *

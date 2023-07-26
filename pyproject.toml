@@ -1,0 +1,77 @@
+[project]
+name = "flask-openapi3"
+description = "Generate REST API and OpenAPI documentation for your Flask project."
+readme = "README.md"
+license = { text = "MIT" }
+maintainers = [{ name = "llc", email = "luolingchun@outlook.com" }]
+classifiers = [
+    # "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    # "Development Status :: 3 - Alpha    ",
+    # "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11"
+]
+requires-python = ">=3.8"
+dependencies = ["Flask>=2.0,<3.0", "pydantic>=2.0,<3.0"]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/luolingchun/flask-openapi3"
+Documentation = "https://luolingchun.github.io/flask-openapi3"
+
+[project.optional-dependencies]
+yaml = ["pyyaml"]
+async = ["asgiref >= 3.2"]
+dotenv = ["python-dotenv"]
+email = ["email-validator"]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "flask_openapi3/__version__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/flask_openapi3",
+    "/examples",
+    "/requirements",
+    "/tests",
+    "/CHANGELOG.md",
+    "/CONTRIBUTING.md",
+    "/LICENSE.rst"
+]
+
+
+[tool.flake8]
+per-file-ignores = ["__init__.py:F401"]
+max-line-length = 120
+count = true
+
+
+[tool.mypy]
+files = "src"
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["pydantic_core.*", "devtools.*"]
+follow_imports = "skip"
+ignore_missing_imports = true
+
