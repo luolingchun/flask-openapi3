@@ -36,9 +36,14 @@ Now you can use `string`, `int`, and `HTTPStatus` as response's key.
 ```python hl_lines="5 7"
 from http import HTTPStatus
 
+
+class BookResponse(BaseModel):
+    message: str = Field(..., description="The message")
+
+    
 @api.get("/hello/<string:name>",
         responses={
-            HTTPStatus.OK: Message, 
+            HTTPStatus.OK: BookResponse, 
             "201": {"content": {"text/csv": {"schema": {"type": "string"}}}},
             204: None
         })
@@ -46,7 +51,6 @@ def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 
     response = make_response(json.dumps(message), HTTPStatus.OK)
-    # response = make_response("sss", HTTPStatus.OK)
     response.mimetype = "application/json"
     return response
 ```
