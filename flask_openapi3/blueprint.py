@@ -8,13 +8,20 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from ._http import HTTPMethod
-from .models import Tag, ExternalDocumentation
+from .models import ExternalDocumentation
 from .models import ExtraRequestBody
-from .models.server import Server
+from .models import Server
+from .models import Tag
 from .scaffold import APIScaffold
 from .types import ResponseDict
-from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, parse_rule, convert_responses_key_to_string
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
+from .utils import parse_rule
 
 
 class APIBlueprint(APIScaffold, Blueprint):

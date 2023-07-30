@@ -13,15 +13,32 @@ from pydantic import BaseModel
 from ._http import HTTP_STATUS, HTTPMethod
 from .blueprint import APIBlueprint
 from .commands import openapi_command
-from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
-from .models import ExternalDocumentation, ExtraRequestBody, Schema
+from .models import APISpec
+from .models import Components
+from .models import ExternalDocumentation
+from .models import ExtraRequestBody
+from .models import Info
 from .models import OAuthConfig
+from .models import OPENAPI3_REF_PREFIX
+from .models import Schema
+from .models import Server
+from .models import Tag
 from .models import ValidationErrorModel
 from .scaffold import APIScaffold
-from .templates import openapi_html_string, redoc_html_string, rapidoc_html_string, swagger_html_string
-from .types import ResponseDict, SecuritySchemesDict
-from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, make_validation_error_response, convert_responses_key_to_string
+from .templates import openapi_html_string
+from .templates import rapidoc_html_string
+from .templates import redoc_html_string
+from .templates import swagger_html_string
+from .types import ResponseDict
+from .types import SecuritySchemesDict
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import make_validation_error_response
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
 from .view import APIView
 
 
@@ -239,7 +256,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set components
         self.components.schemas = self.components_schemas
-        self.components.securitySchemes = self.security_schemes
+        self.components.securitySchemes = self.security_schemes  # type: ignore
         spec.components = self.components
 
         # Convert spec to JSON

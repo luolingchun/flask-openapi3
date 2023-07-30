@@ -16,8 +16,8 @@ from pydantic import BaseModel
 from ._http import HTTPMethod
 from .models import ExternalDocumentation
 from .models import ExtraRequestBody
-from .models.server import Server
-from .models.tag import Tag
+from .models import Server
+from .models import Tag
 from .request import _do_request
 from .types import ResponseDict
 
@@ -88,9 +88,7 @@ class APIScaffold(Scaffold, ABC):
                     body=body,
                     path_kwargs=kwargs
                 )
-                if isinstance(func_kwargs, FlaskResponse):
-                    # Validation error response
-                    return func_kwargs
+
                 # handle async request
                 if view_class:
                     signature = inspect.signature(view_class.__init__)
@@ -115,9 +113,7 @@ class APIScaffold(Scaffold, ABC):
                     body=body,
                     path_kwargs=kwargs
                 )
-                if isinstance(func_kwargs, FlaskResponse):
-                    # Validation error response
-                    return func_kwargs
+
                 # handle request
                 if view_class:
                     signature = inspect.signature(view_class.__init__)

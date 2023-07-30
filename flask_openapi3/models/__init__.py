@@ -38,6 +38,7 @@ from .server_variable import ServerVariable
 from .style_values import StyleValues
 from .tag import Tag
 from .validation_error import UnprocessableEntity
+from .validation_error import ValidationErrorModel
 from .xml import XML
 
 OPENAPI3_REF_PREFIX = '#/components/schemas'

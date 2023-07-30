@@ -3,21 +3,26 @@
 # @Time    : 2022/10/14 16:09
 import typing
 import warnings
-
-from .types import ResponseDict
-
-if typing.TYPE_CHECKING:
-    from .openapi import OpenAPI
-
 from copy import deepcopy
 from typing import Optional, List, Dict, Any, Callable
 
 from ._http import HTTPMethod
-from .models import ExternalDocumentation, ExtraRequestBody
+from .models import ExternalDocumentation
+from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
-from .utils import get_operation, parse_and_store_tags, parse_parameters, get_responses, parse_method, \
-    get_operation_id_for_path, parse_rule, convert_responses_key_to_string
+from .types import ResponseDict
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
+from .utils import parse_rule
+
+if typing.TYPE_CHECKING:
+    from .openapi import OpenAPI
 
 warnings.simplefilter("once")
 
