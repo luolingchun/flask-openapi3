@@ -87,7 +87,7 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
+app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={404: NotFoundResponse})
 
 book_tag = Tag(name='book', description='Some Book')
 security = [
@@ -127,7 +127,7 @@ class BookResponse(BaseModel):
     tags=[book_tag],
     summary='new summary',
     description='new description',
-    responses={"200": BookResponse, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+    responses={200: BookResponse, 201: {"content": {"text/csv": {"schema": {"type": "string"}}}}},
     security=security
 )
 def get_book(path: BookPath):
@@ -157,7 +157,7 @@ def get_books(query: BookQuery):
     }
 
 
-@app.post('/book', tags=[book_tag], responses={"200": BookResponse})
+@app.post('/book', tags=[book_tag], responses={200: BookResponse})
 def create_book(body: BookBody):
     print(body)
     return {"code": 0, "message": "ok"}, HTTPStatus.OK
@@ -236,7 +236,7 @@ def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book', responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@api.post('/book', responses={201: {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}

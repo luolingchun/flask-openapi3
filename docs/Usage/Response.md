@@ -18,15 +18,41 @@ class BookResponse(BaseModel):
 @app.get('/book/<int:bid>', 
          tags=[book_tag], 
          responses={
-             "200": BookResponse, 
+             200: BookResponse, 
              # Version 2.4.0 starts supporting response for dictionary types
-             "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}
+             201: {"content": {"text/csv": {"schema": {"type": "string"}}}}
          })
 def get_book(path: BookPath, query: BookBody):
     """get a book
     get book by id, age or author
     """
     return {"code": 0, "message": "ok", "data": {}}
+```
+
+*New in v2.5.0*
+
+Now you can use `string`, `int`, and `HTTPStatus` as response's key.
+
+```python hl_lines="5 7"
+from http import HTTPStatus
+
+
+class BookResponse(BaseModel):
+    message: str = Field(..., description="The message")
+
+    
+@api.get("/hello/<string:name>",
+        responses={
+            HTTPStatus.OK: BookResponse, 
+            "201": {"content": {"text/csv": {"schema": {"type": "string"}}}},
+            204: None
+        })
+def hello(path: HelloPath):
+    message = {"message": f"""Hello {path.name}!"""}
+
+    response = make_response(json.dumps(message), HTTPStatus.OK)
+    response.mimetype = "application/json"
+    return response
 ```
 
 

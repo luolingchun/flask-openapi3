@@ -39,7 +39,7 @@ def create_book(body: BookBody):
 You need to add docs to the view-func. The first line is the **summary**, and the rest is the **description**. Like this:
 
 ```python hl_lines="3 4 5 6"
-@app.get('/book/<int:bid>', tags=[book_tag], responses={"200": BookResponse}, security=security)
+@app.get('/book/<int:bid>', tags=[book_tag], responses={200: BookResponse}, security=security)
 def get_book(path: BookPath, query: BookBody):
     """Get book
     Get some book by id, like:

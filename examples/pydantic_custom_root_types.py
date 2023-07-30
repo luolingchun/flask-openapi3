@@ -35,7 +35,7 @@ class SelloutDict3(BaseModel):
 
 @app.post('/api/v1/sellouts',
           tags=[Tag(name='Sellout', description='Loren.')],
-          responses={'200': SelloutList}
+          responses={200: SelloutList}
           )
 def post_sellout(body: SelloutList):
     print(body)
@@ -44,7 +44,7 @@ def post_sellout(body: SelloutList):
 
 @app.post('/api/v2/sellouts',
           tags=[Tag(name='Sellout', description='Loren.')],
-          responses={'200': SelloutDict}
+          responses={200: SelloutDict}
           )
 def post_sellout2(body: SelloutDict):
     print(body)

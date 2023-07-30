@@ -6,7 +6,7 @@ If you need the complete Specification, go to http://127.0.0.1:5000/openapi/open
 
 *New in v2.0.0*
 
-The `flask openapi` command will export the OpenAPI Specification to console when you execute the command,
+The `flask openapi` command will export the OpenAPI Specification to console when you execute the command.
 
 ```
 flask --app IMPORT openapi
@@ -218,7 +218,7 @@ You can add `responses` for each API under the `app` wrapper.
 app = OpenAPI(
     __name__, 
     info=info, 
-    responses={"404": NotFoundResponse}
+    responses={404: NotFoundResponse}
 )
 
 @app.get(...)

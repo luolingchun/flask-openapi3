@@ -44,7 +44,7 @@ class Message(BaseModel):
 
 
 @bp.get("/hello/<string:name>",
-        responses={"200": Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+        responses={HTTPStatus.OK: Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 
@@ -54,7 +54,7 @@ def hello(path: HelloPath):
     return response
 
 
-@bp.get("/hello_no_response/<string:name>", responses={"204": None})
+@bp.get("/hello_no_response/<string:name>", responses={204: None})
 def hello_no_response(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 

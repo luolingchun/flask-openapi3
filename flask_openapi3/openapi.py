@@ -10,18 +10,18 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
 from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
 
+from ._http import HTTP_STATUS, HTTPMethod
 from .blueprint import APIBlueprint
 from .commands import openapi_command
-from .http import HTTPMethod, HTTP_STATUS
 from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
 from .models.common import ExternalDocumentation, ExtraRequestBody, Schema
 from .models.oauth import OAuthConfig
-from .models.security import SecurityScheme
 from .models.validation_error import ValidationErrorModel
 from .scaffold import APIScaffold
 from .templates import openapi_html_string, redoc_html_string, rapidoc_html_string, swagger_html_string
+from .types import ResponseDict, SecuritySchemesDict
 from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, make_validation_error_response
+    get_operation_id_for_path, make_validation_error_response, convert_responses_key_to_string
 from .view import APIView
 
 
@@ -31,9 +31,9 @@ class OpenAPI(APIScaffold, Flask):
             import_name: str,
             *,
             info: Optional[Info] = None,
-            security_schemes: Optional[Dict[str, Union[SecurityScheme, Dict[str, Any]]]] = None,
+            security_schemes: Optional[SecuritySchemesDict] = None,
             oauth_config: Optional[OAuthConfig] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
@@ -96,7 +96,11 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set security schemes, responses, paths and components
         self.security_schemes = security_schemes
-        self.responses = responses or {}
+
+        responses = responses or {}
+        # Convert key to string
+        self.responses = convert_responses_key_to_string(responses)
+
         self.paths: Dict = dict()
         self.components_schemas: Dict = dict()
         self.components = Components()
@@ -329,7 +333,7 @@ class OpenAPI(APIScaffold, Flask):
             operation_id: Optional[str] = None,
             extra_form: Optional[ExtraRequestBody] = None,
             extra_body: Optional[ExtraRequestBody] = None,
-            responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]] = None,
+            responses: Optional[ResponseDict] = None,
             extra_responses: Optional[Dict[str, Dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -362,12 +366,15 @@ class OpenAPI(APIScaffold, Flask):
         """
         if doc_ui is True:
             if responses is None:
-                responses = {}
+                new_responses = {}
+            else:
+                # Convert key to string
+                new_responses = convert_responses_key_to_string(responses)
             if extra_responses is None:
                 extra_responses = {}
             # Global response: combine API responses
             combine_responses = deepcopy(self.responses)
-            combine_responses.update(**responses)
+            combine_responses.update(**new_responses)
             # Create operation
             operation = get_operation(
                 func,

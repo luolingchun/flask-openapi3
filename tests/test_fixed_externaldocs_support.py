@@ -31,7 +31,7 @@ def test_openapi_api_doc_with_and_without_external_docs(app):
     assert "externalDocs" in app.api_doc
 
     openapi = GeneratorData.from_dict(data=app.api_doc, config=config)
-    assert type(openapi) == GeneratorData
+    assert type(openapi) is GeneratorData
 
 
 def test_openapi_api_doc_with_and_without_external_docs_url(app):
@@ -41,7 +41,7 @@ def test_openapi_api_doc_with_and_without_external_docs_url(app):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     openapi = GeneratorData.from_dict(data=resp.json, config=config)
-    assert type(openapi) == GeneratorData
+    assert type(openapi) is GeneratorData
     assert "externalDocs" not in resp.json
 
     app.external_docs = ExternalDocumentation(
@@ -51,5 +51,5 @@ def test_openapi_api_doc_with_and_without_external_docs_url(app):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     openapi = GeneratorData.from_dict(data=resp.json, config=config)
-    assert type(openapi) == GeneratorData
+    assert type(openapi) is GeneratorData
     assert "externalDocs" in resp.json

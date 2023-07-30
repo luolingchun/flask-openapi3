@@ -251,7 +251,7 @@ def test_openapi_api_json_schema_against_openapi_python_client_generator(client)
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     openapi = GeneratorData.from_dict(data=resp.json, config=config)
-    assert type(openapi) == GeneratorData
+    assert type(openapi) is GeneratorData
 
     assert (
             openapi.endpoint_collections_by_tag["book"].endpoints[0].name == "get_books"

@@ -50,7 +50,7 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={"404": NotFoundResponse})
+app = OpenAPI(__name__, info=info, security_schemes=security_schemes, responses={404: NotFoundResponse})
 
 book_tag = Tag(name='book', description='Some Book')
 security = [
@@ -95,7 +95,7 @@ class BookResponse(BaseModel):
     external_docs=ExternalDocumentation(
         url="https://www.openapis.org/",
         description="Something great got better, get excited!"),
-    responses={"200": BookResponse},
+    responses={200: BookResponse},
     security=security,
     servers=[Server(url="https://www.openapis.org/", description="openapi")]
 )
@@ -126,7 +126,7 @@ def get_books(query: BookQuery):
     }
 
 
-@app.post('/book', tags=[book_tag], responses={"200": BookResponse})
+@app.post('/book', tags=[book_tag], responses={200: BookResponse})
 def create_book(body: BookBody):
     print(body)
     return {"code": 0, "message": "ok"}, HTTPStatus.OK
