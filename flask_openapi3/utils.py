@@ -227,7 +227,7 @@ def parse_form(
 
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
-    title = schema.get("title")
+    title = schema.get("title") or form.__name__
     components_schemas[title] = Schema(**schema)
     encoding = {}
     for k, v in properties.items():
@@ -269,7 +269,7 @@ def parse_body(
     schema = get_model_schema(body)
     components_schemas = dict()
 
-    title = schema.get("title")
+    title = schema.get("title") or body.__name__
     components_schemas[title] = Schema(**schema)
     if extra_body:
         content = {
@@ -320,17 +320,18 @@ def get_responses(
                     )})
 
             model_config = response.Config
-            if hasattr(model_config, "openapi_extra"):
+            openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
+            if openapi_extra:
                 # Add additional information from model_config to the response
-                _responses[key].description = model_config.openapi_extra.get("description")
-                _responses[key].headers = model_config.openapi_extra.get("headers")
-                _responses[key].links = model_config.openapi_extra.get("links")
+                _responses[key].description = openapi_extra.get("description")  # type: ignore
+                _responses[key].headers = openapi_extra.get("headers")
+                _responses[key].links = openapi_extra.get("links")
                 _content = _responses[key].content
-                _content["application/json"].example = model_config.openapi_extra.get("example")  # type: ignore
-                _content["application/json"].examples = model_config.openapi_extra.get("examples")  # type: ignore
-                _content["application/json"].encoding = model_config.openapi_extra.get("encoding")  # type: ignore
-                if model_config.openapi_extra.get("content"):
-                    _responses[key].content.update(model_config.openapi_extra.get("content"))  # type: ignore
+                _content["application/json"].example = openapi_extra.get("example")  # type: ignore
+                _content["application/json"].examples = openapi_extra.get("examples")  # type: ignore
+                _content["application/json"].encoding = openapi_extra.get("encoding")  # type: ignore
+                if openapi_extra.get("content"):
+                    _responses[key].content.update(openapi_extra.get("content"))  # type: ignore
 
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")
@@ -468,12 +469,13 @@ def parse_parameters(
                 "content": _content,
             })
         model_config = form.Config
-        if hasattr(model_config, "openapi_extra"):
-            request_body.description = model_config.openapi_extra.get("description")
-            request_body.content["multipart/form-data"].example = model_config.openapi_extra.get("example")
-            request_body.content["multipart/form-data"].examples = model_config.openapi_extra.get("examples")
-            if model_config.openapi_extra.get("encoding"):
-                request_body.content["multipart/form-data"].encoding = model_config.openapi_extra.get("encoding")
+        openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
+        if openapi_extra:
+            request_body.description = openapi_extra.get("description")
+            request_body.content["multipart/form-data"].example = openapi_extra.get("example")
+            request_body.content["multipart/form-data"].examples = openapi_extra.get("examples")
+            if openapi_extra.get("encoding"):
+                request_body.content["multipart/form-data"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
     if body:
@@ -488,11 +490,12 @@ def parse_parameters(
         else:
             request_body = RequestBody(content=_content)
         model_config = body.Config
-        if hasattr(model_config, "openapi_extra"):
-            request_body.description = model_config.openapi_extra.get("description")
-            request_body.content["application/json"].example = model_config.openapi_extra.get("example")
-            request_body.content["application/json"].examples = model_config.openapi_extra.get("examples")
-            request_body.content["application/json"].encoding = model_config.openapi_extra.get("encoding")
+        openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
+        if openapi_extra:
+            request_body.description = openapi_extra.get("description")
+            request_body.content["application/json"].example = openapi_extra.get("example")
+            request_body.content["application/json"].examples = openapi_extra.get("examples")
+            request_body.content["application/json"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
     # Set the parsed parameters in the operation object

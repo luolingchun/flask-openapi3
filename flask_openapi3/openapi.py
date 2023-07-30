@@ -243,13 +243,11 @@ class OpenAPI(APIScaffold, Flask):
             openapi=self.openapi_version,
             info=self.info,
             servers=self.severs,
+            paths=self.paths,
             externalDocs=self.external_docs
         )
         # Set tags
         spec.tags = self.tags or None
-
-        # Set paths
-        spec.paths = self.paths
 
         # Add ValidationErrorModel to components schemas
         self.components_schemas[self.validation_error_model.__name__] = Schema(**self.validation_error_model.schema())

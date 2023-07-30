@@ -50,9 +50,9 @@ class APISpec(BaseModel):
     openapi: str
     info: Info
     servers: Optional[List[Server]] = None
-    paths: Optional[Dict[str, PathItem]] = None
+    paths: Paths
     components: Optional[Components] = None
-    security: Optional[List[Dict[str, List[str]]]] = None
+    security: Optional[List[SecurityRequirement]] = None
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
 
