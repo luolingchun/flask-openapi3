@@ -5,27 +5,17 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-
-class Contact(BaseModel):
-    name: Optional[str] = None
-    url: Optional[str] = None
-    email: Optional[str] = None
-
-    class Config:
-        extra = "allow"
-
-
-class License(BaseModel):
-    name: str
-    url: Optional[str] = None
-
-    class Config:
-        extra = "allow"
+from .contact import Contact
+from .license import License
 
 
 class Info(BaseModel):
-    """https://spec.openapis.org/oas/v3.0.3#info-object"""
+    """
+    https://spec.openapis.org/oas/v3.0.3#info-object
+    """
+
     title: str
+    summary: Optional[str] = None
     description: Optional[str] = None
     termsOfService: Optional[str] = None
     contact: Optional[Contact] = None

@@ -3,10 +3,9 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Any, Type, Optional, Dict, Union
+from typing import Any, Type, Optional, Dict
 
-from flask import request, current_app
-from flask.wrappers import Response as FlaskResponse
+from flask import request, current_app, abort
 from pydantic import ValidationError, BaseModel
 from pydantic.error_wrappers import ErrorWrapper
 
@@ -94,7 +93,7 @@ def _do_request(
         form: Optional[Type[BaseModel]] = None,
         body: Optional[Type[BaseModel]] = None,
         path_kwargs: Optional[Dict[Any, Any]] = None
-) -> Union[FlaskResponse, Dict]:
+) -> Dict:
     """
     Validate requests and responses.
 
@@ -134,6 +133,6 @@ def _do_request(
     except ValidationError as e:
         # Create a response with validation error details
         validation_error_callback = getattr(current_app, "validation_error_callback")
-        return validation_error_callback(e)
+        abort(validation_error_callback(e))
 
     return func_kwargs

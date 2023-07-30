@@ -13,15 +13,32 @@ from pydantic import BaseModel
 from ._http import HTTP_STATUS, HTTPMethod
 from .blueprint import APIBlueprint
 from .commands import openapi_command
-from .models import Info, APISpec, Tag, Components, Server, OPENAPI3_REF_PREFIX
-from .models.common import ExternalDocumentation, ExtraRequestBody, Schema
-from .models.oauth import OAuthConfig
-from .models.validation_error import ValidationErrorModel
+from .models import APISpec
+from .models import Components
+from .models import ExternalDocumentation
+from .models import ExtraRequestBody
+from .models import Info
+from .models import OAuthConfig
+from .models import OPENAPI3_REF_PREFIX
+from .models import Schema
+from .models import Server
+from .models import Tag
+from .models import ValidationErrorModel
 from .scaffold import APIScaffold
-from .templates import openapi_html_string, redoc_html_string, rapidoc_html_string, swagger_html_string
-from .types import ResponseDict, SecuritySchemesDict
-from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, make_validation_error_response, convert_responses_key_to_string
+from .templates import openapi_html_string
+from .templates import rapidoc_html_string
+from .templates import redoc_html_string
+from .templates import swagger_html_string
+from .types import ResponseDict
+from .types import SecuritySchemesDict
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import make_validation_error_response
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
 from .view import APIView
 
 
@@ -66,7 +83,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             doc_expansion: Default expansion setting for operations and tags ("list", "full", or "none").
                            See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
-            doc_prefix: URL prefix used for OpenAPI document and UI. Default to "/openapi"
+            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi"
             api_doc_url: URL for accessing the OpenAPI specification document in JSON format.
                          Defaults to "/openapi.json".
             swagger_url: URL for accessing the Swagger UI documentation. Defaults to "/swagger".
@@ -78,7 +95,7 @@ class OpenAPI(APIScaffold, Flask):
                            See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object.
             operation_id_callback: Callback function for custom operation ID generation.
                                    Receives name (str), path (str), and method (str) parameters.
-                                   Default to `get_operation_id_for_path` from utils.
+                                   Defaults to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
                                 See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
             validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
@@ -239,7 +256,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set components
         self.components.schemas = self.components_schemas
-        self.components.securitySchemes = self.security_schemes
+        self.components.securitySchemes = self.security_schemes  # type: ignore
         spec.components = self.components
 
         # Convert spec to JSON
@@ -353,15 +370,15 @@ class OpenAPI(APIScaffold, Flask):
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
-            extra_form: Extra information describing the request body(application/form).
-            extra_body: Extra information describing the request body(application/json).
+            extra_form: **Deprecated in v3.x**. Extra information describing the request body(application/form).
+            extra_body: **Deprecated in v3.x**. Extra information describing the request body(application/json).
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            extra_responses: Extra information for responses.
+            extra_responses: **Deprecated in v3.x**. Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add OpenAPI document UI (swagger, rapidoc, and redoc). Defaults to True.
+            doc_ui: Declares this operation to be shown. Default to True.
             method: HTTP method for the operation. Defaults to GET.
         """
         if doc_ui is True:

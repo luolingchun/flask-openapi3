@@ -8,13 +8,20 @@ from flask import Blueprint
 from pydantic import BaseModel
 
 from ._http import HTTPMethod
-from .models import Tag, ExternalDocumentation
-from .models.common import ExtraRequestBody
-from .models.server import Server
+from .models import ExternalDocumentation
+from .models import ExtraRequestBody
+from .models import Server
+from .models import Tag
 from .scaffold import APIScaffold
 from .types import ResponseDict
-from .utils import get_operation, get_responses, parse_and_store_tags, parse_parameters, parse_method, \
-    get_operation_id_for_path, parse_rule, convert_responses_key_to_string
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
+from .utils import parse_rule
 
 
 class APIBlueprint(APIScaffold, Blueprint):
@@ -43,7 +50,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             doc_ui: Enable OpenAPI document UI (Swagger UI, Redoc, and Rapidoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
-                                   Default to `get_operation_id_for_path` from utils
+                                   Defaults to `get_operation_id_for_path` from utils
             **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -124,16 +131,15 @@ class APIBlueprint(APIScaffold, Blueprint):
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
-            extra_form: Extra information describing the request body(application/form).
-            extra_body: Extra information describing the request body(application/json).
+            extra_form: **Deprecated in v3.x**. Extra information describing the request body(application/form).
+            extra_body: **Deprecated in v3.x**. Extra information describing the request body(application/json).
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            extra_responses: Extra information for responses.
+            extra_responses: **Deprecated in v3.x**. Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Add openapi document UI (swagger, rapidoc and redoc).
-                    Defaults to True.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
         if self.doc_ui is True and doc_ui is True:
             if responses is None:

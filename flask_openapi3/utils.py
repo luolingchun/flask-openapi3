@@ -12,11 +12,21 @@ from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
 
 from ._http import HTTP_STATUS, HTTPMethod
-from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
-from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
-from .models.path import Operation, RequestBody, PathItem, Response
-from .models.path import ParameterInType, Parameter
-from .types import ResponseDict, ResponseStrKeyDict
+from .models import Encoding
+from .models import ExtraRequestBody
+from .models import MediaType
+from .models import OPENAPI3_REF_PREFIX
+from .models import OPENAPI3_REF_TEMPLATE
+from .models import Operation
+from .models import Parameter
+from .models import ParameterInType
+from .models import PathItem
+from .models import RequestBody
+from .models import Response
+from .models import Schema
+from .models import Tag
+from .types import ResponseDict
+from .types import ResponseStrKeyDict
 
 
 def get_operation(
@@ -108,7 +118,7 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.header,
+            "in": ParameterInType.HEADER,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -135,7 +145,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.cookie,
+            "in": ParameterInType.COOKIE,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -162,7 +172,7 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.path,
+            "in": ParameterInType.PATH,
             "description": value.get("description"),
             "required": True,
             "schema": Schema(**value)
@@ -189,7 +199,7 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     for name, value in properties.items():
         data = {
             "name": name,
-            "in": ParameterInType.query,
+            "in": ParameterInType.QUERY,
             "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
@@ -299,8 +309,6 @@ def get_responses(
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
-            _responses[key] = response  # type: ignore
-        elif isinstance(response, dict):
             _responses[key] = Response(**response)
         else:
             schema = get_model_schema(response)
@@ -308,16 +316,8 @@ def get_responses(
                 description=HTTP_STATUS.get(key, ""),
                 content={
                     "application/json": MediaType(
-                        **{
-                            "schema": Schema(
-                                **{
-                                    "$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"
-                                }
-                            )
-                        }
-                    )
-                }
-            )
+                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"})
+                    )})
 
             model_config = response.Config
             if hasattr(model_config, "openapi_extra"):
@@ -350,7 +350,7 @@ def get_responses(
         _responses[key] = new_response.merge_with(_responses.get(key))
 
     components_schemas.update(**_schemas)
-    operation.responses = _responses
+    operation.responses = _responses  # type: ignore
 
 
 def parse_and_store_tags(
@@ -496,7 +496,7 @@ def parse_parameters(
         operation.requestBody = request_body
 
     # Set the parsed parameters in the operation object
-    operation.parameters = parameters if parameters else None
+    operation.parameters = parameters if parameters else None  # type: ignore
 
     return header, cookie, path, query, form, body  # type: ignore
 
