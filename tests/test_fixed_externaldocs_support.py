@@ -1,8 +1,8 @@
 import pytest
 from openapi_python_client import GeneratorData, Config
 
-from flask_openapi3 import OpenAPI
 from flask_openapi3 import ExternalDocumentation
+from flask_openapi3 import OpenAPI
 
 
 @pytest.fixture
@@ -26,6 +26,8 @@ def test_openapi_api_doc_with_and_without_external_docs(app):
         url="http://example.com/openapi/markdown",
         description="Testing the description"
     )
+    # Update spec_json
+    app.spec_json = None
     assert "externalDocs" in app.api_doc
 
     openapi = GeneratorData.from_dict(data=app.api_doc, config=config)
@@ -44,6 +46,8 @@ def test_openapi_api_doc_with_and_without_external_docs_url(app):
 
     app.external_docs = ExternalDocumentation(
         url="http://example.com/openapi/markdown", description="Testing the description")
+    # Update spec_json
+    app.spec_json = None
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
     openapi = GeneratorData.from_dict(data=resp.json, config=config)

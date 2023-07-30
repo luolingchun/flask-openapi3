@@ -10,7 +10,7 @@ from functools import wraps
 from typing import Callable, List, Optional, Dict, Type, Any, Tuple, Union
 
 from flask.scaffold import Scaffold
-from flask.wrappers import Response
+from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel
 
 from .http import HTTPMethod
@@ -77,7 +77,7 @@ class APIScaffold(Scaffold, ABC):
         is_coroutine_function = iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)
-            async def view_func(**kwargs) -> Response:
+            async def view_func(**kwargs) -> FlaskResponse:
                 func_kwargs = _do_request(
                     header=header,
                     cookie=cookie,
@@ -87,8 +87,8 @@ class APIScaffold(Scaffold, ABC):
                     body=body,
                     path_kwargs=kwargs
                 )
-                if isinstance(func_kwargs, Response):
-                    # 422
+                if isinstance(func_kwargs, FlaskResponse):
+                    # Validation error response
                     return func_kwargs
                 # handle async request
                 if view_class:
@@ -104,8 +104,8 @@ class APIScaffold(Scaffold, ABC):
                 return response
         else:
             @wraps(func)
-            def view_func(**kwargs) -> Response:
-                result = _do_request(
+            def view_func(**kwargs) -> FlaskResponse:
+                func_kwargs = _do_request(
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -114,9 +114,9 @@ class APIScaffold(Scaffold, ABC):
                     body=body,
                     path_kwargs=kwargs
                 )
-                if isinstance(result, Response):
-                    # 422
-                    return result
+                if isinstance(func_kwargs, FlaskResponse):
+                    # Validation error response
+                    return func_kwargs
                 # handle request
                 if view_class:
                     signature = inspect.signature(view_class.__init__)
@@ -125,9 +125,9 @@ class APIScaffold(Scaffold, ABC):
                         view_object = view_class(view_kwargs=view_kwargs)
                     else:
                         view_object = view_class()
-                    response = func(view_object, **result)
+                    response = func(view_object, **func_kwargs)
                 else:
-                    response = func(**result)
+                    response = func(**func_kwargs)
                 return response
 
         if not hasattr(func, "view"):

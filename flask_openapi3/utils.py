@@ -6,14 +6,15 @@ import inspect
 import re
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, Union
 
-from pydantic import BaseModel
+from flask import make_response, current_app
+from flask.wrappers import Response as FlaskResponse
+from pydantic import BaseModel, ValidationError
 
 from .http import HTTP_STATUS, HTTPMethod
 from .models import OPENAPI3_REF_TEMPLATE, OPENAPI3_REF_PREFIX, Tag
 from .models.common import Schema, MediaType, Encoding, ExtraRequestBody
 from .models.path import Operation, RequestBody, PathItem, Response
 from .models.path import ParameterInType, Parameter
-from .models.validation_error import UnprocessableEntity
 
 
 def get_operation(
@@ -283,39 +284,19 @@ def parse_body(
 
 
 def get_responses(
-        responses: Optional[Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]]],
+        responses: Dict[str, Union[Type[BaseModel], Dict[Any, Any], None]],
         extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
 ) -> None:
-    if responses is None:
-        responses = {}
     _responses = {}
     _schemas = {}
-    if not responses.get("422"):
-        # Handle response 422 for Unprocessable Entity
-        _responses["422"] = Response(
-            description=HTTP_STATUS["422"],
-            content={
-                "application/json": MediaType(
-                    **{
-                        "schema": Schema(
-                            **{
-                                "type": "array",
-                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{UnprocessableEntity.__name__}"}
-                            }
-                        )
-                    }
-                )
-            }
-        )
-        _schemas[UnprocessableEntity.__name__] = Schema(**UnprocessableEntity.schema())
+
     for key, response in responses.items():
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
-            continue
-        if isinstance(response, dict):
+        elif isinstance(response, dict):
             _responses[key] = response  # type: ignore
         else:
             schema = get_model_schema(response)
@@ -558,6 +539,22 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
             paths[uri] = PathItem(delete=operation)
         else:
             paths[uri].delete = operation
+
+
+def make_validation_error_response(e: ValidationError) -> FlaskResponse:
+    """
+    Create a Flask response for a validation error.
+
+    Args:
+        e: The ValidationError object containing the details of the error.
+
+    Returns:
+        FlaskResponse: A Flask Response object with the JSON representation of the error.
+    """
+    response = make_response(e.json())
+    response.headers["Content-Type"] = "application/json"
+    response.status_code = getattr(current_app, "validation_error_status", 422)
+    return response
 
 
 def parse_rule(rule: str, url_prefix=None) -> str:

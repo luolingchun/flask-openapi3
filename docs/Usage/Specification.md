@@ -376,3 +376,44 @@ def hello():
 if __name__ == "__main__":
     app.run(debug=True)
 ```
+
+
+## validation error
+
+*new in v2.5.0*
+
+You can override validation error response use `validation_error_status`, `validation_error_model`
+and `validation_error_callback`. 
+
+
+- validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic. 
+                           Defaults to 422.
+- validation_error_model: Validation error response model for OpenAPI Specification.
+- validation_error_callback: Validation error response callback, the return format corresponds to 
+                             the validation_error_model. Receive `ValidationError` and return `Flask Response`.
+
+
+```python
+from flask.wrappers import Response as FlaskResponse
+from pydantic import BaseModel, ValidationError
+
+class ValidationErrorModel(BaseModel):
+    code: str
+    message: str
+
+
+def validation_error_callback(e: ValidationError) -> FlaskResponse:
+    validation_error_object = ValidationErrorModel(code="400", message=e.json())
+    response = make_response(validation_error_object.json())
+    response.headers["Content-Type"] = "application/json"
+    response.status_code = getattr(current_app, "validation_error_status", 422)
+    return response
+
+
+app = OpenAPI(
+    __name__,
+    validation_error_status=400,
+    validation_error_model=ValidationErrorModel,
+    validation_error_callback=validation_error_callback
+)
+```
