@@ -2,10 +2,9 @@
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
 from copy import deepcopy
-from typing import Optional, List, Dict, Any, Type, Callable, Tuple
+from typing import Optional, List, Dict, Any, Callable
 
 from flask import Blueprint
-from pydantic import BaseModel
 
 from ._http import HTTPMethod
 from .models import ExternalDocumentation
@@ -13,6 +12,7 @@ from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
 from .scaffold import APIScaffold
+from .types import ParametersTuple
 from .types import ResponseDict
 from .utils import convert_responses_key_to_string
 from .utils import get_operation
@@ -119,7 +119,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
+    ) -> ParametersTuple:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
 

@@ -20,14 +20,8 @@ class FileStorage(_FileStorage):
 
     @classmethod
     def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(
-            format="binary",
-            type="string"
-        )
+        field_schema.update(format="binary", type="string")
 
     @classmethod
-    def validate(cls, value: Any) -> '_FileStorage':
-        if not isinstance(value, _FileStorage):
-            raise TypeError('werkzeug.datastructures.FileStorage required')
-
+    def validate(cls, value: Any) -> "_FileStorage":
         return value

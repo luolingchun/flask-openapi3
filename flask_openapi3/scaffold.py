@@ -7,11 +7,10 @@ import sys
 import warnings
 from abc import ABC
 from functools import wraps
-from typing import Callable, List, Optional, Dict, Type, Any, Tuple
+from typing import Callable, List, Optional, Dict, Any
 
 from flask.scaffold import Scaffold
 from flask.wrappers import Response as FlaskResponse
-from pydantic import BaseModel
 
 from ._http import HTTPMethod
 from .models import ExternalDocumentation
@@ -19,6 +18,7 @@ from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
 from .request import _do_request
+from .types import ParametersTuple
 from .types import ResponseDict
 
 if sys.version_info >= (3, 8):
@@ -57,7 +57,7 @@ class APIScaffold(Scaffold, ABC):
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
+    ) -> ParametersTuple:
         raise NotImplementedError
 
     def register_api(self, api) -> None:

@@ -29,7 +29,7 @@ class Components(BaseModel):
     examples: Optional[Dict[str, Union[Example, Reference]]] = None
     requestBodies: Optional[Dict[str, Union[RequestBody, Reference]]] = None
     headers: Optional[Dict[str, Union[Header, Reference]]] = None
-    securitySchemes: Optional[Dict[str, Union[SecurityScheme, Any]]] = None
+    securitySchemes: Optional[Dict[str, Union[SecurityScheme, Dict[str, Any]]]] = None
     links: Optional[Dict[str, Union[Link, Reference]]] = None
     callbacks: Optional[Dict[str, Union[Callback, Reference]]] = None
     pathItems: Optional[Dict[str, Union[PathItem, Reference]]] = None

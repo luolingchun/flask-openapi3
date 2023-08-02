@@ -5,7 +5,7 @@ import json
 import os
 import re
 from copy import deepcopy
-from typing import Optional, List, Dict, Union, Any, Type, Callable, Tuple
+from typing import Optional, List, Dict, Union, Any, Type, Callable
 
 from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
@@ -29,6 +29,7 @@ from .templates import openapi_html_string
 from .templates import rapidoc_html_string
 from .templates import redoc_html_string
 from .templates import swagger_html_string
+from .types import ParametersTuple
 from .types import ResponseDict
 from .types import SecuritySchemesDict
 from .utils import convert_responses_key_to_string
@@ -254,7 +255,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set components
         self.components.schemas = self.components_schemas
-        self.components.securitySchemes = self.security_schemes  # type: ignore
+        self.components.securitySchemes = self.security_schemes
         spec.components = self.components
 
         # Convert spec to JSON
@@ -356,7 +357,7 @@ class OpenAPI(APIScaffold, Flask):
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
-    ) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
+    ) -> ParametersTuple:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
 

@@ -1,4 +1,4 @@
-## tag
+## tags
 
 You can also specify tag for apis like this:
 
@@ -17,16 +17,17 @@ and then you will get the magic.
 
 ![image-20210525160744617](../assets/image-20210525160744617.png)
 
-### abp_tags
+## abp_tags & view_tags
 
 *New in v0.9.3*
 
-You don't need to specify **tag** for every api.
+You don't need to specify **tags** for every api.
 
-```python hl_lines="3"
+```python hl_lines="3 4"
 tag = Tag(name='book', description="Some Book")
 
 api = APIBlueprint('/book', __name__, url_prefix='/api', abp_tags=[tag])
+api_view = APIView('/book', __name__, url_prefix='/api', view_tags=[tag])
 
 
 @api.post('/book')
@@ -269,6 +270,24 @@ security = [
     security=security
 )
 def get_book(path: BookPath):
+    ...
+```
+
+## abp_security & view_security
+
+*New in v0.9.3*
+
+You don't need to specify **security** for every api.
+
+```python hl_lines="3 4"
+tag = Tag(name='book', description="Some Book")
+security = [{"jwt": []}]
+api = APIBlueprint('/book', __name__, abp_tags=[tag], abp_security=security)
+api_view = APIView('/book', __name__, abp_tags=[tag], view_security=security)
+
+
+@api.post('/book')
+def create_book(body: BookBody):
     ...
 ```
 

@@ -25,6 +25,7 @@ from .models import RequestBody
 from .models import Response
 from .models import Schema
 from .models import Tag
+from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
 
@@ -320,18 +321,18 @@ def get_responses(
                     )})
 
             model_config = response.Config
-            openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
-            if openapi_extra:
+            openapi_extra = getattr(model_config, "openapi_extra", None)
+            if openapi_extra is not None:
                 # Add additional information from model_config to the response
-                _responses[key].description = openapi_extra.get("description")  # type: ignore
+                _responses[key].description = openapi_extra.get("description")
                 _responses[key].headers = openapi_extra.get("headers")
                 _responses[key].links = openapi_extra.get("links")
                 _content = _responses[key].content
-                _content["application/json"].example = openapi_extra.get("example")  # type: ignore
-                _content["application/json"].examples = openapi_extra.get("examples")  # type: ignore
-                _content["application/json"].encoding = openapi_extra.get("encoding")  # type: ignore
-                if openapi_extra.get("content"):
-                    _responses[key].content.update(openapi_extra.get("content"))  # type: ignore
+                if _content is not None:
+                    _content["application/json"].example = openapi_extra.get("example")
+                    _content["application/json"].examples = openapi_extra.get("examples")
+                    _content["application/json"].encoding = openapi_extra.get("encoding")
+                    _content.update(openapi_extra.get("content", {}))
 
             _schemas[response.__name__] = Schema(**schema)
             definitions = schema.get("definitions")
@@ -351,7 +352,7 @@ def get_responses(
         _responses[key] = new_response.merge_with(_responses.get(key))
 
     components_schemas.update(**_schemas)
-    operation.responses = _responses  # type: ignore
+    operation.responses = _responses
 
 
 def parse_and_store_tags(
@@ -392,7 +393,7 @@ def parse_parameters(
         components_schemas: Optional[Dict] = None,
         operation: Optional[Operation] = None,
         doc_ui: bool = True,
-) -> Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
+) -> ParametersTuple:
     """
     Parses the parameters of a given function and returns the types for header, cookie, path,
     query, form, and body parameters. Also populates the Operation object with the parsed parameters.
@@ -411,7 +412,7 @@ def parse_parameters(
 
     """
     # Get the type hints from the function
-    annotations = get_type_hints(func)
+    annotations: Dict[str, Type[BaseModel]] = get_type_hints(func)
 
     # Get the types for header, cookie, path, query, form, and body parameters
     header = annotations.get("header")
@@ -423,7 +424,7 @@ def parse_parameters(
 
     # If doc_ui is False, return the types without further processing
     if doc_ui is False:
-        return header, cookie, path, query, form, body  # type: ignore
+        return header, cookie, path, query, form, body
 
     parameters = []
 
@@ -465,11 +466,9 @@ def parse_parameters(
                 required=extra_form.required
             )
         else:
-            request_body = RequestBody(**{
-                "content": _content,
-            })
+            request_body = RequestBody(content=_content)
         model_config = form.Config
-        openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
+        openapi_extra = getattr(model_config, "openapi_extra", None)
         if openapi_extra:
             request_body.description = openapi_extra.get("description")
             request_body.content["multipart/form-data"].example = openapi_extra.get("example")
@@ -490,7 +489,7 @@ def parse_parameters(
         else:
             request_body = RequestBody(content=_content)
         model_config = body.Config
-        openapi_extra: dict = getattr(model_config, "openapi_extra", None)  # type: ignore
+        openapi_extra = getattr(model_config, "openapi_extra", None)
         if openapi_extra:
             request_body.description = openapi_extra.get("description")
             request_body.content["application/json"].example = openapi_extra.get("example")
@@ -499,9 +498,9 @@ def parse_parameters(
         operation.requestBody = request_body
 
     # Set the parsed parameters in the operation object
-    operation.parameters = parameters if parameters else None  # type: ignore
+    operation.parameters = parameters if parameters else None
 
-    return header, cookie, path, query, form, body  # type: ignore
+    return header, cookie, path, query, form, body
 
 
 def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:

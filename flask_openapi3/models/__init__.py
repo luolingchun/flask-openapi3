@@ -41,8 +41,8 @@ from .validation_error import UnprocessableEntity
 from .validation_error import ValidationErrorModel
 from .xml import XML
 
-OPENAPI3_REF_PREFIX = '#/components/schemas'
-OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + '/{model}'
+OPENAPI3_REF_PREFIX = "#/components/schemas"
+OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + "/{model}"
 
 
 class APISpec(BaseModel):

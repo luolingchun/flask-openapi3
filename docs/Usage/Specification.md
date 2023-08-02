@@ -129,7 +129,7 @@ security = [{"jwt": []}]
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 ```
 
-Second, add pass the **security** to your api, like this:
+Second, add pass the [**security**](./Route_Operation.md#security) to your api, like this:
 
 ```python hl_lines="1"
 @app.get('/book/<int:bid>', tags=[book_tag], security=security)
@@ -141,22 +141,6 @@ result:
 
 ![image-20210525165350520](../assets/image-20210525165350520.png)
 
-### abp_security
-
-*New in v0.9.3*
-
-You don't need to specify **security** for every api.
-
-```python hl_lines="3"
-tag = Tag(name='book', description="Some Book")
-security = [{"jwt": []}]
-api = APIBlueprint('/book', __name__, abp_tags=[tag], abp_security=security)
-
-
-@api.post('/book')
-def create_book(body: BookBody):
-    ...
-```
 
 ## oauth_config
 
@@ -226,11 +210,11 @@ def endpoint():
     ...
 ```
 
-### abp_responses
+## abp_responses & view_responses
 
 *New in v0.9.4*
 
-You can add `responses` for each API under the `api` wrapper.
+You can add `responses` for each API under the `api` or `api_view` wrapper.
 
 ```python hl_lines="10"
 class Unauthorized(BaseModel):
@@ -239,10 +223,15 @@ class Unauthorized(BaseModel):
 
 
 api = APIBlueprint(
-    '/book', 
+    "/book", 
     __name__, 
-    url_prefix='/api',
-    abp_responses={"401": Unauthorized}
+    url_prefix="/api",
+    abp_responses={401: Unauthorized}
+)
+
+api_view = APIView(
+    "/book",
+    view_responses={401: Unauthorized}
 )
 
 @api.get(...)
@@ -262,7 +251,7 @@ You can also use [responses ](./Response.md#responses) and [extra_responses](./R
 
 ## doc_ui
 
-You can pass `doc_ui=False` to disable the `OpenAPI spec` when init `OpenAPI `.
+You can pass `doc_ui=False` to disable the `OpenAPI spec` when init [`OpenAPI`](../Reference/OpenAPI.md).
 
 ```python
 app = OpenAPI(__name__, info=info, doc_ui=False)
@@ -270,7 +259,7 @@ app = OpenAPI(__name__, info=info, doc_ui=False)
 
 *New in v0.9.4*
 
-You can also use `doc_ui` in endpoint or when initializing `APIBlueprint`.
+You can also use `doc_ui` in endpoint or when initializing [`APIBlueprint`](../Reference/APIBlueprint.md) or [`APIView`](../Reference/APIView.md).
 
 ```python hl_lines="4 9"
 api = APIBlueprint(

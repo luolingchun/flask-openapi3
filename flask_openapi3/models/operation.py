@@ -10,7 +10,7 @@ from .external_documentation import ExternalDocumentation
 from .parameter import Parameter
 from .reference import Reference
 from .request_body import RequestBody
-from .responses import Responses
+from .response import Response
 from .security_requirement import SecurityRequirement
 from .server import Server
 
@@ -25,9 +25,9 @@ class Operation(BaseModel):
     description: Optional[str] = None
     externalDocs: Optional[ExternalDocumentation] = None
     operationId: Optional[str] = None
-    parameters: Optional[List[Union[Parameter, Reference]]] = None
+    parameters: Optional[List[Parameter]] = None
     requestBody: Optional[Union[RequestBody, Reference]] = None
-    responses: Optional[Responses] = None
+    responses: Optional[Dict[str, Response]] = None
     callbacks: Optional[Dict[str, Callback]] = None
 
     deprecated: Optional[bool] = False
