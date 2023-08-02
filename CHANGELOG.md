@@ -1,3 +1,10 @@
+## v2.5.0 2023-08-02
+
+- [#79](https://github.com/luolingchun/flask-openapi3/discussions/79) Support `by_alias` in Model Config. Thanks, @candleindark.
+- [#82](https://github.com/luolingchun/flask-openapi3/issues/82) Fix parameter in url_prefix. Thanks, @riedgar-ms.
+- [#83](https://github.com/luolingchun/flask-openapi3/pull/83) Be able to change 422 validation errors to other http response status. Thanks, @CostcoFanboy.
+- [#86](https://github.com/luolingchun/flask-openapi3/issues/86) Responses key supports both string, int, and HTTPStatus. Thanks, @CostcoFanboy.
+
 ## v2.4.0 2023-06-04
 
 - [#72](https://github.com/luolingchun/flask-openapi3/pull/72) security_schemes(SecurityScheme) supports a json format.
