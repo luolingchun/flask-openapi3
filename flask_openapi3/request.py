@@ -47,9 +47,13 @@ def _do_form(form, func_kwargs):
     request_form = request.form
     request_files = request.files
     form_dict = {}
-    for k, v in form.schema().get("properties", {}).items():
+    schema = form.schema()
+    for k, v in schema.get("properties", {}).items():
+        # Resolve type schema
+        v = _resolve_type_schema(schema, v)
         if v.get("type") == "array":
-            items = v.get("items", {})
+            # Resolve array items type schema
+            items = _resolve_type_schema(schema, v.get("items", {}))
             if items.get("type") == "string" and items.get("format") == "binary":
                 # List[FileStorage]
                 # eg: {"title": "Files", "type": "array", "items": {"format": "binary", "type": "string"}
@@ -58,6 +62,10 @@ def _do_form(form, func_kwargs):
                 # List[str], List[int] ...
                 # eg: {"title": "Files", "type": "array", "items": {"type": "string"}
                 value = request_form.getlist(k)
+                
+                if items.get("type") == "object" and all(isinstance(x, str) for x in value):
+                    # In case of array items type is object, convert string json parameters to dict
+                    value = [json.loads(item) for item in value]
         else:
             if v.get("format") == "binary":
                 # FileStorage
@@ -65,6 +73,10 @@ def _do_form(form, func_kwargs):
             else:
                 # str, int ...
                 value = request_form.get(k)
+                
+                if(v.get("type") == "object" and isinstance(value, str)):
+                    # In case of type is object, convert string json parameter to dict
+                    value = json.loads(value)
         if value is not None:
             form_dict[k] = value
     func_kwargs.update({"form": form(**form_dict)})
@@ -136,3 +148,19 @@ def _do_request(
         abort(validation_error_callback(e))
 
     return func_kwargs
+
+def _resolve_type_schema(schema, typeSchema):
+    """
+    Resolve type schema from schema definitions if it is a reference.
+
+    Args:
+        schema: The schema.
+        typeSchema: The type schema.
+
+    Returns:
+        Returns the type schema itself if it is not a reference.    
+    """
+    definitions = schema.get("definitions", {})
+    if typeSchema.get("$ref"):
+        return definitions.get(typeSchema.get("$ref").split("/")[-1])
+    return typeSchema
