@@ -62,7 +62,6 @@ def _do_form(form, func_kwargs):
                 # List[str], List[int] ...
                 # eg: {"title": "Files", "type": "array", "items": {"type": "string"}
                 value = request_form.getlist(k)
-                
                 if items.get("type") == "object" and all(isinstance(x, str) for x in value):
                     # In case of array items type is object, convert string json parameters to dict
                     value = [json.loads(item) for item in value]
@@ -73,8 +72,7 @@ def _do_form(form, func_kwargs):
             else:
                 # str, int ...
                 value = request_form.get(k)
-                
-                if(v.get("type") == "object" and isinstance(value, str)):
+                if v.get("type") == "object" and isinstance(value, str):
                     # In case of type is object, convert string json parameter to dict
                     value = json.loads(value)
         if value is not None:
@@ -149,6 +147,7 @@ def _do_request(
 
     return func_kwargs
 
+
 def _resolve_type_schema(schema, typeSchema):
     """
     Resolve type schema from schema definitions if it is a reference.
@@ -158,7 +157,7 @@ def _resolve_type_schema(schema, typeSchema):
         typeSchema: The type schema.
 
     Returns:
-        Returns the type schema itself if it is not a reference.    
+        Returns the type schema itself if it is not a reference.
     """
     definitions = schema.get("definitions", {})
     if typeSchema.get("$ref"):
