@@ -233,7 +233,7 @@ def parse_form(
     encoding = {}
     for k, v in properties.items():
         if v.get("type") == "array":
-            encoding[k] = Encoding(style="form")
+            encoding[k] = Encoding(style="form", explode=True)
     if extra_form:
         # Update encoding
         if extra_form.encoding:
