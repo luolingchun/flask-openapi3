@@ -69,7 +69,7 @@ def test_openapi(client):
         "digit": "1",
         "digit_list": ["2", "3"],
         "file": (BytesIO(b"post-data"), "filename"),
-        "files": [(BytesIO(b"post-data"), "filename"), (BytesIO(b"post-data"), "filename")],
+        "file_list": [(BytesIO(b"post-data"), "filename"), (BytesIO(b"post-data"), "filename")],
         "file_type": "1",
         "none": "null",
         "number": "1.2",
@@ -83,7 +83,7 @@ def test_openapi(client):
         "parameter_union": '{"tag2": "string"}',
         "union_all": "true",
         "string": "a",
-        "string_list": '["a", "b", "c"]'
+        "string_list": ["a", "b", "c"]
     }
     resp = client.post("/example", data=data, content_type="multipart/form-data")
     print(resp.text)
