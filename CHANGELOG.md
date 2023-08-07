@@ -1,3 +1,7 @@
+## v2.5.1 2023-08-07
+
+- [#95](https://github.com/luolingchun/flask-openapi3/pull/95) Added ability to deserialize complex form parameter objects. Thanks, BlackGad.
+
 ## v2.5.0 2023-08-02
 
 - [#79](https://github.com/luolingchun/flask-openapi3/discussions/79) Support `by_alias` in Model Config. Thanks, @candleindark.
