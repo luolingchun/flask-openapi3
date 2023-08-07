@@ -54,10 +54,25 @@ def _do_form(form, func_kwargs):
                 # List[FileStorage]
                 # eg: {"title": "Files", "type": "array", "items": {"format": "binary", "type": "string"}
                 value = request_files.getlist(k)
+            elif items.get("type") in ["object", "null", None]:
+                # list object, None, $ref, anyOf
+                value = []
+                for i in request_form.getlist(k):
+                    try:
+                        json_loads_result = json.loads(i)
+                    except JSONDecodeError:
+                        json_loads_result = i
+                    value.append(json_loads_result)
             else:
                 # List[str], List[int] ...
                 # eg: {"title": "Files", "type": "array", "items": {"type": "string"}
                 value = request_form.getlist(k)
+        elif v.get("type") in ["object", "null", None]:
+            # list object, None, $ref, anyOf
+            try:
+                value = json.loads(request_form.get(k)) if request_form.get(k) else None
+            except JSONDecodeError:
+                value = request_form.get(k)
         else:
             if v.get("format") == "binary":
                 # FileStorage
@@ -65,8 +80,7 @@ def _do_form(form, func_kwargs):
             else:
                 # str, int ...
                 value = request_form.get(k)
-        if value is not None:
-            form_dict[k] = value
+        form_dict[k] = value
     func_kwargs.update({"form": form(**form_dict)})
 
 

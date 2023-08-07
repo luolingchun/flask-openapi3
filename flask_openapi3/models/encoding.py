@@ -21,7 +21,7 @@ class Encoding(BaseModel):
     contentType: Optional[str] = None
     headers: Optional[Dict[str, Union[Header, Reference]]] = None
     style: Optional[str] = None
-    explode: bool = False
+    explode: Optional[bool] = None
     allowReserved: bool = False
 
     class Config:
