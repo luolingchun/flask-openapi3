@@ -1,6 +1,10 @@
+## v2.5.2 2023-08-13
+
+- [#97](https://github.com/luolingchun/flask-openapi3/issues/97) Fix response miss description. Thanks, @tekrei.
+
 ## v2.5.1 2023-08-07
 
-- [#95](https://github.com/luolingchun/flask-openapi3/pull/95) Added ability to deserialize complex form parameter objects. Thanks, BlackGad.
+- [#95](https://github.com/luolingchun/flask-openapi3/pull/95) Added ability to deserialize complex form parameter objects. Thanks, @BlackGad.
 
 ## v2.5.0 2023-08-02
 
