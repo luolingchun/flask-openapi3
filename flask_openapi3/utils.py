@@ -310,6 +310,8 @@ def get_responses(
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
+            if not response.get("description"):
+                response["description"] = HTTP_STATUS.get(key, "")
             _responses[key] = Response(**response)
         else:
             schema = get_model_schema(response)
