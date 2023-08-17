@@ -11,7 +11,6 @@ from .models import Discriminator
 from .models import Encoding
 from .models import Example
 from .models import ExternalDocumentation
-from .models import ExtraRequestBody
 from .models import FileStorage
 from .models import Header
 from .models import Info

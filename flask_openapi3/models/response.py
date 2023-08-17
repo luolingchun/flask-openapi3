@@ -24,16 +24,3 @@ class Response(BaseModel):
     model_config = {
         "extra": "allow"
     }
-
-    def merge_with(self, other_response: Optional["Response"]) -> "Response":
-        """Merge content from both responses."""
-        if not other_response:
-            return self
-
-        if other_response.content:
-            if self.content:
-                self.content.update(other_response.content)
-            else:
-                self.content = other_response.content
-
-        return self

@@ -13,7 +13,6 @@ from pydantic import BaseModel, ValidationError
 
 from ._http import HTTP_STATUS, HTTPMethod
 from .models import Encoding
-from .models import ExtraRequestBody
 from .models import MediaType
 from .models import OPENAPI3_REF_PREFIX
 from .models import OPENAPI3_REF_TEMPLATE
@@ -219,7 +218,6 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
 
 def parse_form(
         form: Type[BaseModel],
-        extra_form: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a form model and returns a list of parameters and component schemas."""
     schema = get_model_schema(form)
@@ -234,25 +232,12 @@ def parse_form(
     for k, v in properties.items():
         if v.get("type") == "array":
             encoding[k] = Encoding(style="form", explode=True)
-    if extra_form:
-        # Update encoding
-        if extra_form.encoding:
-            encoding.update(**extra_form.encoding)
-        content = {
-            "multipart/form-data": MediaType(
-                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
-                example=extra_form.example,
-                examples=extra_form.examples,
-                encoding=encoding or None
-            )
-        }
-    else:
-        content = {
-            "multipart/form-data": MediaType(
-                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
-                encoding=encoding or None
-            )
-        }
+    content = {
+        "multipart/form-data": MediaType(
+            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
+            encoding=encoding or None
+        )
+    }
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -264,7 +249,6 @@ def parse_form(
 
 def parse_body(
         body: Type[BaseModel],
-        extra_body: Optional[ExtraRequestBody] = None,
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a body model and returns a list of parameters and component schemas."""
     schema = get_model_schema(body)
@@ -272,21 +256,11 @@ def parse_body(
 
     title = schema.get("title") or body.__name__
     components_schemas[title] = Schema(**schema)
-    if extra_body:
-        content = {
-            "application/json": MediaType(
-                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
-                example=extra_body.example,
-                examples=extra_body.examples,
-                encoding=extra_body.encoding
-            )
-        }
-    else:
-        content = {
-            "application/json": MediaType(
-                schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"})
-            )
-        }
+    content = {
+        "application/json": MediaType(
+            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"})
+        )
+    }
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -298,7 +272,6 @@ def parse_body(
 
 def get_responses(
         responses: ResponseStrKeyDict,
-        extra_responses: Dict[str, dict],
         components_schemas: dict,
         operation: Operation
 ) -> None:
@@ -343,16 +316,6 @@ def get_responses(
                 for name, value in definitions.items():
                     _schemas[name] = Schema(**value)
 
-    # handle extra_responses
-    for key, value in extra_responses.items():
-        # key "200" value {"content":{"text/csv":{"schema":{"type": "string"}}}}
-        new_response = Response(
-            # Best effort to ensure there is always a description
-            description=value.pop("description", HTTP_STATUS.get(key, "")),
-            **value
-        )
-        _responses[key] = new_response.merge_with(_responses.get(key))
-
     components_schemas.update(**_schemas)
     operation.responses = _responses
 
@@ -390,8 +353,6 @@ def parse_and_store_tags(
 def parse_parameters(
         func: Callable,
         *,
-        extra_form: Optional[ExtraRequestBody] = None,
-        extra_body: Optional[ExtraRequestBody] = None,
         components_schemas: Optional[Dict] = None,
         operation: Optional[Operation] = None,
         doc_ui: bool = True,
@@ -402,8 +363,6 @@ def parse_parameters(
 
     Arguments:
         func: The function to parse the parameters from.
-        extra_form: Additional form data for the request body (default: None).
-        extra_body: Additional body data for the request body (default: None).
         components_schemas: Dictionary to store the parsed components schemas (default: None).
         operation: Operation object to populate with parsed parameters (default: None).
         doc_ui: Flag indicating whether to return types for documentation UI (default: True).
@@ -459,16 +418,9 @@ def parse_parameters(
         components_schemas.update(**_components_schemas)
 
     if form:
-        _content, _components_schemas = parse_form(form, extra_form)
+        _content, _components_schemas = parse_form(form)
         components_schemas.update(**_components_schemas)
-        if extra_form:
-            request_body = RequestBody(
-                description=extra_form.description,
-                content=_content,
-                required=extra_form.required
-            )
-        else:
-            request_body = RequestBody(content=_content)
+        request_body = RequestBody(content=_content)
         model_config: DefaultDict[str, Any] = form.model_config  # type: ignore
         openapi_extra = model_config.get("openapi_extra")
         if openapi_extra:
@@ -480,16 +432,9 @@ def parse_parameters(
         operation.requestBody = request_body
 
     if body:
-        _content, _components_schemas = parse_body(body, extra_body)
+        _content, _components_schemas = parse_body(body)
         components_schemas.update(**_components_schemas)
-        if extra_body:
-            request_body = RequestBody(
-                description=extra_body.description,
-                content=_content,
-                required=extra_body.required
-            )
-        else:
-            request_body = RequestBody(content=_content)
+        request_body = RequestBody(content=_content)
         model_config: DefaultDict[str, Any] = body.model_config  # type: ignore
         openapi_extra = model_config.get("openapi_extra")
         if openapi_extra:

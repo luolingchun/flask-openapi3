@@ -8,7 +8,6 @@ from flask import Blueprint
 
 from ._http import HTTPMethod
 from .models import ExternalDocumentation
-from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
 from .scaffold import APIScaffold
@@ -109,10 +108,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
-            extra_form: Optional[ExtraRequestBody] = None,
-            extra_body: Optional[ExtraRequestBody] = None,
             responses: Optional[ResponseDict] = None,
-            extra_responses: Optional[Dict[str, Dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
@@ -131,10 +127,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
-            extra_form: **Deprecated in v3.x**. Extra information describing the request body(application/form).
-            extra_body: **Deprecated in v3.x**. Extra information describing the request body(application/json).
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            extra_responses: **Deprecated in v3.x**. Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
@@ -147,8 +140,6 @@ class APIBlueprint(APIScaffold, Blueprint):
             else:
                 # Convert key to string
                 new_responses = convert_responses_key_to_string(responses)
-            if extra_responses is None:
-                extra_responses = {}
             # Global response: combine API responses
             combine_responses = deepcopy(self.abp_responses)
             combine_responses.update(**new_responses)
@@ -179,13 +170,11 @@ class APIBlueprint(APIScaffold, Blueprint):
             # Parse parameters
             header, cookie, path, query, form, body = parse_parameters(
                 func,
-                extra_form=extra_form,
-                extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation
             )
             # Parse response
-            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
+            get_responses(combine_responses, self.components_schemas, operation)
 
             # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
             uri = parse_rule(rule, url_prefix=self.url_prefix)

@@ -9,7 +9,7 @@ The type orders are according to the contents of the specification:
 https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#table-of-contents
 """
 
-from typing import Optional, List, Any, Dict, Union
+from typing import Optional, List, Dict
 
 from pydantic import BaseModel
 
@@ -68,15 +68,6 @@ class APISpec(BaseModel):
     }
 
 
-class ExtraRequestBody(BaseModel):
-    description: Optional[str] = None
-    required: Optional[bool] = True
-    # For MediaType
-    example: Optional[Any] = None
-    examples: Optional[Dict[str, Union[Example, Reference]]] = None
-    encoding: Optional[Dict[str, Encoding]] = None
-
-
 class OAuthConfig(BaseModel):
     """
     https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md#oauth-20-configuration
@@ -92,10 +83,6 @@ class OAuthConfig(BaseModel):
     usePkceWithAuthorizationCodeGrant: Optional[bool] = False
 
 
-Components.model_rebuild()
 Encoding.model_rebuild()
-MediaType.model_rebuild()
 Operation.model_rebuild()
-Parameter.model_rebuild()
 PathItem.model_rebuild()
-RequestBody.model_rebuild()

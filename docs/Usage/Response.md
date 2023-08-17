@@ -58,40 +58,6 @@ def hello(path: HelloPath):
 
 ![image-20210526104627124](../assets/image-20210526104627124.png)
 
-## extra_responses
-
-*New in v2.4.0*
-
-!!! Deprecated-Warning warning
-
-    `extra_responses` have been merged into the `responses`, and `extra_responses` will be deprecated in v3.x.
-
-*New in v1.0.0*
-
-You can pass to your path operation decorators a parameter `extra_responses`.
-
-It receives a `dict`, the keys are status codes for each response, like `200`, and the values are other dicts with the
-information for each of them.
-
-Like this:
-
-```python
-@app.get(
-    '/book/<int:bid>',
-    tags=[book_tag],
-    responses={"200": BookResponse},
-    extra_responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
-    security=security
-)
-def get_book(path: BookPath):
-    ...
-
-
-@api.post('/book', extra_responses={"201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
-def create_book(body: BookBody):
-    ...
-```
-
 ## More information about OpenAPI responses
 
 - [OpenAPI Responses Object](https://spec.openapis.org/oas/v3.0.3#responses-object), it includes the Response Object.

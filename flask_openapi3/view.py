@@ -2,13 +2,11 @@
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
 import typing
-import warnings
 from copy import deepcopy
 from typing import Optional, List, Dict, Any, Callable
 
 from ._http import HTTPMethod
 from .models import ExternalDocumentation
-from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
 from .types import ResponseDict
@@ -23,8 +21,6 @@ from .utils import parse_rule
 
 if typing.TYPE_CHECKING:
     from .openapi import OpenAPI
-
-warnings.simplefilter("once")
 
 
 class APIView:
@@ -113,10 +109,7 @@ class APIView:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
-            extra_form: Optional[ExtraRequestBody] = None,
-            extra_body: Optional[ExtraRequestBody] = None,
             responses: Optional[ResponseDict] = None,
-            extra_responses: Optional[Dict[str, dict]] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
@@ -133,10 +126,7 @@ class APIView:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
-            extra_form: **Deprecated in v3.x**. Extra information describing the request body(application/form).
-            extra_body: **Deprecated in v3.x**. Extra information describing the request body(application/json).
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            extra_responses: **Deprecated in v3.x**. Extra information for responses.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
@@ -144,26 +134,11 @@ class APIView:
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
-        if extra_form is not None:
-            warnings.warn(
-                """`extra_form` will be deprecated in v3.x, please use `openapi_extra` instead.""",
-                DeprecationWarning)
-        if extra_body is not None:
-            warnings.warn(
-                """`extra_body` will be deprecated in v3.x, please use `openapi_extra` instead.""",
-                DeprecationWarning)
-        if extra_responses is not None:
-            warnings.warn(
-                """`extra_responses` will be deprecated in v3.x, please use `responses` instead.""",
-                DeprecationWarning)
-
         if responses is None:
             new_responses = {}
         else:
             # Convert key to string
             new_responses = convert_responses_key_to_string(responses)
-        if extra_responses is None:
-            extra_responses = {}
         if security is None:
             security = []
         tags = tags + self.view_tags if tags else self.view_tags
@@ -196,13 +171,11 @@ class APIView:
             # Parse parameters
             parse_parameters(
                 func,
-                extra_form=extra_form,
-                extra_body=extra_body,
                 components_schemas=self.components_schemas,
                 operation=operation
             )
             # Parse response
-            get_responses(combine_responses, extra_responses, self.components_schemas, operation)
+            get_responses(combine_responses, self.components_schemas, operation)
             func.operation = operation
 
             return func

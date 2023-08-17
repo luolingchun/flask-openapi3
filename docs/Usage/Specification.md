@@ -239,16 +239,6 @@ def endpoint():
     ...
 ```
 
-You can also use [responses ](./Response.md#responses) and [extra_responses](./Response.md#extra_responses) in your api.
-
-*New in v2.4.0*
-
-!!! Deprecated-Warning warning
-
-    `extra_responses` have been merged into the `responses`, and `extra_responses` will be deprecated in v3.x.
-
-
-
 ## doc_ui
 
 You can pass `doc_ui=False` to disable the `OpenAPI spec` when init [`OpenAPI`](../Reference/OpenAPI.md).
