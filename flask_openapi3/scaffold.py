@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/8/30 9:40
-import functools
 import inspect
-import sys
 from abc import ABC
 from functools import wraps
 from typing import Callable, List, Optional, Dict, Any
@@ -18,18 +16,6 @@ from .models import Tag
 from .request import _do_request
 from .types import ParametersTuple
 from .types import ResponseDict
-
-if sys.version_info >= (3, 8):
-    iscoroutinefunction = inspect.iscoroutinefunction
-else:
-    def iscoroutinefunction(func: Any) -> bool:
-        while inspect.ismethod(func):
-            func = func.__func__
-
-        while isinstance(func, functools.partial):
-            func = func.func
-
-        return inspect.iscoroutinefunction(func)
 
 
 class APIScaffold(Scaffold, ABC):
@@ -68,7 +54,7 @@ class APIScaffold(Scaffold, ABC):
             view_class=None,
             view_kwargs=None
     ):
-        is_coroutine_function = iscoroutinefunction(func)
+        is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)
             async def view_func(**kwargs) -> FlaskResponse:

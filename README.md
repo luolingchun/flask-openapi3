@@ -39,7 +39,7 @@ The key features are:
 
 ## Requirements
 
-Python 3.7+
+Python 3.8+
 
 flask-openapi3 is dependent on the following libraries:
 
