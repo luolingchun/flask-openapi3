@@ -93,7 +93,7 @@ class BookQuery(BaseModel):
     author: str = Field(None, description='Author')
 ```
 
-More information to see [BaseModel](https://pydantic-docs.helpmanual.io/usage/models/), and you can [Customize the Field](https://pydantic-docs.helpmanual.io/usage/schema/#field-customization).
+More information to see [BaseModel](https://docs.pydantic.dev/1.10/usage/models/), and you can [Customize the Field](https://docs.pydantic.dev/1.10/usage/schema/#field-customization).
 
 *New in v2.1.0*
 
@@ -111,4 +111,4 @@ Magic:
 
 ![](../assets/Snipaste_2022-09-04_10-10-03.png)
 
-More available fields to see [Parameter Object Fixed Fields](https://spec.openapis.org/oas/v3.1.0#fixed-fields-9).
+More available fields to see [Parameter Object Fixed Fields](https://spec.openapis.org/oas/v3.0.3#fixed-fields-9).

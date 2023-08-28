@@ -1,5 +1,5 @@
-The [BaseModel](https://docs.pydantic.dev/latest/usage/models/) in [Pydantic](https://github.com/pydantic/pydantic) 
-supports some custom configurations([Model Config](https://docs.pydantic.dev/latest/usage/model_config/)), 
+The [BaseModel](https://docs.pydantic.dev/1.10/usage/models/) in [Pydantic](https://github.com/pydantic/pydantic) 
+supports some custom configurations([Model Config](https://docs.pydantic.dev/1.10/usage/model_config/)), 
 so we can use the `openapi_extra` to extend OpenAPI Specification.
 
 ## openapi_extra

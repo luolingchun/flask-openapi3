@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" 
+        <img class="off-glb" src="https://raw.githubusercontent.com/luolingchun/flask-openapi3/v2.x/docs/images/logo-text.svg" 
              width="60%" height="auto" alt="logo">
     </a>
 </div>
@@ -9,7 +9,7 @@
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/flask-openapi3/actions/workflows/tests.yml" target="_blank">
-        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/tests.yml?branch=master" alt="test">
+        <img class="off-glb" src="https://img.shields.io/github/actions/workflow/status/luolingchun/flask-openapi3/tests.yml?branch=v2.x" alt="test">
     </a>
     <a href="https://pypi.org/project/flask-openapi3/" target="_blank">
         <img class="off-glb" src="https://img.shields.io/pypi/v/flask-openapi3" alt="pypi">
@@ -195,11 +195,11 @@ if __name__ == "__main__":
 
 ## API Document
 
-Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
+Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/v2.x/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
 
 You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc).
 
-![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
-![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
-![openapi-redoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-redoc.png)
-![openapi-RapiDoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-rapidoc.png)
+![openapi](https://raw.githubusercontent.com/luolingchun/flask-openapi3/v2.x/docs/images/openapi.png)
+![openapi-swagger](https://raw.githubusercontent.com/luolingchun/flask-openapi3/v2.x/docs/images/openapi-swagger.png)
+![openapi-redoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/v2.x/docs/images/openapi-redoc.png)
+![openapi-RapiDoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/v2.x/docs/images/openapi-rapidoc.png)
