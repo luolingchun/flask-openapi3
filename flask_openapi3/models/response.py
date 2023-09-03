@@ -13,7 +13,7 @@ from .reference import Reference
 
 class Response(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#response-object
+    https://spec.openapis.org/oas/v3.1.0#response-object
     """
 
     description: str

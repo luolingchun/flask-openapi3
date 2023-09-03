@@ -6,6 +6,6 @@ from typing import Dict
 from .path_item import PathItem
 
 """
-https://spec.openapis.org/oas/v3.0.3#paths-object
+https://spec.openapis.org/oas/v3.1.0#paths-object
 """
 Paths = Dict[str, PathItem]

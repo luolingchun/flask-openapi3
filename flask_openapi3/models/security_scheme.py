@@ -11,7 +11,7 @@ from .security_scheme_in_type import SecuritySchemeInType
 
 class SecurityScheme(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#security-scheme-object
+    https://spec.openapis.org/oas/v3.1.0#security-scheme-object
     """
 
     type: str

@@ -53,7 +53,7 @@ OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + "/{model}"
 
 
 class APISpec(BaseModel):
-    """https://spec.openapis.org/oas/v3.0.3#openapi-object"""
+    """https://spec.openapis.org/oas/v3.1.0#openapi-object"""
     openapi: str
     info: Info
     servers: Optional[List[Server]] = None

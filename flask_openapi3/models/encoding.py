@@ -15,7 +15,7 @@ else:
 
 class Encoding(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#encoding-object
+    https://spec.openapis.org/oas/v3.1.0#encoding-object
     """
 
     contentType: Optional[str] = None

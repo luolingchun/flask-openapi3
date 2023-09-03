@@ -10,7 +10,7 @@ from .server_variable import ServerVariable
 
 class Server(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#server-object
+    https://spec.openapis.org/oas/v3.1.0#server-object
     """
 
     url: str

@@ -71,7 +71,7 @@ def get_book(path: BookPath, query: BookBody):
 
 Allows referencing an external resource for extended documentation.
 
-More information to see [External Documentation Object](https://spec.openapis.org/oas/v3.0.3#external-documentation-object).
+More information to see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
 
 ```python hl_lines="10"
 from flask_openapi3 import OpenAPI, ExternalDocumentation
@@ -246,7 +246,7 @@ def get_book(path: BookPath):
 
 While the OpenAPI Specification tries to accommodate most use cases, 
 additional data can be added to extend the specification at certain points.
-See [Specification Extensions](https://spec.openapis.org/oas/v3.0.3#specification-extensions).
+See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
 
 
 ```python  hl_lines="3 12 19 28 42"

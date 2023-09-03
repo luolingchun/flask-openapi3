@@ -14,7 +14,7 @@ from .xml import XML
 
 class Schema(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#schema-object
+    https://spec.openapis.org/oas/v3.1.0#schema-object
     """
 
     title: Optional[str] = None

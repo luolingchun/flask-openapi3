@@ -93,9 +93,9 @@ class BookQuery(BaseModel):
     author: str = Field(None, description='Author')
 ```
 
-More information to see [BaseModel](https://pydantic-docs.helpmanual.io/usage/models/), and you can [Customize the Field](https://pydantic-docs.helpmanual.io/usage/schema/#field-customization).
+More information to see [BaseModel](https://docs.pydantic.dev/latest/usage/models/), and you can [Customize the Field](https://docs.pydantic.dev/latest/usage/fields/).
 
-However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.0.3#parameter-object). Here is an example:
+However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.1.0#parameter-object). Here is an example:
 
 `age` with **`example`** and `author` with **`deprecated`**.
 

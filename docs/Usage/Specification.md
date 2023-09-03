@@ -54,9 +54,9 @@ pip install pyyaml
 ## info
 
 **`flask-openapi3`** provide [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc) interactive documentation.
-Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3).
+Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0).
 
-You must import **`Info`** from **`flask-openapi3`**, it needs some parameters: **`title`**, **`version`**... , more information sees the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.0.3#info-object).
+You must import **`Info`** from **`flask-openapi3`**, it needs some parameters: **`title`**, **`version`**... , more information sees the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.1.0#info-object).
 
 ```python hl_lines="4 5"
 from flask_openapi3 import Info
@@ -78,7 +78,7 @@ run it, and go to http://127.0.0.1:5000/openapi, you will see the documentation.
 ## security_schemes
 
 There are some examples for Security Scheme Object,
-more features see the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.0.3#security-scheme-object).
+more features see the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.1.0#security-scheme-object).
 
 ```python
 # Basic Authentication Sample
@@ -313,7 +313,7 @@ app = OpenAPI(__name__, info=info, servers=servers)
 
 Allows referencing an external resource for extended documentation.
 
-More information to see [External Documentation Object](https://spec.openapis.org/oas/v3.0.3#external-documentation-object).
+More information to see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
 
 ```python
 from flask_openapi3 import OpenAPI, ExternalDocumentation
@@ -331,7 +331,7 @@ app = OpenAPI(__name__, info=info, external_docs=external_docs)
 
 While the OpenAPI Specification tries to accommodate most use cases, 
 additional data can be added to extend the specification at certain points.
-See [Specification Extensions](https://spec.openapis.org/oas/v3.0.3#specification-extensions).
+See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
 
 It can also be available in **APIBlueprint** and **APIView**, goto [Operation](Route_Operation.md#openapi_extensions).
 

@@ -20,7 +20,7 @@ from .security_scheme import SecurityScheme
 
 class Components(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#components-object
+    https://spec.openapis.org/oas/v3.1.0#components-object
     """
 
     schemas: Optional[Dict[str, Union[Reference, Schema]]] = Field(None)

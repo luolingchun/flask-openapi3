@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img class="off-glb" src="https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/logo-text.svg" 
+        <img class="off-glb" src="https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/logo-text.svg" 
              width="60%" height="auto" alt="logo">
     </a>
 </div>
@@ -29,7 +29,7 @@ The key features are:
 
 - **Easy to code:** Easy to use and easy to learn
 
-- **Standard document specification:** Based on [OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3)
+- **Standard document specification:** Based on [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0)
 
 - **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc)
   
@@ -199,7 +199,7 @@ Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/mast
 
 You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc).
 
-![openapi](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi.png)
-![openapi-swagger](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-swagger.png)
-![openapi-redoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-redoc.png)
-![openapi-RapiDoc](https://github.com/luolingchun/flask-openapi3/raw/master/docs/images/openapi-rapidoc.png)
+![openapi](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi.png)
+![openapi-swagger](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-swagger.png)
+![openapi-redoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-redoc.png)
+![openapi-RapiDoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-rapidoc.png)

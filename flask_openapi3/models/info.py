@@ -11,7 +11,7 @@ from .license import License
 
 class Info(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#info-object
+    https://spec.openapis.org/oas/v3.1.0#info-object
     """
 
     title: str

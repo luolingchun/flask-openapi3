@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class ExternalDocumentation(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#external-documentation-object
+    https://spec.openapis.org/oas/v3.1.0#external-documentation-object
     """
 
     description: Optional[str] = None

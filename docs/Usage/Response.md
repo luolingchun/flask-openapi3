@@ -60,6 +60,6 @@ def hello(path: HelloPath):
 
 ## More information about OpenAPI responses
 
-- [OpenAPI Responses Object](https://spec.openapis.org/oas/v3.0.3#responses-object), it includes the Response Object.
-- [OpenAPI Response Object](https://spec.openapis.org/oas/v3.0.3#response-object).
+- [OpenAPI Responses Object](https://spec.openapis.org/oas/v3.1.0#responses-object), it includes the Response Object.
+- [OpenAPI Response Object](https://spec.openapis.org/oas/v3.1.0#response-object).
 

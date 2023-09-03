@@ -4,6 +4,6 @@
 from typing import Dict, List
 
 """
-https://spec.openapis.org/oas/v3.0.3#security-requirement-object
+https://spec.openapis.org/oas/v3.1.0#security-requirement-object
 """
 SecurityRequirement = Dict[str, List[str]]

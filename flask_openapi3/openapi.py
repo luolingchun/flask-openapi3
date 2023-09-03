@@ -74,9 +74,9 @@ class OpenAPI(APIScaffold, Flask):
         Arguments:
             import_name: The import name for the Flask application.
             info: Information about the API (title, version, etc.).
-                  See https://spec.openapis.org/oas/v3.0.3#info-object.
+                  See https://spec.openapis.org/oas/v3.1.0#info-object.
             security_schemes: Security schemes for the API.
-                              See https://spec.openapis.org/oas/v3.0.3#security-scheme-object.
+                              See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.
             oauth_config: OAuth 2.0 configuration for authentication.
                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
@@ -92,12 +92,12 @@ class OpenAPI(APIScaffold, Flask):
             ui_templates: Custom UI templates to override or add UI documents.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
-                           See: https://spec.openapis.org/oas/v3.0.3#external-documentation-object.
+                           See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.
             operation_id_callback: Callback function for custom operation ID generation.
                                    Receives name (str), path (str), and method (str) parameters.
                                    Defaults to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
-                                See https://spec.openapis.org/oas/v3.0.3#specification-extensions.
+                                See https://spec.openapis.org/oas/v3.1.0#specification-extensions.
             validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
                                     Defaults to 422.
             validation_error_model: Validation error response model for OpenAPI Specification.
@@ -108,7 +108,7 @@ class OpenAPI(APIScaffold, Flask):
         super(OpenAPI, self).__init__(import_name, **kwargs)
 
         # Set OpenAPI version and API information
-        self.openapi_version = "3.0.3"
+        self.openapi_version = "3.1.0"
         self.info = info or Info(title="OpenAPI", version="1.0.0")
 
         # Set security schemes, responses, paths and components

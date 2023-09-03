@@ -130,7 +130,7 @@ class APIScaffold(Scaffold, ABC):
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP GET method.
-        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
         Arguments:
             rule: The URL rule string.
@@ -193,7 +193,7 @@ class APIScaffold(Scaffold, ABC):
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP POST method.
-        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
         Arguments:
             rule: The URL rule string.
@@ -256,7 +256,7 @@ class APIScaffold(Scaffold, ABC):
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP PUT method.
-        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
         Arguments:
             rule: The URL rule string.
@@ -319,7 +319,7 @@ class APIScaffold(Scaffold, ABC):
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP DELETE method.
-        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
         Arguments:
             rule: The URL rule string.
@@ -382,7 +382,7 @@ class APIScaffold(Scaffold, ABC):
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP PATCH method.
-        More information goto https://spec.openapis.org/oas/v3.0.3#operation-object
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
         Arguments:
             rule: The URL rule string.

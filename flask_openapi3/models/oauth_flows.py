@@ -10,7 +10,7 @@ from .oauth_flow import OAuthFlow
 
 class OAuthFlows(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#oauth-flows-object
+    https://spec.openapis.org/oas/v3.1.0#oauth-flows-object
     """
 
     implicit: Optional[OAuthFlow] = None

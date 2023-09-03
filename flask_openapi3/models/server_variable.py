@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class ServerVariable(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#server-variable-object
+    https://spec.openapis.org/oas/v3.1.0#server-variable-object
     """
 
     enum: List[str]

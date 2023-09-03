@@ -13,7 +13,7 @@ from .schema import Schema
 
 class MediaType(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.0.3#media-type-object
+    https://spec.openapis.org/oas/v3.1.0#media-type-object
     """
 
     media_type_schema: Optional[Union[Reference, Schema]] = Field(default=None, alias="schema")
