@@ -1,3 +1,9 @@
+## v3.0.0rc1 2023-09-03
+
+- Upgrade pydantic to v2
+- Remove deprecated code
+- Drop support for Python 3.7
+
 ## v2.5.2 2023-08-13
 
 - [#97](https://github.com/luolingchun/flask-openapi3/issues/97) Fix response miss description. Thanks, @tekrei.
