@@ -10,6 +10,9 @@ from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, 
 from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
+from pydantic.schema import normalize_name
+# GenerateJsonSchema class have this method in pydantic 2-x
+# use `from pydantic.json_schema import GenerateJsonSchema`
 
 from ._http import HTTP_STATUS, HTTPMethod
 from .models import Encoding
@@ -314,12 +317,14 @@ def get_responses(
                 response["description"] = HTTP_STATUS.get(key, "")
             _responses[key] = Response(**response)
         else:
+            # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
+            name = normalize_name(response.__name__)
             schema = get_model_schema(response)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
                     "application/json": MediaType(
-                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"})
+                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
                     )})
 
             model_config = response.Config
@@ -336,12 +341,12 @@ def get_responses(
                     _content["application/json"].encoding = openapi_extra.get("encoding")
                     _content.update(openapi_extra.get("content", {}))
 
-            _schemas[response.__name__] = Schema(**schema)
+            _schemas[name] = Schema(**schema)
             definitions = schema.get("definitions")
             if definitions:
                 # Add schema definitions to _schemas
                 for name, value in definitions.items():
-                    _schemas[name] = Schema(**value)
+                    _schemas[normalize_name(name)] = Schema(**value)
 
     # handle extra_responses
     for key, value in extra_responses.items():
