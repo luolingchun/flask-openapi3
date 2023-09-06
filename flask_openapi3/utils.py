@@ -29,6 +29,13 @@ from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
 
+# name, in, description, required, schema set by code so it's not included
+ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT = set([
+    "deprecated",
+    "example",
+    "examples"
+])
+
 
 def get_operation(
         func: Callable, *,
@@ -179,7 +186,9 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update(**dict(
+            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
+        ))
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -206,7 +215,9 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update(**dict(
+            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
+        ))
         parameters.append(Parameter(**data))
 
     # Parse definitions
