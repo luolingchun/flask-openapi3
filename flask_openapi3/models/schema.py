@@ -53,5 +53,5 @@ class Schema(BaseModel):
     example: Optional[Any] = None
     deprecated: Optional[bool] = None
 
-    class Config:
-        extra = "allow"
+    # this repository use Schema Object as Reference Object so we need $ref fieald
+    ref: Optional[str] = Field(alias="$ref", default=None)
