@@ -132,7 +132,9 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update(**dict(
+            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
+        ))
         parameters.append(Parameter(**data))
 
     # Parse definitions
