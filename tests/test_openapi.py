@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar, List, Optional
 
 from pydantic import BaseModel, Field
 from pydantic.generics import GenericModel
