@@ -195,7 +195,7 @@ class APIView:
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
-                header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
+                header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
                 view_func = app.create_view_func(
                     func,
                     header,
@@ -204,6 +204,7 @@ class APIView:
                     query,
                     form,
                     body,
+                    raw,
                     view_class=cls,
                     view_kwargs=view_kwargs
                 )

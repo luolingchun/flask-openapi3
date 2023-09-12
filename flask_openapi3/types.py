@@ -22,5 +22,6 @@ ParametersTuple = Tuple[
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
+    Optional[Type[BaseModel]],
     Optional[Type[BaseModel]]
 ]

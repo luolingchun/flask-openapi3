@@ -25,6 +25,7 @@ from .models import RequestBody
 from .models import Response
 from .models import Schema
 from .models import Tag
+from .models.data_type import DataType
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
@@ -420,10 +421,11 @@ def parse_parameters(
     query = annotations.get("query")
     form = annotations.get("form")
     body = annotations.get("body")
+    raw = annotations.get("raw")
 
     # If doc_ui is False, return the types without further processing
     if doc_ui is False:
-        return header, cookie, path, query, form, body
+        return header, cookie, path, query, form, body, raw
 
     parameters = []
 
@@ -482,10 +484,19 @@ def parse_parameters(
             request_body.content["application/json"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
+    if raw:
+        _content = {
+            raw.mimetype: MediaType(
+                schema=Schema(type=DataType.STRING)
+            )
+        }
+        request_body = RequestBody(content=_content)
+        operation.requestBody = request_body
+
     # Set the parsed parameters in the operation object
     operation.parameters = parameters if parameters else None
 
-    return header, cookie, path, query, form, body
+    return header, cookie, path, query, form, body, raw
 
 
 def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:

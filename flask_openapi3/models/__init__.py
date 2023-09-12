@@ -11,6 +11,7 @@ https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#table-o
 
 from typing import Optional, List, Dict
 
+from flask import Request
 from pydantic import BaseModel
 
 from .callback import Callback
@@ -81,6 +82,10 @@ class OAuthConfig(BaseModel):
     additionalQueryStringParams: Optional[Dict[str, str]] = None
     useBasicAuthenticationWithAccessCodeGrant: Optional[bool] = False
     usePkceWithAuthorizationCodeGrant: Optional[bool] = False
+
+
+class RawModel(Request):
+    media_type: str = "application/json"
 
 
 Encoding.model_rebuild()
