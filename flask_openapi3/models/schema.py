@@ -16,7 +16,7 @@ class Schema(BaseModel):
     """
     https://spec.openapis.org/oas/v3.1.0#schema-object
     """
-
+    ref: Optional[str] = Field(alias="$ref", default=None)
     title: Optional[str] = None
     multipleOf: Optional[float] = Field(default=None, gt=0.0)
     maximum: Optional[float] = None
@@ -52,7 +52,3 @@ class Schema(BaseModel):
     externalDocs: Optional[ExternalDocumentation] = None
     example: Optional[Any] = None
     deprecated: Optional[bool] = None
-
-    model_config = {
-        "extra": "allow"
-    }
