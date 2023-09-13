@@ -55,27 +55,34 @@ plugins:
             show_root_full_path: false
   - glightbox
   - i18n:
-      default_language: en
-      default_language_only: false
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
       languages:
-        en: English
-        zh: 简体中文
-      nav_translations:
-        zh:
-          Home: 简介
-          Quickstart: 快速开始
-          Usage: 教程
-          Specification: 规范
-          Request: 请求
-          Response: 响应
-          Route Operation: 路由操作
-          Model Config: 模型配置
-          UI Templates: 自定义模板
-          Example: 示例
-          API Reference: API 参考
-          LICENSE: 许可
-          Changelog: 更新日志
-          Contributing: 贡献
+        - build: true
+          default: true
+          locale: en
+          name: English
+        - build: true
+          default: false
+          locale: zh
+          name: 简体中文
+          nav_translations:
+              Home: 简介
+              Quickstart: 快速开始
+              Usage: 教程
+              Specification: 规范
+              Request: 请求
+              Response: 响应
+              Route Operation: 路由操作
+              Model Config: 模型配置
+              UI Templates: 自定义模板
+              Example: 示例
+              API Reference: API 参考
+              LICENSE: 许可
+              Changelog: 更新日志
+              Contributing: 贡献
 
 extra:
   version:
