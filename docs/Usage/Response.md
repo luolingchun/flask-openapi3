@@ -29,8 +29,6 @@ def get_book(path: BookPath, query: BookBody):
     return {"code": 0, "message": "ok", "data": {}}
 ```
 
-*New in v2.5.0*
-
 Now you can use `string`, `int`, and `HTTPStatus` as response's key.
 
 ```python hl_lines="5 7"

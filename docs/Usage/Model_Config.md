@@ -4,9 +4,6 @@ so we can use the `openapi_extra` to extend OpenAPI Specification.
 
 ## openapi_extra
 
-*New in v2.4.0*
-
-
 The `openapi_extra` will be merged with the automatically generated OpenAPI schema.
 
 ### form
@@ -16,8 +13,8 @@ class UploadFilesForm(BaseModel):
     file: FileStorage
     str_list: List[str]
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             # "example": {"a": 123},
             "examples": {
                 "Example 01": {
@@ -35,6 +32,7 @@ class UploadFilesForm(BaseModel):
                 }
             }
         }
+    )
 ```
 
 Effect in Redoc:
@@ -48,8 +46,8 @@ class BookBody(BaseModel):
     age: int
     author: str
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             "description": "This is post RequestBody",
             "example": {"age": 12, "author": "author1"},
             "examples": {
@@ -71,6 +69,7 @@ class BookBody(BaseModel):
                 }
 
             }}
+    )
 ```
 
 Effect in swagger:
@@ -83,8 +82,8 @@ Effect in swagger:
 class MessageResponse(BaseModel):
     message: str = Field(..., description="The message")
 
-    class Config:
-        openapi_extra = {
+    model_config = dict(
+        openapi_extra={
             # "example": {"message": "aaa"},
             "examples": {
                 "example1": {
@@ -101,6 +100,7 @@ class MessageResponse(BaseModel):
                 }
             }
         }
+    )
 ```
 
 Effect in swagger:
@@ -110,8 +110,6 @@ Effect in swagger:
 
 ## by_alias
 
-*New in v2.5.0*
-
 Sometimes you may not want to use aliases (such as in the responses model). In that case, `by_alias` will be convenient:
 
 ```python
@@ -119,6 +117,7 @@ class MessageResponse(BaseModel):
     message: str = Field(..., description="The message")
     metadata: Dict[str, str] = Field(alias="metadata_")
 
-    class Config:
-        by_alias = False
+    model_config = dict(
+        by_alias=False
+    )
 ```

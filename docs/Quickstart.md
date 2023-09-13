@@ -89,8 +89,6 @@ if __name__ == '__main__':
 
 ## Nested APIBlueprint
 
-*New in v2.0.0*
-
 Allow an **API Blueprint** to be registered on another **API Blueprint**.
 
 For more information, please see [Flask Nesting Blueprints](https://flask.palletsprojects.com/en/latest/blueprints/#nesting-blueprints).
@@ -127,8 +125,6 @@ if __name__ == '__main__':
 
 ## APIView
 
-*New in v2.2.0*
-
 [Class-based API View](./Reference/APIView.md), click [here](https://github.com/luolingchun/flask-openapi3/blob/master/examples/api_view_demo.py) for the complete example:
 
 ```python
@@ -146,8 +142,6 @@ class BookListAPIView:
         """description for a created book"""
         return body.json()
 ```
-
-*New in v2.4.0*
 
 You can define a parameter named `view_kwargs` (the only parameter of the `__init__` function),
 and using `view_kwargs.get` get the required keys for each.
@@ -188,8 +182,6 @@ app.register_api_view(
 ```
 
 ## Async API
-
-*New in v2.2.2*
 
 Just use `async` when defining functions. More information goes to [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/).
 

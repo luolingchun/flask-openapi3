@@ -4,8 +4,6 @@ If you need the complete Specification, go to http://127.0.0.1:5000/openapi/open
 
 ## command: flask openapi
 
-*New in v2.0.0*
-
 The `flask openapi` command will export the OpenAPI Specification to console when you execute the command.
 
 ```
@@ -144,8 +142,6 @@ result:
 
 ## oauth_config
 
-*New in v0.9.4*
-
 You can pass `oauth_config` when initializing `OpenAPI`:
 
 ```python
@@ -194,8 +190,6 @@ Here's more information about [OAuth 2.0 configuration](https://github.com/swagg
 
 ## responses
 
-*New in v0.9.4*
-
 You can add `responses` for each API under the `app` wrapper.
 
 ```python hl_lines="4"
@@ -211,8 +205,6 @@ def endpoint():
 ```
 
 ## abp_responses & view_responses
-
-*New in v0.9.4*
 
 You can add `responses` for each API under the `api` or `api_view` wrapper.
 
@@ -246,8 +238,6 @@ You can pass `doc_ui=False` to disable the `OpenAPI spec` when init [`OpenAPI`](
 ```python
 app = OpenAPI(__name__, info=info, doc_ui=False)
 ```
-
-*New in v0.9.4*
 
 You can also use `doc_ui` in endpoint or when initializing [`APIBlueprint`](../Reference/APIBlueprint.md) or [`APIView`](../Reference/APIView.md).
 
@@ -327,8 +317,6 @@ app = OpenAPI(__name__, info=info, external_docs=external_docs)
 
 ## openapi_extensions
 
-*new in v2.4.0*
-
 While the OpenAPI Specification tries to accommodate most use cases, 
 additional data can be added to extend the specification at certain points.
 See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
@@ -358,8 +346,6 @@ if __name__ == "__main__":
 
 
 ## validation error
-
-*new in v2.5.0*
 
 You can override validation error response use `validation_error_status`, `validation_error_model`
 and `validation_error_callback`. 
