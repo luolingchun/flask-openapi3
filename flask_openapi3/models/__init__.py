@@ -85,7 +85,7 @@ class OAuthConfig(BaseModel):
 
 
 class RawModel(Request):
-    media_type: str = "application/json"
+    mimetype: str = "application/json"
 
 
 Encoding.model_rebuild()

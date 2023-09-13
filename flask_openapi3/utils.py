@@ -21,6 +21,7 @@ from .models import Operation
 from .models import Parameter
 from .models import ParameterInType
 from .models import PathItem
+from .models import RawModel
 from .models import RequestBody
 from .models import Response
 from .models import Schema
@@ -412,16 +413,16 @@ def parse_parameters(
 
     """
     # Get the type hints from the function
-    annotations: Dict[str, Type[BaseModel]] = get_type_hints(func)
+    annotations = get_type_hints(func)
 
     # Get the types for header, cookie, path, query, form, and body parameters
-    header = annotations.get("header")
-    cookie = annotations.get("cookie")
-    path = annotations.get("path")
-    query = annotations.get("query")
-    form = annotations.get("form")
-    body = annotations.get("body")
-    raw = annotations.get("raw")
+    header: Optional[Type[BaseModel]] = annotations.get("header")
+    cookie: Optional[Type[BaseModel]] = annotations.get("cookie")
+    path: Optional[Type[BaseModel]] = annotations.get("path")
+    query: Optional[Type[BaseModel]] = annotations.get("query")
+    form: Optional[Type[BaseModel]] = annotations.get("form")
+    body: Optional[Type[BaseModel]] = annotations.get("body")
+    raw: Optional[Type[RawModel]] = annotations.get("raw")
 
     # If doc_ui is False, return the types without further processing
     if doc_ui is False:
