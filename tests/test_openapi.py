@@ -312,3 +312,22 @@ def test_form_examples(request):
             },
             "required": True
         }
+
+
+class BaseRequestBody(BaseModel):
+    base: BaseRequest
+
+
+def test_body_with_complex_object(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    @test_app.post("/test")
+    def endpoint_test(body: BaseRequestBody):
+        return body.json(), 200
+
+    with test_app.test_client() as client:
+        resp = client.get("/openapi/openapi.json")
+        assert resp.status_code == 200
+        assert set(["properties", "required", "title", "type"]) == set(
+            resp.json['components']['schemas']['BaseRequestBody'].keys())
