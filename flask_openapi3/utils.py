@@ -10,9 +10,6 @@ from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, 
 from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
-from pydantic.schema import normalize_name
-# GenerateJsonSchema class have this method in pydantic 2-x
-# use `from pydantic.json_schema import GenerateJsonSchema`
 
 from ._http import HTTP_STATUS, HTTPMethod
 from .models import Encoding
@@ -593,3 +590,7 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
         _responses[key] = value
 
     return _responses
+
+
+def normalize_name(name: str) -> str:
+    return re.sub(r'[^\w.\-]', '_', name)
