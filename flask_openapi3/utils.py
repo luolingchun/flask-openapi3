@@ -228,7 +228,8 @@ def parse_form(
 
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
-    title = schema.get("title") or form.__name__
+    original_title = schema.get("title") or form.__name__
+    title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
     encoding = {}
     for k, v in properties.items():

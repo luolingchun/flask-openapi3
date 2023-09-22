@@ -307,10 +307,10 @@ def test_form_examples(request):
             }
         }
 
-    BaseRequest.Config = Config
+    BaseRequestGeneric[BaseRequest].Config = Config
 
     @test_app.post("/test")
-    def endpoint_test(form: BaseRequest):
+    def endpoint_test(form: BaseRequestGeneric[BaseRequest]):
         return form.json(), 200
 
     with test_app.test_client() as client:
@@ -319,13 +319,19 @@ def test_form_examples(request):
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
             "content": {
                 "multipart/form-data": {
-                    "schema": {"$ref": "#/components/schemas/BaseRequest"},
+                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"},
                     "examples": {
                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
                     }
                 }
             },
             "required": True
+        }
+        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
+            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
+            'required': ['detail'],
+            'title': 'BaseRequestGeneric[BaseRequest]',
+            'type': 'object',
         }
 
 
