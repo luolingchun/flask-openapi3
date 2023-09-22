@@ -270,7 +270,8 @@ def parse_body(
     schema = get_model_schema(body)
     components_schemas = dict()
 
-    title = schema.get("title") or body.__name__
+    original_title = schema.get("title") or body.__name__
+    title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
     if extra_body:
         content = {

@@ -7,6 +7,9 @@ from pydantic.generics import GenericModel
 from flask_openapi3 import OpenAPI
 
 
+T = TypeVar("T", bound=BaseModel)
+
+
 def test_responses_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
@@ -230,6 +233,10 @@ class BaseRequest(BaseModel):
     test_str: str
 
 
+class BaseRequestGeneric(GenericModel, Generic[T]):
+    detail: T
+
+
 def test_body_examples_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
@@ -253,10 +260,10 @@ def test_body_examples_are_replicated_in_open_api(request):
             }
         }
 
-    BaseRequest.Config = Config
+    BaseRequestGeneric[BaseRequest].Config = Config
 
     @test_app.post("/test")
-    def endpoint_test(body: BaseRequest):
+    def endpoint_test(body: BaseRequestGeneric[BaseRequest]):
         return body.json(), 200
 
     with test_app.test_client() as client:
@@ -270,10 +277,16 @@ def test_body_examples_are_replicated_in_open_api(request):
                         "Example 02": {"externalValue": "https://example.org/examples/second-example.xml"},
                         "Example 03": {"$ref": "#/components/examples/third-example"}
                     },
-                    "schema": {"$ref": "#/components/schemas/BaseRequest"}
+                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"}
                 }
             },
             "required": True
+        }
+        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
+            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
+            'required': ['detail'],
+            'title': 'BaseRequestGeneric[BaseRequest]',
+            'type': 'object',
         }
 
 
@@ -337,9 +350,6 @@ def test_body_with_complex_object(request):
 
 class Detail(BaseModel):
     num: int
-
-
-T = TypeVar("T", bound=BaseModel)
 
 
 class GenericResponse(GenericModel, Generic[T]):
