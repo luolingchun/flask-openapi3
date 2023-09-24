@@ -125,7 +125,11 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -179,7 +183,11 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -206,7 +214,11 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**value)
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
