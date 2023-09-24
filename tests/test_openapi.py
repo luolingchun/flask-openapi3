@@ -1,8 +1,11 @@
 from __future__ import annotations
+from typing import Generic, TypeVar, List
 
 from pydantic import BaseModel
 
 from flask_openapi3 import OpenAPI
+
+T = TypeVar("T", bound=BaseModel)
 
 
 def test_responses_are_replicated_in_open_api(request):
@@ -229,6 +232,10 @@ class BaseRequest(BaseModel):
     test_str: str
 
 
+class BaseRequestGeneric(BaseModel, Generic[T]):
+    detail: T
+
+
 def test_body_examples_are_replicated_in_open_api(request):
     test_app = OpenAPI(request.node.name)
     test_app.config["TESTING"] = True
@@ -252,10 +259,10 @@ def test_body_examples_are_replicated_in_open_api(request):
             }
         }
     )
-    BaseRequest.model_config = model_config
+    BaseRequestGeneric[BaseRequest].model_config = model_config
 
     @test_app.post("/test")
-    def endpoint_test(body: BaseRequest):
+    def endpoint_test(body: BaseRequestGeneric[BaseRequest]):
         return body.model_dump(), 200
 
     with test_app.test_client() as client:
@@ -269,10 +276,16 @@ def test_body_examples_are_replicated_in_open_api(request):
                         "Example 02": {"externalValue": "https://example.org/examples/second-example.xml"},
                         "Example 03": {"$ref": "#/components/examples/third-example"}
                     },
-                    "schema": {"$ref": "#/components/schemas/BaseRequest"}
+                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"}
                 }
             },
             "required": True
+        }
+        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
+            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
+            'required': ['detail'],
+            'title': 'BaseRequestGeneric[BaseRequest]',
+            'type': 'object',
         }
 
 
@@ -293,10 +306,10 @@ def test_form_examples(request):
             }
         }
     )
-    BaseRequest.model_config = model_config
+    BaseRequestGeneric[BaseRequest].model_config = model_config
 
     @test_app.post("/test")
-    def endpoint_test(form: BaseRequest):
+    def endpoint_test(form: BaseRequestGeneric[BaseRequest]):
         return form.model_dump(), 200
 
     with test_app.test_client() as client:
@@ -305,13 +318,19 @@ def test_form_examples(request):
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
             "content": {
                 "multipart/form-data": {
-                    "schema": {"$ref": "#/components/schemas/BaseRequest"},
+                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"},
                     "examples": {
                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
                     }
                 }
             },
             "required": True
+        }
+        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
+            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
+            'required': ['detail'],
+            'title': 'BaseRequestGeneric[BaseRequest]',
+            'type': 'object',
         }
 
 
@@ -332,3 +351,42 @@ def test_body_with_complex_object(request):
         assert resp.status_code == 200
         assert set(["properties", "required", "title", "type"]) == set(
             resp.json['components']['schemas']['BaseRequestBody'].keys())
+
+
+class Detail(BaseModel):
+    num: int
+
+
+class GenericResponse(BaseModel, Generic[T]):
+    detail: T
+
+
+class ListGenericResponse(BaseModel, Generic[T]):
+    items: List[GenericResponse[T]]
+
+
+def test_responses_with_generics(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    @test_app.get("/test", responses={"201": ListGenericResponse[Detail]})
+    def endpoint_test():
+        return b'', 201
+
+    with test_app.test_client() as client:
+        resp = client.get("/openapi/openapi.json")
+        assert resp.status_code == 200
+        assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
+            "description": "Created",
+            "content": {
+                "application/json": {
+                    "schema": {"$ref": "#/components/schemas/ListGenericResponse_Detail_"}
+                },
+            },
+        }
+
+        schemas = resp.json["components"]["schemas"]
+        detail = schemas['ListGenericResponse_Detail_']
+        assert detail['title'] == 'ListGenericResponse[Detail]'
+        assert detail['properties']['items']['items']['$ref'] == '#/components/schemas/GenericResponse_Detail_'
+        assert schemas['GenericResponse_Detail_']['title'] == 'GenericResponse[Detail]'

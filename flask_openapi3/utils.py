@@ -226,7 +226,8 @@ def parse_form(
 
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
-    title = schema.get("title") or form.__name__
+    original_title = schema.get("title") or form.__name__
+    title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
     encoding = {}
     for k, v in properties.items():
@@ -254,7 +255,8 @@ def parse_body(
     schema = get_model_schema(body)
     components_schemas = dict()
 
-    title = schema.get("title") or body.__name__
+    original_title = schema.get("title") or body.__name__
+    title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
     content = {
         "application/json": MediaType(
@@ -287,12 +289,14 @@ def get_responses(
                 response["description"] = HTTP_STATUS.get(key, "")
             _responses[key] = Response(**response)
         else:
+            # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
+            name = normalize_name(response.__name__)
             schema = get_model_schema(response)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
                     "application/json": MediaType(
-                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{response.__name__}"})
+                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
                     )})
 
             model_config: DefaultDict[str, Any] = response.model_config  # type: ignore
@@ -309,12 +313,12 @@ def get_responses(
                     _content["application/json"].encoding = openapi_extra.get("encoding")
                     _content.update(openapi_extra.get("content", {}))
 
-            _schemas[response.__name__] = Schema(**schema)
+            _schemas[name] = Schema(**schema)
             definitions = schema.get("$defs")
             if definitions:
                 # Add schema definitions to _schemas
                 for name, value in definitions.items():
-                    _schemas[name] = Schema(**value)
+                    _schemas[normalize_name(name)] = Schema(**value)
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
@@ -533,3 +537,7 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
         _responses[key] = value
 
     return _responses
+
+
+def normalize_name(name: str) -> str:
+    return re.sub(r'[^\w.\-]', '_', name)
