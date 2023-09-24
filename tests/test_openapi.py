@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Optional, Generic, TypeVar, List
 
 from pydantic import BaseModel, Field
@@ -344,7 +345,7 @@ def test_body_with_complex_object(request):
 
     @test_app.post("/test")
     def endpoint_test(body: BaseRequestBody):
-        return body.json(), 200
+        return body.model_dump(), 200
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -402,6 +403,7 @@ def test_path_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(path: PathParam):
+        print(path)
         return {}, 200
 
     with test_app.test_client() as client:
@@ -435,6 +437,7 @@ def test_query_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(query: QueryParam):
+        print(query)
         return {}, 200
 
     with test_app.test_client() as client:
@@ -468,19 +471,18 @@ def test_header_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(header: HeaderParam):
+        print(header)
         return {}, 200
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["parameters"][0] == {
-            "description": "app name",
-            "in": "header",
-            "name": "app_name",
-            "required": False,
-            "schema": {
-                "description": "app name",
-                "title": "App Name",
-                "type": "string",
-            },
+            'description': 'app name',
+            'in': 'header',
+            'name': 'app_name',
+            'required': False,
+            'schema': {'anyOf': [{'type': 'string'}, {'type': 'null'}],
+                       'description': 'app name',
+                       'title': 'App Name'}
         }
