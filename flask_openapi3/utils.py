@@ -29,13 +29,6 @@ from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
 
-# name, in, description, required, schema set by code so it's not included
-ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT = set([
-    "deprecated",
-    "example",
-    "examples"
-])
-
 
 def get_operation(
         func: Callable, *,
@@ -132,9 +125,11 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**dict(
-            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
-        ))
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -188,9 +183,11 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**dict(
-            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
-        ))
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -217,9 +214,11 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update(**dict(
-            filter(lambda item: item[0] in ALLOWED_FIELD_NAMES_FOR_PARAMETER_OBJECT, value.items())
-        ))
+        data.update({
+            "deprecated": value.get("deprecated"),
+            "example": value.get("example"),
+            "examples": value.get("examples"),
+        })
         parameters.append(Parameter(**data))
 
     # Parse definitions
