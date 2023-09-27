@@ -486,11 +486,16 @@ def parse_parameters(
         operation.requestBody = request_body
 
     if raw:
-        _content = {
-            raw.mimetype: MediaType(
-                schema=Schema(type=DataType.STRING)
-            )
-        }
+        _content = {}
+        for mimetype in raw.mimetypes:
+            if mimetype.startswith("application/json"):
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.OBJECT)
+                )
+            else:
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.STRING)
+                )
         request_body = RequestBody(content=_content)
         operation.requestBody = request_body
 

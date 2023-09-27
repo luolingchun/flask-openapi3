@@ -8,7 +8,7 @@ app = OpenAPI(__name__)
 
 
 class BookRaw(RawModel):
-    mimetype = "text/csv"
+    mimetypes = ["text/csv", "application/json"]
 
 
 @app.post("/book")

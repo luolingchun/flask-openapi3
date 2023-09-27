@@ -85,7 +85,7 @@ class OAuthConfig(BaseModel):
 
 
 class RawModel(Request):
-    mimetype: str = "application/json"
+    mimetypes: List[str] = ["application/json"]
 
 
 Encoding.model_rebuild()
