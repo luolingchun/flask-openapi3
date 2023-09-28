@@ -83,6 +83,26 @@ Receive flask **`request.headers`**.
 
 Receive flask **`request.cookies`**.
 
+### raw
+
+Receive flask **`request`** and no data validation.
+
+```python
+from flask_openapi3 import RawModel
+
+
+class BookRaw(RawModel):
+    mimetypes = ["text/csv", "application/json"]
+
+
+@app.post("/book")
+def get_book(raw: BookRaw):
+    # raw equals to flask.request
+    print(raw.data)
+    print(raw.mimetype)
+    return "ok"
+```
+
 ## Request model
 
 First, you need to define a [pydantic](https://github.com/pydantic/pydantic) model:
