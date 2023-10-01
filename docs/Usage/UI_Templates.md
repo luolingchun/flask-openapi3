@@ -1,8 +1,6 @@
 Flask OpenAPI3 supports [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc)
 and [RapiDoc](https://github.com/rapi-doc/RapiDoc) templates by default.
 
-*New in v2.3.0*
-
 You can customize templates use `ui_templates` in initializing OpenAPI.
 
 ```python

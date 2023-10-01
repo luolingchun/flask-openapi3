@@ -19,8 +19,6 @@ and then you will get the magic.
 
 ## abp_tags & view_tags
 
-*New in v0.9.3*
-
 You don't need to specify **tags** for every api.
 
 ```python hl_lines="3 4"
@@ -50,8 +48,6 @@ def get_book(path: BookPath, query: BookBody):
 ```
 
 ![image-20210605115557426](../assets/image-20210605115557426.png)
-
-*New in v1.0.0*
 
 Now keyword parameters `summary` and `description` is supported, it will be take first.
 
@@ -109,8 +105,6 @@ def get_book(path: BookPath):
 
 ## operation_id_callback
 
-*new in v2.4.0*
-
 You can set a custom callback to automatically set `operation_id` for an api (operation).
 Just add a `operation_id_callback` param to the constructor of  `OpenAPI` or `APIBlueprint` or `APIView`.
 The example shows setting the default `operation_id` to be the function name, in this case `create_book`.
@@ -127,8 +121,6 @@ def create_book(body: BookBody):
 ```
 
 ## deprecated
-
-*New in v1.0.0*
 
 `deprecated`: mark as deprecated support. default to not True.
 
@@ -204,8 +196,6 @@ def get_book(path: BookPath):
 
 ## abp_security & view_security
 
-*New in v0.9.3*
-
 You don't need to specify **security** for every api.
 
 ```python hl_lines="3 4"
@@ -241,8 +231,6 @@ def get_book(path: BookPath):
 ```
 
 ## openapi_extensions
-
-*new in v2.4.0*
 
 While the OpenAPI Specification tries to accommodate most use cases, 
 additional data can be added to extend the specification at certain points.
@@ -306,8 +294,6 @@ You can pass `doc_ui=False` to disable the `OpenAPI spec` when init `OpenAPI `.
 ```python
 app = OpenAPI(__name__, info=info, doc_ui=False)
 ```
-
-*New in v0.9.4*
 
 You can also use `doc_ui` in endpoint or when initializing `APIBlueprint`.
 
