@@ -10,7 +10,7 @@ Before submitting pr, you need to complete the following steps:
 1. Install requirements
 
     ```bash
-    pip install -U -r requirements-dev.txt
+    pip install -U flask>=2.0 pydantic>=2.0
     ```
 
 2. Running the tests
