@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Generic, TypeVar, List
+from typing import Generic, TypeVar, List
 
 from pydantic import BaseModel, Field
 
@@ -41,7 +41,7 @@ def test_responses_are_replicated_in_open_api(request):
 
     @test_app.get("/test", responses={"201": BaseResponse})
     def endpoint_test():
-        return b'', 201
+        return b"", 201
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -101,7 +101,7 @@ def test_none_responses_are_replicated_in_open_api(request):
         }
     )
     def endpoint_test():
-        return b'', 204
+        return b"", 204
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -156,7 +156,7 @@ def test_responses_are_replicated_in_open_api2(request):
         }
     )
     def endpoint_test():
-        return b'', 201
+        return b"", 201
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -206,7 +206,7 @@ def test_responses_without_content_are_replicated_in_open_api(request):
         }
     )
     def endpoint_test():
-        return b'', 201
+        return b"", 201
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -282,11 +282,11 @@ def test_body_examples_are_replicated_in_open_api(request):
             },
             "required": True
         }
-        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
-            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
-            'required': ['detail'],
-            'title': 'BaseRequestGeneric[BaseRequest]',
-            'type': 'object',
+        assert resp.json["components"]["schemas"]["BaseRequestGeneric_BaseRequest_"] == {
+            "properties": {"detail": {"$ref": "#/components/schemas/BaseRequest"}},
+            "required": ["detail"],
+            "title": "BaseRequestGeneric[BaseRequest]",
+            "type": "object",
         }
 
 
@@ -327,11 +327,11 @@ def test_form_examples(request):
             },
             "required": True
         }
-        assert resp.json["components"]["schemas"]['BaseRequestGeneric_BaseRequest_'] == {
-            'properties': {'detail': {'$ref': '#/components/schemas/BaseRequest'}},
-            'required': ['detail'],
-            'title': 'BaseRequestGeneric[BaseRequest]',
-            'type': 'object',
+        assert resp.json["components"]["schemas"]["BaseRequestGeneric_BaseRequest_"] == {
+            "properties": {"detail": {"$ref": "#/components/schemas/BaseRequest"}},
+            "required": ["detail"],
+            "title": "BaseRequestGeneric[BaseRequest]",
+            "type": "object",
         }
 
 
@@ -351,7 +351,7 @@ def test_body_with_complex_object(request):
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert {"properties", "required", "title", "type"} == set(
-            resp.json['components']['schemas']['BaseRequestBody'].keys())
+            resp.json["components"]["schemas"]["BaseRequestBody"].keys())
 
 
 class Detail(BaseModel):
@@ -372,7 +372,7 @@ def test_responses_with_generics(request):
 
     @test_app.get("/test", responses={"201": ListGenericResponse[Detail]})
     def endpoint_test():
-        return b'', 201
+        return b"", 201
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -387,10 +387,10 @@ def test_responses_with_generics(request):
         }
 
         schemas = resp.json["components"]["schemas"]
-        detail = schemas['ListGenericResponse_Detail_']
-        assert detail['title'] == 'ListGenericResponse[Detail]'
-        assert detail['properties']['items']['items']['$ref'] == '#/components/schemas/GenericResponse_Detail_'
-        assert schemas['GenericResponse_Detail_']['title'] == 'GenericResponse[Detail]'
+        detail = schemas["ListGenericResponse_Detail_"]
+        assert detail["title"] == "ListGenericResponse[Detail]"
+        assert detail["properties"]["items"]["items"]["$ref"] == "#/components/schemas/GenericResponse_Detail_"
+        assert schemas["GenericResponse_Detail_"]["title"] == "GenericResponse[Detail]"
 
 
 class PathParam(BaseModel):
@@ -419,7 +419,7 @@ def test_path_parameter_object(request):
             "schema": {
                 "deprecated": False,
                 "description": "id for path",
-                'maxLength': 300,
+                "maxLength": 300,
                 "example": "42",
                 "title": "Type Name",
                 "type": "string",
@@ -453,7 +453,7 @@ def test_query_parameter_object(request):
             "schema": {
                 "deprecated": True,
                 "description": "count of param",
-                'maximum': 1000.0,
+                "maximum": 1000.0,
                 "example": 100,
                 "title": "Count",
                 "type": "integer",
@@ -462,7 +462,11 @@ def test_query_parameter_object(request):
 
 
 class HeaderParam(BaseModel):
-    app_name: Optional[str] = Field(None, description="app name")
+    app_name: str = Field(None, description="app name")
+
+
+class CookieParam(BaseModel):
+    app_name: str = Field(None, description="app name", json_schema_extra={"example": "aaa"})
 
 
 def test_header_parameter_object(request):
@@ -470,19 +474,26 @@ def test_header_parameter_object(request):
     test_app.config["TESTING"] = True
 
     @test_app.post("/test")
-    def endpoint_test(header: HeaderParam):
+    def endpoint_test(header: HeaderParam, cookie: CookieParam):
         print(header)
+        print(cookie)
         return {}, 200
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["parameters"][0] == {
-            'description': 'app name',
-            'in': 'header',
-            'name': 'app_name',
-            'required': False,
-            'schema': {'anyOf': [{'type': 'string'}, {'type': 'null'}],
-                       'description': 'app name',
-                       'title': 'App Name'}
+            "description": "app name",
+            "in": "header",
+            "name": "app_name",
+            "required": False,
+            "schema": {"description": "app name", "title": "App Name", "type": "string"}
+        }
+        assert resp.json["paths"]["/test"]["post"]["parameters"][1] == {
+            "description": "app name",
+            "in": "cookie",
+            "example": "aaa",
+            "name": "app_name",
+            "required": False,
+            "schema": {"description": "app name", "example": "aaa", "title": "App Name", "type": "string"}
         }
