@@ -338,6 +338,16 @@ class OpenAPI(APIScaffold, Flask):
         # Register the APIView with the current instance
         api_view.register(self, view_kwargs=view_kwargs)
 
+    def _add_url_rule(
+            self,
+            rule,
+            endpoint=None,
+            view_func=None,
+            provide_automatic_options=None,
+            **options,
+    ) -> None:
+        self.add_url_rule(rule, endpoint, view_func, provide_automatic_options, **options)
+
     def _do_decorator(
             self,
             rule: str,

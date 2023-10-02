@@ -2,11 +2,9 @@
 # @Author  : llc
 # @Time    : 2022/8/30 9:40
 import inspect
-from abc import ABC
 from functools import wraps
 from typing import Callable, List, Optional, Dict, Any
 
-from flask.scaffold import Scaffold
 from flask.wrappers import Response as FlaskResponse
 
 from .models import ExternalDocumentation
@@ -18,7 +16,7 @@ from .types import ResponseDict
 from .utils import HTTPMethod
 
 
-class APIScaffold(Scaffold, ABC):
+class APIScaffold:
     def _do_decorator(
             self,
             rule: str,
@@ -40,6 +38,16 @@ class APIScaffold(Scaffold, ABC):
         raise NotImplementedError
 
     def register_api(self, api) -> None:
+        raise NotImplementedError
+
+    def _add_url_rule(
+            self,
+            rule,
+            endpoint=None,
+            view_func=None,
+            provide_automatic_options=None,
+            **options,
+    ) -> None:
         raise NotImplementedError
 
     @staticmethod
@@ -168,7 +176,7 @@ class APIScaffold(Scaffold, ABC):
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.GET]})
-            self.add_url_rule(rule, view_func=view_func, **options)
+            self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -231,7 +239,7 @@ class APIScaffold(Scaffold, ABC):
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.POST]})
-            self.add_url_rule(rule, view_func=view_func, **options)
+            self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -294,7 +302,7 @@ class APIScaffold(Scaffold, ABC):
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PUT]})
-            self.add_url_rule(rule, view_func=view_func, **options)
+            self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -357,7 +365,7 @@ class APIScaffold(Scaffold, ABC):
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.DELETE]})
-            self.add_url_rule(rule, view_func=view_func, **options)
+            self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
@@ -420,7 +428,7 @@ class APIScaffold(Scaffold, ABC):
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body)
             options.update({"methods": [HTTPMethod.PATCH]})
-            self.add_url_rule(rule, view_func=view_func, **options)
+            self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
