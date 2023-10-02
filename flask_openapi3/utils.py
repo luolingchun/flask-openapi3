@@ -5,6 +5,7 @@
 import inspect
 import re
 import sys
+from enum import Enum
 from http import HTTPStatus
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, DefaultDict
 
@@ -31,8 +32,6 @@ from .types import ResponseStrKeyDict
 HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
 
 if sys.version_info < (3, 11):
-    from enum import Enum
-
 
     class HTTPMethod(str, Enum):
         GET = "GET"
