@@ -4,6 +4,7 @@
 
 import inspect
 import re
+import sys
 from http import HTTPStatus
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, DefaultDict
 
@@ -11,7 +12,6 @@ from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
 
-from ._http import HTTP_STATUS, HTTPMethod
 from .models import Encoding
 from .models import MediaType
 from .models import OPENAPI3_REF_PREFIX
@@ -27,6 +27,25 @@ from .models import Tag
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
+
+HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
+
+if sys.version_info < (3, 11):
+    from enum import Enum
+
+
+    class HTTPMethod(str, Enum):
+        GET = "GET"
+        POST = "POST"
+        PUT = "PUT"
+        DELETE = "DELETE"
+        PATCH = "PATCH"
+        HEAD = "HEAD"
+        OPTIONS = "OPTIONS"
+        TRACE = "TRACE"
+        CONNECT = "CONNECT"
+else:
+    from http import HTTPMethod
 
 
 def get_operation(
