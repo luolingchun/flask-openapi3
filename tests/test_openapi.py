@@ -394,7 +394,8 @@ def test_responses_with_generics(request):
 
 
 class PathParam(BaseModel):
-    type_name: str = Field(..., description="id for path", deprecated=False, example="42", max_length=300)
+    type_name: str = Field(..., description="id for path", max_length=300,
+                           json_schema_extra={"deprecated": False, "example": "42"})
 
 
 def test_path_parameter_object(request):
@@ -428,7 +429,8 @@ def test_path_parameter_object(request):
 
 
 class QueryParam(BaseModel):
-    count: int = Field(..., description="count of param", deprecated=True, example=100, le=1000.0)
+    count: int = Field(..., description="count of param", le=1000.0,
+                       json_schema_extra={"deprecated": True, "example": 100})
 
 
 def test_query_parameter_object(request):
