@@ -9,13 +9,13 @@ from typing import Callable, List, Optional, Dict, Any
 from flask.scaffold import Scaffold
 from flask.wrappers import Response as FlaskResponse
 
-from ._http import HTTPMethod
 from .models import ExternalDocumentation
 from .models import Server
 from .models import Tag
 from .request import _do_request
 from .types import ParametersTuple
 from .types import ResponseDict
+from .utils import HTTPMethod
 
 
 class APIScaffold(Scaffold, ABC):

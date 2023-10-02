@@ -10,7 +10,6 @@ from typing import Optional, List, Dict, Union, Any, Type, Callable
 from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
 
-from ._http import HTTP_STATUS, HTTPMethod
 from .blueprint import APIBlueprint
 from .commands import openapi_command
 from .models import APISpec
@@ -31,6 +30,8 @@ from .templates import swagger_html_string
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import SecuritySchemesDict
+from .utils import HTTPMethod
+from .utils import HTTP_STATUS
 from .utils import convert_responses_key_to_string
 from .utils import get_operation
 from .utils import get_operation_id_for_path

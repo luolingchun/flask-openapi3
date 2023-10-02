@@ -6,13 +6,13 @@ from typing import Optional, List, Dict, Any, Callable
 
 from flask import Blueprint
 
-from ._http import HTTPMethod
 from .models import ExternalDocumentation
 from .models import Server
 from .models import Tag
 from .scaffold import APIScaffold
 from .types import ParametersTuple
 from .types import ResponseDict
+from .utils import HTTPMethod
 from .utils import convert_responses_key_to_string
 from .utils import get_operation
 from .utils import get_operation_id_for_path

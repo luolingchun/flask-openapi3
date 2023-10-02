@@ -20,7 +20,7 @@ class FileStorage(_FileStorage):
 
     @classmethod
     def __get_pydantic_core_schema__(cls, _source: Any) -> core_schema.CoreSchema:
-        return core_schema.general_plain_validator_function(cls.validate)
+        return core_schema.with_info_plain_validator_function(cls.validate)
 
     @classmethod
     def validate(cls, value: _FileStorage, _info: core_schema.ValidationInfo) -> _FileStorage:
