@@ -1,3 +1,9 @@
+## v2.5.3 2023-10-03
+
+- [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
+- [#106](https://github.com/luolingchun/flask-openapi3/pull/106) Bugfix for parameter object. Thanks, @ota42y.
+- [#107](https://github.com/luolingchun/flask-openapi3/pull/107) Bugfix for generics class. Thanks, @ota42y.
+
 ## v2.5.2 2023-08-13
 
 - [#97](https://github.com/luolingchun/flask-openapi3/issues/97) Fix response miss description. Thanks, @tekrei.
