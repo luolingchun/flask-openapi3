@@ -1,3 +1,10 @@
+## v3.0.0rc2 2023-10-03
+
+- [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
+- [#106](https://github.com/luolingchun/flask-openapi3/pull/106) Bugfix for parameter object. Thanks, @ota42y.
+- [#107](https://github.com/luolingchun/flask-openapi3/pull/107) Bugfix for generics class. Thanks, @ota42y.
+- [#114](https://github.com/luolingchun/flask-openapi3/pull/114) Support Flask 3.0.
+
 ## v3.0.0rc1 2023-09-03
 
 - Upgrade pydantic to v2
