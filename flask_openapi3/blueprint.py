@@ -108,7 +108,7 @@ class APIBlueprint(APIScaffold, Blueprint):
     ) -> None:
         self.add_url_rule(rule, endpoint, view_func, provide_automatic_options, **options)
 
-    def _do_decorator(
+    def _collect_openapi_info(
             self,
             rule: str,
             func: Callable,
