@@ -99,7 +99,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         # Register the nested APIBlueprint as a blueprint
         self.register_blueprint(api)
 
-    def _do_decorator(
+    def _collect_openapi_info(
             self,
             rule: str,
             func: Callable,

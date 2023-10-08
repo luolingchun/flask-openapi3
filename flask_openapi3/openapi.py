@@ -337,7 +337,7 @@ class OpenAPI(APIScaffold, Flask):
         # Register the APIView with the current instance
         api_view.register(self, view_kwargs=view_kwargs)
 
-    def _do_decorator(
+    def _collect_openapi_info(
             self,
             rule: str,
             func: Callable,

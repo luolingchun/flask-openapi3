@@ -17,7 +17,7 @@ from .models import ExternalDocumentation
 from .models import ExtraRequestBody
 from .models import Server
 from .models import Tag
-from .request import _do_request
+from .request import _validate_request
 from .types import ParametersTuple
 from .types import ResponseDict
 
@@ -37,7 +37,7 @@ warnings.simplefilter("once")
 
 
 class APIScaffold(Scaffold, ABC):
-    def _do_decorator(
+    def _collect_openapi_info(
             self,
             rule: str,
             func: Callable,
@@ -79,7 +79,7 @@ class APIScaffold(Scaffold, ABC):
         if is_coroutine_function:
             @wraps(func)
             async def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _do_request(
+                func_kwargs = _validate_request(
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -104,7 +104,7 @@ class APIScaffold(Scaffold, ABC):
         else:
             @wraps(func)
             def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _do_request(
+                func_kwargs = _validate_request(
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -189,7 +189,7 @@ class APIScaffold(Scaffold, ABC):
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
-                self._do_decorator(
+                self._collect_openapi_info(
                     rule,
                     func,
                     tags=tags,
@@ -273,7 +273,7 @@ class APIScaffold(Scaffold, ABC):
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
-                self._do_decorator(
+                self._collect_openapi_info(
                     rule,
                     func,
                     tags=tags,
@@ -357,7 +357,7 @@ class APIScaffold(Scaffold, ABC):
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
-                self._do_decorator(
+                self._collect_openapi_info(
                     rule,
                     func,
                     tags=tags,
@@ -441,7 +441,7 @@ class APIScaffold(Scaffold, ABC):
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
-                self._do_decorator(
+                self._collect_openapi_info(
                     rule,
                     func,
                     tags=tags,
@@ -525,7 +525,7 @@ class APIScaffold(Scaffold, ABC):
 
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = \
-                self._do_decorator(
+                self._collect_openapi_info(
                     rule,
                     func,
                     tags=tags,
