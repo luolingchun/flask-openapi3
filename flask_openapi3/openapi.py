@@ -33,6 +33,7 @@ from .types import ParametersTuple
 from .types import ResponseDict
 from .types import SecuritySchemesDict
 from .utils import convert_responses_key_to_string
+from .utils import get_model_schema
 from .utils import get_operation
 from .utils import get_operation_id_for_path
 from .utils import get_responses
@@ -251,7 +252,13 @@ class OpenAPI(APIScaffold, Flask):
         spec.tags = self.tags or None
 
         # Add ValidationErrorModel to components schemas
-        self.components_schemas[self.validation_error_model.__name__] = Schema(**self.validation_error_model.schema())
+        schema = get_model_schema(self.validation_error_model)
+        self.components_schemas[self.validation_error_model.__name__] = Schema(**schema)
+
+        # Parse definitions
+        definitions = schema.get("definitions", {})
+        for name, value in definitions.items():
+            self.components_schemas[name] = Schema(**value)
 
         # Set components
         self.components.schemas = self.components_schemas
