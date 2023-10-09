@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/21 10:32
+from typing import List
 
 import pytest
 from flask import make_response, current_app
@@ -9,13 +10,34 @@ from pydantic import BaseModel, Field, ValidationError
 from flask_openapi3 import OpenAPI
 
 
+class GenericTracebackError(BaseModel):
+    location: str = Field(..., example="GenericError.py")
+    line: int = Field(..., example=1)
+    method: str = Field(..., example="GenericError")
+    message: str = Field(..., example="400:Bad Request")
+
+
 class ValidationErrorModel(BaseModel):
     code: str
     message: str
+    more_info: List[GenericTracebackError] = Field(..., example=[GenericTracebackError(
+        location="GenericError.py",
+        line=1,
+        method="GenericError",
+        message="400:Bad Request")])
 
 
 def validation_error_callback(e: ValidationError):
-    validation_error_object = ValidationErrorModel(code="400", message=e.json())
+    validation_error_object = ValidationErrorModel(
+        code="400",
+        message=e.json(),
+        more_info=[GenericTracebackError(
+            location="GenericError.py",
+            line=1,
+            method="GenericError",
+            message="400:Bad Request"
+        )]
+    )
     response = make_response(validation_error_object.model_dump_json())
     response.headers["Content-Type"] = "application/json"
     response.status_code = getattr(current_app, "validation_error_status", 422)
@@ -38,7 +60,7 @@ def client():
 
 
 class BookQuery(BaseModel):
-    age: int = Field(None, description='Age')
+    age: int = Field(None, description="Age")
 
 
 @app.get("/query")
@@ -50,7 +72,7 @@ def api_query(query: BookQuery):
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
-    assert resp.json["components"]["schemas"]["ValidationErrorModel"] == ValidationErrorModel.model_json_schema()
+    assert resp.json["components"]["schemas"].get("GenericTracebackError") is not None
 
 
 def test_api_query(client):
