@@ -22,10 +22,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - run: pip install -r ./requirements/doc.txt
+          cache: "pip"
+          cache-dependency-path: "requirements/doc.txt"
+
+      - name: Install dependencies
+        run: pip install -U -r ./requirements/doc.txt
+
       - name: Build docs
         run: |
           git config --local user.email "action@github.com"
