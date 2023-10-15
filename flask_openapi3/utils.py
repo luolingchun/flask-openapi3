@@ -21,10 +21,12 @@ from .models import Operation
 from .models import Parameter
 from .models import ParameterInType
 from .models import PathItem
+from .models import RawModel
 from .models import RequestBody
 from .models import Response
 from .models import Schema
 from .models import Tag
+from .models.data_type import DataType
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
@@ -411,19 +413,20 @@ def parse_parameters(
 
     """
     # Get the type hints from the function
-    annotations: Dict[str, Type[BaseModel]] = get_type_hints(func)
+    annotations = get_type_hints(func)
 
     # Get the types for header, cookie, path, query, form, and body parameters
-    header = annotations.get("header")
-    cookie = annotations.get("cookie")
-    path = annotations.get("path")
-    query = annotations.get("query")
-    form = annotations.get("form")
-    body = annotations.get("body")
+    header: Optional[Type[BaseModel]] = annotations.get("header")
+    cookie: Optional[Type[BaseModel]] = annotations.get("cookie")
+    path: Optional[Type[BaseModel]] = annotations.get("path")
+    query: Optional[Type[BaseModel]] = annotations.get("query")
+    form: Optional[Type[BaseModel]] = annotations.get("form")
+    body: Optional[Type[BaseModel]] = annotations.get("body")
+    raw: Optional[Type[RawModel]] = annotations.get("raw")
 
     # If doc_ui is False, return the types without further processing
     if doc_ui is False:
-        return header, cookie, path, query, form, body
+        return header, cookie, path, query, form, body, raw
 
     parameters = []
 
@@ -482,10 +485,24 @@ def parse_parameters(
             request_body.content["application/json"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
+    if raw:
+        _content = {}
+        for mimetype in raw.mimetypes:
+            if mimetype.startswith("application/json"):
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.OBJECT)
+                )
+            else:
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.STRING)
+                )
+        request_body = RequestBody(content=_content)
+        operation.requestBody = request_body
+
     # Set the parsed parameters in the operation object
     operation.parameters = parameters if parameters else None
 
-    return header, cookie, path, query, form, body
+    return header, cookie, path, query, form, body, raw
 
 
 def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> None:

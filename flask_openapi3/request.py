@@ -97,6 +97,7 @@ def _validate_request(
         query: Optional[Type[BaseModel]] = None,
         form: Optional[Type[BaseModel]] = None,
         body: Optional[Type[BaseModel]] = None,
+        raw: Optional[Type[BaseModel]] = None,
         path_kwargs: Optional[Dict[Any, Any]] = None
 ) -> Dict:
     """
@@ -135,6 +136,8 @@ def _validate_request(
             _validate_form(form, func_kwargs)
         if body:
             _validate_body(body, func_kwargs)
+        if raw:
+            func_kwargs.update({"raw": request})
     except ValidationError as e:
         # Create a response with validation error details
         validation_error_callback = getattr(current_app, "validation_error_callback")

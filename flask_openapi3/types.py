@@ -6,6 +6,7 @@ from typing import Dict, Union, Type, Any, Tuple, Optional
 
 from pydantic import BaseModel
 
+from .models import RawModel
 from .models import SecurityScheme
 
 _ResponseDictValue = Union[Type[BaseModel], Dict[Any, Any], None]
@@ -22,5 +23,6 @@ ParametersTuple = Tuple[
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
-    Optional[Type[BaseModel]]
+    Optional[Type[BaseModel]],
+    Optional[Type[RawModel]]
 ]

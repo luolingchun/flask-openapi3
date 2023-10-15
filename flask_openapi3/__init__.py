@@ -24,6 +24,7 @@ from .models import Operation
 from .models import Parameter
 from .models import ParameterInType
 from .models import PathItem
+from .models import RawModel
 from .models import Reference
 from .models import RequestBody
 from .models import Response

@@ -59,6 +59,7 @@ class APIScaffold:
             query,
             form,
             body,
+            raw,
             view_class=None,
             view_kwargs=None
     ):
@@ -73,6 +74,7 @@ class APIScaffold:
                     query=query,
                     form=form,
                     body=body,
+                    raw=raw,
                     path_kwargs=kwargs
                 )
 
@@ -98,6 +100,7 @@ class APIScaffold:
                     query=query,
                     form=form,
                     body=body,
+                    raw=raw,
                     path_kwargs=kwargs
                 )
 
@@ -156,7 +159,7 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body = \
+            header, cookie, path, query, form, body, raw = \
                 self._collect_openapi_info(
                     rule,
                     func,
@@ -174,7 +177,7 @@ class APIScaffold:
                     method=HTTPMethod.GET
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.GET]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -219,7 +222,7 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body = \
+            header, cookie, path, query, form, body, raw = \
                 self._collect_openapi_info(
                     rule,
                     func,
@@ -237,7 +240,7 @@ class APIScaffold:
                     method=HTTPMethod.POST
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.POST]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -282,7 +285,7 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body = \
+            header, cookie, path, query, form, body, raw = \
                 self._collect_openapi_info(
                     rule,
                     func,
@@ -300,7 +303,7 @@ class APIScaffold:
                     method=HTTPMethod.PUT
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PUT]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -345,7 +348,7 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body = \
+            header, cookie, path, query, form, body, raw = \
                 self._collect_openapi_info(
                     rule,
                     func,
@@ -363,7 +366,7 @@ class APIScaffold:
                     method=HTTPMethod.DELETE
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.DELETE]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -408,7 +411,7 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body = \
+            header, cookie, path, query, form, body, raw = \
                 self._collect_openapi_info(
                     rule,
                     func,
@@ -426,7 +429,7 @@ class APIScaffold:
                     method=HTTPMethod.PATCH
                 )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body)
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PATCH]})
             self._add_url_rule(rule, view_func=view_func, **options)
 

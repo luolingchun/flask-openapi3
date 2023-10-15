@@ -424,7 +424,7 @@ class OpenAPI(APIScaffold, Flask):
                 tags = []
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
             # Parse parameters
-            header, cookie, path, query, form, body = parse_parameters(
+            header, cookie, path, query, form, body, raw = parse_parameters(
                 func,
                 components_schemas=self.components_schemas,
                 operation=operation
@@ -435,8 +435,8 @@ class OpenAPI(APIScaffold, Flask):
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             # Parse method
             parse_method(uri, method, self.paths, operation)
-            return header, cookie, path, query, form, body
+            return header, cookie, path, query, form, body, raw
         else:
             # Parse parameters
-            header, cookie, path, query, form, body = parse_parameters(func, doc_ui=False)
-            return header, cookie, path, query, form, body
+            header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
+            return header, cookie, path, query, form, body, raw
