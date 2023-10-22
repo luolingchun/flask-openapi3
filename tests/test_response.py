@@ -56,4 +56,4 @@ def test_openapi(client):
     _json = resp.json
     assert resp.status_code == 200
     assert _json["paths"]["/book/{bid}"]["get"]["responses"].keys() - ["200", "201", "202", "204"] == {"422"}
-    assert _json["paths"]["/api/book"]["get"]["responses"].keys() - ["200", "201", "202", "204"] == {"422"}
+    assert _json["paths"]["/api/book"]["get"]["responses"].keys() - ["200", "201", "202", "204"] == set()
