@@ -1,3 +1,20 @@
+## v3.0.0 2023-10-22
+
+- Upgrade pydantic to v2.
+- Remove deprecated code.
+- Drop support for Python 3.7.
+- support for raw requests (#109).
+- Upgrade Swagger UI v5.9.0.
+- Upgrade Redoc v2.1.2
+- Update RapiDoc 9.3.4.
+- [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
+- [#106](https://github.com/luolingchun/flask-openapi3/pull/106) Bugfix for parameter object. Thanks, @ota42y.
+- [#107](https://github.com/luolingchun/flask-openapi3/pull/107) Bugfix for generics class. Thanks, @ota42y.
+- [#114](https://github.com/luolingchun/flask-openapi3/pull/114) Support Flask 3.0.
+- [#118](https://github.com/luolingchun/flask-openapi3/discussions/118) Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.
+- [#122](https://github.com/luolingchun/flask-openapi3/issues/122) Skip 422 response non parameters. Thanks, @Danielsn1.
+
+
 ## v3.0.0rc2 2023-10-03
 
 - [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
@@ -10,6 +27,17 @@
 - Upgrade pydantic to v2
 - Remove deprecated code
 - Drop support for Python 3.7
+
+## v2.5.4 2023-10-22
+
+- [#118](https://github.com/luolingchun/flask-openapi3/discussions/118) Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.
+- [#122](https://github.com/luolingchun/flask-openapi3/issues/122) Skip 422 response non parameters. Thanks, @Danielsn1.
+
+## v2.5.3 2023-10-03
+
+- [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
+- [#106](https://github.com/luolingchun/flask-openapi3/pull/106) Bugfix for parameter object. Thanks, @ota42y.
+- [#107](https://github.com/luolingchun/flask-openapi3/pull/107) Bugfix for generics class. Thanks, @ota42y.
 
 ## v2.5.2 2023-08-13
 
