@@ -1,5 +1,5 @@
 site_name: flask-openapi3
-site_url: https://luolingchun.github.io/flask-openapi3
+site_url: https://luolingchun.github.io/flask-openapi3/
 site_description: Generate REST API and OpenAPI documentation for your Flask project.
 site_author: llc
 
