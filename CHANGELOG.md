@@ -1,3 +1,8 @@
+## v2.5.4 2023-10-22
+
+- [#118](https://github.com/luolingchun/flask-openapi3/discussions/118) Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.
+- [#122](https://github.com/luolingchun/flask-openapi3/issues/122) Skip 422 response non parameters. Thanks, @Danielsn1.
+
 ## v2.5.3 2023-10-03
 
 - [#105](https://github.com/luolingchun/flask-openapi3/pull/105) Supports valid properties only. Thanks, @ota42y.
