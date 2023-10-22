@@ -20,6 +20,7 @@ markdown_extensions:
 
 theme:
   name: material
+  custom_dir: docs/overrides
   logo: images/logo.svg
   favicon: images/logo-blue.svg
   palette:
