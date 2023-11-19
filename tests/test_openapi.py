@@ -236,11 +236,6 @@ class BaseRequest(BaseModel):
 class BaseRequestGeneric(BaseModel, Generic[T]):
     detail: T
 
-
-def test_body_examples_are_replicated_in_open_api(request):
-    test_app = OpenAPI(request.node.name)
-    test_app.config["TESTING"] = True
-
     model_config = dict(
         openapi_extra={
             "examples": {
@@ -260,13 +255,18 @@ def test_body_examples_are_replicated_in_open_api(request):
             }
         }
     )
-    BaseRequestGeneric[BaseRequest].model_config = model_config
+
+
+def test_body_examples_are_replicated_in_open_api(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
 
     @test_app.post("/test")
     def endpoint_test(body: BaseRequestGeneric[BaseRequest]):
         return body.model_dump(), 200
 
     with test_app.test_client() as client:
+        client.post("/test", json={"detail": {"test_int": 1, "test_str": "s"}})
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
