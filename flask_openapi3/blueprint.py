@@ -164,7 +164,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             operation.externalDocs = external_docs
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
-                name=func.__name__, path=rule, method=method
+                name=self.name, path=rule, method=method
             )
             # Only set `deprecated` if True, otherwise leave it as None
             operation.deprecated = deprecated
