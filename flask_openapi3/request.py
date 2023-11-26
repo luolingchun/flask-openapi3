@@ -77,7 +77,8 @@ def _validate_form(form: Type[BaseModel], func_kwargs):
             else:
                 # str, int ...
                 value = request_form.get(k)  # type:ignore
-        form_dict[k] = value
+        if value is not None:
+            form_dict[k] = value
     func_kwargs.update({"form": form.model_validate(obj=form_dict)})
 
 

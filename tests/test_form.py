@@ -52,7 +52,8 @@ class FormParameters(BaseModel):
     parameter_list_union: List[Union[bool, float, str, int, FileType, MetadataParameter]]
     parameter_union: Union[MetadataParameter, MetadataParameter2]
     union_all: Union[str, int, float, bool, FileType, MetadataParameter]
-    none: None
+    none: None = None
+    default_value: str = "default_value"
 
 
 @app.post("/example")
