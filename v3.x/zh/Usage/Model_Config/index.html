@@ -1054,6 +1054,23 @@ so we can use the <code>openapi_extra</code> to extend OpenAPI Specification.</p
 </code></pre></div></td></tr></table></div>
 <p>Effect in swagger:</p>
 <p><a class="glightbox" href="../../../assets/Snipaste_2023-06-02_11-06-59.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="" src="../../../assets/Snipaste_2023-06-02_11-06-59.png" /></a></p>
+<p>You can use <code>reqiured</code> in <code>openapi_extra</code> to mark the RequestBody as Optional.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">PingBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+        <span class="n">ping</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;String to return, &#39;ok&#39; when null.&quot;</span><span class="p">)</span>
+
+        <span class="n">model_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">openapi_extra</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
 <h3 id="responses">responses<a class="headerlink" href="#responses" title="Permanent link">⚓︎</a></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
