@@ -80,7 +80,8 @@ def _validate_form(form, func_kwargs):
             else:
                 # str, int ...
                 value = request_form.get(k)
-        form_dict[k] = value
+        if value is not None:
+            form_dict[k] = value
     func_kwargs.update({"form": form(**form_dict)})
 
 
