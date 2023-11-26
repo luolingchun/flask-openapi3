@@ -1,3 +1,9 @@
+## v2.5.5 2023-11-26
+
+- Fix the same operationId in APIBlueprint (#133). Thanks, @fluffybrain3.
+- Make body required false (#130). Thanks, @@styper.
+- The default value defined in the form is invalid (#129). Thanks, @seekplum.
+
 ## v2.5.4 2023-10-22
 
 - [#118](https://github.com/luolingchun/flask-openapi3/discussions/118) Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.
