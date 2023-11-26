@@ -77,6 +77,21 @@ Effect in swagger:
 
 ![](../assets/Snipaste_2023-06-02_11-06-59.png)
 
+
+
+You can use `reqiured` in `openapi_extra` to mark the RequestBody as Optional.
+
+```python
+class PingBody(BaseModel):
+    ping: Optional[str] = Field("ok", description="String to return, 'ok' when null.")
+
+
+class Config:
+    openapi_extra = {
+        "required": False
+    }
+```
+
 ### responses
 
 ```python

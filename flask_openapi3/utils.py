@@ -514,6 +514,7 @@ def parse_parameters(
         openapi_extra = getattr(model_config, "openapi_extra", None)
         if openapi_extra:
             request_body.description = openapi_extra.get("description")
+            request_body.required = openapi_extra.get("required", True)
             request_body.content["application/json"].example = openapi_extra.get("example")
             request_body.content["application/json"].examples = openapi_extra.get("examples")
             request_body.content["application/json"].encoding = openapi_extra.get("encoding")
