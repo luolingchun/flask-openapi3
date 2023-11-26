@@ -1,3 +1,9 @@
+## v3.0.1 2023-11-26
+
+- Fix the same operationId in APIBlueprint (#133). Thanks, @fluffybrain3.
+- Make body required false (#130). Thanks, @styper.
+- The default value defined in the form is invalid (#129). Thanks, @seekplum.
+
 ## v3.0.0 2023-10-22
 
 - Upgrade pydantic to v2.
@@ -27,6 +33,12 @@
 - Upgrade pydantic to v2
 - Remove deprecated code
 - Drop support for Python 3.7
+
+## v2.5.5 2023-11-26
+
+- Fix the same operationId in APIBlueprint (#133). Thanks, @fluffybrain3.
+- Make body required false (#130). Thanks, @styper.
+- The default value defined in the form is invalid (#129). Thanks, @seekplum.
 
 ## v2.5.4 2023-10-22
 
