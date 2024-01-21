@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.4">
     
     
       
@@ -681,7 +681,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.__init__" class="md-nav__link">
     <span class="md-ellipsis">
-      __init__()
+      __init__
     </span>
   </a>
   
@@ -690,7 +690,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.register_api" class="md-nav__link">
     <span class="md-ellipsis">
-      register_api()
+      register_api
     </span>
   </a>
   
@@ -699,7 +699,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.register_api_view" class="md-nav__link">
     <span class="md-ellipsis">
-      register_api_view()
+      register_api_view
     </span>
   </a>
   
@@ -895,7 +895,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.__init__" class="md-nav__link">
     <span class="md-ellipsis">
-      __init__()
+      __init__
     </span>
   </a>
   
@@ -904,7 +904,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.register_api" class="md-nav__link">
     <span class="md-ellipsis">
-      register_api()
+      register_api
     </span>
   </a>
   
@@ -913,7 +913,7 @@
           <li class="md-nav__item">
   <a href="#flask_openapi3.OpenAPI.register_api_view" class="md-nav__link">
     <span class="md-ellipsis">
-      register_api_view()
+      register_api_view
     </span>
   </a>
   
@@ -958,7 +958,6 @@
   <h1>OpenAPI</h1>
 
 <div class="doc doc-object doc-class">
-
 
 
 
@@ -1402,7 +1401,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        OpenAPI class that provides REST API functionality along with Swagger UI and Redoc.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            import_name: The import name for the Flask application.</span>
 <span class="sd">            info: Information about the API (title, version, etc.).</span>
 <span class="sd">                  See https://spec.openapis.org/oas/v3.1.0#info-object.</span>
@@ -1627,7 +1626,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register an APIBlueprint.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            api: The APIBlueprint instance to register.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1651,7 +1650,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register APIView</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            api_view: The APIView instance to register.</span>
 <span class="sd">            view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1706,7 +1705,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Collects OpenAPI specification information for Flask routes and view functions.</span>
 
-<span class="sd">        Arguments:</span>
+<span class="sd">        Args:</span>
 <span class="sd">            rule: Flask route.</span>
 <span class="sd">            func: Flask view_func.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
@@ -1762,7 +1761,7 @@
             <span class="p">)</span>
             <span class="c1"># Parse response</span>
             <span class="n">get_responses</span><span class="p">(</span><span class="n">combine_responses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
-            <span class="c1"># Convert route parameter format from /pet/&lt;petId&gt; to /pet/{petId}</span>
+            <span class="c1"># Convert a route parameter format from /pet/&lt;petId&gt; to /pet/{petId}</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;([^&lt;:]+:)?&quot;</span><span class="p">,</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
             <span class="c1"># Parse method</span>
             <span class="n">parse_method</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
@@ -1785,7 +1784,6 @@
 
 
 <div class="doc doc-object doc-attribute">
-
 
 
 
@@ -1834,7 +1832,6 @@
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2319,7 +2316,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    OpenAPI class that provides REST API functionality along with Swagger UI and Redoc.</span>
 
-<span class="sd">    Arguments:</span>
+<span class="sd">    Args:</span>
 <span class="sd">        import_name: The import name for the Flask application.</span>
 <span class="sd">        info: Information about the API (title, version, etc.).</span>
 <span class="sd">              See https://spec.openapis.org/oas/v3.1.0#info-object.</span>
@@ -2423,7 +2420,6 @@
 
 
 
-
 <h3 id="flask_openapi3.OpenAPI.register_api" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">)</span></code>
 
@@ -2492,7 +2488,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register an APIBlueprint.</span>
 
-<span class="sd">    Arguments:</span>
+<span class="sd">    Args:</span>
 <span class="sd">        api: The APIBlueprint instance to register.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2519,7 +2515,6 @@
 
 
 <div class="doc doc-object doc-function">
-
 
 
 
@@ -2609,7 +2604,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register APIView</span>
 
-<span class="sd">    Arguments:</span>
+<span class="sd">    Args:</span>
 <span class="sd">        api_view: The APIView instance to register.</span>
 <span class="sd">        view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2643,6 +2638,7 @@
   </div>
 
   </div>
+
 
 </div>
 
@@ -2737,10 +2733,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
