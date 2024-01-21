@@ -5,7 +5,7 @@ from enum import Enum
 
 
 class ParameterInType(str, Enum):
-    """The places Parameters can be put when calling an Endpoint"""
+    """The place Parameters can be put when calling an Endpoint"""
 
     QUERY = "query"
     PATH = "path"

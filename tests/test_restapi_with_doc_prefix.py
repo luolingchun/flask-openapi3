@@ -98,7 +98,7 @@ def get_book(path: BookPath):
     http://localhost:5000/book/3
     """
     if path.bid == 4:
-        return NotFoundResponse().dict(), 404
+        return NotFoundResponse().model_dump(), 404
     return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 

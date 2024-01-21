@@ -36,7 +36,7 @@ class APIView:
         """
         Create a class-based view
 
-        Arguments:
+        Args:
             url_prefix: A path to prepend to all the APIView's urls
             view_tags: APIView tags for every API.
             view_security: APIView security for every API.
@@ -120,7 +120,7 @@ class APIView:
         Decorator for view method.
         More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
 
-        Arguments:
+        Args:
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.

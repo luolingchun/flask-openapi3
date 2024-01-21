@@ -58,7 +58,7 @@ def get_operation(
     """
     Return an Operation object with the specified summary and description.
 
-    Arguments:
+    Args:
         func: The function or method for which the operation is being defined.
         summary: A short summary of what the operation does.
         description: A verbose explanation of the operation behavior.
@@ -100,7 +100,7 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     """
     Generate a unique operation ID based on the name, path, and method.
 
-    Arguments:
+    Args:
         name: The name or identifier for the operation.
         path: The URL path for the operation.
         method: The HTTP method for the operation.
@@ -370,7 +370,7 @@ def parse_and_store_tags(
     Parses new tags, stores them in an old_tags list if they are not already present,
     and updates the tags attribute of the operation object.
 
-    Arguments:
+    Args:
         new_tags: A list of new Tag objects to be parsed and stored.
         old_tags: The list of existing Tag objects.
         old_tag_names: The list that names of existing tags.
@@ -401,7 +401,7 @@ def parse_parameters(
     Parses the parameters of a given function and returns the types for header, cookie, path,
     query, form, and body parameters. Also populates the Operation object with the parsed parameters.
 
-    Arguments:
+    Args:
         func: The function to parse the parameters from.
         components_schemas: Dictionary to store the parsed components schemas (default: None).
         operation: Operation object to populate with parsed parameters (default: None).
@@ -510,7 +510,7 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
     """
     Parses the HTTP method and updates the corresponding PathItem object in the paths' dictionary.
 
-    Arguments:
+    Args:
         uri: The URI of the API endpoint.
         method: The HTTP method for the API endpoint.
         paths: A dictionary containing the API paths and their corresponding PathItem objects.
@@ -572,7 +572,7 @@ def parse_rule(rule: str, url_prefix=None) -> str:
     if not trail_slash:
         uri = uri.rstrip("/")
 
-    # Convert route parameter format from /pet/<petId> to /pet/{petId}
+    # Convert a route parameter format from /pet/<petId> to /pet/{petId}
     uri = re.sub(r"<([^<:]+:)?", "{", uri).replace(">", "}")
 
     return uri

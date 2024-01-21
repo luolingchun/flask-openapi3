@@ -73,7 +73,7 @@ class OpenAPI(APIScaffold, Flask):
         """
         OpenAPI class that provides REST API functionality along with Swagger UI and Redoc.
 
-        Arguments:
+        Args:
             import_name: The import name for the Flask application.
             info: Information about the API (title, version, etc.).
                   See https://spec.openapis.org/oas/v3.1.0#info-object.
@@ -298,7 +298,7 @@ class OpenAPI(APIScaffold, Flask):
         """
         Register an APIBlueprint.
 
-        Arguments:
+        Args:
             api: The APIBlueprint instance to register.
 
         """
@@ -322,7 +322,7 @@ class OpenAPI(APIScaffold, Flask):
         """
         Register APIView
 
-        Arguments:
+        Args:
             api_view: The APIView instance to register.
             view_kwargs: Additional keyword arguments to pass to the API views.
         """
@@ -377,7 +377,7 @@ class OpenAPI(APIScaffold, Flask):
         """
         Collects OpenAPI specification information for Flask routes and view functions.
 
-        Arguments:
+        Args:
             rule: Flask route.
             func: Flask view_func.
             tags: Adds metadata to a single tag.
@@ -433,7 +433,7 @@ class OpenAPI(APIScaffold, Flask):
             )
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
-            # Convert route parameter format from /pet/<petId> to /pet/{petId}
+            # Convert a route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
             # Parse method
             parse_method(uri, method, self.paths, operation)

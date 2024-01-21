@@ -39,7 +39,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         """
         Based on Flask Blueprint
 
-        Arguments:
+        Args:
             name: The name of the blueprint. It Will be prepared to each endpoint name.
             import_name: The name of the blueprint package, usually ``__name__``.
                          This helps locate the ``root_path`` for the blueprint.
@@ -129,7 +129,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         """
         Collects OpenAPI specification information for Flask routes and view functions.
 
-        Arguments:
+        Args:
             rule: Flask route
             func: Flask view_func
             tags: Adds metadata to a single tag.
