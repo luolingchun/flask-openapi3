@@ -1,3 +1,7 @@
+## v3.0.2 2024-01-28
+
+- Fix missing Pydantic Calculated Fields (#141). Thanks, @thebmw.
+
 ## v3.0.1 2023-11-26
 
 - Fix the same operationId in APIBlueprint (#133). Thanks, @fluffybrain3.
