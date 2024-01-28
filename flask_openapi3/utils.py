@@ -12,6 +12,7 @@ from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, 
 from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
+from pydantic.json_schema import JsonSchemaMode
 
 from .models import Encoding
 from .models import MediaType
@@ -116,7 +117,7 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     return operation_id
 
 
-def get_model_schema(model: Type[BaseModel]) -> dict:
+def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = "validation") -> dict:
     """Converts a Pydantic model to an OpenAPI schema."""
 
     assert inspect.isclass(model) and issubclass(model, BaseModel), \
@@ -125,7 +126,7 @@ def get_model_schema(model: Type[BaseModel]) -> dict:
     model_config = model.model_config
     by_alias = bool(model_config.get("by_alias", True))
 
-    return model.model_json_schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE)
+    return model.model_json_schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE, mode=mode)
 
 
 def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
@@ -327,7 +328,7 @@ def get_responses(
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
             name = normalize_name(response.__name__)
-            schema = get_model_schema(response)
+            schema = get_model_schema(response, mode="serialization")
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
@@ -592,4 +593,4 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
 
 
 def normalize_name(name: str) -> str:
-    return re.sub(r'[^\w.\-]', '_', name)
+    return re.sub(r"[^\w.\-]", "_", name)
