@@ -117,7 +117,7 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
     return operation_id
 
 
-def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = 'validation') -> dict:
+def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = "validation") -> dict:
     """Converts a Pydantic model to an OpenAPI schema."""
 
     assert inspect.isclass(model) and issubclass(model, BaseModel), \
@@ -328,7 +328,7 @@ def get_responses(
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
             name = normalize_name(response.__name__)
-            schema = get_model_schema(response, mode='serialization')
+            schema = get_model_schema(response, mode="serialization")
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
@@ -593,4 +593,4 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
 
 
 def normalize_name(name: str) -> str:
-    return re.sub(r'[^\w.\-]', '_', name)
+    return re.sub(r"[^\w.\-]", "_", name)
