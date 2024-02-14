@@ -18,10 +18,12 @@ class GreeterService:
         return f"Hi {name}!"
 
 
+# Perform some fake DI where views may or may not receive additional args
 def inject(fn):
     @wraps(fn)
     def _inner(*args, **kwargs):
-        return fn(*args, **kwargs, greeter=GreeterService())
+        extra = {"greeter": GreeterService()} if "greeter" in fn.__annotations__ else {}
+        return fn(*args, **kwargs, **extra)
 
     return _inner
 
@@ -44,7 +46,6 @@ def client():
 def test_get_greeter_view(client):
     resp = client.get("/v1/greet?name=Bob")
     assert resp.status_code == 200
-
     assert resp.text == "Hi Bob!"
 
 
