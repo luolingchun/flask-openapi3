@@ -46,3 +46,9 @@ def test_get_greeter_view(client):
     assert resp.status_code == 200
 
     assert resp.text == "Hi Bob!"
+
+
+def test_openapi(client):
+    resp = client.get("/openapi/openapi.json")
+    assert resp.status_code == 200
+    assert resp.json == app.api_doc
