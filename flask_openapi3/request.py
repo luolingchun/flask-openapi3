@@ -123,10 +123,6 @@ def _validate_request(
     # Dictionary to store func kwargs
     func_kwargs: Dict = dict()
 
-    # Remove all path arguments provided by flask and pass everything else down to the caller.
-    if path_kwargs and request.view_args:
-        func_kwargs = {k: v for k, v in path_kwargs.items() if k not in request.view_args}
-
     try:
         # Validate header, cookie, path, and query parameters
         if header:

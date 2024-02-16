@@ -2,8 +2,9 @@
 from functools import wraps
 
 import pytest
-from flask_openapi3 import OpenAPI
 from pydantic import BaseModel
+
+from flask_openapi3 import OpenAPI
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -22,18 +23,15 @@ class GreeterService:
 def inject(fn):
     @wraps(fn)
     def _inner(*args, **kwargs):
-        extra = {"greeter": GreeterService()} if "greeter" in fn.__annotations__ else {}
-        return fn(*args, **kwargs, **extra)
+        return fn(*args, **kwargs, greeter=GreeterService())
 
     return _inner
 
 
 @app.get("/<version>/greet")
+@inject
 def view(greeter: GreeterService, query: GreetQuery):
     return greeter.greet(query.name)
-
-
-app.view_functions = {k: inject(v) for k, v in app.view_functions.items()}
 
 
 @pytest.fixture
