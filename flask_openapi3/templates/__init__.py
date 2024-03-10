@@ -76,10 +76,15 @@ rapidoc_html_string = """
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
     <title>RapiDoc</title>
     <link rel="shortcut icon" href="static/images/rapidoc.svg">
-    <script src="static/js/rapidoc-min.js"></script>
 </head>
 <body>
 <rapi-doc spec-url='{{ api_doc_url }}'></rapi-doc>
+<script>
+    var rapiDoc = document.querySelector("rapi-doc");
+    var specUrl = new URL("{{api_doc_url}}", window.location.href).href;
+    rapiDoc.setAttribute("spec-url", specUrl);
+</script>
+<script src="static/js/rapidoc-min.js"></script>
 </body>
 </html>
 """
@@ -137,10 +142,11 @@ swagger_html_string = """
 <script src="static/js/swagger-ui-bundle.js"></script>
 <script src="static/js/swagger-ui-standalone-preset.js"></script>
 <script>
+    url = new URL("{{api_doc_url}}", window.location.href).href;
     window.onload = function () {
         // Begin Swagger UI call region
         window.ui = SwaggerUIBundle({
-            url: "{{api_doc_url}}",
+            url: url,
             dom_id: "#swagger-ui",
             deepLinking: true,
             presets: [
