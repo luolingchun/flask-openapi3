@@ -142,10 +142,12 @@ swagger_html_string = """
 <script src="static/js/swagger-ui-bundle.js"></script>
 <script src="static/js/swagger-ui-standalone-preset.js"></script>
 <script>
+    const swagger_config = JSON.parse(`{{ swagger_config|tojson }}`);
     url = new URL("{{api_doc_url}}", window.location.href).href;
     window.onload = function () {
         // Begin Swagger UI call region
         window.ui = SwaggerUIBundle({
+        ...{
             url: url,
             dom_id: "#swagger-ui",
             deepLinking: true,
@@ -160,6 +162,8 @@ swagger_html_string = """
             docExpansion: "{{ doc_expansion }}",
             showExtensions: true,
             showCommonExtensions: true
+        },
+        ...swagger_config
         })
         // End Swagger UI call region
         const oauthConfig = JSON.parse(`{{ oauth_config|tojson }}`);
