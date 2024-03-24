@@ -1,3 +1,14 @@
+## v3.1.0 2024-03-24
+
+- Add the swagger_config parameter to configure the swagger ui by @luolingchun in #146
+- Use full links in Swagger and RapiDoc
+- Upgrade Redoc to 2.1.3
+- Upgrade Swagger to 5.12.0
+
+**DeprecationWarning**
+
+- The doc_expansion parameter is deprecated; use swagger_config instead.
+
 ## v3.0.2 2024-01-28
 
 - Fix missing Pydantic Calculated Fields (#141). Thanks, @thebmw.
