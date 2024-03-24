@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.15">
     
     
       
@@ -499,6 +499,15 @@
   <a href="#doc_expansion" class="md-nav__link">
     <span class="md-ellipsis">
       doc_expansion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swagger_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      swagger_config
     </span>
   </a>
   
@@ -1024,6 +1033,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#swagger_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      swagger_config
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#interactive-documentation" class="md-nav__link">
     <span class="md-ellipsis">
       Interactive documentation
@@ -1451,6 +1469,28 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <p>More information to see <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">Configuration</a>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">doc_expansion</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
+<div class="admonition deprecated-warning warning">
+<p class="admonition-title">Deprecated-warning</p>
+<p><code>doc_expansion</code> have been merged into the <code>swagger_config</code>, and <code>doc_expansion</code> will be deprecated in the future.</p>
+</div>
+<h2 id="swagger_config">swagger_config<a class="headerlink" href="#swagger_config" title="Permanent link">⚓︎</a></h2>
+<p>Swagger supports many configuration items. 
+For more information on Swagger Configuration,
+please refer to <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">Swagger Configuration</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span>
+    <span class="vm">__name__</span><span class="p">,</span> 
+    <span class="n">swagger_config</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;doc_expansion&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;validatorUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.b.com&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
 <h2 id="interactive-documentation">Interactive documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">⚓︎</a></h2>
 <p><strong>Flask OpenAPI3</strong> provides support for the following Interactive documentation:</p>
 <ul>
@@ -1689,7 +1729,7 @@ and <code>validation_error_callback</code>. </p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
