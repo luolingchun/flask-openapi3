@@ -269,6 +269,26 @@ More information to see [Configuration](https://github.com/swagger-api/swagger-u
 app = OpenAPI(__name__, info=info, doc_expansion='full')
 ```
 
+!!! Deprecated-Warning warning
+
+    `doc_expansion` have been merged into the `swagger_config`, and `doc_expansion` will be deprecated in the future.
+
+## swagger_config
+
+Swagger supports many configuration items. 
+For more information on Swagger Configuration,
+please refer to [Swagger Configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md).
+
+```python
+app = OpenAPI(
+    __name__, 
+    swagger_config={
+        "doc_expansion": "none", 
+        "validatorUrl": "https://www.b.com"
+    }
+)
+```
+
 ## Interactive documentation
 
 **Flask OpenAPI3** provides support for the following Interactive documentation:

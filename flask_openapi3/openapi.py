@@ -60,6 +60,7 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: str = "/swagger",
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
+            swagger_config: Optional[Dict[str, Any]] = None,
             ui_templates: Optional[Dict[str, str]] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
@@ -83,7 +84,7 @@ class OpenAPI(APIScaffold, Flask):
                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
-            doc_expansion: Default expansion setting for operations and tags ("list", "full", or "none").
+            doc_expansion(deprecated): Default expansion setting for operations and tags ("list", "full", or "none").
                            See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
             doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi"
             api_doc_url: URL for accessing the OpenAPI specification document in JSON format.
@@ -91,6 +92,8 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: URL for accessing the Swagger UI documentation. Defaults to "/swagger".
             redoc_url: URL for accessing the Redoc UI documentation. Defaults to "/redoc".
             rapidoc_url: URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".
+            swagger_config: Swagger UI Configuration, More information:
+                            https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
             ui_templates: Custom UI templates to override or add UI documents.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
@@ -137,7 +140,13 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set OAuth configuration and documentation expansion
         self.oauth_config = oauth_config
+        if doc_expansion != "list":
+            import warnings
+            warnings.filterwarnings("once")
+            warnings.warn("The `doc_expansion` parameter is deprecated; use `swagger_config` instead.",
+                          DeprecationWarning)
         self.doc_expansion = doc_expansion
+        self.swagger_config = swagger_config
 
         # Set UI templates for customization
         self.ui_templates = ui_templates or dict()
@@ -210,6 +219,7 @@ class OpenAPI(APIScaffold, Flask):
                     api_doc_url=self.api_doc_url.lstrip("/"),
                     # The following parameters are only for swagger ui
                     doc_expansion=self.doc_expansion,
+                    swagger_config=self.swagger_config,
                     oauth_config=self.oauth_config.model_dump() if self.oauth_config else None
                 )
             )
