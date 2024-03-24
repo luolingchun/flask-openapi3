@@ -84,7 +84,7 @@ class OpenAPI(APIScaffold, Flask):
                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
-            doc_expansion: Default expansion setting for operations and tags ("list", "full", or "none").
+            doc_expansion(deprecated): Default expansion setting for operations and tags ("list", "full", or "none").
                            See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
             doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi"
             api_doc_url: URL for accessing the OpenAPI specification document in JSON format.
