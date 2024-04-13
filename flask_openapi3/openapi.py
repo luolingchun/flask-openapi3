@@ -27,6 +27,7 @@ from .templates import openapi_html_string
 from .templates import rapidoc_html_string
 from .templates import redoc_html_string
 from .templates import swagger_html_string
+from .templates import scalar_html_string
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import SecuritySchemesDict
@@ -60,7 +61,9 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: str = "/swagger",
             redoc_url: str = "/redoc",
             rapidoc_url: str = "/rapidoc",
+            scalar_url: str = "/scalar",
             swagger_config: Optional[Dict[str, Any]] = None,
+            scalar_config: Optional[Dict[str, Any]] = None,
             ui_templates: Optional[Dict[str, str]] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
@@ -92,8 +95,11 @@ class OpenAPI(APIScaffold, Flask):
             swagger_url: URL for accessing the Swagger UI documentation. Defaults to "/swagger".
             redoc_url: URL for accessing the Redoc UI documentation. Defaults to "/redoc".
             rapidoc_url: URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".
+            scalar_url: URL for accessing the Scalar UI documentation. Defaults to "/scalar".
             swagger_config: Swagger UI Configuration, More information:
                             https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
+            scalar_config: Scalar UI Configuration, More information:
+                            https://github.com/scalar/scalar?tab=readme-ov-file#configuration.
             ui_templates: Custom UI templates to override or add UI documents.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
@@ -137,6 +143,7 @@ class OpenAPI(APIScaffold, Flask):
         self.swagger_url = swagger_url
         self.redoc_url = redoc_url
         self.rapidoc_url = rapidoc_url
+        self.scalar_url = scalar_url
 
         # Set OAuth configuration and documentation expansion
         self.oauth_config = oauth_config
@@ -147,6 +154,7 @@ class OpenAPI(APIScaffold, Flask):
                           DeprecationWarning)
         self.doc_expansion = doc_expansion
         self.swagger_config = swagger_config
+        self.scalar_config = scalar_config
 
         # Set UI templates for customization
         self.ui_templates = ui_templates or dict()
@@ -205,6 +213,7 @@ class OpenAPI(APIScaffold, Flask):
             self.swagger_url.strip("/"): swagger_html_string,
             self.redoc_url.strip("/"): redoc_html_string,
             self.rapidoc_url.strip("/"): rapidoc_html_string,
+            self.scalar_url.strip("/"): scalar_html_string,
             **self.ui_templates
         }
 
@@ -217,6 +226,8 @@ class OpenAPI(APIScaffold, Flask):
                 view_func=lambda source=value: render_template_string(
                     source,
                     api_doc_url=self.api_doc_url.lstrip("/"),
+                    # Config parameter for scalar UI
+                    scalar_config=self.scalar_config,
                     # The following parameters are only for swagger ui
                     doc_expansion=self.doc_expansion,
                     swagger_config=self.swagger_config,
@@ -232,7 +243,8 @@ class OpenAPI(APIScaffold, Flask):
                 openapi_html_string,
                 swagger_url=self.swagger_url.lstrip("/"),
                 redoc_url=self.redoc_url.lstrip("/"),
-                rapidoc_url=self.rapidoc_url.lstrip("/")
+                rapidoc_url=self.rapidoc_url.lstrip("/"),
+                scalar_url=self.scalar_url.lstrip("/"),
             )
         )
 

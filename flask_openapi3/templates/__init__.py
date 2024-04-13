@@ -11,6 +11,17 @@ openapi_html_string = """
     <style>
         body {
             background-color: #131417;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
 
         .box {
@@ -18,8 +29,8 @@ openapi_html_string = """
             height: 200px;
             background: #2c303a;
             border-radius: 30px;
-            margin: 50px auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
@@ -28,45 +39,45 @@ openapi_html_string = """
         }
 
         .box:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
             box-shadow: 0 0 20px #333743f0;
-        }
-
-        .swagger, .redoc, .rapidoc {
-            margin: 10px;
-            color: white;
-            font-size: 30px;
-            user-select: none;
+            cursor: pointer;
         }
 
         .box img {
-            user-select: none;
+            height: 64px;
+            margin-bottom: 10px;
         }
 
+        .box a {
+            color: white;
+            font-size: 24px;
+            user-select: none;
+        }
     </style>
-
 </head>
 <body>
-<div class="box" onclick="window.location.href= '{{ swagger_url }}';return false">
-    <img height="64"
-         src="static/images/swagger.svg"
-         alt="Swagger UI">
-    <a class="swagger">Swagger</a>
-</div>
-<div class="box" onclick="window.location.href= '{{ redoc_url }}';return false">
-    <img height="64"
-         src="static/images/redoc.svg"
-         alt="ReDoc">
-    <a class="redoc">ReDoc</a>
-</div>
-<div class="box" onclick="window.location.href= '{{ rapidoc_url }}';return false">
-    <img height="64"
-         src="static/images/rapidoc.svg"
-         alt="RapiDoc">
-    <a class="rapidoc">RapiDoc</a>
+<div class="grid">
+    <div class="box" onclick="window.location.href= '{{ swagger_url }}';return false">
+        <img src="static/images/swagger.svg" alt="Swagger UI">
+        <a class="swagger">Swagger</a>
+    </div>
+    <div class="box" onclick="window.location.href= '{{ redoc_url }}';return false">
+        <img src="static/images/redoc.svg" alt="ReDoc">
+        <a class="redoc">ReDoc</a>
+    </div>
+    <div class="box" onclick="window.location.href= '{{ rapidoc_url }}';return false">
+        <img src="static/images/rapidoc.svg" alt="RapiDoc">
+        <a class="rapidoc">RapiDoc</a>
+    </div>
+    <div class="box" onclick="window.location.href= '{{ scalar_url }}';return false">
+        <img src="static/images/scalar.svg" alt="Scalar">
+        <a class="scalar">Scalar</a>
+    </div>
 </div>
 </body>
 </html>
+
 """
 rapidoc_html_string = """
 <!DOCTYPE html>
@@ -208,5 +219,31 @@ swagger_html_string = """
     }
 </script>
 </body>
+</html>
+"""
+scalar_html_string = """
+<!doctype html>
+<html>
+    <head>
+        <title>Scalar API</title>
+        <meta charset="utf-8" />
+        <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" href="static/images/scalar.svg">
+    </head>
+    <body>
+        <script
+        id="api-reference"
+        data-url="{{api_doc_url}}">
+        </script>
+        <script>
+        const scalar_config = JSON.parse(`{{ scalar_config|tojson }}`);
+        var configuration = {...scalar_config};
+        var apiReference = document.getElementById('api-reference');
+        apiReference.dataset.configuration = JSON.stringify(configuration);
+        </script>
+        <script src="static/js/scalar.standalone.js"></script>
+    </body>
 </html>
 """
