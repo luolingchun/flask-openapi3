@@ -20,9 +20,9 @@ class Schema(BaseModel):
     title: Optional[str] = None
     multipleOf: Optional[float] = Field(default=None, gt=0.0)
     maximum: Optional[float] = None
-    exclusiveMaximum: Optional[bool] = None
+    exclusiveMaximum: Optional[float] = None
     minimum: Optional[float] = None
-    exclusiveMinimum: Optional[bool] = None
+    exclusiveMinimum: Optional[float] = None
     maxLength: Optional[int] = Field(default=None, ge=0)
     minLength: Optional[int] = Field(default=None, ge=0)
     pattern: Optional[str] = None
