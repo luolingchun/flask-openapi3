@@ -1,3 +1,7 @@
+## v3.1.1 2024-04-21
+
+- Wrong types of exclusiveMinimum & exclusiveMaximum fields in Schema class by @Lavertis in #149
+
 ## v3.1.0 2024-03-24
 
 - Add the swagger_config parameter to configure the swagger ui by @luolingchun in #146
