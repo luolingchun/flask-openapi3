@@ -2,252 +2,252 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Changelog/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Changelog/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Changelog/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Contributing/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Contributing/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Contributing/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Example/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Example/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Example/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/LICENSE/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/LICENSE/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/LICENSE/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Quickstart/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Quickstart/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Quickstart/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Reference/APIBlueprint/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Reference/APIBlueprint/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Reference/APIBlueprint/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Reference/APIView/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Reference/APIView/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Reference/APIView/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Reference/Models/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Reference/Models/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Reference/Models/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Reference/OpenAPI/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Reference/OpenAPI/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Reference/OpenAPI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Reference/Scaffold/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Reference/Scaffold/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Reference/Scaffold/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/JSON/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/JSON/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/JSON/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Model_Config/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Model_Config/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/Model_Config/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Request/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Request/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/Request/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Response/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Response/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/Response/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Route_Operation/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Route_Operation/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/Route_Operation/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Specification/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/Specification/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/Specification/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/Usage/UI_Templates/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x/Usage/UI_Templates/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.xzh/Usage/UI_Templates/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.x"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Changelog/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Changelog/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xChangelog/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Contributing/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Contributing/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xContributing/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Example/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Example/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xExample/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/LICENSE/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/LICENSE/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xLICENSE/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Quickstart/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Quickstart/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xQuickstart/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/APIBlueprint/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/APIBlueprint/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xReference/APIBlueprint/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/APIView/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/APIView/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xReference/APIView/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/Models/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/Models/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xReference/Models/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/OpenAPI/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/OpenAPI/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xReference/OpenAPI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/Scaffold/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Reference/Scaffold/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xReference/Scaffold/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/JSON/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/JSON/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/JSON/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Model_Config/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Model_Config/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/Model_Config/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Request/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Request/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/Request/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Response/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Response/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/Response/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Route_Operation/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Route_Operation/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/Route_Operation/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Specification/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/Specification/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/Specification/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/UI_Templates/</loc>
-        <lastmod>2024-03-24</lastmod>
+        <lastmod>2024-04-21</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/flask-openapi3/v3.x/zh/Usage/UI_Templates/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/flask-openapi3/v3.xUsage/UI_Templates/"/>
