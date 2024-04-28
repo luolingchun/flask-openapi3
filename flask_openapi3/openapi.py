@@ -4,12 +4,18 @@
 import json
 import os
 import re
-import warnings
+import sys
 from copy import deepcopy
+from importlib import import_module
 from typing import Optional, List, Dict, Union, Any, Type, Callable
 
 from flask import Flask, Blueprint, render_template_string, current_app
 from pydantic import BaseModel
+
+if sys.version_info >= (3, 10):
+    from importlib.metadata import entry_points
+else:
+    from importlib_metadata import entry_points
 
 from .blueprint import APIBlueprint
 from .commands import openapi_command
@@ -25,9 +31,6 @@ from .models import Tag
 from .models import ValidationErrorModel
 from .scaffold import APIScaffold
 from .templates import openapi_html_string
-from .templates import rapidoc_html_string
-from .templates import redoc_html_string
-from .templates import swagger_html_string
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import SecuritySchemesDict
@@ -44,8 +47,6 @@ from .utils import parse_method
 from .utils import parse_parameters
 from .view import APIView
 
-warnings.filterwarnings("once")
-
 
 class OpenAPI(APIScaffold, Flask):
     def __init__(
@@ -54,18 +55,7 @@ class OpenAPI(APIScaffold, Flask):
             *,
             info: Optional[Info] = None,
             security_schemes: Optional[SecuritySchemesDict] = None,
-            oauth_config: Optional[OAuthConfig] = None,
             responses: Optional[ResponseDict] = None,
-            doc_ui: bool = True,
-            doc_expansion: str = "list",
-            doc_prefix: str = "/openapi",
-            doc_url: str = "/openapi.json",
-            api_doc_url: str = "/openapi.json",
-            swagger_url: str = "/swagger",
-            redoc_url: str = "/redoc",
-            rapidoc_url: str = "/rapidoc",
-            swagger_config: Optional[Dict[str, Any]] = None,
-            ui_templates: Optional[Dict[str, str]] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id_callback: Callable = get_operation_id_for_path,
@@ -73,6 +63,9 @@ class OpenAPI(APIScaffold, Flask):
             validation_error_status: Union[str, int] = 422,
             validation_error_model: Type[BaseModel] = ValidationErrorModel,
             validation_error_callback: Callable = make_validation_error_response,
+            doc_ui: bool = True,
+            doc_prefix: str = "/openapi",
+            doc_url: str = "/openapi.json",
             **kwargs: Any
     ) -> None:
         """
@@ -81,39 +74,30 @@ class OpenAPI(APIScaffold, Flask):
         Args:
             import_name: The import name for the Flask application.
             info: Information about the API (title, version, etc.).
-                  See https://spec.openapis.org/oas/v3.1.0#info-object.
+                See https://spec.openapis.org/oas/v3.1.0#info-object.
             security_schemes: Security schemes for the API.
-                              See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.
-            oauth_config: **Deprecated**, OAuth 2.0 configuration for authentication.
-                          See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.
+                See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
-            doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
-            doc_expansion: **Deprecated**, Default expansion setting for operations and tags ("list", "full", or "none")
-                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
-            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi"
-            api_doc_url: **Deprecated**, URL for accessing the OpenAPI specification document in JSON format.
-                         Defaults to "/openapi.json".
-            doc_url: URL for accessing the OpenAPI specification document in JSON format.
-                         Defaults to "/openapi.json".
-            swagger_url: **Deprecated**, URL for accessing the Swagger UI documentation. Defaults to "/swagger".
-            redoc_url: **Deprecated**, URL for accessing the Redoc UI documentation. Defaults to "/redoc".
-            rapidoc_url: **Deprecated**, URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".
-            swagger_config: **Deprecated**, Swagger UI Configuration, More information:
-                            https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
-            ui_templates: **Deprecated**, Custom UI templates to override or add UI documents.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
-                           See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.
+                See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.
             operation_id_callback: Callback function for custom operation ID generation.
-                                   Receives name (str), path (str), and method (str) parameters.
-                                   Defaults to `get_operation_id_for_path` from utils.
+                Receives name (str), path (str), and method (str) parameters.
+                Defaults to `get_operation_id_for_path` from utils.
             openapi_extensions: Extensions to the OpenAPI Schema.
-                                See https://spec.openapis.org/oas/v3.1.0#specification-extensions.
-            validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
-                                    Defaults to 422.
+                See https://spec.openapis.org/oas/v3.1.0#specification-extensions.
+            validation_error_status:
+                HTTP Status of the response given when a validation error is detected by pydantic.
+                Defaults to 422.
             validation_error_model: Validation error response model for OpenAPI Specification.
             validation_error_callback: Validation error response callback, the return format corresponds to
-                                       the validation_error_model.
+                the validation_error_model.
+            doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc).
+                Defaults to True.
+            doc_prefix: URL prefix used for OpenAPI document and UI.
+                Defaults to "/openapi".
+            doc_url: URL for accessing the OpenAPI specification document in JSON format.
+                Defaults to "/openapi.json".
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -139,61 +123,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set URL prefixes and endpoints
         self.doc_prefix = doc_prefix
-        if api_doc_url != "/openapi.json":
-            warnings.warn(
-                "The `api_doc_url` is deprecated in v4.x, use `doc_url` instead.",
-                DeprecationWarning
-            )
-            self.doc_url = api_doc_url
-        else:
-            self.doc_url = doc_url
-        if swagger_url != "/swagger":
-            warnings.warn(
-                "The `swagger_url` is deprecated in v4.x.",
-                DeprecationWarning
-            )
-        if redoc_url != "/redoc":
-            warnings.warn(
-                "The `redoc_url` is deprecated in v4.x.",
-                DeprecationWarning
-            )
-        if rapidoc_url != "/rapidoc":
-            warnings.warn(
-                "The `rapidoc_url` is deprecated in v4.x.",
-                DeprecationWarning
-            )
-
-        self.swagger_url = swagger_url
-        self.redoc_url = redoc_url
-        self.rapidoc_url = rapidoc_url
-
-        # Set OAuth configuration and documentation expansion
-        if oauth_config is not None:
-            warnings.warn(
-                "The `oauth_config` is deprecated in v4.x, use `app.config['OAUTH_CONFIG']` instead.",
-                DeprecationWarning
-            )
-        self.oauth_config = oauth_config.model_dump() if oauth_config else None
-        if doc_expansion != "list":
-            warnings.warn(
-                "The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.",
-                DeprecationWarning
-            )
-        self.doc_expansion = doc_expansion
-        if swagger_config is not None:
-            warnings.warn(
-                "The `swagger_config` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.",
-                DeprecationWarning
-            )
-        self.swagger_config = swagger_config
-
-        # Set UI templates for customization
-        if ui_templates is not None:
-            warnings.warn(
-                "The `ui_templates` is deprecated in v4.x.",
-                DeprecationWarning
-            )
-        self.ui_templates = ui_templates or dict()
+        self.doc_url = doc_url
 
         # Set servers and external documentation
         self.severs = servers
@@ -240,33 +170,27 @@ class OpenAPI(APIScaffold, Flask):
         # Add the API documentation URL rule
         blueprint.add_url_rule(
             rule=self.doc_url,
-            endpoint="api_doc",
+            endpoint="doc_url",
             view_func=lambda: self.api_doc
         )
 
-        # Combine built-in templates and user-defined templates
-        builtins_templates = {
-            self.swagger_url.strip("/"): swagger_html_string,
-            self.redoc_url.strip("/"): redoc_html_string,
-            self.rapidoc_url.strip("/"): rapidoc_html_string,
-            **self.ui_templates
-        }
-
-        # Add URL rules for the templates
-        for key, value in builtins_templates.items():
-            blueprint.add_url_rule(
-                rule=f"/{key}",
-                endpoint=key,
-                # Pass default value to source
-                view_func=lambda source=value: render_template_string(
-                    source,
-                    api_doc_url=self.doc_url.lstrip("/"),
-                    # The following parameters are only for swagger ui
-                    doc_expansion=self.doc_expansion,
-                    swagger_config=self.swagger_config or current_app.config.get("SWAGGER_CONFIG"),
-                    oauth_config=self.oauth_config or current_app.config.get("OAUTH_CONFIG")
-                )
-            )
+        ui_templates = []
+        for entry_point in entry_points(group="flask_openapi3.plugins"):
+            try:
+                module_path = entry_point.value
+                module_name, class_name = module_path.rsplit(".", 1)
+                module = import_module(module_name)
+                plugin_class = getattr(module, class_name)
+                plugin_register = plugin_class.register
+                plugin_name = plugin_class.name
+                plugin_display_name = plugin_class.display_name
+                bp = plugin_register(doc_url=self.doc_url.lstrip("/"), config=config, oauth_config=self.oauth_config)
+                self.register_blueprint(bp, url_prefix=self.doc_prefix)
+                ui_templates.append({"name": plugin_name, "display_name": plugin_display_name})
+            except (ModuleNotFoundError, AttributeError):
+                import traceback
+                print(f"Warning: plugin '{entry_point.value}' registration failed.")
+                traceback.print_exc()
 
         # Add URL rule for the home page
         blueprint.add_url_rule(
@@ -274,9 +198,7 @@ class OpenAPI(APIScaffold, Flask):
             endpoint="openapi",
             view_func=lambda: render_template_string(
                 openapi_html_string,
-                swagger_url=self.swagger_url.lstrip("/"),
-                redoc_url=self.redoc_url.lstrip("/"),
-                rapidoc_url=self.rapidoc_url.lstrip("/")
+                ui_templates=ui_templates
             )
         )
 

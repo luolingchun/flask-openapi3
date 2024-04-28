@@ -39,6 +39,13 @@ yaml = ["pyyaml"]
 async = ["asgiref >= 3.2"]
 dotenv = ["python-dotenv"]
 email = ["email-validator"]
+# ui templates
+swagger = ["flask-openapi3-swagger"]
+redoc = ["flask-openapi3-redoc"]
+rapidoc = ["flask-openapi3-rapidoc"]
+rapipdf = ["flask-openapi3-rapipdf"]
+scalar = ["flask-openapi3-scalar"]
+elements = ["flask-openapi3-elements"]
 
 
 [build-system]
