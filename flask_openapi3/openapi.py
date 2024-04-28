@@ -9,7 +9,7 @@ from copy import deepcopy
 from importlib import import_module
 from typing import Optional, List, Dict, Union, Any, Type, Callable
 
-from flask import Flask, Blueprint, render_template_string, current_app
+from flask import Flask, Blueprint, render_template_string
 from pydantic import BaseModel
 
 if sys.version_info >= (3, 10):
@@ -23,7 +23,6 @@ from .models import APISpec
 from .models import Components
 from .models import ExternalDocumentation
 from .models import Info
-from .models import OAuthConfig
 from .models import OPENAPI3_REF_PREFIX
 from .models import Schema
 from .models import Server
@@ -184,7 +183,7 @@ class OpenAPI(APIScaffold, Flask):
                 plugin_register = plugin_class.register
                 plugin_name = plugin_class.name
                 plugin_display_name = plugin_class.display_name
-                bp = plugin_register(doc_url=self.doc_url.lstrip("/"), config=config, oauth_config=self.oauth_config)
+                bp = plugin_register(doc_url=self.doc_url.lstrip("/"))
                 self.register_blueprint(bp, url_prefix=self.doc_prefix)
                 ui_templates.append({"name": plugin_name, "display_name": plugin_display_name})
             except (ModuleNotFoundError, AttributeError):
