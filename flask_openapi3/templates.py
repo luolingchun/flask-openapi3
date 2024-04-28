@@ -22,20 +22,48 @@ a/x3gCx7M2rvrU8m3suK+3w+AcssZ50vnfwAAAABJRU5ErkJggg==
     <style>
         body {
             background-color: #131417;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: 36px;
         }
 
         .box {
+            grid-column: span 2;
             width: 300px;
             height: 200px;
             background: #2c303a;
             border-radius: 30px;
-            margin: 50px auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             transform: scale(1);
             transition: all .3s ease;
+        }
+
+        /* Dealing with 2 orphan items */
+
+        .box:last-child:nth-child(3n - 1) {
+            grid-column-end: -2;
+        }
+
+        .box:nth-last-child(2):nth-child(3n + 1) {
+            grid-column-end: 4;
+        }
+
+        /* Dealing with single orphan */
+
+        .box:last-child:nth-child(3n - 2) {
+            grid-column-end: 5;
         }
 
         .box:hover {
@@ -44,7 +72,6 @@ a/x3gCx7M2rvrU8m3suK+3w+AcssZ50vnfwAAAABJRU5ErkJggg==
         }
 
         .box a {
-            margin: 10px;
             color: white;
             font-size: 30px;
             user-select: none;
@@ -52,18 +79,22 @@ a/x3gCx7M2rvrU8m3suK+3w+AcssZ50vnfwAAAABJRU5ErkJggg==
 
         .box img {
             user-select: none;
+            height: 64px;
+            margin-bottom: 10px;
         }
 
     </style>
 
 </head>
 <body>
-{% for ui in ui_templates %}
-<div class="box" onclick="window.location.href='{{ ui.name }}';return false">
-    <img height="64" src="{{ ui.name }}/images/{{ ui.name }}.svg">
-    <a>{{ ui.display_name }}</a>
+<div class="grid">
+    {% for ui in ui_templates %}
+    <div class="box" onclick="window.location.href='{{ ui.name }}';return false">
+        <img height="64" src="{{ ui.name }}/images/{{ ui.name }}.svg">
+        <a>{{ ui.display_name }}</a>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 
 </body>
 </html>
