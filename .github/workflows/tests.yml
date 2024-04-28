@@ -46,6 +46,8 @@ jobs:
           pip install -U -r ./requirements/test.txt
           pip install -U -r ./requirements/flake8.txt
           pip install -U -r ./requirements/mypy.txt
+          pip install -e .[swagger]
+#          pip install -e .[swagger,redoc,rapidoc,rapipdf,scalar,elements]
 
       - name: Test with pytest
         run: pytest tests
