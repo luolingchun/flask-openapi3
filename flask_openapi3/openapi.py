@@ -4,10 +4,11 @@
 import json
 import os
 import re
+import warnings
 from copy import deepcopy
 from typing import Optional, List, Dict, Union, Any, Type, Callable
 
-from flask import Flask, Blueprint, render_template_string
+from flask import Flask, Blueprint, render_template_string, current_app
 from pydantic import BaseModel
 
 from .blueprint import APIBlueprint
@@ -43,6 +44,8 @@ from .utils import parse_method
 from .utils import parse_parameters
 from .view import APIView
 
+warnings.filterwarnings("once")
+
 
 class OpenAPI(APIScaffold, Flask):
     def __init__(
@@ -56,6 +59,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_ui: bool = True,
             doc_expansion: str = "list",
             doc_prefix: str = "/openapi",
+            doc_url: str = "/openapi.json",
             api_doc_url: str = "/openapi.json",
             swagger_url: str = "/swagger",
             redoc_url: str = "/redoc",
@@ -80,21 +84,23 @@ class OpenAPI(APIScaffold, Flask):
                   See https://spec.openapis.org/oas/v3.1.0#info-object.
             security_schemes: Security schemes for the API.
                               See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.
-            oauth_config: OAuth 2.0 configuration for authentication.
+            oauth_config: **Deprecated**, OAuth 2.0 configuration for authentication.
                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
-            doc_expansion(deprecated): Default expansion setting for operations and tags ("list", "full", or "none").
+            doc_expansion: **Deprecated**, Default expansion setting for operations and tags ("list", "full", or "none")
                            See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
             doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to "/openapi"
-            api_doc_url: URL for accessing the OpenAPI specification document in JSON format.
+            api_doc_url: **Deprecated**, URL for accessing the OpenAPI specification document in JSON format.
                          Defaults to "/openapi.json".
-            swagger_url: URL for accessing the Swagger UI documentation. Defaults to "/swagger".
-            redoc_url: URL for accessing the Redoc UI documentation. Defaults to "/redoc".
-            rapidoc_url: URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".
-            swagger_config: Swagger UI Configuration, More information:
+            doc_url: URL for accessing the OpenAPI specification document in JSON format.
+                         Defaults to "/openapi.json".
+            swagger_url: **Deprecated**, URL for accessing the Swagger UI documentation. Defaults to "/swagger".
+            redoc_url: **Deprecated**, URL for accessing the Redoc UI documentation. Defaults to "/redoc".
+            rapidoc_url: **Deprecated**, URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".
+            swagger_config: **Deprecated**, Swagger UI Configuration, More information:
                             https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.
-            ui_templates: Custom UI templates to override or add UI documents.
+            ui_templates: **Deprecated**, Custom UI templates to override or add UI documents.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
                            See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.
@@ -133,22 +139,60 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set URL prefixes and endpoints
         self.doc_prefix = doc_prefix
-        self.api_doc_url = api_doc_url
+        if api_doc_url != "/openapi.json":
+            warnings.warn(
+                "The `api_doc_url` is deprecated in v4.x, use `doc_url` instead.",
+                DeprecationWarning
+            )
+            self.doc_url = api_doc_url
+        else:
+            self.doc_url = doc_url
+        if swagger_url != "/swagger":
+            warnings.warn(
+                "The `swagger_url` is deprecated in v4.x.",
+                DeprecationWarning
+            )
+        if redoc_url != "/redoc":
+            warnings.warn(
+                "The `redoc_url` is deprecated in v4.x.",
+                DeprecationWarning
+            )
+        if rapidoc_url != "/rapidoc":
+            warnings.warn(
+                "The `rapidoc_url` is deprecated in v4.x.",
+                DeprecationWarning
+            )
+
         self.swagger_url = swagger_url
         self.redoc_url = redoc_url
         self.rapidoc_url = rapidoc_url
 
         # Set OAuth configuration and documentation expansion
-        self.oauth_config = oauth_config
+        if oauth_config is not None:
+            warnings.warn(
+                "The `oauth_config` is deprecated in v4.x, use `app.config['OAUTH_CONFIG']` instead.",
+                DeprecationWarning
+            )
+        self.oauth_config = oauth_config.model_dump() if oauth_config else None
         if doc_expansion != "list":
-            import warnings
-            warnings.filterwarnings("once")
-            warnings.warn("The `doc_expansion` parameter is deprecated; use `swagger_config` instead.",
-                          DeprecationWarning)
+            warnings.warn(
+                "The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.",
+                DeprecationWarning
+            )
         self.doc_expansion = doc_expansion
+        if swagger_config is not None:
+            warnings.warn(
+                "The `swagger_config` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.",
+                DeprecationWarning
+            )
         self.swagger_config = swagger_config
 
         # Set UI templates for customization
+        if ui_templates is not None:
+            warnings.warn(
+                "The `ui_templates` is deprecated in v4.x.",
+                DeprecationWarning
+            )
         self.ui_templates = ui_templates or dict()
 
         # Set servers and external documentation
@@ -195,7 +239,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Add the API documentation URL rule
         blueprint.add_url_rule(
-            rule=self.api_doc_url,
+            rule=self.doc_url,
             endpoint="api_doc",
             view_func=lambda: self.api_doc
         )
@@ -216,11 +260,11 @@ class OpenAPI(APIScaffold, Flask):
                 # Pass default value to source
                 view_func=lambda source=value: render_template_string(
                     source,
-                    api_doc_url=self.api_doc_url.lstrip("/"),
+                    api_doc_url=self.doc_url.lstrip("/"),
                     # The following parameters are only for swagger ui
                     doc_expansion=self.doc_expansion,
-                    swagger_config=self.swagger_config,
-                    oauth_config=self.oauth_config.model_dump() if self.oauth_config else None
+                    swagger_config=self.swagger_config or current_app.config.get("SWAGGER_CONFIG"),
+                    oauth_config=self.oauth_config or current_app.config.get("OAUTH_CONFIG")
                 )
             )
 
