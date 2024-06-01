@@ -142,6 +142,18 @@ result:
 
 ## oauth_config
 
+!!! Deprecated-Warning warning
+
+    The `oauth_config` is deprecated in v4.x, use `app.config['OAUTH_CONFIG']` instead.
+
+    ```python
+    from flask_openapi3 import OpenAPI
+    
+    app = OpenAPI(__name__)
+    
+    app.config["OAUTH_CONFIG"] = {"clientId": "xxx", "clientSecret": "xxx"}
+    ```
+
 You can pass `oauth_config` when initializing `OpenAPI`:
 
 ```python
@@ -257,6 +269,21 @@ def get_book():
 
 ## doc_expansion
 
+!!! Deprecated-Warning warning
+
+    The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
+
+    ```python
+    from flask_openapi3 import OpenAPI
+    
+    app = OpenAPI(__name__)
+    
+    app.config["SWAGGER_CONFIG"] = {
+        "docExpansion": "none", 
+        "validatorUrl": "https://www.b.com"
+    }
+    ```
+
 Just for Swagger UI.
 
 String=["list", "full", "none"].
@@ -269,11 +296,22 @@ More information to see [Configuration](https://github.com/swagger-api/swagger-u
 app = OpenAPI(__name__, info=info, doc_expansion='full')
 ```
 
+## swagger_config
+
 !!! Deprecated-Warning warning
 
-    `doc_expansion` have been merged into the `swagger_config`, and `doc_expansion` will be deprecated in the future.
+    The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
 
-## swagger_config
+    ```python
+    from flask_openapi3 import OpenAPI
+    
+    app = OpenAPI(__name__)
+    
+    app.config["SWAGGER_CONFIG"] = {
+        "docExpansion": "none", 
+        "validatorUrl": "https://www.b.com"
+    }
+    ```
 
 Swagger supports many configuration items. 
 For more information on Swagger Configuration,
@@ -283,13 +321,18 @@ please refer to [Swagger Configuration](https://github.com/swagger-api/swagger-u
 app = OpenAPI(
     __name__, 
     swagger_config={
-        "doc_expansion": "none", 
+        "docExpansion": "none", 
         "validatorUrl": "https://www.b.com"
     }
 )
 ```
 
 ## Interactive documentation
+
+!!! Deprecated-Warning warning
+
+    `api_doc_url` will be renamed to `doc_url` in v4.x, and `swagger_url`, `redoc_url`, `rapidoc_url` will be removed.
+
 
 **Flask OpenAPI3** provides support for the following Interactive documentation:
 

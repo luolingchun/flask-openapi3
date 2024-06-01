@@ -1,3 +1,7 @@
+!!! Deprecated-Warning warning
+
+    The `ui_templates` is deprecated in v4.x. More interactive UI will be provided through [plugins](https://github.com/luolingchun/flask-openapi3-plugins).
+
 Flask OpenAPI3 supports [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc)
 and [RapiDoc](https://github.com/rapi-doc/RapiDoc) templates by default.
 
