@@ -1,3 +1,8 @@
+## v4.0.0rc1 2024-06-02
+
+- Support plugins for ui templates
+- Support for OPENAPI_HTML_STRING in app.config
+
 ## v3.1.2 2024-06-02
 
 - Support SWAGGER_CONFIG and OAUTH_CONFIG in app.config by @luolingchun in #153
