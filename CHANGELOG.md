@@ -1,3 +1,18 @@
+## v3.1.2 2024-06-02
+
+- Support SWAGGER_CONFIG and OAUTH_CONFIG in app.config by @luolingchun in #153
+
+**DeprecationWarning**
+
+- The `api_doc_url` is deprecated in v4.x, use `doc_url` instead.
+- The `swagger_url` is deprecated in v4.x.
+- The `redoc_url` is deprecated in v4.x.
+- The `rapidoc_url` is deprecated in v4.x.
+- The `oauth_config` is deprecated in v4.x, use `app.config['OAUTH_CONFIG']` instead.
+- The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
+- The `swagger_config` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
+- The `ui_templates` is deprecated in v4.x.
+
 ## v3.1.1 2024-04-21
 
 - Wrong types of exclusiveMinimum & exclusiveMaximum fields in Schema class by @Lavertis in #149
