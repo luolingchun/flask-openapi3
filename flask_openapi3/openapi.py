@@ -196,7 +196,7 @@ class OpenAPI(APIScaffold, Flask):
             rule="/",
             endpoint="openapi",
             view_func=lambda: render_template_string(
-                openapi_html_string,
+                self.config.get("OPENAPI_HTML_STRING") or openapi_html_string,
                 ui_templates=ui_templates
             )
         )
