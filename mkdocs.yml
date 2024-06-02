@@ -82,6 +82,7 @@ plugins:
             Route Operation: 路由操作
             Specification: 规范
             UI Templates: 自定义模板
+            Configuration: 配置
             Usage: 教程
 
 
@@ -104,6 +105,7 @@ nav:
       - Response: Usage/Response.md
       - Route Operation: Usage/Route_Operation.md
       - Model Config: Usage/Model_Config.md
+      - Configuration: Usage/Configuration.md
       - UI Templates: Usage/UI_Templates.md
       - JSON: Usage/JSON.md
   - Example: Example.md

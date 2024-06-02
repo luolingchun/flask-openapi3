@@ -11,20 +11,20 @@ from flask_openapi3 import OpenAPI
 
 
 class GenericTracebackError(BaseModel):
-    location: str = Field(..., example="GenericError.py")
-    line: int = Field(..., example=1)
-    method: str = Field(..., example="GenericError")
-    message: str = Field(..., example="400:Bad Request")
+    location: str = Field(..., json_schema_extra={"example": "GenericError.py"})
+    line: int = Field(..., json_schema_extra={"example": 1})
+    method: str = Field(..., json_schema_extra={"example": "GenericError"})
+    message: str = Field(..., json_schema_extra={"example": "400:Bad Request"})
 
 
 class ValidationErrorModel(BaseModel):
     code: str
     message: str
-    more_info: List[GenericTracebackError] = Field(..., example=[GenericTracebackError(
+    more_info: List[GenericTracebackError] = Field(..., json_schema_extra={"example": [GenericTracebackError(
         location="GenericError.py",
         line=1,
         method="GenericError",
-        message="400:Bad Request")])
+        message="400:Bad Request")]})
 
 
 def validation_error_callback(e: ValidationError):
