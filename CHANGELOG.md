@@ -1,3 +1,8 @@
+## v4.0.0rc1 2024-06-02
+
+- Support plugins for ui templates
+- Support for OPENAPI_HTML_STRING in app.config
+
 ## v3.1.3 2024-06-16
 
 - Fix empty list in body by @luolingchun in #154
