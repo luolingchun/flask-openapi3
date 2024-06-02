@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -469,6 +469,27 @@
   
   <span class="md-ellipsis">
     Model Config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Usage/Configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
   </span>
   
 
@@ -1484,22 +1505,22 @@
 
 
 <h2 id="flask_openapi3.models.APISpec" class="doc doc-heading">
-          <code>APISpec</code>
+            <code>APISpec</code>
 
 
 <a href="#flask_openapi3.models.APISpec" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#openapi-object">https://spec.openapis.org/oas/v3.1.0#openapi-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/__init__.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
 <span class="normal">59</span>
@@ -1527,9 +1548,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1545,8 +1566,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1555,22 +1575,22 @@
 
 
 <h2 id="flask_openapi3.models.OAuthConfig" class="doc doc-heading">
-          <code>OAuthConfig</code>
+            <code>OAuthConfig</code>
 
 
 <a href="#flask_openapi3.models.OAuthConfig" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md#oauth-20-configuration">https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md#oauth-20-configuration</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/__init__.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">72</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/__init__.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">72</span>
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
@@ -1596,9 +1616,9 @@
     <span class="n">useBasicAuthenticationWithAccessCodeGrant</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">usePkceWithAuthorizationCodeGrant</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1614,8 +1634,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1624,8 +1643,8 @@
 
 
 <h2 id="flask_openapi3.models.Callback" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">Callback</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathItem</span><span class="p">]</span></code>
-  
+            <code class="highlight language-python"><span class="n">Callback</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathItem</span><span class="p">]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -1633,8 +1652,8 @@
 <a href="#flask_openapi3.models.Callback" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -1643,22 +1662,22 @@
 
 
 <h2 id="flask_openapi3.models.Components" class="doc doc-heading">
-          <code>Components</code>
+            <code>Components</code>
 
 
 <a href="#flask_openapi3.models.Components" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#components-object">https://spec.openapis.org/oas/v3.1.0#components-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/components.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/components.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
@@ -1696,9 +1715,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1714,8 +1733,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1724,22 +1742,22 @@
 
 
 <h2 id="flask_openapi3.models.Contact" class="doc doc-heading">
-          <code>Contact</code>
+            <code>Contact</code>
 
 
 <a href="#flask_openapi3.models.Contact" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#contact-object">https://spec.openapis.org/oas/v3.1.0#contact-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/contact.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/contact.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -1763,9 +1781,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1781,8 +1799,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1791,22 +1808,22 @@
 
 
 <h2 id="flask_openapi3.models.Discriminator" class="doc doc-heading">
-          <code>Discriminator</code>
+            <code>Discriminator</code>
 
 
 <a href="#flask_openapi3.models.Discriminator" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#discriminator-object">https://spec.openapis.org/oas/v3.1.0#discriminator-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/discriminator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/discriminator.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -1828,9 +1845,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1846,8 +1863,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1856,22 +1872,22 @@
 
 
 <h2 id="flask_openapi3.models.Encoding" class="doc doc-heading">
-          <code>Encoding</code>
+            <code>Encoding</code>
 
 
 <a href="#flask_openapi3.models.Encoding" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#encoding-object">https://spec.openapis.org/oas/v3.1.0#encoding-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/encoding.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/encoding.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -1899,9 +1915,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1917,8 +1933,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1927,22 +1942,22 @@
 
 
 <h2 id="flask_openapi3.models.Example" class="doc doc-heading">
-          <code>Example</code>
+            <code>Example</code>
 
 
 <a href="#flask_openapi3.models.Example" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#example-object">https://spec.openapis.org/oas/v3.1.0#example-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/example.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/example.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -1968,9 +1983,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1986,8 +2001,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -1996,22 +2010,22 @@
 
 
 <h2 id="flask_openapi3.models.ExternalDocumentation" class="doc doc-heading">
-          <code>ExternalDocumentation</code>
+            <code>ExternalDocumentation</code>
 
 
 <a href="#flask_openapi3.models.ExternalDocumentation" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#external-documentation-object">https://spec.openapis.org/oas/v3.1.0#external-documentation-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/external_documentation.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/external_documentation.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -2033,9 +2047,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2051,8 +2065,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2061,22 +2074,22 @@
 
 
 <h2 id="flask_openapi3.models.FileStorage" class="doc doc-heading">
-          <code>FileStorage</code>
+            <code>FileStorage</code>
 
 
 <a href="#flask_openapi3.models.FileStorage" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="werkzeug.datastructures.FileStorage">FileStorage</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="werkzeug.datastructures.FileStorage">FileStorage</span></code></p>
 
-  
+
       <p>An uploaded file included as part of the request data.</p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/file.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/file.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -2110,9 +2123,9 @@
     <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">_FileStorage</span><span class="p">,</span> <span class="n">_info</span><span class="p">:</span> <span class="n">core_schema</span><span class="o">.</span><span class="n">ValidationInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_FileStorage</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2128,8 +2141,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2138,22 +2150,22 @@
 
 
 <h2 id="flask_openapi3.models.Header" class="doc doc-heading">
-          <code>Header</code>
+            <code>Header</code>
 
 
 <a href="#flask_openapi3.models.Header" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="flask_openapi3.models.parameter.Parameter" href="#flask_openapi3.models.Parameter">Parameter</a></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="flask_openapi3.models.parameter.Parameter" href="#flask_openapi3.models.Parameter">Parameter</a></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#header-object">https://spec.openapis.org/oas/v3.1.0#header-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/header.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/header.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
@@ -2175,9 +2187,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2193,8 +2205,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2203,22 +2214,22 @@
 
 
 <h2 id="flask_openapi3.models.Info" class="doc doc-heading">
-          <code>Info</code>
+            <code>Info</code>
 
 
 <a href="#flask_openapi3.models.Info" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#info-object">https://spec.openapis.org/oas/v3.1.0#info-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/info.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/info.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
@@ -2250,9 +2261,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2268,8 +2279,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2278,22 +2288,22 @@
 
 
 <h2 id="flask_openapi3.models.License" class="doc doc-heading">
-          <code>License</code>
+            <code>License</code>
 
 
 <a href="#flask_openapi3.models.License" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#license-object">https://spec.openapis.org/oas/v3.1.0#license-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/license.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/license.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -2317,9 +2327,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2335,8 +2345,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2345,22 +2354,22 @@
 
 
 <h2 id="flask_openapi3.models.Link" class="doc doc-heading">
-          <code>Link</code>
+            <code>Link</code>
 
 
 <a href="#flask_openapi3.models.Link" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#link-object">https://spec.openapis.org/oas/v3.1.0#link-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/link.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/link.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -2390,9 +2399,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2408,8 +2417,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2418,22 +2426,22 @@
 
 
 <h2 id="flask_openapi3.models.MediaType" class="doc doc-heading">
-          <code>MediaType</code>
+            <code>MediaType</code>
 
 
 <a href="#flask_openapi3.models.MediaType" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#media-type-object">https://spec.openapis.org/oas/v3.1.0#media-type-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/media_type.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/media_type.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
@@ -2459,9 +2467,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2477,8 +2485,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2487,22 +2494,22 @@
 
 
 <h2 id="flask_openapi3.models.OAuthFlow" class="doc doc-heading">
-          <code>OAuthFlow</code>
+            <code>OAuthFlow</code>
 
 
 <a href="#flask_openapi3.models.OAuthFlow" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#oauth-flow-object">https://spec.openapis.org/oas/v3.1.0#oauth-flow-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/oauth_flow.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/oauth_flow.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -2528,9 +2535,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2546,8 +2553,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2556,22 +2562,22 @@
 
 
 <h2 id="flask_openapi3.models.OAuthFlows" class="doc doc-heading">
-          <code>OAuthFlows</code>
+            <code>OAuthFlows</code>
 
 
 <a href="#flask_openapi3.models.OAuthFlows" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#oauth-flows-object">https://spec.openapis.org/oas/v3.1.0#oauth-flows-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/oauth_flows.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/oauth_flows.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -2597,9 +2603,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2615,8 +2621,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2625,22 +2630,22 @@
 
 
 <h2 id="flask_openapi3.models.Operation" class="doc doc-heading">
-          <code>Operation</code>
+            <code>Operation</code>
 
 
 <a href="#flask_openapi3.models.Operation" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#operation-object">https://spec.openapis.org/oas/v3.1.0#operation-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/operation.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/operation.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
 <span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
@@ -2684,9 +2689,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2702,8 +2707,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2712,22 +2716,22 @@
 
 
 <h2 id="flask_openapi3.models.Parameter" class="doc doc-heading">
-          <code>Parameter</code>
+            <code>Parameter</code>
 
 
 <a href="#flask_openapi3.models.Parameter" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#parameter-object">https://spec.openapis.org/oas/v3.1.0#parameter-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/parameter.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/parameter.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
@@ -2771,9 +2775,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2789,8 +2793,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2799,22 +2802,22 @@
 
 
 <h2 id="flask_openapi3.models.ParameterInType" class="doc doc-heading">
-          <code>ParameterInType</code>
+            <code>ParameterInType</code>
 
 
 <a href="#flask_openapi3.models.ParameterInType" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code>str</code>, <code><span title="enum.Enum">Enum</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code>str</code>, <code><span title="enum.Enum">Enum</span></code></p>
 
-  
+
       <p>The place Parameters can be put when calling an Endpoint</p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/parameter_in_type.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/parameter_in_type.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
@@ -2828,9 +2831,9 @@
     <span class="n">HEADER</span> <span class="o">=</span> <span class="s2">&quot;header&quot;</span>
     <span class="n">COOKIE</span> <span class="o">=</span> <span class="s2">&quot;cookie&quot;</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2846,8 +2849,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2856,22 +2858,22 @@
 
 
 <h2 id="flask_openapi3.models.PathItem" class="doc doc-heading">
-          <code>PathItem</code>
+            <code>PathItem</code>
 
 
 <a href="#flask_openapi3.models.PathItem" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#path-item-object">https://spec.openapis.org/oas/v3.1.0#path-item-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/path_item.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/path_item.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
 <span class="normal">20</span>
@@ -2913,9 +2915,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -2931,8 +2933,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2941,8 +2942,8 @@
 
 
 <h2 id="flask_openapi3.models.Paths" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">Paths</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathItem</span><span class="p">]</span></code>
-  
+            <code class="highlight language-python"><span class="n">Paths</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PathItem</span><span class="p">]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -2950,8 +2951,8 @@
 <a href="#flask_openapi3.models.Paths" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -2960,22 +2961,22 @@
 
 
 <h2 id="flask_openapi3.models.Reference" class="doc doc-heading">
-          <code>Reference</code>
+            <code>Reference</code>
 
 
 <a href="#flask_openapi3.models.Reference" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#reference-object">https://spec.openapis.org/oas/v3.1.0#reference-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/reference.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/reference.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
@@ -2995,9 +2996,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3013,8 +3014,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3023,22 +3023,22 @@
 
 
 <h2 id="flask_openapi3.models.RequestBody" class="doc doc-heading">
-          <code>RequestBody</code>
+            <code>RequestBody</code>
 
 
 <a href="#flask_openapi3.models.RequestBody" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#request-body-object">https://spec.openapis.org/oas/v3.1.0#request-body-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/request_body.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/request_body.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -3062,9 +3062,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3080,8 +3080,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3090,22 +3089,22 @@
 
 
 <h2 id="flask_openapi3.models.Response" class="doc doc-heading">
-          <code>Response</code>
+            <code>Response</code>
 
 
 <a href="#flask_openapi3.models.Response" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#response-object">https://spec.openapis.org/oas/v3.1.0#response-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/response.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/response.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
@@ -3131,9 +3130,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3149,8 +3148,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3159,8 +3157,8 @@
 
 
 <h2 id="flask_openapi3.models.Responses" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">Responses</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Response</span><span class="p">,</span> <span class="n">Reference</span><span class="p">]]</span></code>
-  
+            <code class="highlight language-python"><span class="n">Responses</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Response</span><span class="p">,</span> <span class="n">Reference</span><span class="p">]]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -3168,8 +3166,8 @@
 <a href="#flask_openapi3.models.Responses" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -3178,22 +3176,22 @@
 
 
 <h2 id="flask_openapi3.models.Schema" class="doc doc-heading">
-          <code>Schema</code>
+            <code>Schema</code>
 
 
 <a href="#flask_openapi3.models.Schema" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#schema-object">https://spec.openapis.org/oas/v3.1.0#schema-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/schema.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/schema.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
@@ -3273,9 +3271,9 @@
     <span class="n">example</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">deprecated</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3291,8 +3289,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3301,8 +3298,8 @@
 
 
 <h2 id="flask_openapi3.models.SecurityRequirement" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">SecurityRequirement</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span></code>
-  
+            <code class="highlight language-python"><span class="n">SecurityRequirement</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
   </span>
@@ -3310,8 +3307,8 @@
 <a href="#flask_openapi3.models.SecurityRequirement" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-  </div>
+    <div class="doc doc-contents first">
+    </div>
 
 </div>
 
@@ -3320,22 +3317,22 @@
 
 
 <h2 id="flask_openapi3.models.SecurityScheme" class="doc doc-heading">
-          <code>SecurityScheme</code>
+            <code>SecurityScheme</code>
 
 
 <a href="#flask_openapi3.models.SecurityScheme" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">https://spec.openapis.org/oas/v3.1.0#security-scheme-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/security_scheme.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/security_scheme.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span>
@@ -3369,9 +3366,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3387,8 +3384,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3397,22 +3393,22 @@
 
 
 <h2 id="flask_openapi3.models.Server" class="doc doc-heading">
-          <code>Server</code>
+            <code>Server</code>
 
 
 <a href="#flask_openapi3.models.Server" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#server-object">https://spec.openapis.org/oas/v3.1.0#server-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/server.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/server.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
@@ -3436,9 +3432,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3454,8 +3450,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3464,22 +3459,22 @@
 
 
 <h2 id="flask_openapi3.models.ServerVariable" class="doc doc-heading">
-          <code>ServerVariable</code>
+            <code>ServerVariable</code>
 
 
 <a href="#flask_openapi3.models.ServerVariable" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#server-variable-object">https://spec.openapis.org/oas/v3.1.0#server-variable-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/server_variable.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/server_variable.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -3503,9 +3498,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3521,8 +3516,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3531,20 +3525,20 @@
 
 
 <h2 id="flask_openapi3.models.StyleValues" class="doc doc-heading">
-          <code>StyleValues</code>
+            <code>StyleValues</code>
 
 
 <a href="#flask_openapi3.models.StyleValues" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code>str</code>, <code><span title="enum.Enum">Enum</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code>str</code>, <code><span title="enum.Enum">Enum</span></code></p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/style_values.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/style_values.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
@@ -3560,9 +3554,9 @@
     <span class="n">pipeDelimited</span> <span class="o">=</span> <span class="s2">&quot;pipeDelimited&quot;</span>
     <span class="n">deepObject</span> <span class="o">=</span> <span class="s2">&quot;deepObject&quot;</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3578,8 +3572,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3588,22 +3581,22 @@
 
 
 <h2 id="flask_openapi3.models.Tag" class="doc doc-heading">
-          <code>Tag</code>
+            <code>Tag</code>
 
 
 <a href="#flask_openapi3.models.Tag" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#tag-object">https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#tag-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/tag.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/tag.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
@@ -3627,9 +3620,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3645,8 +3638,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3655,20 +3647,20 @@
 
 
 <h2 id="flask_openapi3.models.ValidationErrorModel" class="doc doc-heading">
-          <code>ValidationErrorModel</code>
+            <code>ValidationErrorModel</code>
 
 
 <a href="#flask_openapi3.models.ValidationErrorModel" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/validation_error.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/validation_error.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -3688,9 +3680,9 @@
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;an optional object which contains values required to render the error message.&quot;</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3706,8 +3698,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3716,22 +3707,22 @@
 
 
 <h2 id="flask_openapi3.models.XML" class="doc doc-heading">
-          <code>XML</code>
+            <code>XML</code>
 
 
 <a href="#flask_openapi3.models.XML" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
-  
+
       <p><a href="https://spec.openapis.org/oas/v3.1.0#xml-object">https://spec.openapis.org/oas/v3.1.0#xml-object</a></p>
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/models/xml.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/models/xml.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
@@ -3759,9 +3750,9 @@
         <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span>
     <span class="p">}</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -3777,8 +3768,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -3876,10 +3866,12 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../assets/javascripts/bundle.081f42fc.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
     
-  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
 </html>

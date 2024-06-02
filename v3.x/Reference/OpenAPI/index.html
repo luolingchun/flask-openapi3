@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -469,6 +469,27 @@
   
   <span class="md-ellipsis">
     Model Config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Usage/Configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
   </span>
   
 
@@ -956,23 +977,20 @@
 
 
 <h2 id="flask_openapi3.OpenAPI" class="doc doc-heading">
-          <code>OpenAPI</code>
+            <code>OpenAPI</code>
 
 
 <a href="#flask_openapi3.OpenAPI" class="headerlink" title="Permanent link">⚓︎</a></h2>
 
 
-  <div class="doc doc-contents first">
-          <p class="doc doc-class-bases">
-            Bases: <code><a class="autorefs autorefs-internal" title="flask_openapi3.scaffold.APIScaffold" href="../Scaffold/#flask_openapi3.scaffold.APIScaffold">APIScaffold</a></code>, <code><span title="flask.Flask">Flask</span></code></p>
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="flask_openapi3.scaffold.APIScaffold" href="../Scaffold/#flask_openapi3.scaffold.APIScaffold">APIScaffold</a></code>, <code><span title="flask.Flask">Flask</span></code></p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
+              <details class="quote">
+                <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 50</span>
 <span class="normal"> 51</span>
 <span class="normal"> 52</span>
 <span class="normal"> 53</span>
@@ -1376,7 +1394,51 @@
 <span class="normal">451</span>
 <span class="normal">452</span>
 <span class="normal">453</span>
-<span class="normal">454</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">OpenAPI</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Flask</span><span class="p">):</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">OpenAPI</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Flask</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">import_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1388,6 +1450,7 @@
             <span class="n">doc_ui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
             <span class="n">doc_expansion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
             <span class="n">doc_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi&quot;</span><span class="p">,</span>
+            <span class="n">doc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">,</span>
             <span class="n">api_doc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">,</span>
             <span class="n">swagger_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/swagger&quot;</span><span class="p">,</span>
             <span class="n">redoc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/redoc&quot;</span><span class="p">,</span>
@@ -1412,21 +1475,23 @@
 <span class="sd">                  See https://spec.openapis.org/oas/v3.1.0#info-object.</span>
 <span class="sd">            security_schemes: Security schemes for the API.</span>
 <span class="sd">                              See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.</span>
-<span class="sd">            oauth_config: OAuth 2.0 configuration for authentication.</span>
+<span class="sd">            oauth_config: **Deprecated**, OAuth 2.0 configuration for authentication.</span>
 <span class="sd">                          See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.</span>
 <span class="sd">            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">            doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.</span>
-<span class="sd">            doc_expansion(deprecated): Default expansion setting for operations and tags (&quot;list&quot;, &quot;full&quot;, or &quot;none&quot;).</span>
+<span class="sd">            doc_expansion: **Deprecated**, Default expansion setting for operations and tags (&quot;list&quot;, &quot;full&quot;, or &quot;none&quot;)</span>
 <span class="sd">                           See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.</span>
 <span class="sd">            doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to &quot;/openapi&quot;</span>
-<span class="sd">            api_doc_url: URL for accessing the OpenAPI specification document in JSON format.</span>
+<span class="sd">            api_doc_url: **Deprecated**, URL for accessing the OpenAPI specification document in JSON format.</span>
 <span class="sd">                         Defaults to &quot;/openapi.json&quot;.</span>
-<span class="sd">            swagger_url: URL for accessing the Swagger UI documentation. Defaults to &quot;/swagger&quot;.</span>
-<span class="sd">            redoc_url: URL for accessing the Redoc UI documentation. Defaults to &quot;/redoc&quot;.</span>
-<span class="sd">            rapidoc_url: URL for accessing the RapiDoc UI documentation. Defaults to &quot;/rapidoc&quot;.</span>
-<span class="sd">            swagger_config: Swagger UI Configuration, More information:</span>
+<span class="sd">            doc_url: URL for accessing the OpenAPI specification document in JSON format.</span>
+<span class="sd">                         Defaults to &quot;/openapi.json&quot;.</span>
+<span class="sd">            swagger_url: **Deprecated**, URL for accessing the Swagger UI documentation. Defaults to &quot;/swagger&quot;.</span>
+<span class="sd">            redoc_url: **Deprecated**, URL for accessing the Redoc UI documentation. Defaults to &quot;/redoc&quot;.</span>
+<span class="sd">            rapidoc_url: **Deprecated**, URL for accessing the RapiDoc UI documentation. Defaults to &quot;/rapidoc&quot;.</span>
+<span class="sd">            swagger_config: **Deprecated**, Swagger UI Configuration, More information:</span>
 <span class="sd">                            https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.</span>
-<span class="sd">            ui_templates: Custom UI templates to override or add UI documents.</span>
+<span class="sd">            ui_templates: **Deprecated**, Custom UI templates to override or add UI documents.</span>
 <span class="sd">            servers: An array of Server objects providing connectivity information to a target server.</span>
 <span class="sd">            external_docs: External documentation for the API.</span>
 <span class="sd">                           See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.</span>
@@ -1465,22 +1530,60 @@
 
         <span class="c1"># Set URL prefixes and endpoints</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doc_prefix</span> <span class="o">=</span> <span class="n">doc_prefix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">api_doc_url</span> <span class="o">=</span> <span class="n">api_doc_url</span>
+        <span class="k">if</span> <span class="n">api_doc_url</span> <span class="o">!=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `api_doc_url` is deprecated in v4.x, use `doc_url` instead.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span> <span class="o">=</span> <span class="n">api_doc_url</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span> <span class="o">=</span> <span class="n">doc_url</span>
+        <span class="k">if</span> <span class="n">swagger_url</span> <span class="o">!=</span> <span class="s2">&quot;/swagger&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `swagger_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">redoc_url</span> <span class="o">!=</span> <span class="s2">&quot;/redoc&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `redoc_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">rapidoc_url</span> <span class="o">!=</span> <span class="s2">&quot;/rapidoc&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `rapidoc_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">swagger_url</span> <span class="o">=</span> <span class="n">swagger_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">redoc_url</span> <span class="o">=</span> <span class="n">redoc_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rapidoc_url</span> <span class="o">=</span> <span class="n">rapidoc_url</span>
 
         <span class="c1"># Set OAuth configuration and documentation expansion</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="o">=</span> <span class="n">oauth_config</span>
+        <span class="k">if</span> <span class="n">oauth_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `oauth_config` is deprecated in v4.x, use `app.config[&#39;OAUTH_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="o">=</span> <span class="n">oauth_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">if</span> <span class="n">oauth_config</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">doc_expansion</span> <span class="o">!=</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">warnings</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">)</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;The `doc_expansion` parameter is deprecated; use `swagger_config` instead.&quot;</span><span class="p">,</span>
-                          <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `doc_expansion` is deprecated in v4.x, use `app.config[&#39;SWAGGER_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doc_expansion</span> <span class="o">=</span> <span class="n">doc_expansion</span>
+        <span class="k">if</span> <span class="n">swagger_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `swagger_config` is deprecated in v4.x, use `app.config[&#39;SWAGGER_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">swagger_config</span> <span class="o">=</span> <span class="n">swagger_config</span>
 
         <span class="c1"># Set UI templates for customization</span>
+        <span class="k">if</span> <span class="n">ui_templates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The `ui_templates` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ui_templates</span> <span class="o">=</span> <span class="n">ui_templates</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
 
         <span class="c1"># Set servers and external documentation</span>
@@ -1527,7 +1630,7 @@
 
         <span class="c1"># Add the API documentation URL rule</span>
         <span class="n">blueprint</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span>
-            <span class="n">rule</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api_doc_url</span><span class="p">,</span>
+            <span class="n">rule</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span><span class="p">,</span>
             <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;api_doc&quot;</span><span class="p">,</span>
             <span class="n">view_func</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_doc</span>
         <span class="p">)</span>
@@ -1548,11 +1651,11 @@
                 <span class="c1"># Pass default value to source</span>
                 <span class="n">view_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">source</span><span class="o">=</span><span class="n">value</span><span class="p">:</span> <span class="n">render_template_string</span><span class="p">(</span>
                     <span class="n">source</span><span class="p">,</span>
-                    <span class="n">api_doc_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api_doc_url</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">),</span>
+                    <span class="n">api_doc_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">),</span>
                     <span class="c1"># The following parameters are only for swagger ui</span>
                     <span class="n">doc_expansion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_expansion</span><span class="p">,</span>
-                    <span class="n">swagger_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swagger_config</span><span class="p">,</span>
-                    <span class="n">oauth_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="n">swagger_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swagger_config</span> <span class="ow">or</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SWAGGER_CONFIG&quot;</span><span class="p">),</span>
+                    <span class="n">oauth_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="ow">or</span> <span class="n">current_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OAUTH_CONFIG&quot;</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -1785,9 +1888,9 @@
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span>
 </code></pre></div></td></tr></table></div>
-            </details>
+              </details>
 
-  
+
 
   <div class="doc doc-children">
 
@@ -1802,8 +1905,8 @@
 
 
 <h3 id="flask_openapi3.OpenAPI.api_doc" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">api_doc</span><span class="p">:</span> <span class="n">Dict</span></code>
-  
+            <code class="highlight language-python"><span class="n">api_doc</span><span class="p">:</span> <span class="n">Dict</span></code>
+
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-property"><code>property</code></small>
   </span>
@@ -1811,395 +1914,404 @@
 <a href="#flask_openapi3.OpenAPI.api_doc" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Generate the OpenAPI specification JSON.</p>
 
 
-
-  <p><span class="doc-section-title">Returns:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td>
-                <code><span title="typing.Dict">Dict</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The OpenAPI specification JSON as a dictionary.</p>
-            </div>
-          </td>
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
         </tr>
-    </tbody>
-  </table>
-  </div>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Dict">Dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The OpenAPI specification JSON as a dictionary.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
 
 </div>
-
 
 
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="flask_openapi3.OpenAPI.__init__" class="doc doc-heading">
-          <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">import_name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">oauth_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">responses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">doc_expansion</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="s1">&#39;/openapi&#39;</span><span class="p">,</span> <span class="n">api_doc_url</span><span class="o">=</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="n">swagger_url</span><span class="o">=</span><span class="s1">&#39;/swagger&#39;</span><span class="p">,</span> <span class="n">redoc_url</span><span class="o">=</span><span class="s1">&#39;/redoc&#39;</span><span class="p">,</span> <span class="n">rapidoc_url</span><span class="o">=</span><span class="s1">&#39;/rapidoc&#39;</span><span class="p">,</span> <span class="n">swagger_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ui_templates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">servers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">external_docs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operation_id_callback</span><span class="o">=</span><span class="n">get_operation_id_for_path</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validation_error_status</span><span class="o">=</span><span class="mi">422</span><span class="p">,</span> <span class="n">validation_error_model</span><span class="o">=</span><span class="n">ValidationErrorModel</span><span class="p">,</span> <span class="n">validation_error_callback</span><span class="o">=</span><span class="n">make_validation_error_response</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">import_name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">oauth_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">responses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">doc_expansion</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="n">doc_prefix</span><span class="o">=</span><span class="s1">&#39;/openapi&#39;</span><span class="p">,</span> <span class="n">doc_url</span><span class="o">=</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="n">api_doc_url</span><span class="o">=</span><span class="s1">&#39;/openapi.json&#39;</span><span class="p">,</span> <span class="n">swagger_url</span><span class="o">=</span><span class="s1">&#39;/swagger&#39;</span><span class="p">,</span> <span class="n">redoc_url</span><span class="o">=</span><span class="s1">&#39;/redoc&#39;</span><span class="p">,</span> <span class="n">rapidoc_url</span><span class="o">=</span><span class="s1">&#39;/rapidoc&#39;</span><span class="p">,</span> <span class="n">swagger_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ui_templates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">servers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">external_docs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operation_id_callback</span><span class="o">=</span><span class="n">get_operation_id_for_path</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validation_error_status</span><span class="o">=</span><span class="mi">422</span><span class="p">,</span> <span class="n">validation_error_model</span><span class="o">=</span><span class="n">ValidationErrorModel</span><span class="p">,</span> <span class="n">validation_error_callback</span><span class="o">=</span><span class="n">make_validation_error_response</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.OpenAPI.__init__" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>OpenAPI class that provides REST API functionality along with Swagger UI and Redoc.</p>
 
 
-
-  <p><span class="doc-section-title">Parameters:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>import_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The import name for the Flask application.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>info</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Info" href="../Models/#flask_openapi3.models.Info">Info</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Information about the API (title, version, etc.).
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>import_name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The import name for the Flask application.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>info</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Info" href="../Models/#flask_openapi3.models.Info">Info</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Information about the API (title, version, etc.).
   See <a href="https://spec.openapis.org/oas/v3.1.0#info-object">https://spec.openapis.org/oas/v3.1.0#info-object</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>security_schemes</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.SecuritySchemesDict">SecuritySchemesDict</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Security schemes for the API.
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>security_schemes</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.SecuritySchemesDict">SecuritySchemesDict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Security schemes for the API.
               See <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">https://spec.openapis.org/oas/v3.1.0#security-scheme-object</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>oauth_config</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.OAuthConfig" href="../Models/#flask_openapi3.models.OAuthConfig">OAuthConfig</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>OAuth 2.0 configuration for authentication.
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>oauth_config</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.OAuthConfig" href="../Models/#flask_openapi3.models.OAuthConfig">OAuthConfig</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, OAuth 2.0 configuration for authentication.
           See <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md">https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>responses</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.ResponseDict">ResponseDict</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>API responses should be either a subclass of BaseModel, a dictionary, or None.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>doc_ui</code></td>
-          <td>
-                <code>bool</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.</p>
-            </div>
-          </td>
-          <td>
-                <code>True</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>doc_expansion(deprecated)</code></td>
-          <td>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Default expansion setting for operations and tags ("list", "full", or "none").
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>responses</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.ResponseDict">ResponseDict</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>API responses should be either a subclass of BaseModel, a dictionary, or None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>doc_ui</code></td>
+            <td>
+                  <code>bool</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>doc_expansion</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, Default expansion setting for operations and tags ("list", "full", or "none")
            See <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md</a>.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>doc_prefix</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>URL prefix used for OpenAPI document and UI. Defaults to "/openapi"</p>
-            </div>
-          </td>
-          <td>
-                <code>&#39;/openapi&#39;</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>api_doc_url</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>URL for accessing the OpenAPI specification document in JSON format.
+              </div>
+            </td>
+            <td>
+                  <code>&#39;list&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>doc_prefix</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>URL prefix used for OpenAPI document and UI. Defaults to "/openapi"</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/openapi&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>api_doc_url</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, URL for accessing the OpenAPI specification document in JSON format.
          Defaults to "/openapi.json".</p>
-            </div>
-          </td>
-          <td>
-                <code>&#39;/openapi.json&#39;</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>swagger_url</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>URL for accessing the Swagger UI documentation. Defaults to "/swagger".</p>
-            </div>
-          </td>
-          <td>
-                <code>&#39;/swagger&#39;</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>redoc_url</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>URL for accessing the Redoc UI documentation. Defaults to "/redoc".</p>
-            </div>
-          </td>
-          <td>
-                <code>&#39;/redoc&#39;</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>rapidoc_url</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".</p>
-            </div>
-          </td>
-          <td>
-                <code>&#39;/rapidoc&#39;</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>swagger_config</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Swagger UI Configuration, More information:
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/openapi.json&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>doc_url</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>URL for accessing the OpenAPI specification document in JSON format.
+         Defaults to "/openapi.json".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/openapi.json&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>swagger_url</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, URL for accessing the Swagger UI documentation. Defaults to "/swagger".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/swagger&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>redoc_url</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, URL for accessing the Redoc UI documentation. Defaults to "/redoc".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/redoc&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>rapidoc_url</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, URL for accessing the RapiDoc UI documentation. Defaults to "/rapidoc".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;/rapidoc&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>swagger_config</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, Swagger UI Configuration, More information:
             <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>ui_templates</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, str]]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Custom UI templates to override or add UI documents.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>servers</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Server" href="../Models/#flask_openapi3.models.Server">Server</a>]]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>An array of Server objects providing connectivity information to a target server.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>external_docs</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.ExternalDocumentation" href="../Models/#flask_openapi3.models.ExternalDocumentation">ExternalDocumentation</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>External documentation for the API.
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>ui_templates</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, str]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><strong>Deprecated</strong>, Custom UI templates to override or add UI documents.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>servers</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Server" href="../Models/#flask_openapi3.models.Server">Server</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of Server objects providing connectivity information to a target server.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>external_docs</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.ExternalDocumentation" href="../Models/#flask_openapi3.models.ExternalDocumentation">ExternalDocumentation</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>External documentation for the API.
            See: <a href="https://spec.openapis.org/oas/v3.1.0#external-documentation-object">https://spec.openapis.org/oas/v3.1.0#external-documentation-object</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>operation_id_callback</code></td>
-          <td>
-                <code><span title="typing.Callable">Callable</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Callback function for custom operation ID generation.
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>operation_id_callback</code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callback function for custom operation ID generation.
                    Receives name (str), path (str), and method (str) parameters.
                    Defaults to <code>get_operation_id_for_path</code> from utils.</p>
-            </div>
-          </td>
-          <td>
-                <code><span title="flask_openapi3.utils.get_operation_id_for_path">get_operation_id_for_path</span></code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>openapi_extensions</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Extensions to the OpenAPI Schema.
+              </div>
+            </td>
+            <td>
+                  <code><span title="flask_openapi3.utils.get_operation_id_for_path">get_operation_id_for_path</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>openapi_extensions</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Extensions to the OpenAPI Schema.
                 See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">https://spec.openapis.org/oas/v3.1.0#specification-extensions</a>.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>validation_error_status</code></td>
-          <td>
-                <code><span title="typing.Union">Union</span>[str, int]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>HTTP Status of the response given when a validation error is detected by pydantic.
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>validation_error_status</code></td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[str, int]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>HTTP Status of the response given when a validation error is detected by pydantic.
                     Defaults to 422.</p>
-            </div>
-          </td>
-          <td>
-                <code>422</code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>validation_error_model</code></td>
-          <td>
-                <code><span title="typing.Type">Type</span>[<span title="pydantic.BaseModel">BaseModel</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Validation error response model for OpenAPI Specification.</p>
-            </div>
-          </td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="flask_openapi3.models.ValidationErrorModel" href="../Models/#flask_openapi3.models.ValidationErrorModel">ValidationErrorModel</a></code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>validation_error_callback</code></td>
-          <td>
-                <code><span title="typing.Callable">Callable</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Validation error response callback, the return format corresponds to
+              </div>
+            </td>
+            <td>
+                  <code>422</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>validation_error_model</code></td>
+            <td>
+                  <code><span title="typing.Type">Type</span>[<span title="pydantic.BaseModel">BaseModel</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Validation error response model for OpenAPI Specification.</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="flask_openapi3.models.ValidationErrorModel" href="../Models/#flask_openapi3.models.ValidationErrorModel">ValidationErrorModel</a></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>validation_error_callback</code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Validation error response callback, the return format corresponds to
                        the validation_error_model.</p>
-            </div>
-          </td>
-          <td>
-                <code><span title="flask_openapi3.utils.make_validation_error_response">make_validation_error_response</span></code>
-          </td>
-        </tr>
-        <tr class="doc-section-item">
-          <td><code>**kwargs</code></td>
-          <td>
-                <code><span title="typing.Any">Any</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Additional kwargs to be passed to Flask.</p>
-            </div>
-          </td>
-          <td>
-                <code>{}</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+              </div>
+            </td>
+            <td>
+                  <code><span title="flask_openapi3.utils.make_validation_error_response">make_validation_error_response</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>**kwargs</code></td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional kwargs to be passed to Flask.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
+            <details class="quote">
+              <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 51</span>
 <span class="normal"> 52</span>
 <span class="normal"> 53</span>
 <span class="normal"> 54</span>
@@ -2325,7 +2437,51 @@
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">import_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2336,6 +2492,7 @@
         <span class="n">doc_ui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">doc_expansion</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
         <span class="n">doc_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi&quot;</span><span class="p">,</span>
+        <span class="n">doc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">,</span>
         <span class="n">api_doc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">,</span>
         <span class="n">swagger_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/swagger&quot;</span><span class="p">,</span>
         <span class="n">redoc_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/redoc&quot;</span><span class="p">,</span>
@@ -2360,21 +2517,23 @@
 <span class="sd">              See https://spec.openapis.org/oas/v3.1.0#info-object.</span>
 <span class="sd">        security_schemes: Security schemes for the API.</span>
 <span class="sd">                          See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.</span>
-<span class="sd">        oauth_config: OAuth 2.0 configuration for authentication.</span>
+<span class="sd">        oauth_config: **Deprecated**, OAuth 2.0 configuration for authentication.</span>
 <span class="sd">                      See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md.</span>
 <span class="sd">        responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">        doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.</span>
-<span class="sd">        doc_expansion(deprecated): Default expansion setting for operations and tags (&quot;list&quot;, &quot;full&quot;, or &quot;none&quot;).</span>
+<span class="sd">        doc_expansion: **Deprecated**, Default expansion setting for operations and tags (&quot;list&quot;, &quot;full&quot;, or &quot;none&quot;)</span>
 <span class="sd">                       See https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.</span>
 <span class="sd">        doc_prefix: URL prefix used for OpenAPI document and UI. Defaults to &quot;/openapi&quot;</span>
-<span class="sd">        api_doc_url: URL for accessing the OpenAPI specification document in JSON format.</span>
+<span class="sd">        api_doc_url: **Deprecated**, URL for accessing the OpenAPI specification document in JSON format.</span>
 <span class="sd">                     Defaults to &quot;/openapi.json&quot;.</span>
-<span class="sd">        swagger_url: URL for accessing the Swagger UI documentation. Defaults to &quot;/swagger&quot;.</span>
-<span class="sd">        redoc_url: URL for accessing the Redoc UI documentation. Defaults to &quot;/redoc&quot;.</span>
-<span class="sd">        rapidoc_url: URL for accessing the RapiDoc UI documentation. Defaults to &quot;/rapidoc&quot;.</span>
-<span class="sd">        swagger_config: Swagger UI Configuration, More information:</span>
+<span class="sd">        doc_url: URL for accessing the OpenAPI specification document in JSON format.</span>
+<span class="sd">                     Defaults to &quot;/openapi.json&quot;.</span>
+<span class="sd">        swagger_url: **Deprecated**, URL for accessing the Swagger UI documentation. Defaults to &quot;/swagger&quot;.</span>
+<span class="sd">        redoc_url: **Deprecated**, URL for accessing the Redoc UI documentation. Defaults to &quot;/redoc&quot;.</span>
+<span class="sd">        rapidoc_url: **Deprecated**, URL for accessing the RapiDoc UI documentation. Defaults to &quot;/rapidoc&quot;.</span>
+<span class="sd">        swagger_config: **Deprecated**, Swagger UI Configuration, More information:</span>
 <span class="sd">                        https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md.</span>
-<span class="sd">        ui_templates: Custom UI templates to override or add UI documents.</span>
+<span class="sd">        ui_templates: **Deprecated**, Custom UI templates to override or add UI documents.</span>
 <span class="sd">        servers: An array of Server objects providing connectivity information to a target server.</span>
 <span class="sd">        external_docs: External documentation for the API.</span>
 <span class="sd">                       See: https://spec.openapis.org/oas/v3.1.0#external-documentation-object.</span>
@@ -2413,22 +2572,60 @@
 
     <span class="c1"># Set URL prefixes and endpoints</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">doc_prefix</span> <span class="o">=</span> <span class="n">doc_prefix</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">api_doc_url</span> <span class="o">=</span> <span class="n">api_doc_url</span>
+    <span class="k">if</span> <span class="n">api_doc_url</span> <span class="o">!=</span> <span class="s2">&quot;/openapi.json&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `api_doc_url` is deprecated in v4.x, use `doc_url` instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span> <span class="o">=</span> <span class="n">api_doc_url</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span> <span class="o">=</span> <span class="n">doc_url</span>
+    <span class="k">if</span> <span class="n">swagger_url</span> <span class="o">!=</span> <span class="s2">&quot;/swagger&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `swagger_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">redoc_url</span> <span class="o">!=</span> <span class="s2">&quot;/redoc&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `redoc_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rapidoc_url</span> <span class="o">!=</span> <span class="s2">&quot;/rapidoc&quot;</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `rapidoc_url` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
+
     <span class="bp">self</span><span class="o">.</span><span class="n">swagger_url</span> <span class="o">=</span> <span class="n">swagger_url</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">redoc_url</span> <span class="o">=</span> <span class="n">redoc_url</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">rapidoc_url</span> <span class="o">=</span> <span class="n">rapidoc_url</span>
 
     <span class="c1"># Set OAuth configuration and documentation expansion</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="o">=</span> <span class="n">oauth_config</span>
+    <span class="k">if</span> <span class="n">oauth_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `oauth_config` is deprecated in v4.x, use `app.config[&#39;OAUTH_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">oauth_config</span> <span class="o">=</span> <span class="n">oauth_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">if</span> <span class="n">oauth_config</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">doc_expansion</span> <span class="o">!=</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">warnings</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;once&quot;</span><span class="p">)</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;The `doc_expansion` parameter is deprecated; use `swagger_config` instead.&quot;</span><span class="p">,</span>
-                      <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `doc_expansion` is deprecated in v4.x, use `app.config[&#39;SWAGGER_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">doc_expansion</span> <span class="o">=</span> <span class="n">doc_expansion</span>
+    <span class="k">if</span> <span class="n">swagger_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `swagger_config` is deprecated in v4.x, use `app.config[&#39;SWAGGER_CONFIG&#39;]` instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">swagger_config</span> <span class="o">=</span> <span class="n">swagger_config</span>
 
     <span class="c1"># Set UI templates for customization</span>
+    <span class="k">if</span> <span class="n">ui_templates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `ui_templates` is deprecated in v4.x.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span>
+        <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">ui_templates</span> <span class="o">=</span> <span class="n">ui_templates</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="c1"># Set servers and external documentation</span>
@@ -2456,81 +2653,78 @@
     <span class="c1"># Initialize specification JSON</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="flask_openapi3.OpenAPI.register_api" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.OpenAPI.register_api" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Register an APIBlueprint.</p>
 
 
-
-  <p><span class="doc-section-title">Parameters:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>api</code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="flask_openapi3.blueprint.APIBlueprint" href="../APIBlueprint/#flask_openapi3.APIBlueprint">APIBlueprint</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The APIBlueprint instance to register.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
         </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>api</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="flask_openapi3.blueprint.APIBlueprint" href="../APIBlueprint/#flask_openapi3.APIBlueprint">APIBlueprint</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The APIBlueprint instance to register.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">307</span>
-<span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <details class="quote">
+              <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register an APIBlueprint.</span>
 
@@ -2554,99 +2748,96 @@
     <span class="c1"># Register the APIBlueprint with the current instance</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
-
 
 <div class="doc doc-object doc-function">
 
 
-
 <h3 id="flask_openapi3.OpenAPI.register_api_view" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">register_api_view</span><span class="p">(</span><span class="n">api_view</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">register_api_view</span><span class="p">(</span><span class="n">api_view</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.OpenAPI.register_api_view" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
 
-  <div class="doc doc-contents ">
-  
+    <div class="doc doc-contents ">
+
       <p>Register APIView</p>
 
 
-
-  <p><span class="doc-section-title">Parameters:</span></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr class="doc-section-item">
-          <td><code>api_view</code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="flask_openapi3.view.APIView" href="../APIView/#flask_openapi3.view.APIView">APIView</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The APIView instance to register.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
         </tr>
-        <tr class="doc-section-item">
-          <td><code>view_kwargs</code></td>
-          <td>
-                <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="typing.Any">Any</span>, <span title="typing.Any">Any</span>]]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Additional keyword arguments to pass to the API views.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>api_view</code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="flask_openapi3.view.APIView" href="../APIView/#flask_openapi3.view.APIView">APIView</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The APIView instance to register.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>view_kwargs</code></td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="typing.Any">Any</span>, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional keyword arguments to pass to the API views.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-          <details class="quote">
-            <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span>
-<span class="normal">346</span>
-<span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <details class="quote">
+              <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register APIView</span>
 
@@ -2674,8 +2865,8 @@
     <span class="c1"># Register the APIView with the current instance</span>
     <span class="n">api_view</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-          </details>
-  </div>
+            </details>
+    </div>
 
 </div>
 
@@ -2683,8 +2874,7 @@
 
   </div>
 
-  </div>
-
+    </div>
 
 </div>
 
@@ -2782,10 +2972,12 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../assets/javascripts/bundle.081f42fc.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
     
-  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
 </html>
