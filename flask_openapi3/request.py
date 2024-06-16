@@ -10,7 +10,7 @@ from pydantic import ValidationError, BaseModel
 
 
 def _validate_header(header: Type[BaseModel], func_kwargs):
-    request_headers = dict(request.headers) or {}
+    request_headers = dict(request.headers)
     for key, value in header.model_json_schema().get("properties", {}).items():
         key_title = key.replace("_", "-").title()
         # Add original key
@@ -20,7 +20,7 @@ def _validate_header(header: Type[BaseModel], func_kwargs):
 
 
 def _validate_cookie(cookie: Type[BaseModel], func_kwargs):
-    request_cookies = dict(request.cookies) or {}
+    request_cookies = dict(request.cookies)
     func_kwargs.update({"cookie": cookie.model_validate(obj=request_cookies)})
 
 
@@ -83,7 +83,7 @@ def _validate_form(form: Type[BaseModel], func_kwargs):
 
 
 def _validate_body(body: Type[BaseModel], func_kwargs):
-    obj = request.get_json(silent=True) or {}
+    obj = request.get_json(silent=True)
     if isinstance(obj, str):
         body_model = body.model_validate_json(json_data=obj)
     else:
