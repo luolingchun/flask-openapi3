@@ -93,6 +93,18 @@ a/x3gCx7M2rvrU8m3suK+3w+AcssZ50vnfwAAAABJRU5ErkJggg==
         <img height="64" src="{{ ui.name }}/images/{{ ui.name }}.svg">
         <a>{{ ui.display_name }}</a>
     </div>
+    {% else %}
+    <div style="color: white; grid-column: span 2; display: flex; flex-direction: column; grid-column-end: 5;">
+        <p>Please install at least one optional UI:</p>
+        <p style="font-family: Consolas; background-color: #404348; border-radius: 5px; padding: 5px; font-size: 12px">
+        $ pip install -U flask-openapi3[swagger, redoc, rapidoc, rapipdf, scalar, elements]
+        </p>
+        <p>More optional ui templates goto the document about
+        <a href="https://luolingchun.github.io/flask-openapi3/latest/Usage/UI_Templates/" style="color: #0969da">
+        UI_Templates.
+        </a>
+        </p>
+    </div>
     {% endfor %}
 </div>
 

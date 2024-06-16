@@ -30,11 +30,9 @@ Usage: flask openapi [OPTIONS]
 
 Options:
   -o, --output PATH               The output file path.
-  -f, --format [json|yaml|markdown]
+  -f, --format [json|yaml]
                                   The output file format.
   -i, --indent INTEGER            The indentation for JSON dumps.
-  -a, --ensure_ascii              Ensure ASCII characters or not. Defaults to
-                                  False.
   --help                          Show this message and exit.
 
 ```
@@ -70,7 +68,7 @@ if __name__ == '__main__':
 
 run it, and go to http://127.0.0.1:5000/openapi, you will see the documentation.
 
-![openapi](../images/openapi.png)
+![openapi](../images/openapi-all.png)
 ![image-20210525160157057](../assets/image-20210525160157057.png)
 
 ## security_schemes
@@ -139,67 +137,6 @@ result:
 
 ![image-20210525165350520](../assets/image-20210525165350520.png)
 
-
-## oauth_config
-
-!!! Deprecated-Warning warning
-
-    The `oauth_config` is deprecated in v4.x, use `app.config['OAUTH_CONFIG']` instead.
-
-    ```python
-    from flask_openapi3 import OpenAPI
-    
-    app = OpenAPI(__name__)
-    
-    app.config["OAUTH_CONFIG"] = {"clientId": "xxx", "clientSecret": "xxx"}
-    ```
-
-You can pass `oauth_config` when initializing `OpenAPI`:
-
-```python
-from flask_openapi3 import OpenAPI, OAuthConfig
-from flask_openapi3 import Info
-
-info = Info(title='oauth API', version='1.0.0')
-
-oauth_config = OAuthConfig(
-    clientId="xxx",
-    clientSecret="xxx"
-)
-
-oauth2 = {
-  "type": "oauth2",
-  "flows": {
-    "implicit": {
-      "authorizationUrl": "https://example.com/api/oauth/dialog",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  }
-}
-
-security_schemes = {"oauth2": oauth2}
-
-app = OpenAPI(__name__, info=info, oauth_config=oauth_config, security_schemes=security_schemes)
-
-security = [
-    {"oauth2": ["write:pets", "read:pets"]}
-]
-
-
-@app.get("/", security=security)
-def oauth():
-    return "oauth"
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-```
-
-Here's more information about [OAuth 2.0 configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md)
-
 ## responses
 
 You can add `responses` for each API under the `app` wrapper.
@@ -266,87 +203,6 @@ api = APIBlueprint(
 def get_book():
     ...
 ```
-
-## doc_expansion
-
-!!! Deprecated-Warning warning
-
-    The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
-
-    ```python
-    from flask_openapi3 import OpenAPI
-    
-    app = OpenAPI(__name__)
-    
-    app.config["SWAGGER_CONFIG"] = {
-        "docExpansion": "none", 
-        "validatorUrl": "https://www.b.com"
-    }
-    ```
-
-Just for Swagger UI.
-
-String=["list", "full", "none"].
-
-Controls the default expansion setting for the operations and tags. It can be 'list' (expands only the tags), full' (expands the tags and operations) or 'none' (expands nothing).
-
-More information to see [Configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md).
-
-```python
-app = OpenAPI(__name__, info=info, doc_expansion='full')
-```
-
-## swagger_config
-
-!!! Deprecated-Warning warning
-
-    The `doc_expansion` is deprecated in v4.x, use `app.config['SWAGGER_CONFIG']` instead.
-
-    ```python
-    from flask_openapi3 import OpenAPI
-    
-    app = OpenAPI(__name__)
-    
-    app.config["SWAGGER_CONFIG"] = {
-        "docExpansion": "none", 
-        "validatorUrl": "https://www.b.com"
-    }
-    ```
-
-Swagger supports many configuration items. 
-For more information on Swagger Configuration,
-please refer to [Swagger Configuration](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md).
-
-```python
-app = OpenAPI(
-    __name__, 
-    swagger_config={
-        "docExpansion": "none", 
-        "validatorUrl": "https://www.b.com"
-    }
-)
-```
-
-## Interactive documentation
-
-!!! Deprecated-Warning warning
-
-    `api_doc_url` will be renamed to `doc_url` in v4.x, and `swagger_url`, `redoc_url`, `rapidoc_url` will be removed.
-
-
-**Flask OpenAPI3** provides support for the following Interactive documentation:
-
-- [Swagger](https://github.com/swagger-api/swagger-ui)
-- [Redoc](https://github.com/Redocly/redoc)
-- [RapiDoc](https://github.com/rapi-doc/RapiDoc)
-
-The following are the default values of these configurations. Of course, you can change them:
-
-- doc_prefix = "/openapi"
-- api_doc_url = "/openapi.json"
-- swagger_url= "/swagger"
-- redoc_url = "/redoc"
-- rapidoc_url = "/rapidoc"
 
 ## servers
 

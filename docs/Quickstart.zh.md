@@ -90,8 +90,6 @@ if __name__ == '__main__':
 
 ## 嵌套 APIBlueprint
 
-*v2.0.0 新增*
-
 允许一个 **API Blueprint** 被另一个 **API Blueprint** 注册。
 
 更多信息请查看 [Flask Nesting Blueprints](https://flask.palletsprojects.com/en/latest/blueprints/#nesting-blueprints)。
@@ -128,8 +126,6 @@ if __name__ == '__main__':
 
 ## APIView
 
-*v2.2.0 新增*
-
 [基于类的 API 视图](./Reference/APIView.md)， 点击[这里](https://github.com/luolingchun/flask-openapi3/blob/APIView/examples/api_view_demo.py) 查看完整示例:
 
 ```python
@@ -149,8 +145,6 @@ class BookListAPIView:
 ```
 
 ## 异步 API
-
-*v2.2.2 新增*
 
 在定义函数时使用 `async`。 更多信息参考 [Using async and await — Flask Documentation](https://flask.palletsprojects.com/en/latest/async-await/)。
 
