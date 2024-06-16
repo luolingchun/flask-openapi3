@@ -1,3 +1,7 @@
+## v3.1.3 2024-06-16
+
+- Fix empty list in body by @luolingchun in #154
+
 ## v3.1.2 2024-06-02
 
 - Support SWAGGER_CONFIG and OAUTH_CONFIG in app.config by @luolingchun in #153
