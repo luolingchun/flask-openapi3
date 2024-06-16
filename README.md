@@ -25,7 +25,7 @@
 > This branch is in development preview state.
 
 **Flask OpenAPI3** is a web API framework based on **Flask**. It uses **Pydantic** to verify data and automatic
-generation of interaction documentation: **Swagger**, **ReDoc**, **RapiDoc**, etc.
+generation of interaction documentation.
 
 The key features are:
 
@@ -33,11 +33,9 @@ The key features are:
 
 - **Standard document specification:** Based on [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0)
 
-- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc), [RapiDoc](https://github.com/rapi-doc/RapiDoc), etc.
-  
-- **Data validation:** Fast data verification based on [Pydantic](https://github.com/pydantic/pydantic)
+- **Interactive OpenAPI documentation:** [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc), [RapiDoc](https://github.com/rapi-doc/RapiDoc), [RapiPdf](https://mrin9.github.io/RapiPdf/), [Scalar](https://github.com/scalar/scalar), [Elements](https://github.com/stoplightio/elements)
 
-- **Authorization:** Support to reload authorizations in Swagger UI
+- **Data validation:** Fast data verification based on [Pydantic](https://github.com/pydantic/pydantic)
 
 ## Requirements
 
@@ -64,9 +62,12 @@ conda install -c conda-forge flask-openapi3[swagger]
 <summary>Optional dependencies</summary>
 
 - [python-email-validator](https://github.com/JoshData/python-email-validator) supports email verification.
-- [python-dotenv](https://github.com/theskumar/python-dotenv#readme) enables support for [Environment Variables From dotenv](https://flask.palletsprojects.com/en/latest/cli/#dotenv) when running `flask` commands.
+- [python-dotenv](https://github.com/theskumar/python-dotenv#readme) enables support
+  for [Environment Variables From dotenv](https://flask.palletsprojects.com/en/latest/cli/#dotenv) when running `flask`
+  commands.
 - [pyyaml](https://github.com/yaml/pyyaml) is used to output the OpenAPI document in yaml format.
 - [asgiref](https://github.com/django/asgiref) allows views to be defined with `async def` and use `await`.
+- [flask-openapi3-plugins](https://github.com/luolingchun/flask-openapi3-plugins) Provide OpenAPI UI for flask-openapi3.
 
 To install these dependencies with flask-openapi3:
 
@@ -82,7 +83,10 @@ pip install flask-openapi3[email]
 pip install flask-openapi3[yaml,async,dotenv,email]
 # or manually
 pip install pyyaml asgiref python-dotenv email-validator
+# OpenAPI UI plugins
+pip install -U flask-openapi3[swagger,redoc,rapidoc,rapipdf,scalar,elements]
 ```
+
 </details>
 
 ## A Simple Example
@@ -193,21 +197,18 @@ app.register_api_view(api_view)
 if __name__ == "__main__":
     app.run(debug=True)
 ```
+
 </details>
 
 ## API Document
 
 Run the [simple example](https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py), and go to http://127.0.0.1:5000/openapi.
 
-You will see the documentation: [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc) and [RapiDoc](https://github.com/rapi-doc/RapiDoc).
-
-> Swagger, Redoc, RapiDoc are optional dependencies that require manual installation.
+> OpenAPI UI plugins are optional dependencies that require manual installation.
 >
-> `pip install -U flask-openapi3[swagger,redoc,rapidoc]`
-> 
-> More optional ui templates goto the document about [UI_Templates](https://luolingchun.github.io/flask-openapi3/latest/Usage/UI_Templates/).
+> `pip install -U flask-openapi3[swagger,redoc,rapidoc,rapipdf,scalar,elements]`
+>
+> More optional ui templates goto the document
+> about [UI_Templates](https://luolingchun.github.io/flask-openapi3/latest/Usage/UI_Templates/).
 
-![openapi](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi.png)
-![openapi-swagger](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-swagger.png)
-![openapi-redoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-redoc.png)
-![openapi-RapiDoc](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-rapidoc.png)
+![openapi](https://raw.githubusercontent.com/luolingchun/flask-openapi3/master/docs/images/openapi-all.png)
