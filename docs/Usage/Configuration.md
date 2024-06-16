@@ -1,6 +1,10 @@
 Flask supports many [configurations](https://flask.palletsprojects.com/en/latest/config/), and there are also some
 configurations in this library that can be used.
 
+## TODO
+
+Add plugins
+
 ## SWAGGER_CONFIG
 
 You can change the default behavior of the Swagger UI.

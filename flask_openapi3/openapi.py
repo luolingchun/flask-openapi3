@@ -15,7 +15,7 @@ from pydantic import BaseModel
 if sys.version_info >= (3, 10):
     from importlib.metadata import entry_points
 else:
-    from importlib_metadata import entry_points
+    from importlib_metadata import entry_points  # type: ignore
 
 from .blueprint import APIBlueprint
 from .commands import openapi_command
@@ -144,7 +144,7 @@ class OpenAPI(APIScaffold, Flask):
             self._init_doc()
 
         # Add the OpenAPI command
-        self.cli.add_command(openapi_command)
+        self.cli.add_command(openapi_command)  # type: ignore
 
         # Initialize specification JSON
         self.spec_json: Dict = dict()
