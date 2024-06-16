@@ -1,3 +1,7 @@
+## v4.0.0rc2 2024-06-16
+
+- Fix empty list in body by @luolingchun in #154
+
 ## v4.0.0rc1 2024-06-02
 
 - Support plugins for ui templates
