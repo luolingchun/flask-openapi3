@@ -4,14 +4,15 @@
 from flask_openapi3 import Info
 from flask_openapi3 import OpenAPI
 
-info = Info(title='oauth API', version='1.0.0')
+info = Info(title="oauth API", version="1.0.0")
 
 # https://spec.openapis.org/oas/v3.1.0#implicit-oauth2-sample
 oauth2 = {
     "type": "oauth2",
     "flows": {
         "implicit": {
-            "authorizationUrl": "/openapi/swagger/oauth2-redirect",
+            "authorizationUrl": "https://accounts.google1.com/o/oauth2/v2/auth",
+            "tokenUrl": "https://www.googleapis1.com/oauth2/v4/token",
             "scopes": {
                 "write:pets": "modify pets in your account",
                 "read:pets": "read your pets"
