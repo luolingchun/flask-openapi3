@@ -35,10 +35,10 @@ class APIScaffold:
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
-        raise NotImplementedError
+        raise NotImplementedError   # pragma: no cover
 
     def register_api(self, api) -> None:
-        raise NotImplementedError
+        raise NotImplementedError   # pragma: no cover
 
     def _add_url_rule(
             self,
@@ -48,7 +48,7 @@ class APIScaffold:
             provide_automatic_options=None,
             **options,
     ) -> None:
-        raise NotImplementedError
+        raise NotImplementedError   # pragma: no cover
 
     @staticmethod
     def create_view_func(

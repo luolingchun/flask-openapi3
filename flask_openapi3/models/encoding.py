@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 from .reference import Reference
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from .header import Header
 else:
     Header = "Header"

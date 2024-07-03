@@ -96,14 +96,12 @@ class MessageResponse(BaseModel):
 
 @app.post("/form")
 def api_form(form: UploadFilesForm):
-    print(form)
-    return {"code": 0, "message": "ok"}
+    print(form)  # pragma: no cover
 
 
 @app.post("/body", responses={"200": MessageResponse})
 def api_error_json(body: BookBody):
-    print(body)
-    return {"code": 0, "message": "ok"}
+    print(body)  # pragma: no cover
 
 
 @pytest.fixture

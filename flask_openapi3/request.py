@@ -3,7 +3,7 @@
 # @Time    : 2022/4/1 16:54
 import json
 from json import JSONDecodeError
-from typing import Any, Type, Optional, Dict, Union
+from typing import Any, Type, Optional, Dict
 
 from flask import request, current_app, abort
 from pydantic import ValidationError, BaseModel
@@ -11,35 +11,31 @@ from pydantic import ValidationError, BaseModel
 
 def _validate_header(header: Type[BaseModel], func_kwargs):
     request_headers = dict(request.headers)
-    for key, value in header.model_json_schema().get("properties", {}).items():
+    for key in header.model_json_schema().get("properties", {}):
         key_title = key.replace("_", "-").title()
         # Add original key
-        if key_title in request_headers.keys():
+        if key_title in request_headers:
             request_headers[key] = request_headers[key_title]
-    func_kwargs.update({"header": header.model_validate(obj=request_headers)})
+    func_kwargs["header"] = header.model_validate(obj=request_headers)
 
 
 def _validate_cookie(cookie: Type[BaseModel], func_kwargs):
     request_cookies = dict(request.cookies)
-    func_kwargs.update({"cookie": cookie.model_validate(obj=request_cookies)})
+    func_kwargs["cookie"] = cookie.model_validate(obj=request_cookies)
 
 
 def _validate_path(path: Type[BaseModel], path_kwargs, func_kwargs):
-    func_kwargs.update({"path": path.model_validate(obj=path_kwargs)})
+    func_kwargs["path"] = path.model_validate(obj=path_kwargs)
 
 
 def _validate_query(query: Type[BaseModel], func_kwargs):
     request_args = request.args
     query_dict = {}
     for k, v in query.model_json_schema().get("properties", {}).items():
-        value: Union[list, Optional[str]]
-        if v.get("type") == "array":
-            value = request_args.getlist(k)
-        else:
-            value = request_args.get(k)
+        value = request_args.getlist(k) if v.get("type") == "array" else request_args.get(k)
         if value is not None:
             query_dict[k] = value
-    func_kwargs.update({"query": query.model_validate(obj=query_dict)})
+    func_kwargs["query"] = query.model_validate(obj=query_dict)
 
 
 def _validate_form(form: Type[BaseModel], func_kwargs):
@@ -79,7 +75,7 @@ def _validate_form(form: Type[BaseModel], func_kwargs):
                 value = request_form.get(k)  # type:ignore
         if value is not None:
             form_dict[k] = value
-    func_kwargs.update({"form": form.model_validate(obj=form_dict)})
+    func_kwargs["form"] = form.model_validate(obj=form_dict)
 
 
 def _validate_body(body: Type[BaseModel], func_kwargs):
@@ -88,7 +84,7 @@ def _validate_body(body: Type[BaseModel], func_kwargs):
         body_model = body.model_validate_json(json_data=obj)
     else:
         body_model = body.model_validate(obj=obj)
-    func_kwargs.update({"body": body_model})
+    func_kwargs["body"] = body_model
 
 
 def _validate_request(
@@ -114,14 +110,14 @@ def _validate_request(
         path_kwargs: Path parameters.
 
     Returns:
-        Union[Response, Dict]: Request kwargs.
+        Dict: Request kwargs.
 
     Raises:
         ValidationError: If validation fails.
     """
 
     # Dictionary to store func kwargs
-    func_kwargs: Dict = dict()
+    func_kwargs: Dict = {}
 
     try:
         # Validate header, cookie, path, and query parameters
@@ -138,7 +134,7 @@ def _validate_request(
         if body:
             _validate_body(body, func_kwargs)
         if raw:
-            func_kwargs.update({"raw": request})
+            func_kwargs["raw"] = request
     except ValidationError as e:
         # Create a response with validation error details
         validation_error_callback = getattr(current_app, "validation_error_callback")

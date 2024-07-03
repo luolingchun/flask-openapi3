@@ -26,12 +26,12 @@ class User(BaseModel):
     @computed_field(title="Display Name")
     @cached_property
     def display_name(self) -> str:
-        return f"{self.firstName} {self.lastName}"
+        return f"{self.firstName} {self.lastName}"  # pragma: no cover
 
 
 @app.get("/user", responses={200: User})
 def get_book():
-    return "ok"
+    return "ok"  # pragma: no cover
 
 
 def test_openapi(client):
