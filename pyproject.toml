@@ -66,12 +66,11 @@ include = [
     "/LICENSE.rst"
 ]
 
+[tool.ruff]
+line-length = 120
 
-[tool.flake8]
-per-file-ignores = ["__init__.py:F401"]
-max-line-length = 120
-count = true
-
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
 
 [tool.mypy]
 files = "src"
