@@ -65,8 +65,7 @@ class BookQuery(BaseModel):
 
 @app.get("/query")
 def api_query(query: BookQuery):
-    print(query)
-    return {"code": 0, "message": "ok"}
+    print(query)  # pragma: no cover
 
 
 def test_openapi(client):

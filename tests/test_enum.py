@@ -12,7 +12,7 @@ from flask_openapi3 import OpenAPI
 
 app = OpenAPI(
     __name__,
-    info=Info(title='Enum demo', version='1.0.0')
+    info=Info(title="Enum demo", version="1.0.0")
 )
 
 app.config["TESTING"] = True
@@ -45,3 +45,6 @@ def test_openapi(client):
     _json = resp.json
     assert resp.status_code == 200
     assert _json["components"]["schemas"].get("Language") is not None
+
+    resp = client.get("/English")
+    assert resp.status_code == 200

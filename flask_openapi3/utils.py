@@ -34,7 +34,7 @@ from .types import ResponseStrKeyDict
 
 HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
 
-if sys.version_info < (3, 11):
+if sys.version_info < (3, 11):  # pragma: no cover
 
     class HTTPMethod(str, Enum):
         GET = "GET"
@@ -88,8 +88,7 @@ def get_operation(
     )
 
     # Add any additional openapi_extensions to the operation dictionary
-    openapi_extensions = openapi_extensions or {}
-    operation_dict.update(**openapi_extensions)
+    operation_dict.update(openapi_extensions or {})
 
     # Create and return the Operation object
     operation = Operation(**operation_dict)
@@ -110,11 +109,8 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
         A unique operation ID generated based on the provided name, path, and method.
 
     """
-    operation_id = name + path
-    # Replace non-word characters with underscores
-    operation_id = re.sub(r"\W", "_", operation_id)
-    operation_id = operation_id + "_" + method.lower()
-    return operation_id
+
+    return re.sub(r"\W", "_", name + path) + "_" + method.lower()
 
 
 def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = "validation") -> dict:
@@ -322,8 +318,7 @@ def get_responses(
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
-            if not response.get("description"):
-                response["description"] = HTTP_STATUS.get(key, "")
+            response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
             _responses[key] = Response(**response)
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
@@ -413,6 +408,15 @@ def parse_parameters(
         The types for header, cookie, path, query, form, and body parameters respectively.
 
     """
+
+    # If components_schemas is None, initialize it as an empty dictionary
+    if components_schemas is None:
+        components_schemas = dict()
+
+    # If operation is None, initialize it as an Operation object
+    if operation is None:
+        operation = Operation()
+
     # Get the type hints from the function
     annotations = get_type_hints(func)
 
@@ -430,14 +434,6 @@ def parse_parameters(
         return header, cookie, path, query, form, body, raw
 
     parameters = []
-
-    # If components_schemas is None, initialize it as an empty dictionary
-    if components_schemas is None:
-        components_schemas = dict()
-
-    # If operation is None, initialize it as an Operation object
-    if operation is None:
-        operation = Operation()
 
     if header:
         _parameters, _components_schemas = parse_header(header)
@@ -581,15 +577,8 @@ def parse_rule(rule: str, url_prefix=None) -> str:
 
 def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDict:
     """Convert key to string"""
-    _responses = {}
-    for key, value in responses.items():
-        if isinstance(key, HTTPStatus):
-            key = str(key.value)
-        elif isinstance(key, int):
-            key = str(key)
-        _responses[key] = value
 
-    return _responses
+    return {str(key.value if isinstance(key, HTTPStatus) else key): value for key, value in responses.items()}
 
 
 def normalize_name(name: str) -> str:

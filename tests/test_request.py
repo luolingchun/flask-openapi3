@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/9/2 15:35
+from enum import Enum
 from functools import wraps
 from typing import List, Optional
 
@@ -20,6 +21,11 @@ def client():
     return client
 
 
+class TypeEnum(str, Enum):
+    A = "A"
+    B = "B"
+
+
 class BookForm(BaseModel):
     file: FileStorage
     files: List[FileStorage]
@@ -29,6 +35,7 @@ class BookForm(BaseModel):
 
 class BookQuery(BaseModel):
     age: List[int]
+    book_type: Optional[TypeEnum] = None
 
 
 class BookBody(BaseModel):
@@ -37,6 +44,7 @@ class BookBody(BaseModel):
 
 class BookCookie(BaseModel):
     token: Optional[str] = None
+    token_type: Optional[TypeEnum] = None
 
 
 class BookHeader(BaseModel):
@@ -44,6 +52,7 @@ class BookHeader(BaseModel):
     # required
     hello2: str = Field(..., max_length=12, description="sds")
     api_key: str = Field(..., description="API Key")
+    api_type: Optional[TypeEnum] = None
     x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
 
 
@@ -70,8 +79,7 @@ def api_form(form: BookForm):
 
 @app.post("/body")
 def api_error_json(body: BookBody):
-    print(body)
-    return {"code": 0, "message": "ok"}
+    print(body)  # pragma: no cover
 
 
 @app.get("/header")
@@ -127,7 +135,7 @@ def test_cookie(client):
 
 
 def test_header(client):
-    headers = {"Hello1": "111", "hello2": "222", "api_key": "333", "x-hello": "444"}
+    headers = {"Hello1": "111", "hello2": "222", "api_key": "333", "api_type": "A", "x-hello": "444"}
     resp = client.get("/header", headers=headers)
     print(resp.json)
     assert resp.status_code == 200

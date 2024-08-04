@@ -23,6 +23,7 @@ app.config["TESTING"] = True
 security = [{"jwt": []}]
 
 api_view = APIView(url_prefix="/api/v1/<name>", view_tags=[Tag(name="book")], view_security=security)
+api_view2 = APIView(doc_ui=False)
 
 
 class BookPath(BaseModel):
@@ -43,7 +44,13 @@ class BookBody(BaseModel):
 class BookListAPIView:
     a = 1
 
-    @api_view.doc(summary="get book list")
+    @api_view.doc(
+        summary="get book list",
+        responses={
+            204: None
+        },
+        doc_ui=False
+    )
     def get(self, query: BookQuery):
         print(self.a)
         return query.model_dump_json()
@@ -72,7 +79,15 @@ class BookAPIView:
         return "delete"
 
 
+@api_view2.route("/<name>/book2/<id>")
+class BookAPIView2:
+    @api_view2.doc(summary="get book")
+    def get(self, path: BookPath):
+        return path.model_dump()
+
+
 app.register_api_view(api_view)
+app.register_api_view(api_view2)
 
 
 @pytest.fixture
@@ -108,6 +123,9 @@ def test_put(client):
 
 def test_get(client):
     resp = client.get("/api/v1/name1/book/1")
+    assert resp.status_code == 200
+
+    resp = client.get("/name2/book2/1")
     assert resp.status_code == 200
 
 
