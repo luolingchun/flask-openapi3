@@ -21,10 +21,10 @@ Before submitting pr, you need to complete the following steps:
     pytest tests
     ```
 
-3. Running the flake8
+3. Running the ruff
 
     ```bash
-    flake8 flask_openapi3 tests examples
+    ruff check flask_openapi3 tests examples
     ```
 
 4. Running the mypy

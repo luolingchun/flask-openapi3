@@ -44,16 +44,16 @@ jobs:
           pip install -U "${{ matrix.flask-version }}"
           pip install -U pydantic
           pip install -U -r ./requirements/test.txt
-          pip install -U -r ./requirements/flake8.txt
+          pip install -U -r ./requirements/ruff.txt
           pip install -U -r ./requirements/mypy.txt
           pip install -e .[swagger]
-#          pip install -e .[swagger,redoc,rapidoc,rapipdf,scalar,elements]
+      #          pip install -e .[swagger,redoc,rapidoc,rapipdf,scalar,elements]
 
       - name: Test with pytest
         run: pytest tests
 
-      - name: Flake8
-        run: flake8 flask_openapi3 examples tests
+      - name: ruff
+        run: ruff check flask_openapi3 tests examples
 
       - name: cache mypy
         uses: actions/cache@v4
