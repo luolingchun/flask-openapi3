@@ -17,7 +17,7 @@ def _validate_header(header: Type[BaseModel], func_kwargs):
         key_title = key.replace("_", "-").title()
         # Add original key
         if key_title in request_headers.keys():
-            request_headers[key] = request_headers[value.alias] = request_headers[key_title]
+            request_headers[value.alias or key] = request_headers[key_title]
     func_kwargs.update({"header": header.model_validate(obj=request_headers)})
 
 
@@ -35,9 +35,9 @@ def _validate_query(query: Type[BaseModel], func_kwargs):
     query_dict = {}
     for k, v in query.model_fields.items():
         if get_origin(v.annotation) is list:
-            value = request_args.getlist(k) or request_args.getlist(v.alias)
+            value = request_args.getlist(v.alias or k)
         else:
-            value = request_args.get(k) or request_args.get(v.alias)
+            value = request_args.get(v.alias or k)  # type:ignore
         if value is not None:
             query_dict[k] = value
     func_kwargs.update({"query": query.model_validate(obj=query_dict)})
@@ -50,22 +50,22 @@ def _validate_form(form: Type[BaseModel], func_kwargs):
     for k, v in form.model_fields.items():
         if get_origin(v.annotation) is list:
             if get_args(v.annotation)[0] is FileStorage:
-                value = request_files.getlist(k) or request_files.getlist(v.alias)
+                value = request_files.getlist(v.alias or k)
             else:
                 value = []
-                for i in request_form.getlist(k) or request_form.getlist(v.alias):
+                for i in request_form.getlist(v.alias or k):
                     try:
                         value.append(json.loads(i))
                     except (JSONDecodeError, TypeError):
-                        value.append(i)
+                        value.append(i)  # type:ignore
         elif v.annotation is FileStorage:
-            value = request_files.get(k) or request_files.get(v.alias)
+            value = request_files.get(v.alias or k)  # type:ignore
         else:
-            _value = request_form.get(k) or request_form.get(v.alias)
+            _value = request_form.get(v.alias or k)
             try:
-                value = json.loads(_value)
+                value = json.loads(_value)  # type:ignore
             except (JSONDecodeError, TypeError):
-                value = _value
+                value = _value  # type:ignore
         if value is not None:
             form_dict[k] = value
     func_kwargs.update({"form": form.model_validate(obj=form_dict)})
