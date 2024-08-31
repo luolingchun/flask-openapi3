@@ -7,9 +7,7 @@
   {
     "version": "v3.x",
     "title": "v3.x",
-    "aliases": [
-      "latest"
-    ]
+    "aliases": []
   },
   {
     "version": "v2.x",
