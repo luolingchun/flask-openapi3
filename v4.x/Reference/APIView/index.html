@@ -988,7 +988,8 @@
 
               <details class="quote">
                 <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 26</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 25</span>
+<span class="normal"> 26</span>
 <span class="normal"> 27</span>
 <span class="normal"> 28</span>
 <span class="normal"> 29</span>
@@ -1204,9 +1205,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span> <span class="o">=</span> <span class="n">view_tags</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="o">=</span> <span class="n">view_security</span> <span class="ow">or</span> <span class="p">[]</span>
 
-        <span class="n">view_responses</span> <span class="o">=</span> <span class="n">view_responses</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="c1"># Convert key to string</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">view_responses</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">view_responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="o">=</span> <span class="n">doc_ui</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">operation_id_callback</span>
@@ -1221,7 +1221,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Decorator for view class&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;malformed url rule: </span><span class="si">{</span><span class="n">rule</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">methods</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -1288,21 +1288,17 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">responses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">new_responses</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Convert key to string</span>
-            <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">security</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">security</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span>
 
         <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="k">return</span>
+                <span class="k">return</span> <span class="n">func</span>
+
             <span class="c1"># Global response combines API responses</span>
-            <span class="n">combine_responses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span><span class="p">)</span>
-            <span class="n">combine_responses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_responses</span><span class="p">)</span>
+            <span class="n">combine_responses</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span><span class="p">,</span> <span class="o">**</span><span class="n">new_responses</span><span class="p">}</span>
+
             <span class="c1"># Create operation</span>
             <span class="n">operation</span> <span class="o">=</span> <span class="n">get_operation</span><span class="p">(</span>
                 <span class="n">func</span><span class="p">,</span>
@@ -1310,24 +1306,32 @@
                 <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
                 <span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span>
             <span class="p">)</span>
+
             <span class="c1"># Set external docs</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+
             <span class="c1"># Unique string used to identify the operation.</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
+
             <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+
             <span class="c1"># Add security</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+
             <span class="c1"># Add servers</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+
             <span class="c1"># Store tags</span>
             <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+
             <span class="c1"># Parse parameters</span>
             <span class="n">parse_parameters</span><span class="p">(</span>
                 <span class="n">func</span><span class="p">,</span>
                 <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span>
                 <span class="n">operation</span><span class="o">=</span><span class="n">operation</span>
             <span class="p">)</span>
+
             <span class="c1"># Parse response</span>
             <span class="n">get_responses</span><span class="p">(</span><span class="n">combine_responses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
             <span class="n">func</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="n">operation</span>
@@ -1344,8 +1348,6 @@
 <span class="sd">            app: An instance of the OpenAPI app.</span>
 <span class="sd">            view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">view_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">view_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
                 <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
@@ -1498,7 +1500,8 @@
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
@@ -1533,9 +1536,7 @@
 <span class="normal">59</span>
 <span class="normal">60</span>
 <span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">62</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">view_tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1561,9 +1562,8 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span> <span class="o">=</span> <span class="n">view_tags</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="o">=</span> <span class="n">view_security</span> <span class="ow">or</span> <span class="p">[]</span>
 
-    <span class="n">view_responses</span> <span class="o">=</span> <span class="n">view_responses</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="c1"># Convert key to string</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">view_responses</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">view_responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="o">=</span> <span class="n">doc_ui</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">operation_id_callback</span>
@@ -1764,7 +1764,9 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
@@ -1843,7 +1845,9 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
-<span class="normal">183</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">doc</span><span class="p">(</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">doc</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1876,21 +1880,17 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">responses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">new_responses</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Convert key to string</span>
-        <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">security</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">security</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_tags</span>
 
     <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="n">func</span>
+
         <span class="c1"># Global response combines API responses</span>
-        <span class="n">combine_responses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span><span class="p">)</span>
-        <span class="n">combine_responses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_responses</span><span class="p">)</span>
+        <span class="n">combine_responses</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">view_responses</span><span class="p">,</span> <span class="o">**</span><span class="n">new_responses</span><span class="p">}</span>
+
         <span class="c1"># Create operation</span>
         <span class="n">operation</span> <span class="o">=</span> <span class="n">get_operation</span><span class="p">(</span>
             <span class="n">func</span><span class="p">,</span>
@@ -1898,24 +1898,32 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
             <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
             <span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span>
         <span class="p">)</span>
+
         <span class="c1"># Set external docs</span>
         <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+
         <span class="c1"># Unique string used to identify the operation.</span>
         <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
+
         <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
         <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+
         <span class="c1"># Add security</span>
         <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+
         <span class="c1"># Add servers</span>
         <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+
         <span class="c1"># Store tags</span>
         <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+
         <span class="c1"># Parse parameters</span>
         <span class="n">parse_parameters</span><span class="p">(</span>
             <span class="n">func</span><span class="p">,</span>
             <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span>
             <span class="n">operation</span><span class="o">=</span><span class="n">operation</span>
         <span class="p">)</span>
+
         <span class="c1"># Parse response</span>
         <span class="n">get_responses</span><span class="p">(</span><span class="n">combine_responses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
         <span class="n">func</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="n">operation</span>
@@ -1987,9 +1995,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
 <span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span>
@@ -2025,8 +2031,6 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        app: An instance of the OpenAPI app.</span>
 <span class="sd">        view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">view_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">view_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
             <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
@@ -2069,7 +2073,9 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 66</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
 <span class="normal"> 67</span>
 <span class="normal"> 68</span>
 <span class="normal"> 69</span>
@@ -2103,13 +2109,11 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">route</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator for view class&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;malformed url rule: </span><span class="si">{</span><span class="n">rule</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">methods</span> <span class="o">=</span> <span class="p">[]</span>
 

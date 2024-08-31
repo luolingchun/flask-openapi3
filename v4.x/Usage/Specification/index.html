@@ -460,15 +460,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#oauth_config" class="md-nav__link">
-    <span class="md-ellipsis">
-      oauth_config
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#responses" class="md-nav__link">
     <span class="md-ellipsis">
       responses
@@ -490,33 +481,6 @@
   <a href="#doc_ui" class="md-nav__link">
     <span class="md-ellipsis">
       doc_ui
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#doc_expansion" class="md-nav__link">
-    <span class="md-ellipsis">
-      doc_expansion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#swagger_config" class="md-nav__link">
-    <span class="md-ellipsis">
-      swagger_config
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive documentation
     </span>
   </a>
   
@@ -1009,15 +973,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#oauth_config" class="md-nav__link">
-    <span class="md-ellipsis">
-      oauth_config
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#responses" class="md-nav__link">
     <span class="md-ellipsis">
       responses
@@ -1039,33 +994,6 @@
   <a href="#doc_ui" class="md-nav__link">
     <span class="md-ellipsis">
       doc_ui
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#doc_expansion" class="md-nav__link">
-    <span class="md-ellipsis">
-      doc_expansion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#swagger_config" class="md-nav__link">
-    <span class="md-ellipsis">
-      swagger_config
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive documentation
     </span>
   </a>
   
@@ -1165,9 +1093,7 @@ the <a href="https://flask.palletsprojects.com/en/latest/cli/#application-discov
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code>flask --app hello:app openapi --help
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code>flask --app hello:app openapi --help
 
 Usage: flask openapi [OPTIONS]
 
@@ -1175,11 +1101,9 @@ Usage: flask openapi [OPTIONS]
 
 Options:
   -o, --output PATH               The output file path.
-  -f, --format [json|yaml|markdown]
+  -f, --format [json|yaml]
                                   The output file format.
   -i, --indent INTEGER            The indentation for JSON dumps.
-  -a, --ensure_ascii              Ensure ASCII characters or not. Defaults to
-                                  False.
   --help                          Show this message and exit.
 </code></pre></div></td></tr></table></div>
 <p>Please note, by default, the command will export the OpenAPI specification in JSON.
@@ -1216,7 +1140,7 @@ Before that, you should know something about the <a href="https://spec.openapis.
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
 <p>run it, and go to <a href="http://127.0.0.1:5000/openapi">http://127.0.0.1:5000/openapi</a>, you will see the documentation.</p>
-<p><a class="glightbox" href="../../images/openapi.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi" src="../../images/openapi.png" /></a>
+<p><a class="glightbox" href="../../images/openapi-all.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi" src="../../images/openapi-all.png" /></a>
 <a class="glightbox" href="../../assets/image-20210525160157057.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="image-20210525160157057" src="../../assets/image-20210525160157057.png" /></a></p>
 <h2 id="security_schemes">security_schemes<a class="headerlink" href="#security_schemes" title="Permanent link">⚓︎</a></h2>
 <p>There are some examples for Security Scheme Object,
@@ -1313,101 +1237,6 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 </code></pre></div></td></tr></table></div>
 <p>result:</p>
 <p><a class="glightbox" href="../../assets/image-20210525165350520.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="image-20210525165350520" src="../../assets/image-20210525165350520.png" /></a></p>
-<h2 id="oauth_config">oauth_config<a class="headerlink" href="#oauth_config" title="Permanent link">⚓︎</a></h2>
-<div class="admonition deprecated-warning warning">
-<p class="admonition-title">Deprecated-warning</p>
-<p>The <code>oauth_config</code> is deprecated in v4.x, use <code>app.config['OAUTH_CONFIG']</code> instead.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;OAUTH_CONFIG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;clientId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span> <span class="s2">&quot;clientSecret&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<p>You can pass <code>oauth_config</code> when initializing <code>OpenAPI</code>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">OAuthConfig</span>
-<span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">Info</span>
-
-<span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;oauth API&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span>
-
-<span class="n">oauth_config</span> <span class="o">=</span> <span class="n">OAuthConfig</span><span class="p">(</span>
-    <span class="n">clientId</span><span class="o">=</span><span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
-    <span class="n">clientSecret</span><span class="o">=</span><span class="s2">&quot;xxx&quot;</span>
-<span class="p">)</span>
-
-<span class="n">oauth2</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;oauth2&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;flows&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;implicit&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;authorizationUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://example.com/api/oauth/dialog&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;scopes&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;write:pets&quot;</span><span class="p">:</span> <span class="s2">&quot;modify pets in your account&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;read:pets&quot;</span><span class="p">:</span> <span class="s2">&quot;read your pets&quot;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="n">security_schemes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;oauth2&quot;</span><span class="p">:</span> <span class="n">oauth2</span><span class="p">}</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">oauth_config</span><span class="o">=</span><span class="n">oauth_config</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="n">security_schemes</span><span class="p">)</span>
-
-<span class="n">security</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;oauth2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;write:pets&quot;</span><span class="p">,</span> <span class="s2">&quot;read:pets&quot;</span><span class="p">]}</span>
-<span class="p">]</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">oauth</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s2">&quot;oauth&quot;</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<p>Here's more information about <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md">OAuth 2.0 configuration</a></p>
 <h2 id="responses">responses<a class="headerlink" href="#responses" title="Permanent link">⚓︎</a></h2>
 <p>You can add <code>responses</code> for each API under the <code>app</code> wrapper.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1497,90 +1326,6 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 </span><span class="k">def</span> <span class="nf">get_book</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
-<h2 id="doc_expansion">doc_expansion<a class="headerlink" href="#doc_expansion" title="Permanent link">⚓︎</a></h2>
-<div class="admonition deprecated-warning warning">
-<p class="admonition-title">Deprecated-warning</p>
-<p>The <code>doc_expansion</code> is deprecated in v4.x, use <code>app.config['SWAGGER_CONFIG']</code> instead.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;SWAGGER_CONFIG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;docExpansion&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> 
-    <span class="s2">&quot;validatorUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.b.com&quot;</span>
-<span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<p>Just for Swagger UI.</p>
-<p>String=["list", "full", "none"].</p>
-<p>Controls the default expansion setting for the operations and tags. It can be 'list' (expands only the tags), full' (expands the tags and operations) or 'none' (expands nothing).</p>
-<p>More information to see <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">Configuration</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">doc_expansion</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<h2 id="swagger_config">swagger_config<a class="headerlink" href="#swagger_config" title="Permanent link">⚓︎</a></h2>
-<div class="admonition deprecated-warning warning">
-<p class="admonition-title">Deprecated-warning</p>
-<p>The <code>doc_expansion</code> is deprecated in v4.x, use <code>app.config['SWAGGER_CONFIG']</code> instead.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;SWAGGER_CONFIG&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;docExpansion&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> 
-    <span class="s2">&quot;validatorUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.b.com&quot;</span>
-<span class="p">}</span>
-</code></pre></div></td></tr></table></div>
-</div>
-<p>Swagger supports many configuration items. 
-For more information on Swagger Configuration,
-please refer to <a href="https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md">Swagger Configuration</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span>
-<span class="normal">4</span>
-<span class="normal">5</span>
-<span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span>
-    <span class="vm">__name__</span><span class="p">,</span> 
-    <span class="n">swagger_config</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;docExpansion&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> 
-        <span class="s2">&quot;validatorUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.b.com&quot;</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-<h2 id="interactive-documentation">Interactive documentation<a class="headerlink" href="#interactive-documentation" title="Permanent link">⚓︎</a></h2>
-<div class="admonition deprecated-warning warning">
-<p class="admonition-title">Deprecated-warning</p>
-<p><code>api_doc_url</code> will be renamed to <code>doc_url</code> in v4.x, and <code>swagger_url</code>, <code>redoc_url</code>, <code>rapidoc_url</code> will be removed.</p>
-</div>
-<p><strong>Flask OpenAPI3</strong> provides support for the following Interactive documentation:</p>
-<ul>
-<li><a href="https://github.com/swagger-api/swagger-ui">Swagger</a></li>
-<li><a href="https://github.com/Redocly/redoc">Redoc</a></li>
-<li><a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a></li>
-</ul>
-<p>The following are the default values of these configurations. Of course, you can change them:</p>
-<ul>
-<li>doc_prefix = "/openapi"</li>
-<li>api_doc_url = "/openapi.json"</li>
-<li>swagger_url= "/swagger"</li>
-<li>redoc_url = "/redoc"</li>
-<li>rapidoc_url = "/rapidoc"</li>
-</ul>
 <h2 id="servers">servers<a class="headerlink" href="#servers" title="Permanent link">⚓︎</a></h2>
 <p>An array of Server Objects, which provide connectivity information to a target server. If the server's property is not provided, or is an empty array, the default value would be a Server Object with an url value of /.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>

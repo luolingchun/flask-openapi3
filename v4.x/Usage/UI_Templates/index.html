@@ -829,154 +829,30 @@
 
   <h1>UI Templates</h1>
 
-<div class="admonition deprecated-warning warning">
-<p class="admonition-title">Deprecated-warning</p>
-<p>The <code>ui_templates</code> is deprecated in v4.x. More interactive UI will be provided through <a href="https://github.com/luolingchun/flask-openapi3-plugins">plugins</a>.</p>
-</div>
-<p>Flask OpenAPI3 supports <a href="https://github.com/swagger-api/swagger-ui">Swagger</a>, <a href="https://github.com/Redocly/redoc">Redoc</a>
-and <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a> templates by default.</p>
-<p>You can customize templates use <code>ui_templates</code> in initializing OpenAPI.</p>
+<p>Since version v4, a plugin repository has been added, supporting the following UI templates:</p>
+<p><code>pip install -U flask-openapi3[swagger,redoc,rapidoc,rapipdf,scalar,elements]</code></p>
+<ul>
+<li><a href="https://github.com/swagger-api/swagger-ui">Swagger</a></li>
+<li><a href="https://github.com/Redocly/redoc">Redoc</a></li>
+<li><a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a></li>
+<li><a href="https://mrin9.github.io/RapiPdf/">RapiPdf</a></li>
+<li><a href="https://github.com/scalar/scalar">Scalar</a></li>
+<li><a href="https://github.com/stoplightio/elements">Elements</a></li>
+</ul>
+<p>Manual Installation:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">ui_templates</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;swagger&quot;</span><span class="p">:</span> <span class="n">swagger_html_string</span><span class="p">,</span>
-    <span class="s2">&quot;rapipdf&quot;</span><span class="p">:</span> <span class="n">rapipdf_html_string</span>
-<span class="p">}</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">ui_templates</span><span class="o">=</span><span class="n">ui_templates</span><span class="p">)</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-swagger
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-redoc
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-rapidoc
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-rapipdf
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-scalar
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3-elements
 </code></pre></div></td></tr></table></div>
-<p>In the above example, <code>swagger</code> will overwrite the original template and <code>rapipdf</code> is a new template.</p>
-<p>You can do anything with <code>swagger_html_string</code>, <code>rapipdf_html_string</code> or <code>any_html_string</code>.</p>
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p><code>api_doc_url</code> is a necessary parameter for rendering template, so you must define it in your template.</p>
-</div>
-<p><strong>swagger_html_string:</strong></p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span>
-<span class="normal">44</span>
-<span class="normal">45</span>
-<span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span><span class="p">&gt;</span>
-<span class="hll">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Custom Title<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-</span>    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/swagger-ui-dist/swagger-ui.css&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-<span class="w">        </span><span class="nt">html</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
-<span class="w">            </span><span class="k">overflow</span><span class="p">:</span><span class="w"> </span><span class="bp">-moz-</span><span class="n">scrollbars-vertical</span><span class="p">;</span>
-<span class="w">            </span><span class="k">overflow-y</span><span class="p">:</span><span class="w"> </span><span class="kc">scroll</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="o">*,</span><span class="w"> </span><span class="o">*</span><span class="p">:</span><span class="nd">before</span><span class="o">,</span><span class="w"> </span><span class="o">*</span><span class="p">:</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">inherit</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">            </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#fafafa</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;swagger-ui&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="nb">window</span><span class="p">.</span><span class="nx">onload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Begin Swagger UI call region</span>
-<span class="w">        </span><span class="nb">window</span><span class="p">.</span><span class="nx">ui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">SwaggerUIBundle</span><span class="p">({</span>
-<span class="hll"><span class="w">            </span><span class="nx">url</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;{{api_doc_url}}&quot;</span><span class="p">,</span>
-</span><span class="w">            </span><span class="nx">dom_id</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;#swagger-ui&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nx">deepLinking</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">            </span><span class="nx">presets</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                </span><span class="nx">SwaggerUIBundle</span><span class="p">.</span><span class="nx">presets</span><span class="p">.</span><span class="nx">apis</span><span class="p">,</span>
-<span class="w">                </span><span class="nx">SwaggerUIStandalonePreset</span>
-<span class="w">            </span><span class="p">],</span>
-<span class="w">            </span><span class="nx">plugins</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">                </span><span class="nx">SwaggerUIBundle</span><span class="p">.</span><span class="nx">plugins</span><span class="p">.</span><span class="nx">DownloadUrl</span>
-<span class="w">            </span><span class="p">],</span>
-<span class="w">            </span><span class="nx">layout</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;StandaloneLayout&quot;</span>
-<span class="w">        </span><span class="p">})</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div></td></tr></table></div>
-<p><strong>rapipdf_html_string:</strong></p>
-<p>This will generate a new route, <a href="http://127.0.0.1:5000/openapi/rapipdf">http://127.0.0.1:5000/openapi/rapipdf</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">&lt;!doctype html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/rapipdf/dist/rapipdf-min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">rapi-pdf</span>
-        <span class="na">style</span><span class="o">=</span><span class="s">&quot;width:700px; height:40px; font-size:18px;&quot;</span>
-<span class="hll">        <span class="na">spec-url</span><span class="o">=</span><span class="s">&quot;{{api_doc_url}}&quot;</span>
-</span>        <span class="na">button-bg</span><span class="o">=</span><span class="s">&quot;#b44646&quot;</span>
-<span class="p">&gt;&lt;/</span><span class="nt">rapi-pdf</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div></td></tr></table></div>
+<p>For more UI templates, please check the <a href="https://github.com/luolingchun/flask-openapi3-plugins">plugin repository</a>.</p>
 
 
 

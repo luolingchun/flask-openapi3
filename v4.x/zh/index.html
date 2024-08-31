@@ -942,7 +942,7 @@
 
 <div align="center">
     <a href="https://luolingchun.github.io/flask-openapi3/" target="_blank">
-        <img class="off-glb" src="images/logo-text.svg" width="60%" height="auto" alt="logo">
+        <img class="off-glb" src="../images/logo-text.svg" width="60%" height="auto" alt="logo">
     </a>
 </div>
 <p align="center">
@@ -963,15 +963,13 @@
     </a>
 </p>
 
-<p><strong>Flask OpenAPI3</strong> 是一个基于 <strong>Flask</strong> 的 web API 框架，使用 <strong>Pydantic</strong> 验证数据，自动生成 <strong>Swagger</strong>，<strong>ReDoc</strong> 和 <strong>RapiDoc</strong>
-交互文档。</p>
+<p><strong>Flask OpenAPI3</strong> 是一个基于 <strong>Flask</strong> 的 web API 框架，使用 <strong>Pydantic</strong> 验证数据，自动生成交互文档。</p>
 <p>主要特点有：</p>
 <ul>
 <li><strong>编码简单：</strong> 使用简单易于学习</li>
 <li><strong>标准的文档规范：</strong> 基于<a href="https://spec.openapis.org/oas/v3.1.0">开放 API 规范</a></li>
-<li><strong>交互式 OpenAPI 文档：</strong> <a href="https://github.com/swagger-api/swagger-ui">Swagger</a>, <a href="https://github.com/Redocly/redoc">Redoc</a> 和 <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a></li>
+<li><strong>交互式 OpenAPI 文档：</strong> <a href="https://github.com/swagger-api/swagger-ui">Swagger</a>, <a href="https://github.com/Redocly/redoc">Redoc</a>, <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a>, <a href="https://mrin9.github.io/RapiPdf/">RapiPdf</a>, <a href="https://github.com/scalar/scalar">Scalar</a>, <a href="https://github.com/stoplightio/elements">Elements</a></li>
 <li><strong>数据验证：</strong> 基于 <a href="https://github.com/pydantic/pydantic">Pydantic</a> 的快速数据验证</li>
-<li><strong>认证：</strong> 支持在 Swagger UI 中重新加载认证信息</li>
 </ul>
 <h2 id="_1">依赖<a class="headerlink" href="#_1" title="Permanent link">⚓︎</a></h2>
 <p>Python 3.8+</p>
@@ -993,7 +991,8 @@
 <li><a href="https://github.com/theskumar/python-dotenv#readme">python-dotenv</a> 在运行 <code>flask</code>
   命令时启用对<a href="https://flask.palletsprojects.com/en/latest/cli/#dotenv"> dotenv 环境变量</a> 的支持；</li>
 <li><a href="https://github.com/yaml/pyyaml">pyyaml</a> 用于输出 <code>yaml</code>格式的 OpenAPI 文档；</li>
-<li><a href="https://github.com/django/asgiref">asgiref</a> 允许在定义视图函数时使用 <code>async def</code> 和 <code>await</code>.</li>
+<li><a href="https://github.com/django/asgiref">asgiref</a> 允许在定义视图函数时使用 <code>async def</code> 和 <code>await</code>；</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3-plugins">flask-openapi3-plugins</a> 为 Flask-OpenAPI3 提供 OpenAPI UI.</li>
 </ul>
 <p>和 flask-openapi3 一起安装这些依赖:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1006,7 +1005,9 @@
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>flask-openapi3<span class="o">[</span>yaml<span class="o">]</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>flask-openapi3<span class="o">[</span>yaml<span class="o">]</span>
 <span class="c1"># 或者</span>
 pip<span class="w"> </span>install<span class="w"> </span>flask-openapi3<span class="o">[</span>async<span class="o">]</span>
 <span class="c1"># 或者</span>
@@ -1017,6 +1018,8 @@ pip<span class="w"> </span>install<span class="w"> </span>flask-openapi3<span cl
 pip<span class="w"> </span>install<span class="w"> </span>flask-openapi3<span class="o">[</span>yaml,async,dotenv,email<span class="o">]</span>
 <span class="c1"># 或者手动安装</span>
 pip<span class="w"> </span>install<span class="w"> </span>pyyaml<span class="w"> </span>asgiref<span class="w"> </span>python-dotenv<span class="w"> </span>email-validator
+<span class="c1"># OpenAPI UI 插件</span>
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>flask-openapi3<span class="o">[</span>swagger,redoc,rapidoc,rapipdf,scalar,elements<span class="o">]</span>
 </code></pre></div></td></tr></table></div>
 </details>
 <h2 id="_3">一个简单的示例<a class="headerlink" href="#_3" title="Permanent link">⚓︎</a></h2>
@@ -1220,11 +1223,12 @@ pip<span class="w"> </span>install<span class="w"> </span>pyyaml<span class="w">
 
 <h2 id="api">API 文档<a class="headerlink" href="#api" title="Permanent link">⚓︎</a></h2>
 <p>运行<a href="https://github.com/luolingchun/flask-openapi3/blob/master/examples/simple_demo.py">简单示例</a>，然后访问 <a href="http://127.0.0.1:5000/openapi">http://127.0.0.1:5000/openapi</a>。</p>
-<p>你将看到文档入口：<a href="https://github.com/swagger-api/swagger-ui">Swagger</a>，<a href="https://github.com/Redocly/redoc">Redoc</a> 和 <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a>。</p>
-<p><a class="glightbox" href="../images/openapi.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi" src="../images/openapi.png" /></a>
-<a class="glightbox" href="../images/openapi-swagger.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi-swagger" src="../images/openapi-swagger.png" /></a>
-<a class="glightbox" href="../images/openapi-redoc.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi-redoc" src="../images/openapi-redoc.png" /></a>
-<a class="glightbox" href="../images/openapi-rapidoc.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi-RapiDoc" src="../images/openapi-rapidoc.png" /></a></p>
+<blockquote>
+<p>OpenAPI UI插件是需要手动安装的可选依赖项。</p>
+<p><code>pip install -U flask-openapi3[swagger,redoc,rapidoc,rapipdf,scalar,elements]</code></p>
+<p>更多可选<a href="https://luolingchun.github.io/flask-openapi3/latest/Usage/UI_Templates/">UI模板</a></p>
+</blockquote>
+<p><a class="glightbox" href="../images/openapi-all.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="openapi" src="../images/openapi-all.png" /></a></p>
 
 
 

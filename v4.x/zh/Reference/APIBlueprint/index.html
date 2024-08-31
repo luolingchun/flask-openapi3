@@ -956,7 +956,8 @@
 
               <details class="quote">
                 <summary>Source code in <code>flask_openapi3/blueprint.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 26</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 25</span>
+<span class="normal"> 26</span>
 <span class="normal"> 27</span>
 <span class="normal"> 28</span>
 <span class="normal"> 29</span>
@@ -1123,12 +1124,7 @@
 <span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span>
-<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIBlueprint</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
+<span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIBlueprint</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1169,9 +1165,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span> <span class="o">=</span> <span class="n">abp_tags</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="o">=</span> <span class="n">abp_security</span> <span class="ow">or</span> <span class="p">[]</span>
 
-        <span class="n">abp_responses</span> <span class="o">=</span> <span class="n">abp_responses</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="c1"># Convert key to string</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">abp_responses</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">abp_responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="o">=</span> <span class="n">doc_ui</span>
 
@@ -1198,7 +1193,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_item</span>
 
         <span class="c1"># Merge component schemas from the nested APIBlueprint</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
         <span class="c1"># Register the nested APIBlueprint as a blueprint</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
@@ -1250,14 +1245,12 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">responses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">new_responses</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Convert key to string</span>
-                <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+            <span class="c1"># Convert key to string</span>
+            <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
+
             <span class="c1"># Global response: combine API responses</span>
-            <span class="n">combine_responses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span><span class="p">)</span>
-            <span class="n">combine_responses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_responses</span><span class="p">)</span>
+            <span class="n">combine_responses</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span><span class="p">,</span> <span class="o">**</span><span class="n">new_responses</span><span class="p">}</span>
+
             <span class="c1"># Create operation</span>
             <span class="n">operation</span> <span class="o">=</span> <span class="n">get_operation</span><span class="p">(</span>
                 <span class="n">func</span><span class="p">,</span>
@@ -1265,29 +1258,28 @@
                 <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
                 <span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span>
             <span class="p">)</span>
+
             <span class="c1"># Set external docs</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+
             <span class="c1"># Unique string used to identify the operation.</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
             <span class="p">)</span>
+
             <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+
             <span class="c1"># Add security</span>
-            <span class="k">if</span> <span class="n">security</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">security</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="p">(</span><span class="n">security</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="ow">or</span> <span class="kc">None</span>
+
             <span class="c1"># Add servers</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+
             <span class="c1"># Store tags</span>
-            <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span>
+            <span class="n">tags</span> <span class="o">=</span> <span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span>
             <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
-            <span class="c1"># Parse parameters</span>
-            <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span>
-                <span class="n">func</span><span class="p">,</span>
-                <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span>
-                <span class="n">operation</span><span class="o">=</span><span class="n">operation</span>
-            <span class="p">)</span>
+
             <span class="c1"># Parse response</span>
             <span class="n">get_responses</span><span class="p">(</span><span class="n">combine_responses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
 
@@ -1296,11 +1288,11 @@
 
             <span class="c1"># Parse method</span>
             <span class="n">parse_method</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span>
-        <span class="k">else</span><span class="p">:</span>
+
             <span class="c1"># Parse parameters</span>
-            <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span>
+            <span class="k">return</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="n">operation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1461,7 +1453,8 @@
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/blueprint.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
@@ -1506,9 +1499,7 @@
 <span class="normal">69</span>
 <span class="normal">70</span>
 <span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">import_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1548,9 +1539,8 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span> <span class="o">=</span> <span class="n">abp_tags</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="o">=</span> <span class="n">abp_security</span> <span class="ow">or</span> <span class="p">[]</span>
 
-    <span class="n">abp_responses</span> <span class="o">=</span> <span class="n">abp_responses</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="c1"># Convert key to string</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">abp_responses</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">abp_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">abp_responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">doc_ui</span> <span class="o">=</span> <span class="n">doc_ui</span>
 
@@ -1577,7 +1567,9 @@
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/blueprint.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">76</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
@@ -1598,9 +1590,7 @@
 <span class="normal">94</span>
 <span class="normal">95</span>
 <span class="normal">96</span>
-<span class="normal">97</span>
-<span class="normal">98</span>
-<span class="normal">99</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;APIBlueprint&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">97</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;APIBlueprint&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a nested APIBlueprint&quot;&quot;&quot;</span>
 
     <span class="c1"># Check if the APIBlueprint is being registered on itself</span>
@@ -1620,7 +1610,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="n">uri</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_item</span>
 
     <span class="c1"># Merge component schemas from the nested APIBlueprint</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
     <span class="c1"># Register the nested APIBlueprint as a blueprint</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>

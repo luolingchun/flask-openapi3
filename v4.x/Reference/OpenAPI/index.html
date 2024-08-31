@@ -990,7 +990,8 @@
 
               <details class="quote">
                 <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 50</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 49</span>
+<span class="normal"> 50</span>
 <span class="normal"> 51</span>
 <span class="normal"> 52</span>
 <span class="normal"> 53</span>
@@ -1420,10 +1421,10 @@
         <span class="c1"># Set security schemes, responses, paths and components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">security_schemes</span> <span class="o">=</span> <span class="n">security_schemes</span>
 
-        <span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="c1"># Convert key to string</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
+        <span class="c1"># Initialize instance variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="n">Components</span><span class="p">()</span>
@@ -1444,7 +1445,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">operation_id_callback</span>
 
         <span class="c1"># Set OpenAPI extensions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">openapi_extensions</span> <span class="o">=</span> <span class="n">openapi_extensions</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openapi_extensions</span> <span class="o">=</span> <span class="n">openapi_extensions</span> <span class="ow">or</span> <span class="p">{}</span>
 
         <span class="c1"># Set HTTP Response of validation errors within OpenAPI</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validation_error_status</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">validation_error_status</span><span class="p">)</span>
@@ -1456,10 +1457,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_init_doc</span><span class="p">()</span>
 
         <span class="c1"># Add the OpenAPI command</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">openapi_command</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">openapi_command</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
         <span class="c1"># Initialize specification JSON</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">_init_doc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1486,6 +1487,7 @@
         <span class="p">)</span>
 
         <span class="n">ui_templates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Iterate over all entry points in the &quot;flask_openapi3.plugins&quot; group</span>
         <span class="k">for</span> <span class="n">entry_point</span> <span class="ow">in</span> <span class="n">entry_points</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;flask_openapi3.plugins&quot;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">module_path</span> <span class="o">=</span> <span class="n">entry_point</span><span class="o">.</span><span class="n">value</span>
@@ -1498,7 +1500,7 @@
                 <span class="n">bp</span> <span class="o">=</span> <span class="n">plugin_register</span><span class="p">(</span><span class="n">doc_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_url</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_prefix</span><span class="p">)</span>
                 <span class="n">ui_templates</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">plugin_name</span><span class="p">,</span> <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="n">plugin_display_name</span><span class="p">})</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
                 <span class="kn">import</span> <span class="nn">traceback</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: plugin &#39;</span><span class="si">{</span><span class="n">entry_point</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39; registration failed.&quot;</span><span class="p">)</span>
                 <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
@@ -1593,6 +1595,7 @@
             <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
                 <span class="c1"># Append tag to the list of tags</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
                 <span class="c1"># Append tag name to the list of tag names</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
@@ -1621,6 +1624,7 @@
             <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
                 <span class="c1"># Append tag to the list of tags</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
                 <span class="c1"># Append tag name to the list of tag names</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
@@ -1681,14 +1685,12 @@
 <span class="sd">            method: HTTP method for the operation. Defaults to GET.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">doc_ui</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">responses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">new_responses</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Convert key to string</span>
-                <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+            <span class="c1"># Convert key to string</span>
+            <span class="n">new_responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
+
             <span class="c1"># Global response: combine API responses</span>
-            <span class="n">combine_responses</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">responses</span><span class="p">)</span>
-            <span class="n">combine_responses</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_responses</span><span class="p">)</span>
+            <span class="n">combine_responses</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">responses</span><span class="p">,</span> <span class="o">**</span><span class="n">new_responses</span><span class="p">}</span>
+
             <span class="c1"># Create operation</span>
             <span class="n">operation</span> <span class="o">=</span> <span class="n">get_operation</span><span class="p">(</span>
                 <span class="n">func</span><span class="p">,</span>
@@ -1698,37 +1700,37 @@
             <span class="p">)</span>
             <span class="c1"># Set external docs</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+
             <span class="c1"># Unique string used to identify the operation.</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">(</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
             <span class="p">)</span>
+
             <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+
             <span class="c1"># Add security</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span>
+
             <span class="c1"># Add servers</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+
             <span class="c1"># Store tags</span>
-            <span class="k">if</span> <span class="n">tags</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">tags</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
-            <span class="c1"># Parse parameters</span>
-            <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span>
-                <span class="n">func</span><span class="p">,</span>
-                <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span>
-                <span class="n">operation</span><span class="o">=</span><span class="n">operation</span>
-            <span class="p">)</span>
+            <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[],</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+
             <span class="c1"># Parse response</span>
             <span class="n">get_responses</span><span class="p">(</span><span class="n">combine_responses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+
             <span class="c1"># Convert a route parameter format from /pet/&lt;petId&gt; to /pet/{petId}</span>
             <span class="n">uri</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;([^&lt;:]+:)?&quot;</span><span class="p">,</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
             <span class="c1"># Parse method</span>
             <span class="n">parse_method</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span>
-        <span class="k">else</span><span class="p">:</span>
+
             <span class="c1"># Parse parameters</span>
-            <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span>
+            <span class="k">return</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">components_schemas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">,</span> <span class="n">operation</span><span class="o">=</span><span class="n">operation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2039,7 +2041,8 @@ Defaults to "/openapi.json".</p>
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 51</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 50</span>
+<span class="normal"> 51</span>
 <span class="normal"> 52</span>
 <span class="normal"> 53</span>
 <span class="normal"> 54</span>
@@ -2137,8 +2140,7 @@ Defaults to "/openapi.json".</p>
 <span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">import_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2198,10 +2200,10 @@ Defaults to "/openapi.json".</p>
     <span class="c1"># Set security schemes, responses, paths and components</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">security_schemes</span> <span class="o">=</span> <span class="n">security_schemes</span>
 
-    <span class="n">responses</span> <span class="o">=</span> <span class="n">responses</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="c1"># Convert key to string</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">responses</span> <span class="o">=</span> <span class="n">convert_responses_key_to_string</span><span class="p">(</span><span class="n">responses</span> <span class="ow">or</span> <span class="p">{})</span>
 
+    <span class="c1"># Initialize instance variables</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="n">Components</span><span class="p">()</span>
@@ -2222,7 +2224,7 @@ Defaults to "/openapi.json".</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">operation_id_callback</span>
 
     <span class="c1"># Set OpenAPI extensions</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">openapi_extensions</span> <span class="o">=</span> <span class="n">openapi_extensions</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">openapi_extensions</span> <span class="o">=</span> <span class="n">openapi_extensions</span> <span class="ow">or</span> <span class="p">{}</span>
 
     <span class="c1"># Set HTTP Response of validation errors within OpenAPI</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">validation_error_status</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">validation_error_status</span><span class="p">)</span>
@@ -2234,10 +2236,10 @@ Defaults to "/openapi.json".</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_doc</span><span class="p">()</span>
 
     <span class="c1"># Add the OpenAPI command</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">openapi_command</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">openapi_command</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># Initialize specification JSON</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2310,7 +2312,8 @@ Defaults to "/openapi.json".</p>
 <span class="normal">291</span>
 <span class="normal">292</span>
 <span class="normal">293</span>
-<span class="normal">294</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">294</span>
+<span class="normal">295</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register an APIBlueprint.</span>
 
@@ -2322,6 +2325,7 @@ Defaults to "/openapi.json".</p>
         <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
             <span class="c1"># Append tag to the list of tags</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
             <span class="c1"># Append tag name to the list of tag names</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
@@ -2397,8 +2401,7 @@ Defaults to "/openapi.json".</p>
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">296</span>
-<span class="normal">297</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">297</span>
 <span class="normal">298</span>
 <span class="normal">299</span>
 <span class="normal">300</span>
@@ -2423,7 +2426,9 @@ Defaults to "/openapi.json".</p>
 <span class="normal">319</span>
 <span class="normal">320</span>
 <span class="normal">321</span>
-<span class="normal">322</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register APIView</span>
 
@@ -2439,6 +2444,7 @@ Defaults to "/openapi.json".</p>
         <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
             <span class="c1"># Append tag to the list of tags</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+
             <span class="c1"># Append tag name to the list of tag names</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
