@@ -86,5 +86,5 @@ def test_get_list(client):
 
 
 def test_post(client):
-    resp = client.post("/api/v1/book", json={"age": 1})
-    assert resp.status_code == 422
+    resp = client.post("/api/v1/book", json={"age": 2})
+    assert resp.status_code == 200

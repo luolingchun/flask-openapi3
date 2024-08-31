@@ -10,7 +10,7 @@ from .parameter import Parameter
 from .reference import Reference
 from .server import Server
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # pragma: no cover
     from .operation import Operation
 
 

@@ -5,7 +5,6 @@ import json
 import os
 import re
 import sys
-from copy import deepcopy
 from importlib import import_module
 from typing import Optional, List, Dict, Union, Any, Type, Callable
 
@@ -14,7 +13,7 @@ from pydantic import BaseModel
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import entry_points
-else:
+else:  # pragma: no cover
     from importlib_metadata import entry_points  # type: ignore
 
 from .blueprint import APIBlueprint
@@ -108,10 +107,10 @@ class OpenAPI(APIScaffold, Flask):
         # Set security schemes, responses, paths and components
         self.security_schemes = security_schemes
 
-        responses = responses or {}
         # Convert key to string
-        self.responses = convert_responses_key_to_string(responses)
+        self.responses = convert_responses_key_to_string(responses or {})
 
+        # Initialize instance variables
         self.paths: Dict = dict()
         self.components_schemas: Dict = dict()
         self.components = Components()
@@ -132,7 +131,7 @@ class OpenAPI(APIScaffold, Flask):
         self.operation_id_callback: Callable = operation_id_callback
 
         # Set OpenAPI extensions
-        self.openapi_extensions = openapi_extensions or dict()
+        self.openapi_extensions = openapi_extensions or {}
 
         # Set HTTP Response of validation errors within OpenAPI
         self.validation_error_status = str(validation_error_status)
@@ -147,7 +146,7 @@ class OpenAPI(APIScaffold, Flask):
         self.cli.add_command(openapi_command)  # type: ignore
 
         # Initialize specification JSON
-        self.spec_json: Dict = dict()
+        self.spec_json: Dict = {}
 
     def _init_doc(self) -> None:
         """
@@ -174,6 +173,7 @@ class OpenAPI(APIScaffold, Flask):
         )
 
         ui_templates = []
+        # Iterate over all entry points in the "flask_openapi3.plugins" group
         for entry_point in entry_points(group="flask_openapi3.plugins"):
             try:
                 module_path = entry_point.value
@@ -186,7 +186,7 @@ class OpenAPI(APIScaffold, Flask):
                 bp = plugin_register(doc_url=self.doc_url.lstrip("/"))
                 self.register_blueprint(bp, url_prefix=self.doc_prefix)
                 ui_templates.append({"name": plugin_name, "display_name": plugin_display_name})
-            except (ModuleNotFoundError, AttributeError):
+            except (ModuleNotFoundError, AttributeError):  # pragma: no cover
                 import traceback
                 print(f"Warning: plugin '{entry_point.value}' registration failed.")
                 traceback.print_exc()
@@ -281,6 +281,7 @@ class OpenAPI(APIScaffold, Flask):
             if tag.name not in self.tag_names:
                 # Append tag to the list of tags
                 self.tags.append(tag)
+
                 # Append tag name to the list of tag names
                 self.tag_names.append(tag.name)
 
@@ -309,6 +310,7 @@ class OpenAPI(APIScaffold, Flask):
             if tag.name not in self.tag_names:
                 # Append tag to the list of tags
                 self.tags.append(tag)
+
                 # Append tag name to the list of tag names
                 self.tag_names.append(tag.name)
 
@@ -369,14 +371,12 @@ class OpenAPI(APIScaffold, Flask):
             method: HTTP method for the operation. Defaults to GET.
         """
         if doc_ui is True:
-            if responses is None:
-                new_responses = {}
-            else:
-                # Convert key to string
-                new_responses = convert_responses_key_to_string(responses)
+            # Convert key to string
+            new_responses = convert_responses_key_to_string(responses or {})
+
             # Global response: combine API responses
-            combine_responses = deepcopy(self.responses)
-            combine_responses.update(**new_responses)
+            combine_responses = {**self.responses, **new_responses}
+
             # Create operation
             operation = get_operation(
                 func,
@@ -386,34 +386,34 @@ class OpenAPI(APIScaffold, Flask):
             )
             # Set external docs
             operation.externalDocs = external_docs
+
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
                 name=func.__name__, path=rule, method=method
             )
+
             # Only set `deprecated` if True, otherwise leave it as None
             operation.deprecated = deprecated
+
             # Add security
             operation.security = security
+
             # Add servers
             operation.servers = servers
+
             # Store tags
-            if tags is None:
-                tags = []
-            parse_and_store_tags(tags, self.tags, self.tag_names, operation)
-            # Parse parameters
-            header, cookie, path, query, form, body, raw = parse_parameters(
-                func,
-                components_schemas=self.components_schemas,
-                operation=operation
-            )
+            parse_and_store_tags(tags or [], self.tags, self.tag_names, operation)
+
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
+
             # Convert a route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
+
             # Parse method
             parse_method(uri, method, self.paths, operation)
-            return header, cookie, path, query, form, body, raw
-        else:
+
             # Parse parameters
-            header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
-            return header, cookie, path, query, form, body, raw
+            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+        else:
+            return parse_parameters(func, doc_ui=False)

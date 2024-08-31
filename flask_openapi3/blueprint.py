@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
-from copy import deepcopy
 from typing import Optional, List, Dict, Any, Callable
 
 from flask import Blueprint
@@ -64,9 +63,8 @@ class APIBlueprint(APIScaffold, Blueprint):
         self.abp_tags = abp_tags or []
         self.abp_security = abp_security or []
 
-        abp_responses = abp_responses or {}
         # Convert key to string
-        self.abp_responses = convert_responses_key_to_string(abp_responses)
+        self.abp_responses = convert_responses_key_to_string(abp_responses or {})
 
         self.doc_ui = doc_ui
 
@@ -93,7 +91,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             self.paths[uri] = path_item
 
         # Merge component schemas from the nested APIBlueprint
-        self.components_schemas.update(**api.components_schemas)
+        self.components_schemas.update(api.components_schemas)
 
         # Register the nested APIBlueprint as a blueprint
         self.register_blueprint(api)
@@ -145,14 +143,12 @@ class APIBlueprint(APIScaffold, Blueprint):
             doc_ui: Declares this operation to be shown. Default to True.
         """
         if self.doc_ui is True and doc_ui is True:
-            if responses is None:
-                new_responses = {}
-            else:
-                # Convert key to string
-                new_responses = convert_responses_key_to_string(responses)
+            # Convert key to string
+            new_responses = convert_responses_key_to_string(responses or {})
+
             # Global response: combine API responses
-            combine_responses = deepcopy(self.abp_responses)
-            combine_responses.update(**new_responses)
+            combine_responses = {**self.abp_responses, **new_responses}
+
             # Create operation
             operation = get_operation(
                 func,
@@ -160,29 +156,28 @@ class APIBlueprint(APIScaffold, Blueprint):
                 description=description,
                 openapi_extensions=openapi_extensions
             )
+
             # Set external docs
             operation.externalDocs = external_docs
+
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
                 name=self.name, path=rule, method=method
             )
+
             # Only set `deprecated` if True, otherwise leave it as None
             operation.deprecated = deprecated
+
             # Add security
-            if security is None:
-                security = []
-            operation.security = security + self.abp_security or None
+            operation.security = (security or []) + self.abp_security or None
+
             # Add servers
             operation.servers = servers
+
             # Store tags
-            tags = tags + self.abp_tags if tags else self.abp_tags
+            tags = (tags or []) + self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
-            # Parse parameters
-            header, cookie, path, query, form, body, raw = parse_parameters(
-                func,
-                components_schemas=self.components_schemas,
-                operation=operation
-            )
+
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
 
@@ -191,8 +186,8 @@ class APIBlueprint(APIScaffold, Blueprint):
 
             # Parse method
             parse_method(uri, method, self.paths, operation)
-            return header, cookie, path, query, form, body, raw
-        else:
+
             # Parse parameters
-            header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
-            return header, cookie, path, query, form, body, raw
+            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+        else:
+            return parse_parameters(func, doc_ui=False)

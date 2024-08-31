@@ -114,7 +114,6 @@ def get_book(path: BookPath):
     """
     if path.bid == 4:
         return NotFoundResponse().model_dump(), 404
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
 
 
 @app.get('/book', tags=[book_tag], responses={"200": BookListResponseV1})

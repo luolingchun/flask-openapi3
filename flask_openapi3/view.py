@@ -2,7 +2,6 @@
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
 import typing
-from copy import deepcopy
 from typing import Optional, List, Dict, Any, Callable
 
 from .models import ExternalDocumentation
@@ -19,7 +18,7 @@ from .utils import parse_method
 from .utils import parse_parameters
 from .utils import parse_rule
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # pragma: no cover
     from .openapi import OpenAPI
 
 
@@ -50,9 +49,8 @@ class APIView:
         self.view_tags = view_tags or []
         self.view_security = view_security or []
 
-        view_responses = view_responses or {}
         # Convert key to string
-        self.view_responses = convert_responses_key_to_string(view_responses)
+        self.view_responses = convert_responses_key_to_string(view_responses or {})
 
         self.doc_ui = doc_ui
         self.operation_id_callback: Callable = operation_id_callback
@@ -67,7 +65,7 @@ class APIView:
         """Decorator for view class"""
 
         def wrapper(cls):
-            if self.views.get(rule):
+            if self.views.get(rule):  # pragma: no cover
                 raise ValueError(f"malformed url rule: {rule!r}")
             methods = []
 
@@ -134,21 +132,17 @@ class APIView:
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
-        if responses is None:
-            new_responses = {}
-        else:
-            # Convert key to string
-            new_responses = convert_responses_key_to_string(responses)
-        if security is None:
-            security = []
+        new_responses = convert_responses_key_to_string(responses or {})
+        security = security or []
         tags = tags + self.view_tags if tags else self.view_tags
 
         def decorator(func):
             if self.doc_ui is False or doc_ui is False:
-                return
+                return func
+
             # Global response combines API responses
-            combine_responses = deepcopy(self.view_responses)
-            combine_responses.update(**new_responses)
+            combine_responses = {**self.view_responses, **new_responses}
+
             # Create operation
             operation = get_operation(
                 func,
@@ -156,24 +150,32 @@ class APIView:
                 description=description,
                 openapi_extensions=openapi_extensions
             )
+
             # Set external docs
             operation.externalDocs = external_docs
+
             # Unique string used to identify the operation.
             operation.operationId = operation_id
+
             # Only set `deprecated` if True, otherwise leave it as None
             operation.deprecated = deprecated
+
             # Add security
             operation.security = security + self.view_security or None
+
             # Add servers
             operation.servers = servers
+
             # Store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
+
             # Parse parameters
             parse_parameters(
                 func,
                 components_schemas=self.components_schemas,
                 operation=operation
             )
+
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
             func.operation = operation
@@ -190,8 +192,6 @@ class APIView:
             app: An instance of the OpenAPI app.
             view_kwargs: Additional keyword arguments to pass to the API views.
         """
-        if view_kwargs is None:
-            view_kwargs = {}
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())

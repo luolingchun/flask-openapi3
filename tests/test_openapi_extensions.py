@@ -33,7 +33,7 @@ def client():
 
 @app.get("/", openapi_extensions=openapi_extensions)
 def hello():
-    return "ok"
+    return "ok"  # pragma: no cover
 
 
 # APIBlueprint
@@ -42,7 +42,7 @@ api = APIBlueprint("book", __name__, url_prefix="/api")
 
 @api.get('/book', openapi_extensions=openapi_extensions)
 def get_book():
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}  # pragma: no cover
 
 
 app.register_api(api)
@@ -56,7 +56,7 @@ class BookListAPIView:
 
     @api_view.doc(openapi_extensions=openapi_extensions)
     def post(self):
-        return "ok"
+        return "ok"  # pragma: no cover
 
 
 app.register_api_view(api_view)

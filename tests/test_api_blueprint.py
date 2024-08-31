@@ -82,6 +82,13 @@ def update_book1(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
+@api.patch('/v2/book/<int:bid>')
+def update_book1_v2(path: BookPath, body: BookBody):
+    assert path.bid == 1
+    assert body.age == 3
+    return {"code": 0, "message": "ok"}
+
+
 @api.delete('/book/<int:bid>')
 def delete_book(path: BookPath):
     assert path.bid == 1
@@ -112,6 +119,9 @@ def test_put(client):
 
 def test_patch(client):
     resp = client.patch("/api/book/1", json={"age": 3})
+    assert resp.status_code == 200
+
+    resp = client.patch("/api/v2/book/1", json={"age": 3})
     assert resp.status_code == 200
 
 

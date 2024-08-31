@@ -56,8 +56,39 @@ class FormParameters(BaseModel):
     default_value: str = "default_value"
 
 
+class FormParameter(BaseModel):
+    obj: Dict[Any, Any]
+
+    model_config = dict(
+        openapi_extra={
+            "encoding": {
+                "historyMetadata": {
+                    "contentType": "application/xml; charset=utf-8"
+                },
+                "profileImage": {
+                    "contentType": "image/png, image/jpeg",
+                    "headers": {
+                        "X-Rate-Limit-Limit": {
+                            "description": "The number of allowed requests in the current period",
+                            "schema": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    )
+
+
 @app.post("/example")
 def complex_form_example(form: FormParameters):
+    print(form.model_dump())
+    return "ok"
+
+
+@app.post("/example2")
+def invalid_json_in_form_example(form: FormParameter):
     print(form.model_dump())
     return "ok"
 
@@ -91,5 +122,16 @@ def test_openapi(client):
     assert resp.status_code == 200
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+def test_invalid_json_in_form_example(client):
+    data = {
+        "obj": "{a: 2}"
+    }
+    resp = client.post("/example2", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 422
+
+    data = {
+        "obj": '{"a": 2}'
+    }
+
+    resp = client.post("/example2", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 200

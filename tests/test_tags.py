@@ -24,7 +24,7 @@ api1 = APIBlueprint("book1", __name__)
 
 @api1.get('/book', tags=[Tag(name="book")])
 def get_book():
-    return {"code": 0, "message": "ok"}
+    ...  # pragma: no cover
 
 
 api2 = APIBlueprint("book2", __name__)
@@ -32,7 +32,7 @@ api2 = APIBlueprint("book2", __name__)
 
 @api2.get('/book2', tags=[Tag(name="book")])
 def get_book2():
-    return {"code": 0, "message": "ok"}
+    ...  # pragma: no cover
 
 
 app.register_api(api1)

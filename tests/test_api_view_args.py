@@ -34,7 +34,7 @@ class BookAPIView:
         self.b = view_kwargs.get("b")
 
     @api_view.doc(summary="get book list")
-    def get(self, path: BookPath):
+    async def get(self, path: BookPath):
         print(path)
         return {"b": self.b}
 

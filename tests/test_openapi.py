@@ -41,7 +41,7 @@ def test_responses_are_replicated_in_open_api(request):
 
     @test_app.get("/test", responses={"201": BaseResponse})
     def endpoint_test():
-        return b"", 201
+        return b"", 201  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -101,7 +101,7 @@ def test_none_responses_are_replicated_in_open_api(request):
         }
     )
     def endpoint_test():
-        return b"", 204
+        return b"", 204  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -156,7 +156,7 @@ def test_responses_are_replicated_in_open_api2(request):
         }
     )
     def endpoint_test():
-        return b"", 201
+        return b"", 201  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -206,7 +206,7 @@ def test_responses_without_content_are_replicated_in_open_api(request):
         }
     )
     def endpoint_test():
-        return b"", 201
+        return b"", 201  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -311,7 +311,7 @@ def test_form_examples(request):
 
     @test_app.post("/test")
     def endpoint_test(form: BaseRequestGeneric[BaseRequest]):
-        return form.model_dump(), 200
+        return form.model_dump(), 200  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -345,7 +345,7 @@ def test_body_with_complex_object(request):
 
     @test_app.post("/test")
     def endpoint_test(body: BaseRequestBody):
-        return body.model_dump(), 200
+        return body.model_dump(), 200  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -372,7 +372,7 @@ def test_responses_with_generics(request):
 
     @test_app.get("/test", responses={"201": ListGenericResponse[Detail]})
     def endpoint_test():
-        return b"", 201
+        return b"", 201  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -404,8 +404,7 @@ def test_path_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(path: PathParam):
-        print(path)
-        return {}, 200
+        return path.model_dump(), 200  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -439,8 +438,7 @@ def test_query_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(query: QueryParam):
-        print(query)
-        return {}, 200
+        return query.model_dump(), 200  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -477,9 +475,7 @@ def test_header_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(header: HeaderParam, cookie: CookieParam):
-        print(header)
-        print(cookie)
-        return {}, 200
+        print(header, cookie)  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")

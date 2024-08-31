@@ -18,7 +18,7 @@ class MyModel(BaseModel):
 
 @app.post('/book')
 def create_book(body: MyModel):
-    return body.dict()
+    print(body)  # pragma: no cover
 
 
 @pytest.fixture

@@ -24,7 +24,7 @@ def openapi_command(output, _format, indent):
         if _format == "yaml":
             try:
                 import yaml  # type: ignore
-            except ImportError:
+            except ImportError:  # pragma: no cover
                 raise ImportError("pyyaml must be installed.")
             openapi = yaml.safe_dump(obj, allow_unicode=True)
         else:

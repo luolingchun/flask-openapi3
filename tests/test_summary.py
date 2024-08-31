@@ -26,7 +26,7 @@ def get_book():
     to get some book by id, like:
     http://localhost:5000/book/3
     """
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}  # pragma: no cover
 
 
 @app.get('/book2', description='new description')
@@ -35,7 +35,7 @@ def get_book2():
     to get some book by id, like:
     http://localhost:5000/book/3
     """
-    return {"code": 0, "message": "ok"}
+    return {"code": 0, "message": "ok"}  # pragma: no cover
 
 
 def test_openapi(client):
