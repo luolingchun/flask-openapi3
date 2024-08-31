@@ -4,13 +4,15 @@
   <meta charset="utf-8">
   <title>Redirecting</title>
   <noscript>
-    <meta http-equiv="refresh" content="1; url=v3.x/" />
+    <meta http-equiv="refresh" content="1; url=v4.x/" />
   </noscript>
   <script>
-    window.location.replace("v3.x/" + window.location.hash);
+    window.location.replace(
+      "v4.x/" + window.location.search + window.location.hash
+    );
   </script>
 </head>
 <body>
-  Redirecting to <a href="v3.x/">v3.x/</a>...
+  Redirecting to <a href="v4.x/">v4.x/</a>...
 </body>
 </html>
