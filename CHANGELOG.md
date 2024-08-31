@@ -1,3 +1,11 @@
+## v4.0.0rc3 2024-08-31
+
+- Add py.typed marker file for PEP-561 support by @luolingchun in #160
+- Use ruff instead of flake8 by @luolingchun in #164
+- Remove experimental export markdown by @luolingchun in #161
+- Fix `populate_by_name` when execute `model_validate` by @luolingchun in #167
+- Optimize performance and unit testing by @luolingchun in #155
+
 ## v4.0.0rc2 2024-06-16
 
 - Fix empty list in body by @luolingchun in #154
