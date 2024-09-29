@@ -1,3 +1,14 @@
+## v4.0.0 2024-09-29
+
+* Support plugins for ui templates by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/151
+* Add py.typed marker file for PEP-561 support by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/160
+* Use ruff instead of flake8 by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/164
+* Remove experimental export markdown by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/161
+* Fix `populate_by_name` when execute `model_validate` by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/167
+* Update docs by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/155
+* Fix __get_pydantic_core_schema__ by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/179
+* Fix list with default value by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/180
+
 ## v4.0.0rc3 2024-08-31
 
 - Add py.typed marker file for PEP-561 support by @luolingchun in #160
