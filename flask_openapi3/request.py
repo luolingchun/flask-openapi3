@@ -41,7 +41,7 @@ def _validate_query(query: Type[BaseModel], func_kwargs):
             value = request_args.getlist(v.alias or k) or request_args.getlist(k)
         else:
             value = request_args.get(v.alias or k) or request_args.get(k)  # type:ignore
-        if value is not None:
+        if value is not None and value != []:
             query_dict[k] = value
     func_kwargs["query"] = query.model_validate(obj=query_dict)
 
@@ -69,7 +69,7 @@ def _validate_form(form: Type[BaseModel], func_kwargs):
                 value = json.loads(_value)  # type:ignore
             except (JSONDecodeError, TypeError):
                 value = _value  # type:ignore
-        if value is not None:
+        if value is not None and value != []:
             form_dict[k] = value
     func_kwargs["form"] = form.model_validate(obj=form_dict)
 

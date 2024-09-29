@@ -106,7 +106,7 @@ def api_raw(raw: BookRaw):
 
 
 def test_query(client):
-    r = client.get("/query")
+    r = client.get("/query?age=1")
     print(r.json)
     assert r.status_code == 200
 
