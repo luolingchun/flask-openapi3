@@ -1,13 +1,17 @@
+## v4.0.1 2024-10-05
+
+-  Fix alias in query and form by @luolingchun in #184
+
 ## v4.0.0 2024-09-29
 
-* Support plugins for ui templates by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/151
-* Add py.typed marker file for PEP-561 support by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/160
-* Use ruff instead of flake8 by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/164
-* Remove experimental export markdown by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/161
-* Fix `populate_by_name` when execute `model_validate` by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/167
-* Update docs by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/155
-* Fix __get_pydantic_core_schema__ by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/179
-* Fix list with default value by @luolingchun in https://github.com/luolingchun/flask-openapi3/pull/180
+* Support plugins for ui templates by @luolingchun in #151
+* Add py.typed marker file for PEP-561 support by @luolingchun in #160
+* Use ruff instead of flake8 by @luolingchun in #164
+* Remove experimental export markdown by @luolingchun in #161
+* Fix `populate_by_name` when execute `model_validate` by @luolingchun in #167
+* Update docs by @luolingchun in #155
+* Fix __get_pydantic_core_schema__ by @luolingchun in #179
+* Fix list with default value by @luolingchun in #180
 
 ## v4.0.0rc3 2024-08-31
 
