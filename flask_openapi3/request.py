@@ -165,7 +165,7 @@ def _validate_request(
         if cookie:
             _validate_cookie(cookie, func_kwargs)
         if path:
-            _validate_path(path, path_kwargs, func_kwargs)
+            _validate_path(path, path_kwargs or {}, func_kwargs)
         if query:
             _validate_query(query, func_kwargs)
         if form:
