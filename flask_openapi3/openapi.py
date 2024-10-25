@@ -245,8 +245,11 @@ class OpenAPI(APIScaffold, Flask):
 
         # Update with OpenAPI extensions
         self.spec_json.update(**self.openapi_extensions)
+        self._register_default_error_responses()
+        return self.spec_json
 
-        # Handle validation error response
+    def _register_default_error_responses(self):
+        """Register error response on all endpoints."""
         for rule, path_item in self.spec_json["paths"].items():
             for http_method, operation in path_item.items():
                 if operation.get("parameters") is None and operation.get("requestBody") is None:
@@ -266,8 +269,6 @@ class OpenAPI(APIScaffold, Flask):
                         }
                     }
                 }
-
-        return self.spec_json
 
     def register_api(self, api: APIBlueprint) -> None:
         """
