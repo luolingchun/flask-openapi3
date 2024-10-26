@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -988,6 +988,11 @@
               Bases: <code><a class="autorefs autorefs-internal" title="flask_openapi3.scaffold.APIScaffold" href="../Scaffold/#flask_openapi3.scaffold.APIScaffold">APIScaffold</a></code>, <code><span title="flask.Flask">Flask</span></code></p>
 
 
+
+
+
+
+
               <details class="quote">
                 <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 49</span>
@@ -1816,7 +1821,9 @@
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>import_name</code></td>
+            <td>
+                <code>import_name</code>
+            </td>
             <td>
                   <code>str</code>
             </td>
@@ -1830,7 +1837,9 @@
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>info</code></td>
+            <td>
+                <code>info</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Info" href="../Models/#flask_openapi3.models.Info">Info</a>]</code>
             </td>
@@ -1845,7 +1854,9 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#info-object">https://spec.open
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>security_schemes</code></td>
+            <td>
+                <code>security_schemes</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.SecuritySchemesDict">SecuritySchemesDict</span>]</code>
             </td>
@@ -1860,7 +1871,9 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">https:
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>responses</code></td>
+            <td>
+                <code>responses</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="flask_openapi3.types.ResponseDict">ResponseDict</span>]</code>
             </td>
@@ -1874,7 +1887,9 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">https:
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>servers</code></td>
+            <td>
+                <code>servers</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.Server" href="../Models/#flask_openapi3.models.Server">Server</a>]]</code>
             </td>
@@ -1888,7 +1903,9 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">https:
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>external_docs</code></td>
+            <td>
+                <code>external_docs</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="flask_openapi3.models.ExternalDocumentation" href="../Models/#flask_openapi3.models.ExternalDocumentation">ExternalDocumentation</a>]</code>
             </td>
@@ -1903,7 +1920,9 @@ See: <a href="https://spec.openapis.org/oas/v3.1.0#external-documentation-object
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>operation_id_callback</code></td>
+            <td>
+                <code>operation_id_callback</code>
+            </td>
             <td>
                   <code><span title="typing.Callable">Callable</span></code>
             </td>
@@ -1919,7 +1938,9 @@ Defaults to <code>get_operation_id_for_path</code> from utils.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>openapi_extensions</code></td>
+            <td>
+                <code>openapi_extensions</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[str, <span title="typing.Any">Any</span>]]</code>
             </td>
@@ -1934,7 +1955,9 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">http
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>validation_error_status</code></td>
+            <td>
+                <code>validation_error_status</code>
+            </td>
             <td>
                   <code><span title="typing.Union">Union</span>[str, int]</code>
             </td>
@@ -1949,7 +1972,9 @@ Defaults to 422.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>validation_error_model</code></td>
+            <td>
+                <code>validation_error_model</code>
+            </td>
             <td>
                   <code><span title="typing.Type">Type</span>[<span title="pydantic.BaseModel">BaseModel</span>]</code>
             </td>
@@ -1963,7 +1988,9 @@ Defaults to 422.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>validation_error_callback</code></td>
+            <td>
+                <code>validation_error_callback</code>
+            </td>
             <td>
                   <code><span title="typing.Callable">Callable</span></code>
             </td>
@@ -1978,7 +2005,9 @@ the validation_error_model.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>doc_ui</code></td>
+            <td>
+                <code>doc_ui</code>
+            </td>
             <td>
                   <code>bool</code>
             </td>
@@ -1993,7 +2022,9 @@ Defaults to True.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>doc_prefix</code></td>
+            <td>
+                <code>doc_prefix</code>
+            </td>
             <td>
                   <code>str</code>
             </td>
@@ -2008,7 +2039,9 @@ Defaults to "/openapi".</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>doc_url</code></td>
+            <td>
+                <code>doc_url</code>
+            </td>
             <td>
                   <code>str</code>
             </td>
@@ -2023,7 +2056,9 @@ Defaults to "/openapi.json".</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>**kwargs</code></td>
+            <td>
+                <code>**kwargs</code>
+            </td>
             <td>
                   <code><span title="typing.Any">Any</span></code>
             </td>
@@ -2272,7 +2307,9 @@ Defaults to "/openapi.json".</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>api</code></td>
+            <td>
+                <code>api</code>
+            </td>
             <td>
                   <code><a class="autorefs autorefs-internal" title="flask_openapi3.blueprint.APIBlueprint" href="../APIBlueprint/#flask_openapi3.APIBlueprint">APIBlueprint</a></code>
             </td>
@@ -2369,7 +2406,9 @@ Defaults to "/openapi.json".</p>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-            <td><code>api_view</code></td>
+            <td>
+                <code>api_view</code>
+            </td>
             <td>
                   <code><a class="autorefs autorefs-internal" title="flask_openapi3.view.APIView" href="../APIView/#flask_openapi3.view.APIView">APIView</a></code>
             </td>
@@ -2383,7 +2422,9 @@ Defaults to "/openapi.json".</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code>view_kwargs</code></td>
+            <td>
+                <code>view_kwargs</code>
+            </td>
             <td>
                   <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="typing.Any">Any</span>, <span title="typing.Any">Any</span>]]</code>
             </td>
@@ -2564,7 +2605,7 @@ Defaults to "/openapi.json".</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
