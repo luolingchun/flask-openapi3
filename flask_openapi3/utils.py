@@ -322,8 +322,9 @@ def get_responses(
             _responses[key] = Response(**response)
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
-            name = normalize_name(response.__name__)
             schema = get_model_schema(response, mode="serialization")
+            original_title = schema.get("title") or response.__name__
+            name = normalize_name(original_title)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
