@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/30 14:25
-import json
 import os
 import re
 import sys
@@ -241,9 +240,9 @@ class OpenAPI(APIScaffold, Flask):
         spec.components = self.components
 
         # Convert spec to JSON
-        self.spec_json = json.loads(spec.model_dump_json(by_alias=True, exclude_none=True, warnings=False))
+        self.spec_json = spec.model_dump(mode="json", by_alias=True, exclude_none=True, warnings=False, exclude={"components"})
         # fix to include `default=None` in fields
-        components_only = json.loads(spec.model_dump_json(by_alias=True, exclude_unset=True, warnings=False))["components"]
+        components_only = spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False, include={"components"})["components"]
         self.spec_json["components"] = components_only
 
         # Update with OpenAPI extensions
