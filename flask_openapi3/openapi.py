@@ -218,12 +218,18 @@ class OpenAPI(APIScaffold, Flask):
         spec = APISpec(
             openapi=self.openapi_version,
             info=self.info,
-            servers=self.severs,
-            paths=self.paths,
-            externalDocs=self.external_docs
+            paths=self.paths
         )
+
+        if self.severs:
+            spec.servers = self.severs
+
+        if self.external_docs:
+            spec.externalDocs = self.external_docs
+
         # Set tags
-        spec.tags = self.tags or None
+        if self.tags:
+            spec.tags = self.tags
 
         # Add ValidationErrorModel to components schemas
         schema = get_model_schema(self.validation_error_model)
@@ -240,10 +246,7 @@ class OpenAPI(APIScaffold, Flask):
         spec.components = self.components
 
         # Convert spec to JSON
-        self.spec_json = spec.model_dump(mode="json", by_alias=True, exclude_none=True, warnings=False, exclude={"components"})
-        # fix to include `default=None` in fields
-        components_only = spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False, include={"components"})["components"]
-        self.spec_json["components"] = components_only
+        self.spec_json = spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False)
 
         # Update with OpenAPI extensions
         self.spec_json.update(**self.openapi_extensions)
@@ -387,7 +390,8 @@ class OpenAPI(APIScaffold, Flask):
                 openapi_extensions=openapi_extensions
             )
             # Set external docs
-            operation.externalDocs = external_docs
+            if external_docs:
+                operation.externalDocs = external_docs
 
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
@@ -395,13 +399,16 @@ class OpenAPI(APIScaffold, Flask):
             )
 
             # Only set `deprecated` if True, otherwise leave it as None
-            operation.deprecated = deprecated
+            if deprecated is not None:
+                operation.deprecated = deprecated
 
             # Add security
-            operation.security = security
+            if security:
+                operation.security = security
 
             # Add servers
-            operation.servers = servers
+            if servers:
+                operation.servers = servers
 
             # Store tags
             parse_and_store_tags(tags or [], self.tags, self.tag_names, operation)

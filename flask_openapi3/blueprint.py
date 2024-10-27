@@ -158,7 +158,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             )
 
             # Set external docs
-            operation.externalDocs = external_docs
+            if external_docs:
+                operation.externalDocs = external_docs
 
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
@@ -166,13 +167,17 @@ class APIBlueprint(APIScaffold, Blueprint):
             )
 
             # Only set `deprecated` if True, otherwise leave it as None
-            operation.deprecated = deprecated
+            if deprecated is not None:
+                operation.deprecated = deprecated
 
             # Add security
-            operation.security = (security or []) + self.abp_security or None
+            _security = (security or []) + self.abp_security or None
+            if _security:
+                operation.security = _security
 
             # Add servers
-            operation.servers = servers
+            if servers:
+                operation.servers = servers
 
             # Store tags
             tags = (tags or []) + self.abp_tags
