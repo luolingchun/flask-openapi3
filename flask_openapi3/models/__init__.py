@@ -9,7 +9,7 @@ The type orders are according to the contents of the specification:
 https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#table-of-contents
 """
 
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 
 from flask import Request
 from pydantic import BaseModel
@@ -63,6 +63,7 @@ class APISpec(BaseModel):
     security: Optional[List[SecurityRequirement]] = None
     tags: Optional[List[Tag]] = None
     externalDocs: Optional[ExternalDocumentation] = None
+    webhooks: Optional[Dict[str, Union[PathItem, Reference]]] = None
 
     model_config = {
         "extra": "allow"
