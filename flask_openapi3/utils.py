@@ -73,19 +73,25 @@ def get_operation(
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
     lines = doc.split("\n")
-    doc_summary = lines[0] or None
+    doc_summary = lines[0]
 
     # Determine the summary and description based on provided arguments or docstring
     if summary is None:
-        doc_description = lines[0] if len(lines) == 0 else "</br>".join(lines[1:]) or None
+        doc_description = lines[0] if len(lines) == 0 else "</br>".join(lines[1:])
     else:
-        doc_description = "</br>".join(lines) or None
+        doc_description = "</br>".join(lines)
+
+    summary = summary or doc_summary
+    description = description or doc_description
 
     # Create the operation dictionary with summary and description
-    operation_dict = dict(
-        summary=summary or doc_summary,
-        description=description or doc_description
-    )
+    operation_dict = {}
+
+    if summary:
+        operation_dict["summary"] = summary  # type: ignore
+
+    if description:
+        operation_dict["description"] = description  # type: ignore
 
     # Add any additional openapi_extensions to the operation dictionary
     operation_dict.update(openapi_extensions or {})
@@ -136,16 +142,18 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data = {
             "name": name,
             "in": ParameterInType.HEADER,
-            "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update({
-            "deprecated": value.get("deprecated"),
-            "example": value.get("example"),
-            "examples": value.get("examples"),
-        })
+        if "description" in value.keys():
+            data["description"] = value.get("description")
+        if "deprecated" in value.keys():
+            data["deprecated"] = value.get("deprecated")
+        if "example" in value.keys():
+            data["example"] = value.get("example")
+        if "examples" in value.keys():
+            data["examples"] = value.get("examples")
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -167,16 +175,18 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data = {
             "name": name,
             "in": ParameterInType.COOKIE,
-            "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update({
-            "deprecated": value.get("deprecated"),
-            "example": value.get("example"),
-            "examples": value.get("examples"),
-        })
+        if "description" in value.keys():
+            data["description"] = value.get("description")
+        if "deprecated" in value.keys():
+            data["deprecated"] = value.get("deprecated")
+        if "example" in value.keys():
+            data["example"] = value.get("example")
+        if "examples" in value.keys():
+            data["examples"] = value.get("examples")
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -198,16 +208,18 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data = {
             "name": name,
             "in": ParameterInType.PATH,
-            "description": value.get("description"),
             "required": True,
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update({
-            "deprecated": value.get("deprecated"),
-            "example": value.get("example"),
-            "examples": value.get("examples"),
-        })
+        if "description" in value.keys():
+            data["description"] = value.get("description")
+        if "deprecated" in value.keys():
+            data["deprecated"] = value.get("deprecated")
+        if "example" in value.keys():
+            data["example"] = value.get("example")
+        if "examples" in value.keys():
+            data["examples"] = value.get("examples")
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -229,16 +241,18 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
         data = {
             "name": name,
             "in": ParameterInType.QUERY,
-            "description": value.get("description"),
             "required": name in schema.get("required", []),
             "schema": Schema(**value)
         }
         # Parse extra values
-        data.update({
-            "deprecated": value.get("deprecated"),
-            "example": value.get("example"),
-            "examples": value.get("examples"),
-        })
+        if "description" in value.keys():
+            data["description"] = value.get("description")
+        if "deprecated" in value.keys():
+            data["deprecated"] = value.get("deprecated")
+        if "example" in value.keys():
+            data["example"] = value.get("example")
+        if "examples" in value.keys():
+            data["examples"] = value.get("examples")
         parameters.append(Parameter(**data))
 
     # Parse definitions
@@ -269,9 +283,10 @@ def parse_form(
     content = {
         "multipart/form-data": MediaType(
             schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
-            encoding=encoding or None
         )
     }
+    if encoding:
+        content["multipart/form-data"].encoding = encoding
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -333,18 +348,24 @@ def get_responses(
                     )})
 
             model_config: DefaultDict[str, Any] = response.model_config  # type: ignore
-            openapi_extra = model_config.get("openapi_extra")
+            openapi_extra = model_config.get("openapi_extra", {})
             if openapi_extra:
+                openapi_extra_keys = openapi_extra.keys()
                 # Add additional information from model_config to the response
-                _responses[key].description = openapi_extra.get("description")
-                _responses[key].headers = openapi_extra.get("headers")
-                _responses[key].links = openapi_extra.get("links")
+                if "description" in openapi_extra_keys:
+                    _responses[key].description = openapi_extra.get("description")
+                if "headers" in openapi_extra_keys:
+                    _responses[key].headers = openapi_extra.get("headers")
+                if "links" in openapi_extra_keys:
+                    _responses[key].links = openapi_extra.get("links")
                 _content = _responses[key].content
-                if _content is not None:
-                    _content["application/json"].example = openapi_extra.get("example")
-                    _content["application/json"].examples = openapi_extra.get("examples")
-                    _content["application/json"].encoding = openapi_extra.get("encoding")
-                    _content.update(openapi_extra.get("content", {}))
+                if "example" in openapi_extra_keys:
+                    _content["application/json"].example = openapi_extra.get("example")  # type: ignore
+                if "examples" in openapi_extra_keys:
+                    _content["application/json"].examples = openapi_extra.get("examples")  # type: ignore
+                if "encoding" in openapi_extra_keys:
+                    _content["application/json"].encoding = openapi_extra.get("encoding")  # type: ignore
+                _content.update(openapi_extra.get("content", {}))  # type: ignore
 
             _schemas[name] = Schema(**schema)
             definitions = schema.get("$defs")
@@ -383,8 +404,8 @@ def parse_and_store_tags(
             old_tags.append(tag)
 
     # Set the tags attribute of the operation object to a list of unique tag names from new_tags
-    # If the resulting list is empty, set it to None
-    operation.tags = list(set([tag.name for tag in new_tags])) or None
+    # If the resulting list is empty, set it to ["default"]
+    operation.tags = list(set([tag.name for tag in new_tags])) or ["default"]
 
 
 def parse_parameters(
@@ -459,29 +480,38 @@ def parse_parameters(
     if form:
         _content, _components_schemas = parse_form(form)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(content=_content)
+        request_body = RequestBody(content=_content, required=True)
         model_config: DefaultDict[str, Any] = form.model_config  # type: ignore
-        openapi_extra = model_config.get("openapi_extra")
+        openapi_extra = model_config.get("openapi_extra", {})
         if openapi_extra:
-            request_body.description = openapi_extra.get("description")
-            request_body.content["multipart/form-data"].example = openapi_extra.get("example")
-            request_body.content["multipart/form-data"].examples = openapi_extra.get("examples")
-            if openapi_extra.get("encoding"):
+            openapi_extra_keys = openapi_extra.keys()
+            if "description" in openapi_extra_keys:
+                request_body.description = openapi_extra.get("description")
+            if "example" in openapi_extra_keys:
+                request_body.content["multipart/form-data"].example = openapi_extra.get("example")
+            if "examples" in openapi_extra_keys:
+                request_body.content["multipart/form-data"].examples = openapi_extra.get("examples")
+            if "encoding" in openapi_extra_keys:
                 request_body.content["multipart/form-data"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
     if body:
         _content, _components_schemas = parse_body(body)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(content=_content)
+        request_body = RequestBody(content=_content, required=True)
         model_config: DefaultDict[str, Any] = body.model_config  # type: ignore
-        openapi_extra = model_config.get("openapi_extra")
+        openapi_extra = model_config.get("openapi_extra", {})
         if openapi_extra:
-            request_body.description = openapi_extra.get("description")
+            openapi_extra_keys = openapi_extra.keys()
+            if "description" in openapi_extra_keys:
+                request_body.description = openapi_extra.get("description")
             request_body.required = openapi_extra.get("required", True)
-            request_body.content["application/json"].example = openapi_extra.get("example")
-            request_body.content["application/json"].examples = openapi_extra.get("examples")
-            request_body.content["application/json"].encoding = openapi_extra.get("encoding")
+            if "example" in openapi_extra_keys:
+                request_body.content["application/json"].example = openapi_extra.get("example")
+            if "examples" in openapi_extra_keys:
+                request_body.content["application/json"].examples = openapi_extra.get("examples")
+            if "encoding" in openapi_extra_keys:
+                request_body.content["application/json"].encoding = openapi_extra.get("encoding")
         operation.requestBody = request_body
 
     if raw:
@@ -498,8 +528,9 @@ def parse_parameters(
         request_body = RequestBody(content=_content)
         operation.requestBody = request_body
 
-    # Set the parsed parameters in the operation object
-    operation.parameters = parameters if parameters else None
+    if parameters:
+        # Set the parsed parameters in the operation object
+        operation.parameters = parameters
 
     return header, cookie, path, query, form, body, raw
 
