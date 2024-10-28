@@ -527,8 +527,9 @@ def parse_parameters(
         request_body = RequestBody(content=_content)
         operation.requestBody = request_body
 
-    # Set the parsed parameters in the operation object
-    operation.parameters = parameters if parameters else None
+    if parameters:
+        # Set the parsed parameters in the operation object
+        operation.parameters = parameters
 
     return header, cookie, path, query, form, body, raw
 

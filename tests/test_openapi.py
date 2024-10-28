@@ -517,3 +517,16 @@ def test_default_none(request):
     breaks = test_app.api_doc["components"]["schemas"]["Model"]["properties"]
     assert breaks["two"]["default"] == 2
     assert breaks["one"]["default"] is None
+
+
+def test_parameters_none(request):
+    """Parameters key shouldn't exist."""
+    test_app = OpenAPI(request.node.name)
+
+    @test_app.post("/test")
+    def endpoint_test():
+        print([])  # pragma: no cover
+
+    data = test_app.api_doc["paths"]["/test"]["post"]
+
+    assert "parameters" not in data
