@@ -530,3 +530,16 @@ def test_parameters_none(request):
     data = test_app.api_doc["paths"]["/test"]["post"]
 
     assert "parameters" not in data
+
+
+def test_deprecated_none(request):
+    """Parameters key shouldn't exist."""
+    test_app = OpenAPI(request.node.name)
+
+    @test_app.post("/test")
+    def endpoint_test():
+        print([])  # pragma: no cover
+
+    data = test_app.api_doc["paths"]["/test"]["post"]
+
+    assert "deprecated" not in data

@@ -85,7 +85,7 @@ def get_operation(
     description = description or doc_description
 
     # Create the operation dictionary with summary and description
-    operation_dict = {"deprecated": False}
+    operation_dict = {}
 
     if summary:
         operation_dict["summary"] = summary  # type: ignore
@@ -436,7 +436,7 @@ def parse_parameters(
 
     # If operation is None, initialize it as an Operation object
     if operation is None:
-        operation = Operation(deprecated=False)
+        operation = Operation()
 
     # Get the type hints from the function
     annotations = get_type_hints(func)
