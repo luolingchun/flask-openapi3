@@ -152,19 +152,25 @@ class APIView:
             )
 
             # Set external docs
-            operation.externalDocs = external_docs
+            if external_docs:
+                operation.externalDocs = external_docs
 
             # Unique string used to identify the operation.
-            operation.operationId = operation_id
+            if operation_id:
+                operation.operationId = operation_id
 
             # Only set `deprecated` if True, otherwise leave it as None
-            operation.deprecated = deprecated
+            if deprecated is not None:
+                operation.deprecated = deprecated
 
             # Add security
-            operation.security = security + self.view_security or None
+            _security = (security or []) + self.view_security or None
+            if _security:
+                operation.security = _security
 
             # Add servers
-            operation.servers = servers
+            if servers:
+                operation.servers = servers
 
             # Store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)

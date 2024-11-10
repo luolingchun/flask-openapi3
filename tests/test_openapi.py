@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -485,7 +485,7 @@ def test_header_parameter_object(request):
             "in": "header",
             "name": "app_name",
             "required": False,
-            "schema": {"description": "app name", "title": "App Name", "type": "string"}
+            "schema": {"description": "app name", "title": "App Name", "type": "string", "default": None}
         }
         assert resp.json["paths"]["/test"]["post"]["parameters"][1] == {
             "description": "app name",
@@ -493,5 +493,53 @@ def test_header_parameter_object(request):
             "example": "aaa",
             "name": "app_name",
             "required": False,
-            "schema": {"description": "app name", "example": "aaa", "title": "App Name", "type": "string"}
+            "schema": {"description": "app name", "example": "aaa", "title": "App Name", "type": "string",
+                       "default": None}
         }
+
+
+class Model(BaseModel):
+    one: Optional[int] = Field(default=None)
+    two: Optional[int] = Field(default=2)
+
+
+def test_default_none(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    @test_app.post("/test")
+    def endpoint_test(body: Model):
+        print([])  # pragma: no cover
+
+    works = Model.model_json_schema()["properties"]
+    assert works["one"]["default"] is None
+    assert works["two"]["default"] == 2
+    breaks = test_app.api_doc["components"]["schemas"]["Model"]["properties"]
+    assert breaks["two"]["default"] == 2
+    assert breaks["one"]["default"] is None
+
+
+def test_parameters_none(request):
+    """Parameters key shouldn't exist."""
+    test_app = OpenAPI(request.node.name)
+
+    @test_app.post("/test")
+    def endpoint_test():
+        print([])  # pragma: no cover
+
+    data = test_app.api_doc["paths"]["/test"]["post"]
+
+    assert "parameters" not in data
+
+
+def test_deprecated_none(request):
+    """Parameters key shouldn't exist."""
+    test_app = OpenAPI(request.node.name)
+
+    @test_app.post("/test")
+    def endpoint_test():
+        print([])  # pragma: no cover
+
+    data = test_app.api_doc["paths"]["/test"]["post"]
+
+    assert "deprecated" not in data
