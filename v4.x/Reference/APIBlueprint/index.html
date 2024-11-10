@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
     
     
       
@@ -1127,7 +1127,12 @@
 <span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span>
-<span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIBlueprint</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIBlueprint</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Blueprint</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1263,7 +1268,8 @@
             <span class="p">)</span>
 
             <span class="c1"># Set external docs</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+            <span class="k">if</span> <span class="n">external_docs</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
 
             <span class="c1"># Unique string used to identify the operation.</span>
             <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span><span class="p">(</span>
@@ -1271,13 +1277,17 @@
             <span class="p">)</span>
 
             <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+            <span class="k">if</span> <span class="n">deprecated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
 
             <span class="c1"># Add security</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="p">(</span><span class="n">security</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="n">_security</span> <span class="o">=</span> <span class="p">(</span><span class="n">security</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_security</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">_security</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">_security</span>
 
             <span class="c1"># Add servers</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+            <span class="k">if</span> <span class="n">servers</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
 
             <span class="c1"># Store tags</span>
             <span class="n">tags</span> <span class="o">=</span> <span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">abp_tags</span>

@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
     
     
       
@@ -1185,7 +1185,13 @@
 <span class="normal">212</span>
 <span class="normal">213</span>
 <span class="normal">214</span>
-<span class="normal">215</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIView</span><span class="p">:</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIView</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1315,19 +1321,25 @@
             <span class="p">)</span>
 
             <span class="c1"># Set external docs</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+            <span class="k">if</span> <span class="n">external_docs</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
 
             <span class="c1"># Unique string used to identify the operation.</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
+            <span class="k">if</span> <span class="n">operation_id</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
 
             <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+            <span class="k">if</span> <span class="n">deprecated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
 
             <span class="c1"># Add security</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="n">_security</span> <span class="o">=</span> <span class="p">(</span><span class="n">security</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">_security</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">_security</span>
 
             <span class="c1"># Add servers</span>
-            <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+            <span class="k">if</span> <span class="n">servers</span><span class="p">:</span>
+                <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
 
             <span class="c1"># Store tags</span>
             <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
@@ -1888,7 +1900,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
-<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">doc</span><span class="p">(</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">doc</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tag</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1941,19 +1959,25 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
         <span class="p">)</span>
 
         <span class="c1"># Set external docs</span>
-        <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
+        <span class="k">if</span> <span class="n">external_docs</span><span class="p">:</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="n">external_docs</span>
 
         <span class="c1"># Unique string used to identify the operation.</span>
-        <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
+        <span class="k">if</span> <span class="n">operation_id</span><span class="p">:</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">operationId</span> <span class="o">=</span> <span class="n">operation_id</span>
 
         <span class="c1"># Only set `deprecated` if True, otherwise leave it as None</span>
-        <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
+        <span class="k">if</span> <span class="n">deprecated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">deprecated</span> <span class="o">=</span> <span class="n">deprecated</span>
 
         <span class="c1"># Add security</span>
-        <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="n">_security</span> <span class="o">=</span> <span class="p">(</span><span class="n">security</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">view_security</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">_security</span><span class="p">:</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">_security</span>
 
         <span class="c1"># Add servers</span>
-        <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+        <span class="k">if</span> <span class="n">servers</span><span class="p">:</span>
+            <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
 
         <span class="c1"># Store tags</span>
         <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
@@ -2040,13 +2064,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/view.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">193</span>
 <span class="normal">194</span>
 <span class="normal">195</span>
 <span class="normal">196</span>
@@ -2068,7 +2086,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">212</span>
 <span class="normal">213</span>
 <span class="normal">214</span>
-<span class="normal">215</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register the API views with the given OpenAPI app.</span>
 
