@@ -1,3 +1,11 @@
+## v4.0.2 2024-11-10
+
+- Reuse schema["title"] if it's defined by @ddorian in #186
+- Simple webhook schema by @ddorian in #191
+- Fix missing Field.default when it's value is None in openapi spec by @ddorian in #189
+- ServerVariable.enum should be optional by @luolingchun in #194
+
+
 ## v4.0.1 2024-10-05
 
 -  Fix alias in query and form by @luolingchun in #184
