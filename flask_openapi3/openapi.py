@@ -146,6 +146,11 @@ class OpenAPI(APIScaffold, Flask):
 
         # Initialize specification JSON
         self.spec_json: Dict = {}
+        self.spec = APISpec(
+            openapi=self.openapi_version,
+            info=self.info,
+            paths=self.paths
+        )
 
     def _init_doc(self) -> None:
         """
@@ -215,21 +220,19 @@ class OpenAPI(APIScaffold, Flask):
         if self.spec_json:
             return self.spec_json
 
-        spec = APISpec(
-            openapi=self.openapi_version,
-            info=self.info,
-            paths=self.paths
-        )
+        self.spec.openapi = self.openapi_version
+        self.spec.info = self.info
+        self.spec.paths = self.paths
 
         if self.severs:
-            spec.servers = self.severs
+            self.spec.servers = self.severs
 
         if self.external_docs:
-            spec.externalDocs = self.external_docs
+            self.spec.externalDocs = self.external_docs
 
         # Set tags
         if self.tags:
-            spec.tags = self.tags
+            self.spec.tags = self.tags
 
         # Add ValidationErrorModel to components schemas
         schema = get_model_schema(self.validation_error_model)
@@ -243,10 +246,10 @@ class OpenAPI(APIScaffold, Flask):
         # Set components
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.security_schemes
-        spec.components = self.components
+        self.spec.components = self.components
 
         # Convert spec to JSON
-        self.spec_json = spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False)
+        self.spec_json = self.spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False)
 
         # Update with OpenAPI extensions
         self.spec_json.update(**self.openapi_extensions)
