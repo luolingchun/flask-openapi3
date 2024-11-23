@@ -42,8 +42,10 @@ def _get_value(model: Type[BaseModel], args: MultiDict, model_field_key: str, mo
 def _validate_header(header: Type[BaseModel], func_kwargs: dict):
     request_headers = dict(request.headers)
     header_dict = {}
+    model_properties = header.model_json_schema().get("properties", {})
     for model_field_key, model_field_value in header.model_fields.items():
         key_title = model_field_key.replace("_", "-").title()
+        model_field_schema = model_properties.get(model_field_value.alias or model_field_key)
         if model_field_value.alias and header.model_config.get("populate_by_name"):
             key = model_field_value.alias
             key_alias_title = model_field_value.alias.replace("_", "-").title()
@@ -56,6 +58,12 @@ def _validate_header(header: Type[BaseModel], func_kwargs: dict):
             key = model_field_key
             value = request_headers[key_title]
         if value is not None:
+            header_dict[key] = value
+        if model_field_schema.get("type") == "null":
+            header_dict[key] = value
+    # extra keys
+    for key, value in request_headers.items():
+        if key not in header_dict.keys():
             header_dict[key] = value
     func_kwargs["header"] = header.model_validate(obj=header_dict)
 
@@ -80,6 +88,12 @@ def _validate_query(query: Type[BaseModel], func_kwargs: dict):
         else:
             key, value = _get_value(query, request_args, model_field_key, model_field_value)
         if value is not None and value != []:
+            query_dict[key] = value
+        if model_field_schema.get("type") == "null":
+            query_dict[key] = value
+    # extra keys
+    for key, value in request_args.items():
+        if key not in query_dict.keys():
             query_dict[key] = value
     func_kwargs["query"] = query.model_validate(obj=query_dict)
 
@@ -113,6 +127,12 @@ def _validate_form(form: Type[BaseModel], func_kwargs: dict):
             except (JSONDecodeError, TypeError):
                 value = _value
         if value is not None and value != []:
+            form_dict[key] = value
+        if model_field_schema.get("type") == "null":
+            form_dict[key] = value
+    # extra keys
+    for key, value in {**dict(request_form), **dict(request_files)}.items():
+        if key not in form_dict.keys():
             form_dict[key] = value
     func_kwargs["form"] = form.model_validate(obj=form_dict)
 
