@@ -60,7 +60,7 @@ def _validate_header(header: Type[BaseModel], func_kwargs: dict):
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":
-            header_dict[key] = value
+            header_dict[key] = value  # type:ignore
     # extra keys
     for key, value in request_headers.items():
         if key not in header_dict.keys():
