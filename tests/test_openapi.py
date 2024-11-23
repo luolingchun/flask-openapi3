@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar, List, Optional
+from typing import Generic, TypeVar, List, Optional, Tuple, Literal
 
 from pydantic import BaseModel, Field
 
@@ -543,3 +543,31 @@ def test_deprecated_none(request):
     data = test_app.api_doc["paths"]["/test"]["post"]
 
     assert "deprecated" not in data
+
+
+class TupleModel(BaseModel):
+    my_tuple: Tuple[Literal["a", "b"], Literal["c", "d"]]
+
+
+def test_prefix_items(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    @test_app.post("/test")
+    def endpoint_test(body: TupleModel):
+        print([])  # pragma: no cover
+
+    schema = test_app.api_doc["paths"]["/test"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    assert schema == {'$ref': '#/components/schemas/TupleModel'}
+    components = test_app.api_doc["components"]["schemas"]
+    assert components["TupleModel"] == {'properties': {'my_tuple': {'maxItems': 2,
+                             'minItems': 2,
+                             'prefixItems': [{'enum': ['a', 'b'],
+                                              'type': 'string'},
+                                             {'enum': ['c', 'd'],
+                                              'type': 'string'}],
+                             'title': 'My Tuple',
+                             'type': 'array'}},
+ 'required': ['my_tuple'],
+ 'title': 'TupleModel',
+ 'type': 'object'}
