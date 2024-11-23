@@ -1,3 +1,8 @@
+## v4.0.3 2024-11-23
+
+- Add PrefixItems to Schema Model for use with Tuple types by @JesseDeLoore in #197
+
+
 ## v4.0.2 2024-11-10
 
 - Reuse schema["title"] if it's defined by @ddorian in #186
