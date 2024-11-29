@@ -5,6 +5,7 @@ import typing
 from typing import Optional, List, Dict, Any, Callable
 
 from .models import ExternalDocumentation
+from .models import RequestBody
 from .models import Server
 from .models import Tag
 from .types import ResponseDict
@@ -28,6 +29,7 @@ class APIView:
             url_prefix: Optional[str] = None,
             view_tags: Optional[List[Tag]] = None,
             view_security: Optional[List[Dict[str, List[str]]]] = None,
+            view_request_body: Optional[RequestBody] | None = None,
             view_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
@@ -39,6 +41,7 @@ class APIView:
             url_prefix: A path to prepend to all the APIView's urls
             view_tags: APIView tags for every API.
             view_security: APIView security for every API.
+            view_request_body: API request body should be either a subclass of BaseModel or None.
             view_responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
@@ -48,6 +51,8 @@ class APIView:
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
         self.view_security = view_security or []
+        
+        self.view_request_body = view_request_body
 
         # Convert key to string
         self.view_responses = convert_responses_key_to_string(view_responses or {})
@@ -107,6 +112,7 @@ class APIView:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -124,6 +130,7 @@ class APIView:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -139,6 +146,9 @@ class APIView:
         def decorator(func):
             if self.doc_ui is False or doc_ui is False:
                 return func
+            
+            # Last declared request_body has the highest priority
+            current_request_body = request_body or self.view_request_body
 
             # Global response combines API responses
             combine_responses = {**self.view_responses, **new_responses}
@@ -146,6 +156,8 @@ class APIView:
             # Create operation
             operation = get_operation(
                 func,
+                components_schemas=self.components_schemas,
+                request_body=current_request_body,
                 summary=summary,
                 description=description,
                 openapi_extensions=openapi_extensions

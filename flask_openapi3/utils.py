@@ -5,6 +5,7 @@
 import inspect
 import re
 import sys
+
 from enum import Enum
 from http import HTTPStatus
 from typing import get_type_hints, Dict, Type, Callable, List, Tuple, Optional, Any, DefaultDict
@@ -52,6 +53,8 @@ else:
 
 def get_operation(
         func: Callable, *,
+        components_schemas: dict,
+        request_body: Optional[RequestBody] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         openapi_extensions: Optional[Dict[str, Any]] = None,
@@ -61,6 +64,7 @@ def get_operation(
 
     Args:
         func: The function or method for which the operation is being defined.
+        request_body: The request body for the operation.
         summary: A short summary of what the operation does.
         description: A verbose explanation of the operation behavior.
         openapi_extensions: Additional extensions to the OpenAPI Schema.
@@ -69,6 +73,16 @@ def get_operation(
         An Operation object representing the operation.
 
     """
+    _schemas = {}
+
+    def register_schema(name, schema: Any) -> None:
+        _schemas[name] = Schema(**schema)
+        definitions = schema.get("$defs")
+        if definitions:
+            # Add schema definitions to _schemas
+            for name, value in definitions.items():
+                _schemas[normalize_name(name)] = Schema(**value)
+
     # Get the docstring of the function
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
@@ -85,7 +99,7 @@ def get_operation(
     description = description or doc_description
 
     # Create the operation dictionary with summary and description
-    operation_dict = {}
+    operation_dict: dict[str, RequestBody] = {} # type: ignore
 
     if summary:
         operation_dict["summary"] = summary  # type: ignore
@@ -93,8 +107,36 @@ def get_operation(
     if description:
         operation_dict["description"] = description  # type: ignore
 
+    if request_body:
+        request_content_map = {} # type: ignore
+        if isinstance(request_body, dict) and "content" in request_body:
+            for content_type, model in request_body["content"].items():
+                if isinstance(model, dict):
+                    # inline schema
+                    request_content_map[content_type] = MediaType(
+                        schema=Schema(**model["schema"])
+                    ) if "schema" in model else MediaType(
+                        schema=Schema(type=DataType.STRING)
+                    )
+                elif issubclass(model, MediaType):
+                    request_content_map[content_type] = model
+                elif issubclass(model, BaseModel):
+                    # pydantic model
+                    schema = get_model_schema(model, mode="serialization")
+                    original_title = schema.get("title") or model.__name__
+                    name = normalize_name(original_title)
+                    request_content_map[content_type] = MediaType(
+                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
+                    )
+                    register_schema(name, schema)
+        if len(request_content_map.keys()) > 0:
+            operation_dict["requestBody"] = RequestBody(content=request_content_map, required=True)
+
     # Add any additional openapi_extensions to the operation dictionary
     operation_dict.update(openapi_extensions or {})
+
+    # Update the components_schemas dictionary with the parsed schemas
+    components_schemas.update(**_schemas)
 
     # Create and return the Operation object
     operation = Operation(**operation_dict)
@@ -328,13 +370,44 @@ def get_responses(
     _responses = {}
     _schemas = {}
 
+    def register_schema(name, schema: Any) -> None:
+        _schemas[name] = Schema(**schema)
+        definitions = schema.get("$defs")
+        if definitions:
+            # Add schema definitions to _schemas
+            for name, value in definitions.items():
+                _schemas[normalize_name(name)] = Schema(**value)
+
     for key, response in responses.items():
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
             response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
-            _responses[key] = Response(**response)
+            if "content" in response:
+                response_content_map = {}
+                response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
+                for content_type, model in response["content"].items():
+                    if isinstance(model, dict):
+                        # inline schema
+                        response_content_map[content_type] = MediaType(
+                            schema=Schema(**model["schema"])
+                        ) if "schema" in model else MediaType(
+                            schema=Schema(type=DataType.STRING)
+                        )
+                    elif issubclass(model, BaseModel):
+                        # pydantic model
+                        schema = get_model_schema(model, mode="serialization")
+                        original_title = schema.get("title") or model.__name__
+                        name = normalize_name(original_title)
+                        response_content_map[content_type] = MediaType(
+                            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
+                        )
+                        register_schema(name, schema)
+                response["content"] = response_content_map
+                _responses[key] = Response(**response)
+            else:
+                _responses[key] = Response(**response)
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
             schema = get_model_schema(response, mode="serialization")
@@ -367,12 +440,7 @@ def get_responses(
                     _content["application/json"].encoding = openapi_extra.get("encoding")  # type: ignore
                 _content.update(openapi_extra.get("content", {}))  # type: ignore
 
-            _schemas[name] = Schema(**schema)
-            definitions = schema.get("$defs")
-            if definitions:
-                # Add schema definitions to _schemas
-                for name, value in definitions.items():
-                    _schemas[normalize_name(name)] = Schema(**value)
+            register_schema(name, schema)
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
@@ -487,13 +555,23 @@ def parse_parameters(
             openapi_extra_keys = openapi_extra.keys()
             if "description" in openapi_extra_keys:
                 request_body.description = openapi_extra.get("description")
-            if "example" in openapi_extra_keys:
-                request_body.content["multipart/form-data"].example = openapi_extra.get("example")
-            if "examples" in openapi_extra_keys:
-                request_body.content["multipart/form-data"].examples = openapi_extra.get("examples")
-            if "encoding" in openapi_extra_keys:
-                request_body.content["multipart/form-data"].encoding = openapi_extra.get("encoding")
-        operation.requestBody = request_body
+            if isinstance(request_body.content, dict):
+                form_content: dict[str, Any] = request_body.content
+                if "example" in openapi_extra_keys:
+                    form_content["multipart/form-data"].example = openapi_extra.get("example")
+                if "examples" in openapi_extra_keys:
+                    form_content["multipart/form-data"].examples = openapi_extra.get("examples")
+                if "encoding" in openapi_extra_keys:
+                    form_content["multipart/form-data"].encoding = openapi_extra.get("encoding")
+            elif isinstance(request_body.content, BaseModel):
+                # TODO: Add support for pydantic models example and encoding - decode from model_config or openapi_extra
+                pass
+        if operation.requestBody and isinstance(operation.requestBody, RequestBody):
+            operation.requestBody.required = request_body.required or operation.requestBody.required
+            operation.requestBody.description = request_body.description or operation.requestBody.description
+            operation.requestBody.content.update(request_body.content)
+        else:
+            operation.requestBody = request_body
 
     if body:
         _content, _components_schemas = parse_body(body)
@@ -506,13 +584,23 @@ def parse_parameters(
             if "description" in openapi_extra_keys:
                 request_body.description = openapi_extra.get("description")
             request_body.required = openapi_extra.get("required", True)
-            if "example" in openapi_extra_keys:
-                request_body.content["application/json"].example = openapi_extra.get("example")
-            if "examples" in openapi_extra_keys:
-                request_body.content["application/json"].examples = openapi_extra.get("examples")
-            if "encoding" in openapi_extra_keys:
-                request_body.content["application/json"].encoding = openapi_extra.get("encoding")
-        operation.requestBody = request_body
+            if isinstance(request_body.content, dict):
+                body_content: dict[str, Any] = request_body.content
+                if "example" in openapi_extra_keys:
+                    body_content["application/json"].example = openapi_extra.get("example")
+                if "examples" in openapi_extra_keys:
+                    body_content["application/json"].examples = openapi_extra.get("examples")
+                if "encoding" in openapi_extra_keys:
+                    body_content["application/json"].encoding = openapi_extra.get("encoding")
+            elif isinstance(request_body.content, BaseModel):
+                # TODO: Add support for pydantic models example and encoding - decode from model_config or openapi_extra
+                pass
+        if operation.requestBody and isinstance(operation.requestBody, RequestBody):
+            operation.requestBody.required = request_body.required or operation.requestBody.required
+            operation.requestBody.description = request_body.description or operation.requestBody.description
+            operation.requestBody.content.update(request_body.content)
+        else:
+            operation.requestBody = request_body
 
     if raw:
         _content = {}
@@ -526,7 +614,12 @@ def parse_parameters(
                     schema=Schema(type=DataType.STRING)
                 )
         request_body = RequestBody(content=_content)
-        operation.requestBody = request_body
+        if operation.requestBody and isinstance(operation.requestBody, RequestBody):
+            operation.requestBody.required = request_body.required or operation.requestBody.required
+            operation.requestBody.description = request_body.description or operation.requestBody.description
+            operation.requestBody.content.update(request_body.content)
+        else:
+            operation.requestBody = request_body
 
     if parameters:
         # Set the parsed parameters in the operation object

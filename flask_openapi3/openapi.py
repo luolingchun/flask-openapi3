@@ -22,6 +22,7 @@ from .models import Components
 from .models import ExternalDocumentation
 from .models import Info
 from .models import OPENAPI3_REF_PREFIX
+from .models import RequestBody
 from .models import Schema
 from .models import Server
 from .models import Tag
@@ -52,6 +53,7 @@ class OpenAPI(APIScaffold, Flask):
             *,
             info: Optional[Info] = None,
             security_schemes: Optional[SecuritySchemesDict] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             servers: Optional[List[Server]] = None,
             external_docs: Optional[ExternalDocumentation] = None,
@@ -74,6 +76,7 @@ class OpenAPI(APIScaffold, Flask):
                 See https://spec.openapis.org/oas/v3.1.0#info-object.
             security_schemes: Security schemes for the API.
                 See https://spec.openapis.org/oas/v3.1.0#security-scheme-object.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             servers: An array of Server objects providing connectivity information to a target server.
             external_docs: External documentation for the API.
@@ -102,6 +105,9 @@ class OpenAPI(APIScaffold, Flask):
         # Set OpenAPI version and API information
         self.openapi_version = "3.1.0"
         self.info = info or Info(title="OpenAPI", version="1.0.0")
+
+        # Set request body
+        self.request_body = request_body
 
         # Set security schemes, responses, paths and components
         self.security_schemes = security_schemes
@@ -348,6 +354,7 @@ class OpenAPI(APIScaffold, Flask):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -367,6 +374,7 @@ class OpenAPI(APIScaffold, Flask):
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -378,6 +386,9 @@ class OpenAPI(APIScaffold, Flask):
         if doc_ui is True:
             # Convert key to string
             new_responses = convert_responses_key_to_string(responses or {})
+            
+            # Last declared request_body has the highest priority
+            current_request_body = request_body or self.request_body
 
             # Global response: combine API responses
             combine_responses = {**self.responses, **new_responses}
@@ -385,6 +396,8 @@ class OpenAPI(APIScaffold, Flask):
             # Create operation
             operation = get_operation(
                 func,
+                components_schemas=self.components_schemas,
+                request_body=current_request_body,
                 summary=summary,
                 description=description,
                 openapi_extensions=openapi_extensions

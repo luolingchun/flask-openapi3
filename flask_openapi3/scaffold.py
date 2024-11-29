@@ -8,6 +8,7 @@ from typing import Callable, List, Optional, Dict, Any
 from flask.wrappers import Response as FlaskResponse
 
 from .models import ExternalDocumentation
+from .models import RequestBody
 from .models import Server
 from .models import Tag
 from .request import _validate_request
@@ -27,6 +28,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -131,6 +133,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -150,6 +153,7 @@ class APIScaffold:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -168,6 +172,7 @@ class APIScaffold:
                     description=description,
                     external_docs=external_docs,
                     operation_id=operation_id,
+                    request_body=request_body,
                     responses=responses,
                     deprecated=deprecated,
                     security=security,
@@ -194,6 +199,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -213,6 +219,7 @@ class APIScaffold:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -231,6 +238,7 @@ class APIScaffold:
                     description=description,
                     external_docs=external_docs,
                     operation_id=operation_id,
+                    request_body=request_body,
                     responses=responses,
                     deprecated=deprecated,
                     security=security,
@@ -257,6 +265,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -276,6 +285,7 @@ class APIScaffold:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -294,6 +304,7 @@ class APIScaffold:
                     description=description,
                     external_docs=external_docs,
                     operation_id=operation_id,
+                    request_body=request_body,
                     responses=responses,
                     deprecated=deprecated,
                     security=security,
@@ -320,6 +331,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -339,6 +351,7 @@ class APIScaffold:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -357,6 +370,7 @@ class APIScaffold:
                     description=description,
                     external_docs=external_docs,
                     operation_id=operation_id,
+                    request_body=request_body,
                     responses=responses,
                     deprecated=deprecated,
                     security=security,
@@ -383,6 +397,7 @@ class APIScaffold:
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -402,6 +417,7 @@ class APIScaffold:
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -420,6 +436,7 @@ class APIScaffold:
                     description=description,
                     external_docs=external_docs,
                     operation_id=operation_id,
+                    request_body=request_body,
                     responses=responses,
                     deprecated=deprecated,
                     security=security,

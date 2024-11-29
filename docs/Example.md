@@ -180,6 +180,38 @@ if __name__ == '__main__':
     app.run(debug=True)
 ```
 
+## Multiple media types
+
+```python
+
+@app.get(
+    '/book/<int:bid>',
+    tags=[book_tag],
+    summary='new summary',
+    description='new description',
+    responses={
+        200: {
+            "description": "Multiple media types under the same status code",
+            "content": {
+                "application/json": BookResponse,
+                "application/xml": BookResponse,
+            }
+        },
+        201: {"content": {"text/csv": {"schema": {"type": "string"}}}}
+    },
+    security=security
+)
+def get_book(path: BookPath):
+    """Get a book
+    to get some book by id, like:
+    http://localhost:5000/book/3
+    """
+    if path.bid == 4:
+        return NotFoundResponse().dict(), 404
+    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": 'no'}}
+
+```
+
 ## APIBlueprint
 
 ```python

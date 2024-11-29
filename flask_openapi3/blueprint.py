@@ -6,6 +6,7 @@ from typing import Optional, List, Dict, Any, Callable
 from flask import Blueprint
 
 from .models import ExternalDocumentation
+from .models import RequestBody
 from .models import Server
 from .models import Tag
 from .scaffold import APIScaffold
@@ -30,6 +31,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             *,
             abp_tags: Optional[List[Tag]] = None,
             abp_security: Optional[List[Dict[str, List[str]]]] = None,
+            abp_request_body: Optional[RequestBody] | None = None,
             abp_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
@@ -44,6 +46,7 @@ class APIBlueprint(APIScaffold, Blueprint):
                          This helps locate the ``root_path`` for the blueprint.
             abp_tags: APIBlueprint tags for every API.
             abp_security: APIBlueprint security for every API.
+            abp_request_body: API request body should be either a subclass of BaseModel or None.
             abp_responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI, Redoc, and Rapidoc). Defaults to True.
             operation_id_callback: Callback function for custom operation_id generation.
@@ -62,6 +65,8 @@ class APIBlueprint(APIScaffold, Blueprint):
         # Set values from arguments or default values
         self.abp_tags = abp_tags or []
         self.abp_security = abp_security or []
+
+        self.abp_request_body = abp_request_body
 
         # Convert key to string
         self.abp_responses = convert_responses_key_to_string(abp_responses or {})
@@ -116,6 +121,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             description: Optional[str] = None,
             external_docs: Optional[ExternalDocumentation] = None,
             operation_id: Optional[str] = None,
+            request_body: Optional[RequestBody] = None,
             responses: Optional[ResponseDict] = None,
             deprecated: Optional[bool] = None,
             security: Optional[List[Dict[str, List[Any]]]] = None,
@@ -135,6 +141,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             description: A verbose explanation of the operation behavior.
             external_docs: Additional external documentation for this operation.
             operation_id: Unique string used to identify the operation.
+            request_body: API request body should be either a subclass of BaseModel or None.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             deprecated: Declares this operation to be deprecated.
             security: A declaration of which security mechanisms can be used for this operation.
@@ -146,12 +153,17 @@ class APIBlueprint(APIScaffold, Blueprint):
             # Convert key to string
             new_responses = convert_responses_key_to_string(responses or {})
 
+            # Last declared request_body has the highest priority
+            current_request_body = request_body or self.abp_request_body
+
             # Global response: combine API responses
             combine_responses = {**self.abp_responses, **new_responses}
 
             # Create operation
             operation = get_operation(
                 func,
+                components_schemas=self.components_schemas,
+                request_body=current_request_body,
                 summary=summary,
                 description=description,
                 openapi_extensions=openapi_extensions
