@@ -328,13 +328,44 @@ def get_responses(
     _responses = {}
     _schemas = {}
 
+    def register_schema(name, schema: Any) -> None:
+        _schemas[name] = Schema(**schema)
+        definitions = schema.get("$defs")
+        if definitions:
+            # Add schema definitions to _schemas
+            for name, value in definitions.items():
+                _schemas[normalize_name(name)] = Schema(**value)
+
     for key, response in responses.items():
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
             response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
-            _responses[key] = Response(**response)
+            if "content" in response:
+                response_content_map = {}
+                for content_type, model in response["content"].items():
+                    if isinstance(model, dict):
+                        # inline schema
+                        response_content_map[content_type] = MediaType(
+                            schema=Schema(**model["schema"])
+                        ) if "schema" in model else MediaType(
+                            schema=Schema(type=DataType.STRING)
+                        )
+                    elif issubclass(model, BaseModel):
+                        # pydantic model
+                        schema = get_model_schema(model, mode="serialization")
+                        original_title = schema.get("title") or model.__name__
+                        name = normalize_name(original_title)
+                        response_content_map[content_type] = MediaType(
+                            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
+                        )
+                        register_schema(name, schema)
+                _responses[key] = Response(
+                    description=HTTP_STATUS.get(key, ""),
+                    content=response_content_map)
+            else:
+                _responses[key] = Response(**response)
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
             schema = get_model_schema(response, mode="serialization")
@@ -367,12 +398,7 @@ def get_responses(
                     _content["application/json"].encoding = openapi_extra.get("encoding")  # type: ignore
                 _content.update(openapi_extra.get("content", {}))  # type: ignore
 
-            _schemas[name] = Schema(**schema)
-            definitions = schema.get("$defs")
-            if definitions:
-                # Add schema definitions to _schemas
-                for name, value in definitions.items():
-                    _schemas[normalize_name(name)] = Schema(**value)
+            register_schema(name, schema)
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
