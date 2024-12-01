@@ -40,7 +40,7 @@ class Schema(BaseModel):
     schema_not: Optional[Union[Reference, "Schema"]] = Field(default=None, alias="not")
     items: Optional[Union[Reference, "Schema"]] = None
     properties: Optional[dict[str, Union[Reference, "Schema"]]] = None
-    prefixItems: Optional[List[Union[Reference, "Schema"]]] = None
+    prefixItems: Optional[list[Union[Reference, "Schema"]]] = None
     additionalProperties: Optional[Union[bool, Reference, "Schema"]] = None
     description: Optional[str] = None
     schema_format: Optional[str] = Field(default=None, alias="format")

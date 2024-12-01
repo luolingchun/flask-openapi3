@@ -546,7 +546,7 @@ def test_deprecated_none(request):
 
 
 class TupleModel(BaseModel):
-    my_tuple: Tuple[Literal["a", "b"], Literal["c", "d"]]
+    my_tuple: tuple[Literal["a", "b"], Literal["c", "d"]]
 
 
 def test_prefix_items(request):
