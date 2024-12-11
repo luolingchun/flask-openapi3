@@ -35,8 +35,6 @@ The key features are:
   
 - **Data validation:** Fast data verification based on [Pydantic](https://github.com/pydantic/pydantic)
 
-- **Authorization:** Support to reload authorizations in Swagger UI
-
 ## Requirements
 
 Python 3.8+
