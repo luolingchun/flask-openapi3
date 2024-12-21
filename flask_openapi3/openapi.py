@@ -220,6 +220,11 @@ class OpenAPI(APIScaffold, Flask):
         if self.spec_json:
             return self.spec_json
 
+        self.generate_spec_json()
+
+        return self.spec_json
+
+    def generate_spec_json(self):
         self.spec.openapi = self.openapi_version
         self.spec.info = self.info
         self.spec.paths = self.paths
@@ -274,8 +279,6 @@ class OpenAPI(APIScaffold, Flask):
                         }
                     }
                 }
-
-        return self.spec_json
 
     def register_api(self, api: APIBlueprint) -> None:
         """
