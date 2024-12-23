@@ -636,6 +636,15 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
 
 
 def normalize_name(name: str, *, suffix: Optional[NameSuffix] = None) -> str:
+    """Normalize the name by replacing any non-word characters with underscores.
+
+    Args:
+        name: The name to normalize.
+        suffix: An optional suffix to append to the name.
+
+    Returns:
+        The normalized name.
+    """
     result = re.sub(r"[^\w.\-]", "_", name)
     if suffix is not None:
         result = f"{result}{suffix}"
