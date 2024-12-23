@@ -33,6 +33,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
+            separate_input_output_schemas: bool = False,
             **kwargs: Any
     ) -> None:
         """
@@ -49,6 +50,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
                                    Defaults to `get_operation_id_for_path` from utils
+            separate_input_output_schemas: Separate input and output schemas. Defaults to False.
             **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -70,6 +72,9 @@ class APIBlueprint(APIScaffold, Blueprint):
 
         # Set the operation ID callback function
         self.operation_id_callback: Callable = operation_id_callback
+
+        # Separate input and output schemas
+        self.separate_input_output_schemas = separate_input_output_schemas
 
     def register_api(self, api: "APIBlueprint") -> None:
         """Register a nested APIBlueprint"""
@@ -122,6 +127,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: Optional[bool] = None,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
         """
@@ -141,6 +147,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas.
+                Defaults to None, which falls back to the parent's blueprint value.
         """
         if self.doc_ui is True and doc_ui is True:
             # Convert key to string
@@ -183,8 +191,17 @@ class APIBlueprint(APIScaffold, Blueprint):
             tags = (tags or []) + self.abp_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
+            # fallback to parent's blueprint value
+            if separate_input_output_schemas is None:
+                separate_input_output_schemas = self.separate_input_output_schemas
+
             # Parse response
-            get_responses(combine_responses, self.components_schemas, operation)
+            get_responses(
+                combine_responses,
+                self.components_schemas,
+                operation,
+                separate_input_output_schemas=separate_input_output_schemas,
+            )
 
             # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
             uri = parse_rule(rule, url_prefix=self.url_prefix)
@@ -193,6 +210,11 @@ class APIBlueprint(APIScaffold, Blueprint):
             parse_method(uri, method, self.paths, operation)
 
             # Parse parameters
-            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            return parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                separate_input_output_schemas=separate_input_output_schemas,
+            )
         else:
             return parse_parameters(func, doc_ui=False)

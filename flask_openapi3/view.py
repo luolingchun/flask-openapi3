@@ -31,6 +31,7 @@ class APIView:
             view_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
+            separate_input_output_schemas: bool = False,
     ):
         """
         Create a class-based view
@@ -44,6 +45,7 @@ class APIView:
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
                                    Defaults to `get_operation_id_for_path` from utils
+            separate_input_output_schemas: Separate input and output schemas. Defaults to False.
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
@@ -54,6 +56,7 @@ class APIView:
 
         self.doc_ui = doc_ui
         self.operation_id_callback: Callable = operation_id_callback
+        self.separate_input_output_schemas = separate_input_output_schemas
 
         self.views: Dict = dict()
         self.paths: Dict = dict()
@@ -112,7 +115,8 @@ class APIView:
             security: Optional[List[Dict[str, List[Any]]]] = None,
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            separate_input_output_schemas: Optional[bool] = None,
     ) -> Callable:
         """
         Decorator for view method.
@@ -130,6 +134,8 @@ class APIView:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas
+                Default to None, if not set, it will use the value from the parent APIView.
         """
 
         new_responses = convert_responses_key_to_string(responses or {})
@@ -172,6 +178,13 @@ class APIView:
             if servers:
                 operation.servers = servers
 
+            # Fall back to the parent APIView's value if not set
+            separate_input_output_schemas_ = (
+                self.separate_input_output_schemas
+                if separate_input_output_schemas is None
+                else separate_input_output_schemas
+            )
+
             # Store tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
@@ -179,11 +192,17 @@ class APIView:
             parse_parameters(
                 func,
                 components_schemas=self.components_schemas,
-                operation=operation
+                operation=operation,
+                separate_input_output_schemas=separate_input_output_schemas_,
             )
 
             # Parse response
-            get_responses(combine_responses, self.components_schemas, operation)
+            get_responses(
+                combine_responses,
+                self.components_schemas,
+                operation,
+                separate_input_output_schemas=separate_input_output_schemas_,
+            )
             func.operation = operation
 
             return func
