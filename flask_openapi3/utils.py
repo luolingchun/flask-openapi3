@@ -388,7 +388,7 @@ def get_responses(
             if definitions:
                 # Add schema definitions to _schemas
                 for name, value in definitions.items():
-                    def_name = normalize_name(original_title, suffix=schema_suffix)
+                    def_name = normalize_name(name, suffix=schema_suffix)
                     _schemas[def_name] = Schema(**value)
 
     components_schemas.update(**_schemas)
