@@ -8,7 +8,6 @@ import pytest
 from pydantic import BaseModel, Field, computed_field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3 import Tag, Info
 
 
 app = OpenAPI(__name__)
