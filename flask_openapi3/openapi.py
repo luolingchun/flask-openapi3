@@ -354,7 +354,7 @@ class OpenAPI(APIScaffold, Flask):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
-            separate_input_output_schemas: bool = False,
+            separate_input_output_schemas: Optional[bool] = None,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
         """
@@ -414,6 +414,9 @@ class OpenAPI(APIScaffold, Flask):
 
             # Store tags
             parse_and_store_tags(tags or [], self.tags, self.tag_names, operation)
+
+            # Cast separate_input_output_schemas to bool
+            separate_input_output_schemas = bool(separate_input_output_schemas)
 
             # Parse response
             get_responses(
