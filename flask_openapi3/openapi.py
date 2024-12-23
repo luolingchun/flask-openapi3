@@ -354,6 +354,7 @@ class OpenAPI(APIScaffold, Flask):
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
         """
@@ -373,6 +374,7 @@ class OpenAPI(APIScaffold, Flask):
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: maintains distinct schemas for request and response models.
             method: HTTP method for the operation. Defaults to GET.
         """
         if doc_ui is True:
@@ -414,7 +416,12 @@ class OpenAPI(APIScaffold, Flask):
             parse_and_store_tags(tags or [], self.tags, self.tag_names, operation)
 
             # Parse response
-            get_responses(combine_responses, self.components_schemas, operation)
+            get_responses(
+                combine_responses,
+                self.components_schemas,
+                operation,
+                separate_input_output_schemas=separate_input_output_schemas,
+            )
 
             # Convert a route parameter format from /pet/<petId> to /pet/{petId}
             uri = re.sub(r"<([^<:]+:)?", "{", rule).replace(">", "}")
@@ -423,6 +430,11 @@ class OpenAPI(APIScaffold, Flask):
             parse_method(uri, method, self.paths, operation)
 
             # Parse parameters
-            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            return parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                separate_input_output_schemas=separate_input_output_schemas,
+            )
         else:
             return parse_parameters(func, doc_ui=False)

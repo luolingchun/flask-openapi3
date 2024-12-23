@@ -33,6 +33,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
         raise NotImplementedError   # pragma: no cover
@@ -137,6 +138,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             **options: Any
     ) -> Callable:
         """
@@ -156,6 +158,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas. Default to False.
         """
 
         def decorator(func) -> Callable:
@@ -174,6 +177,7 @@ class APIScaffold:
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
+                    separate_input_output_schemas=separate_input_output_schemas,
                     method=HTTPMethod.GET
                 )
 
@@ -200,6 +204,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             **options: Any
     ) -> Callable:
         """
@@ -219,6 +224,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas. Default to False.
         """
 
         def decorator(func) -> Callable:
@@ -237,6 +243,7 @@ class APIScaffold:
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
+                    separate_input_output_schemas=separate_input_output_schemas,
                     method=HTTPMethod.POST
                 )
 
@@ -263,6 +270,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             **options: Any
     ) -> Callable:
         """
@@ -282,6 +290,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas. Default to False.
         """
 
         def decorator(func) -> Callable:
@@ -300,6 +309,7 @@ class APIScaffold:
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
+                    separate_input_output_schemas=separate_input_output_schemas,
                     method=HTTPMethod.PUT
                 )
 
@@ -326,6 +336,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             **options: Any
     ) -> Callable:
         """
@@ -345,6 +356,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas. Default to False.
         """
 
         def decorator(func) -> Callable:
@@ -363,6 +375,7 @@ class APIScaffold:
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
+                    separate_input_output_schemas=separate_input_output_schemas,
                     method=HTTPMethod.DELETE
                 )
 
@@ -389,6 +402,7 @@ class APIScaffold:
             servers: Optional[List[Server]] = None,
             openapi_extensions: Optional[Dict[str, Any]] = None,
             doc_ui: bool = True,
+            separate_input_output_schemas: bool = False,
             **options: Any
     ) -> Callable:
         """
@@ -408,6 +422,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            separate_input_output_schemas: Separate input and output schemas. Default to False.
         """
 
         def decorator(func) -> Callable:
@@ -426,6 +441,7 @@ class APIScaffold:
                     servers=servers,
                     openapi_extensions=openapi_extensions,
                     doc_ui=doc_ui,
+                    separate_input_output_schemas=separate_input_output_schemas,
                     method=HTTPMethod.PATCH
                 )
 

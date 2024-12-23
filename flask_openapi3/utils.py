@@ -323,7 +323,9 @@ def parse_body(
 def get_responses(
         responses: ResponseStrKeyDict,
         components_schemas: dict,
-        operation: Operation
+        operation: Operation,
+        *,
+        separate_input_output_schemas: bool,
 ) -> None:
     _responses = {}
     _schemas = {}
@@ -414,6 +416,7 @@ def parse_parameters(
         components_schemas: Optional[Dict] = None,
         operation: Optional[Operation] = None,
         doc_ui: bool = True,
+        separate_input_output_schemas: bool = False,
 ) -> ParametersTuple:
     """
     Parses the parameters of a given function and returns the types for header, cookie, path,
@@ -424,6 +427,7 @@ def parse_parameters(
         components_schemas: Dictionary to store the parsed components schemas (default: None).
         operation: Operation object to populate with parsed parameters (default: None).
         doc_ui: Flag indicating whether to return types for documentation UI (default: True).
+        separate_input_output_schemas: Flag indicating whether to separate input and output schemas (default: False).
 
     Returns:
         Tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
