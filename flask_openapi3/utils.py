@@ -28,11 +28,14 @@ from .models import Response
 from .models import Schema
 from .models import Tag
 from .models.data_type import DataType
+from .types import NameSuffix
 from .types import ParametersTuple
 from .types import ResponseDict
 from .types import ResponseStrKeyDict
 
 HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
+INPUT_SUFFIX: NameSuffix = "-Input"
+OUTPUT_SUFFIX: NameSuffix = "-Output"
 
 if sys.version_info < (3, 11):  # pragma: no cover
 
@@ -131,7 +134,7 @@ def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = "validation"
     return model.model_json_schema(by_alias=by_alias, ref_template=OPENAPI3_REF_TEMPLATE, mode=mode)
 
 
-def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
+def parse_header(header: Type[BaseModel], schema_suffix: Optional[NameSuffix]) -> Tuple[List[Parameter], dict]:
     """Parses a header model and returns a list of parameters and component schemas."""
     schema = get_model_schema(header)
     parameters = []
@@ -159,12 +162,13 @@ def parse_header(header: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return parameters, components_schemas
 
 
-def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
+def parse_cookie(cookie: Type[BaseModel], schema_suffix: Optional[NameSuffix]) -> Tuple[List[Parameter], dict]:
     """Parses a cookie model and returns a list of parameters and component schemas."""
     schema = get_model_schema(cookie)
     parameters = []
@@ -192,12 +196,13 @@ def parse_cookie(cookie: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return parameters, components_schemas
 
 
-def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
+def parse_path(path: Type[BaseModel], schema_suffix: Optional[NameSuffix]) -> Tuple[List[Parameter], dict]:
     """Parses a path model and returns a list of parameters and component schemas."""
     schema = get_model_schema(path)
     parameters = []
@@ -225,12 +230,13 @@ def parse_path(path: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return parameters, components_schemas
 
 
-def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
+def parse_query(query: Type[BaseModel], schema_suffix: Optional[NameSuffix]) -> Tuple[List[Parameter], dict]:
     """Parses a query model and returns a list of parameters and component schemas."""
     schema = get_model_schema(query)
     parameters = []
@@ -258,13 +264,15 @@ def parse_query(query: Type[BaseModel]) -> Tuple[List[Parameter], dict]:
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return parameters, components_schemas
 
 
 def parse_form(
         form: Type[BaseModel],
+        schema_suffix: Optional[NameSuffix],
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a form model and returns a list of parameters and component schemas."""
     schema = get_model_schema(form)
@@ -274,7 +282,7 @@ def parse_form(
     assert properties, f"{form.__name__}'s properties cannot be empty."
 
     original_title = schema.get("title") or form.__name__
-    title = normalize_name(original_title)
+    title = normalize_name(original_title, suffix=schema_suffix)
     components_schemas[title] = Schema(**schema)
     encoding = {}
     for k, v in properties.items():
@@ -291,20 +299,22 @@ def parse_form(
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return content, components_schemas
 
 
 def parse_body(
         body: Type[BaseModel],
+        schema_suffix: Optional[NameSuffix],
 ) -> Tuple[Dict[str, MediaType], dict]:
     """Parses a body model and returns a list of parameters and component schemas."""
     schema = get_model_schema(body)
     components_schemas = dict()
 
     original_title = schema.get("title") or body.__name__
-    title = normalize_name(original_title)
+    title = normalize_name(original_title, suffix=schema_suffix)
     components_schemas[title] = Schema(**schema)
     content = {
         "application/json": MediaType(
@@ -315,7 +325,8 @@ def parse_body(
     # Parse definitions
     definitions = schema.get("$defs", {})
     for name, value in definitions.items():
-        components_schemas[name] = Schema(**value)
+        def_name = normalize_name(name, suffix=schema_suffix)
+        components_schemas[def_name] = Schema(**value)
 
     return content, components_schemas
 
@@ -330,6 +341,9 @@ def get_responses(
     _responses = {}
     _schemas = {}
 
+    # Use output suffix to the schema name if separate_input_output_schemas is True
+    schema_suffix = OUTPUT_SUFFIX if separate_input_output_schemas else None
+
     for key, response in responses.items():
         if response is None:
             # If the response is None, it means HTTP status code "204" (No Content)
@@ -341,7 +355,7 @@ def get_responses(
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
             schema = get_model_schema(response, mode="serialization")
             original_title = schema.get("title") or response.__name__
-            name = normalize_name(original_title)
+            name = normalize_name(original_title, suffix=schema_suffix)
             _responses[key] = Response(
                 description=HTTP_STATUS.get(key, ""),
                 content={
@@ -374,7 +388,8 @@ def get_responses(
             if definitions:
                 # Add schema definitions to _schemas
                 for name, value in definitions.items():
-                    _schemas[normalize_name(name)] = Schema(**value)
+                    def_name = normalize_name(original_title, suffix=schema_suffix)
+                    _schemas[def_name] = Schema(**value)
 
     components_schemas.update(**_schemas)
     operation.responses = _responses
@@ -446,6 +461,9 @@ def parse_parameters(
     # Get the type hints from the function
     annotations = get_type_hints(func)
 
+    # Use input suffix to the schema name if separate_input_output_schemas is True
+    schema_suffix = INPUT_SUFFIX if separate_input_output_schemas else None
+
     # Get the types for header, cookie, path, query, form, and body parameters
     header: Optional[Type[BaseModel]] = annotations.get("header")
     cookie: Optional[Type[BaseModel]] = annotations.get("cookie")
@@ -462,27 +480,27 @@ def parse_parameters(
     parameters = []
 
     if header:
-        _parameters, _components_schemas = parse_header(header)
+        _parameters, _components_schemas = parse_header(header, schema_suffix)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
 
     if cookie:
-        _parameters, _components_schemas = parse_cookie(cookie)
+        _parameters, _components_schemas = parse_cookie(cookie, schema_suffix)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
 
     if path:
-        _parameters, _components_schemas = parse_path(path)
+        _parameters, _components_schemas = parse_path(path, schema_suffix)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
 
     if query:
-        _parameters, _components_schemas = parse_query(query)
+        _parameters, _components_schemas = parse_query(query, schema_suffix)
         parameters.extend(_parameters)
         components_schemas.update(**_components_schemas)
 
     if form:
-        _content, _components_schemas = parse_form(form)
+        _content, _components_schemas = parse_form(form, schema_suffix)
         components_schemas.update(**_components_schemas)
         request_body = RequestBody(content=_content, required=True)
         model_config: DefaultDict[str, Any] = form.model_config  # type: ignore
@@ -500,7 +518,7 @@ def parse_parameters(
         operation.requestBody = request_body
 
     if body:
-        _content, _components_schemas = parse_body(body)
+        _content, _components_schemas = parse_body(body, schema_suffix)
         components_schemas.update(**_components_schemas)
         request_body = RequestBody(content=_content, required=True)
         model_config: DefaultDict[str, Any] = body.model_config  # type: ignore
@@ -617,5 +635,8 @@ def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDi
     return {str(key.value if isinstance(key, HTTPStatus) else key): value for key, value in responses.items()}
 
 
-def normalize_name(name: str) -> str:
-    return re.sub(r"[^\w.\-]", "_", name)
+def normalize_name(name: str, *, suffix: Optional[NameSuffix] = None) -> str:
+    result = re.sub(r"[^\w.\-]", "_", name)
+    if suffix is not None:
+        result = f"{result}{suffix}"
+    return result

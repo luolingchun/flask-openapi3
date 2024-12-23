@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/7/9 15:25
 from http import HTTPStatus
-from typing import Dict, Union, Type, Any, Tuple, Optional
+from typing import Dict, Union, Type, Any, Tuple, Optional, Literal
 
 from pydantic import BaseModel
 
@@ -26,3 +26,5 @@ ParametersTuple = Tuple[
     Optional[Type[BaseModel]],
     Optional[Type[RawModel]]
 ]
+
+NameSuffix = Literal["-Input", "-Output"]
