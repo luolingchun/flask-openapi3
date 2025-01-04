@@ -110,6 +110,8 @@ class APIView:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
     ) -> Callable:
         """
@@ -127,6 +129,8 @@ class APIView:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -171,7 +175,12 @@ class APIView:
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
             # Parse parameters
-            parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            parse_parameters(
+                func, components_schemas=self.components_schemas,
+                operation=operation,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required
+            )
 
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
