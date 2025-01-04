@@ -29,6 +29,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
@@ -192,6 +194,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -211,6 +215,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -228,6 +234,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.POST,
             )
@@ -254,6 +262,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -273,6 +283,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -290,6 +302,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PUT,
             )
@@ -316,6 +330,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -335,6 +351,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -352,6 +370,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.DELETE,
             )
@@ -378,6 +398,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -397,6 +419,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -414,6 +438,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PATCH,
             )
