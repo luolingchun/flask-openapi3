@@ -61,7 +61,7 @@ def _validate_header(header: Type[BaseModel], func_kwargs: dict):
             value = request_headers.get(key_alias_title)
         else:
             key = model_field_key
-            value = request_headers[key_title]
+            value = request_headers.get(key_title)
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":
@@ -148,7 +148,7 @@ def _validate_form(form: Type[BaseModel], func_kwargs: dict):
 
 def _validate_body(body: Type[BaseModel], func_kwargs: dict):
     if is_application_json(request.mimetype):
-        if get_origin(body) == UnionType:
+        if get_origin(body) in (Union, UnionType):
             root_model_list = [model for model in get_args(body)]
             Body = RootModel[Union[tuple(root_model_list)]]  # type: ignore
         else:

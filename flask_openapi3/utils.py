@@ -7,6 +7,7 @@ import re
 import sys
 from enum import Enum
 from http import HTTPStatus
+from typing import Any, Callable, DefaultDict, Optional, Type, get_type_hints, Union
 from types import UnionType
 from typing import Any, Callable, DefaultDict, Type, get_type_hints, get_origin, get_args
 
@@ -349,7 +350,7 @@ def parse_body(
         for name, value in definitions.items():
             components_schemas[name] = Schema(**value)
 
-    if get_origin(body) == UnionType:
+    if get_origin(body) in (Union, UnionType):
         for model in get_args(body):
             _parse_body(model)
     else:
@@ -431,7 +432,7 @@ def get_responses(
         elif isinstance(response_model, dict):
             response_model["description"] = response_model.get("description", HTTP_STATUS.get(key, ""))
             _responses[key] = Response(**response_model)
-        elif get_origin(response_model) == UnionType:
+        elif get_origin(response_model) in [UnionType, Union]:
             for model in get_args(response_model):
                 _parse_response(key, model)
         else:
