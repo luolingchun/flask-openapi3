@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1131,8 +1131,8 @@ Before that, you should know something about the <a href="https://spec.openapis.
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">Info</span>
-<span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span>
 
 <span class="hll"><span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;book API&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span>
 </span><span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
@@ -1234,7 +1234,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <p>result:</p>
@@ -1256,7 +1256,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 </span><span class="p">)</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">endpoint</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">endpoint</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="abp_responses-view_responses">abp_responses &amp; view_responses<a class="headerlink" href="#abp_responses-view_responses" title="Permanent link">⚓︎</a></h2>
@@ -1280,7 +1280,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Unauthorized</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Unauthorized</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Status Code&quot;</span><span class="p">)</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">&quot;Unauthorized!&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Exception Information&quot;</span><span class="p">)</span>
 
@@ -1298,7 +1298,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="p">)</span>
 
 <span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">endpoint</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">endpoint</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="doc_ui">doc_ui<a class="headerlink" href="#doc_ui" title="Permanent link">⚓︎</a></h2>
@@ -1325,7 +1325,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="c1"># or</span>
 
 <span class="hll"><span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">():</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="servers">servers<a class="headerlink" href="#servers" title="Permanent link">⚓︎</a></h2>
@@ -1336,7 +1336,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Server</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Server</span>
 
 <span class="n">servers</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">Server</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;http://127.0.0.1:5000&#39;</span><span class="p">),</span>
@@ -1353,7 +1353,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">ExternalDocumentation</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">ExternalDocumentation</span>
 
 <span class="n">external_docs</span><span class="o">=</span><span class="n">ExternalDocumentation</span><span class="p">(</span>
     <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://www.openapis.org/&quot;</span><span class="p">,</span>
@@ -1383,7 +1383,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
 <span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="p">{</span>
 </span>    <span class="s2">&quot;x-google-endpoints&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1395,7 +1395,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 <span class="p">})</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">():</span>
     <span class="k">return</span> <span class="s2">&quot;ok&quot;</span>
 
 
@@ -1433,15 +1433,15 @@ and <code>validation_error_callback</code>. </p>
 <span class="normal">19</span>
 <span class="normal">20</span>
 <span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask.wrappers</span> <span class="kn">import</span> <span class="n">Response</span> <span class="k">as</span> <span class="n">FlaskResponse</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ValidationError</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask.wrappers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span> <span class="k">as</span> <span class="n">FlaskResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ValidationError</span>
 
-<span class="k">class</span> <span class="nc">ValidationErrorModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ValidationErrorModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">code</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
 
 
-<span class="k">def</span> <span class="nf">validation_error_callback</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">ValidationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validation_error_callback</span><span class="p">(</span><span class="n">e</span><span class="p">:</span> <span class="n">ValidationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
     <span class="n">validation_error_object</span> <span class="o">=</span> <span class="n">ValidationErrorModel</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s2">&quot;400&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">make_response</span><span class="p">(</span><span class="n">validation_error_object</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
     <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span>
@@ -1551,7 +1551,7 @@ and <code>validation_error_callback</code>. </p>
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../../js/db.js"></script>
       

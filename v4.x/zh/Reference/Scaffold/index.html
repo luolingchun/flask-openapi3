@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1432,8 +1432,8 @@
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">APIScaffold</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">_collect_openapi_info</span><span class="p">(</span>
+<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIScaffold</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
@@ -1453,10 +1453,10 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParametersTuple</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
 
-    <span class="k">def</span> <span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
 
-    <span class="k">def</span> <span class="nf">_add_url_rule</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_url_rule</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">,</span>
             <span class="n">endpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1467,7 +1467,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">create_view_func</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_view_func</span><span class="p">(</span>
             <span class="n">func</span><span class="p">,</span>
             <span class="n">header</span><span class="p">,</span>
             <span class="n">cookie</span><span class="p">,</span>
@@ -1482,7 +1482,7 @@
         <span class="n">is_coroutine_function</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">is_coroutine_function</span><span class="p">:</span>
             <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-            <span class="k">async</span> <span class="k">def</span> <span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
                 <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
                     <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
                     <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
@@ -1508,7 +1508,7 @@
                 <span class="k">return</span> <span class="n">response</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-            <span class="k">def</span> <span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
                 <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
                     <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
                     <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
@@ -1538,7 +1538,7 @@
 
         <span class="k">return</span> <span class="n">func</span><span class="o">.</span><span class="n">view</span>
 
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
@@ -1574,7 +1574,7 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                     <span class="n">rule</span><span class="p">,</span>
@@ -1601,7 +1601,7 @@
 
         <span class="k">return</span> <span class="n">decorator</span>
 
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
@@ -1637,7 +1637,7 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                     <span class="n">rule</span><span class="p">,</span>
@@ -1664,7 +1664,7 @@
 
         <span class="k">return</span> <span class="n">decorator</span>
 
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
@@ -1700,7 +1700,7 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                     <span class="n">rule</span><span class="p">,</span>
@@ -1727,7 +1727,7 @@
 
         <span class="k">return</span> <span class="n">decorator</span>
 
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
@@ -1763,7 +1763,7 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                     <span class="n">rule</span><span class="p">,</span>
@@ -1790,7 +1790,7 @@
 
         <span class="k">return</span> <span class="n">decorator</span>
 
-    <span class="k">def</span> <span class="nf">patch</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
@@ -1826,7 +1826,7 @@
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                     <span class="n">rule</span><span class="p">,</span>
@@ -2151,7 +2151,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">372</span>
 <span class="normal">373</span>
 <span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span>
+<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2187,7 +2187,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                 <span class="n">rule</span><span class="p">,</span>
@@ -2503,7 +2503,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
-<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2539,7 +2539,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                 <span class="n">rule</span><span class="p">,</span>
@@ -2855,7 +2855,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">patch</span><span class="p">(</span>
+<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2891,7 +2891,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                 <span class="n">rule</span><span class="p">,</span>
@@ -3207,7 +3207,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">246</span>
 <span class="normal">247</span>
 <span class="normal">248</span>
-<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">post</span><span class="p">(</span>
+<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -3243,7 +3243,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                 <span class="n">rule</span><span class="p">,</span>
@@ -3559,7 +3559,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
-<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">put</span><span class="p">(</span>
+<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -3595,7 +3595,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_openapi_info</span><span class="p">(</span>
                 <span class="n">rule</span><span class="p">,</span>
@@ -3729,7 +3729,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
     <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../../js/db.js"></script>
       

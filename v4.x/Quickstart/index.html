@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -991,13 +991,13 @@ and <a href="https://github.com/pydantic/pydantic">Pydantic</a>, So you can use 
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
     <span class="k">return</span> <span class="s1">&#39;Hello, World!&#39;</span>
 
 
@@ -1038,18 +1038,18 @@ and <a href="https://github.com/pydantic/pydantic">Pydantic</a>, So you can use 
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_books</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_books</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;book1&quot;</span><span class="p">,</span> <span class="s2">&quot;book2&quot;</span><span class="p">]</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_book</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span><span class="p">}</span>
 
 
@@ -1075,7 +1075,7 @@ you should use <strong><code>register_api</code></strong> instead of  <strong><c
 <span class="normal">14</span>
 <span class="normal">15</span>
 <span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -1083,7 +1083,7 @@ you should use <strong><code>register_api</code></strong> instead of  <strong><c
 
 
 <span class="nd">@api</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_book</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span><span class="p">}</span>
 
 
@@ -1122,7 +1122,7 @@ you should use <strong><code>register_api</code></strong> instead of  <strong><c
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -1132,12 +1132,12 @@ you should use <strong><code>register_api</code></strong> instead of  <strong><c
 
 
 <span class="nd">@api_english</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/english&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_english_book</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_english_book</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;english&quot;</span><span class="p">}</span>
 
 
 <span class="nd">@api_chinese</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/chinese&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_chinese_book</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_chinese_book</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;chinese&quot;</span><span class="p">}</span>
 
 
@@ -1165,16 +1165,16 @@ you should use <strong><code>register_api</code></strong> instead of  <strong><c
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookListAPIView</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookListAPIView</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;get book list&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;create book&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;description for a created book&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">body</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -1212,28 +1212,28 @@ and using <code>view_kwargs.get</code> get the required keys for each.</p>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookListAPIView</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookListAPIView</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">view_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
 <span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/book/&lt;id&gt;&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookAPIView</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookAPIView</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">view_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">register_api_view</span><span class="p">(</span>
@@ -1262,7 +1262,7 @@ pip<span class="w"> </span>install<span class="w"> </span>asgiref
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/open/api&#39;</span><span class="p">)</span>
-<span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">post_openapi</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">Query</span><span class="p">):</span>
+<span class="hll"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">post_openapi</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">Query</span><span class="p">):</span>
 </span>    <span class="nb">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
     <span class="k">return</span> <span class="s1">&#39;POST, OpenAPI!&#39;</span>
 </code></pre></div></td></tr></table></div>
@@ -1361,7 +1361,7 @@ pip<span class="w"> </span>install<span class="w"> </span>asgiref
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../js/db.js"></script>
       

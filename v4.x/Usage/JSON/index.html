@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -924,18 +924,18 @@
 <span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">orjson</span>
-<span class="kn">from</span> <span class="nn">flask.json.provider</span> <span class="kn">import</span> <span class="n">JSONProvider</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">orjson</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask.json.provider</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONProvider</span>
 
 
-<span class="k">class</span> <span class="nc">OrJSONProvider</span><span class="p">(</span><span class="n">JSONProvider</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OrJSONProvider</span><span class="p">(</span><span class="n">JSONProvider</span><span class="p">):</span>
     <span class="c1"># https://github.com/ijl/orjson#option</span>
     <span class="n">option</span> <span class="o">=</span> <span class="n">orjson</span><span class="o">.</span><span class="n">OPT_INDENT_2</span>
 
-    <span class="k">def</span> <span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">orjson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">orjson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
@@ -968,16 +968,16 @@
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span> <span class="nn">ujson</span>
-<span class="kn">from</span> <span class="nn">flask.json.provider</span> <span class="kn">import</span> <span class="n">JSONProvider</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ujson</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask.json.provider</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONProvider</span>
 
-<span class="k">class</span> <span class="nc">UJSONProvider</span><span class="p">(</span><span class="n">JSONProvider</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UJSONProvider</span><span class="p">(</span><span class="n">JSONProvider</span><span class="p">):</span>
     <span class="c1"># https://github.com/ultrajson/ultrajson</span>
     <span class="n">encode_html_chars</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">ensure_ascii</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">indent</span> <span class="o">=</span> <span class="mi">4</span>
 
-    <span class="k">def</span> <span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">option</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;encode_html_chars&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_html_chars</span><span class="p">,</span>
             <span class="s2">&quot;ensure_ascii&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_ascii</span><span class="p">,</span>
@@ -985,7 +985,7 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">ujson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">option</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ujson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
@@ -1089,7 +1089,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../js/db.js"></script>
       

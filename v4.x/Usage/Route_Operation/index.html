@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1095,13 +1095,13 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">Tag</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span>
 
 <span class="hll"><span class="n">book_tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;book&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Some Book&#39;</span><span class="p">)</span>
 </span>
 
 <span class="hll"><span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">():</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <p>and then you will get the magic.</p>
@@ -1123,7 +1123,7 @@
 </span>
 
 <span class="nd">@api</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="summary-and-description">summary and description<a class="headerlink" href="#summary-and-description" title="Permanent link">⚓︎</a></h2>
@@ -1135,7 +1135,7 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">200</span><span class="p">:</span> <span class="n">BookResponse</span><span class="p">},</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
 <span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get book</span>
 </span><span class="hll"><span class="sd">    Get some book by id, like:</span>
 </span><span class="hll"><span class="sd">    http://localhost:5000/book/3</span>
@@ -1151,7 +1151,7 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;new summary&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new description&#39;</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get book</span>
 <span class="sd">    Get some book by id, like:</span>
 <span class="sd">    http://localhost:5000/book/3</span>
@@ -1176,7 +1176,7 @@
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">ExternalDocumentation</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">ExternalDocumentation</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
 
@@ -1189,7 +1189,7 @@
 </span>        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://www.openapis.org/&quot;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Something great got better, get excited!&quot;</span><span class="p">)</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="operation_id">operation_id<a class="headerlink" href="#operation_id" title="Permanent link">⚓︎</a></h2>
@@ -1209,7 +1209,7 @@
     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new description&#39;</span><span class="p">,</span>
 <span class="hll">    <span class="n">operation_id</span><span class="o">=</span><span class="s2">&quot;get_book_id&quot;</span>
 </span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="operation_id_callback">operation_id_callback<a class="headerlink" href="#operation_id_callback" title="Permanent link">⚓︎</a></h2>
@@ -1223,13 +1223,13 @@ The example shows setting the default <code>operation_id</code> to be the functi
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_operation_id_for_path</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_operation_id_for_path</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">name</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="n">APIBlueprint</span><span class="p">(</span><span class="s1">&#39;book&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="s1">&#39;/api&#39;</span><span class="p">,</span> <span class="n">operation_id_callback</span><span class="o">=</span><span class="n">get_operation_id_for_path</span><span class="p">)</span>
 
 <span class="hll"><span class="nd">@api</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book/&#39;</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="deprecated">deprecated<a class="headerlink" href="#deprecated" title="Permanent link">⚓︎</a></h2>
@@ -1237,7 +1237,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">deprecated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_books</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_books</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="security">security<a class="headerlink" href="#security" title="Permanent link">⚓︎</a></h2>
@@ -1245,7 +1245,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <p>There are many kinds of security supported here:</p>
@@ -1344,7 +1344,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new description&#39;</span><span class="p">,</span>
     <span class="n">security</span><span class="o">=</span><span class="n">security</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="abp_security-view_security">abp_security &amp; view_security<a class="headerlink" href="#abp_security-view_security" title="Permanent link">⚓︎</a></h2>
@@ -1364,7 +1364,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
 </span>
 
 <span class="nd">@api</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="servers">servers<a class="headerlink" href="#servers" title="Permanent link">⚓︎</a></h2>
@@ -1381,7 +1381,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Server</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Server</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
 
@@ -1392,7 +1392,7 @@ The example shows setting the default <code>operation_id</code> to be the functi
     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new description&#39;</span><span class="p">,</span>
     <span class="n">servers</span><span class="o">=</span><span class="p">[</span><span class="n">Server</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://www.openapis.org/&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;openapi&quot;</span><span class="p">)]</span>
 <span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="openapi_extensions">openapi_extensions<a class="headerlink" href="#openapi_extensions" title="Permanent link">⚓︎</a></h2>
@@ -1445,7 +1445,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 <span class="normal">44</span>
 <span class="normal">45</span>
 <span class="normal">46</span>
-<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span><span class="p">,</span> <span class="n">APIView</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">APIBlueprint</span><span class="p">,</span> <span class="n">APIView</span>
 
 <span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="p">{</span>
 </span>    <span class="s2">&quot;x-google-endpoints&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1464,7 +1464,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 <span class="p">}</span>
 
 <span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">():</span>
     <span class="k">return</span> <span class="s2">&quot;ok&quot;</span>
 
 
@@ -1473,7 +1473,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 
 
 <span class="hll"><span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">():</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">}</span>
 
 
@@ -1484,10 +1484,10 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 
 
 <span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/view/book&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookListAPIView</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookListAPIView</span><span class="p">:</span>
 
 <span class="hll">    <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">openapi_extensions</span><span class="o">=</span><span class="n">openapi_extensions</span><span class="p">)</span>
-</span>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span>    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;ok&quot;</span>
 
 
@@ -1517,7 +1517,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 <span class="c1"># or</span>
 
 <span class="hll"><span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span class="k">def</span> <span class="nf">get_book</span><span class="p">():</span>
+</span><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">():</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 
@@ -1615,7 +1615,7 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../js/db.js"></script>
       

@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1056,10 +1056,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </s
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">Info</span><span class="p">,</span> <span class="n">Tag</span>
-<span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span><span class="p">,</span> <span class="n">Tag</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;book API&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
@@ -1067,13 +1067,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </s
 <span class="n">book_tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;book&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Some Book&quot;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;get books&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    to get all books</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1155,11 +1155,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </s
 <span class="normal">60</span>
 <span class="normal">61</span>
 <span class="normal">62</span>
-<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
-<span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Info</span><span class="p">,</span> <span class="n">APIView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Info</span><span class="p">,</span> <span class="n">APIView</span>
 
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;book API&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.0.0&#39;</span><span class="p">)</span>
@@ -1168,48 +1168,48 @@ pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </s
 <span class="n">api_view</span> <span class="o">=</span> <span class="n">APIView</span><span class="p">(</span><span class="n">url_prefix</span><span class="o">=</span><span class="s2">&quot;/api/v1&quot;</span><span class="p">,</span> <span class="n">view_tags</span><span class="o">=</span><span class="p">[</span><span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;book&quot;</span><span class="p">)])</span>
 
 
-<span class="k">class</span> <span class="nc">BookPath</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookPath</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;book ID&quot;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">)</span>
 
 
 <span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookListAPIView</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookListAPIView</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;get book list&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;create book&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;description for a created book&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">body</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">()</span>
 
 
 <span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/book/&lt;id&gt;&quot;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">BookAPIView</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookAPIView</span><span class="p">:</span>
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;get book&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;get&quot;</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;update book&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;put&quot;</span>
 
     <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">summary</span><span class="o">=</span><span class="s2">&quot;delete book&quot;</span><span class="p">,</span> <span class="n">deprecated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;delete&quot;</span>
 
@@ -1308,7 +1308,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </s
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../js/db.js"></script>
       

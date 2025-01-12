@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -1046,7 +1046,7 @@
 
 <h2 id="request-declaration">Request declaration<a class="headerlink" href="#request-declaration" title="Permanent link">⚓︎</a></h2>
 <p>First, you need to import <code>BaseModel</code> from <code>pydantic</code>:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="path">path<a class="headerlink" href="#path" title="Permanent link">⚓︎</a></h3>
 <p>Request parameter in rules，<strong><code>@app.get('/book/&lt;int:bid&gt;')</code></strong>.</p>
@@ -1057,19 +1057,19 @@
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BookPath</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BookPath</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">bid</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;book id&#39;</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-<span class="hll"><span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
 </span>    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="query">query<a class="headerlink" href="#query" title="Permanent link">⚓︎</a></h3>
 <p>Receive flask <strong><code>request.args</code></strong>.</p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">request</span>
 </code></pre></div></td></tr></table></div>
 </div>
 <p>like <a href="#path">path</a>, you need pass <strong><code>query</code></strong> to view function.</p>
@@ -1080,13 +1080,13 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/book/&lt;int:bid&gt;&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
-<span class="hll"><span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
 </span>    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="form">form<a class="headerlink" href="#form" title="Permanent link">⚓︎</a></h3>
@@ -1098,13 +1098,13 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">UploadFileForm</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UploadFileForm</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">file</span><span class="p">:</span> <span class="n">FileStorage</span>  <span class="c1"># request.files[&quot;file&quot;]</span>
     <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;File type&quot;</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">)</span>
-<span class="hll"><span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="n">form</span><span class="p">:</span> <span class="n">UploadFileForm</span><span class="p">):</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">upload_file</span><span class="p">(</span><span class="n">form</span><span class="p">:</span> <span class="n">UploadFileForm</span><span class="p">):</span>
 </span>    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="body">body<a class="headerlink" href="#body" title="Permanent link">⚓︎</a></h3>
@@ -1116,13 +1116,13 @@
 <span class="normal">5</span>
 <span class="normal">6</span>
 <span class="normal">7</span>
-<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/book&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
-<span class="hll"><span class="k">def</span> <span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
+<span class="hll"><span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
 </span>    <span class="o">...</span>
 </code></pre></div></td></tr></table></div>
 <h3 id="header">header<a class="headerlink" href="#header" title="Permanent link">⚓︎</a></h3>
@@ -1143,15 +1143,15 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">flask_openapi3</span> <span class="kn">import</span> <span class="n">RawModel</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">RawModel</span>
 
 
-<span class="k">class</span> <span class="nc">BookRaw</span><span class="p">(</span><span class="n">RawModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookRaw</span><span class="p">(</span><span class="n">RawModel</span><span class="p">):</span>
     <span class="n">mimetypes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text/csv&quot;</span><span class="p">,</span> <span class="s2">&quot;application/json&quot;</span><span class="p">]</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">get_book</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BookRaw</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BookRaw</span><span class="p">):</span>
     <span class="c1"># raw equals to flask.request</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">mimetype</span><span class="p">)</span>
@@ -1161,7 +1161,7 @@
 <p>First, you need to define a <a href="https://github.com/pydantic/pydantic">pydantic</a> model:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1170,7 +1170,7 @@
 <p><code>age</code> with <strong><code>example</code></strong> and <code>author</code> with <strong><code>deprecated</code></strong>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;deprecated&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
 </code></pre></div></td></tr></table></div>
@@ -1272,7 +1272,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
