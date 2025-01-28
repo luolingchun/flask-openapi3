@@ -19,7 +19,7 @@ class Schema(BaseModel):
     ref: Optional[str] = Field(alias="$ref", default=None)
     title: Optional[str] = None
     multipleOf: Optional[float] = Field(default=None, gt=0.0)
-    maximum: Optional[float] = None
+    maximum: Optional[int | float] = None
     exclusiveMaximum: Optional[float] = None
     minimum: Optional[float] = None
     exclusiveMinimum: Optional[float] = None

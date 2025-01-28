@@ -4,7 +4,7 @@ from typing import Generic, TypeVar, List, Optional, Tuple, Literal
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import OpenAPI, Schema
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -571,3 +571,9 @@ def test_prefix_items(request):
  'required': ['my_tuple'],
  'title': 'TupleModel',
  'type': 'object'}
+
+
+def test_schema_bigint(request):
+    max_nr = 9223372036854775807
+    obj = Schema(maximum=max_nr)
+    assert obj.model_dump()["maximum"] == max_nr
