@@ -1,3 +1,12 @@
+## v4.1.0 2025-02-08
+
+- Support for Python 3.13 by @luolingchun in #200
+- Fix query, form, header model extra not honored by @luolingchun in #201
+- Better APISpec init to allow to modify it before generating spec_json. by @ddorian in #195
+- Schema.maximum type float -> int | float by @ddorian in #217
+- Allow url_prefix to be set during API/APIView registration by @luolingchun in #215
+- Drop support for Python 3.8 by @luolingchun in #199
+
 ## v4.0.3 2024-11-23
 
 - Add PrefixItems to Schema Model for use with Tuple types by @JesseDeLoore in #197
