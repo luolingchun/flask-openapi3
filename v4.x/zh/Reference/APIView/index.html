@@ -1214,7 +1214,19 @@
 <span class="normal">218</span>
 <span class="normal">219</span>
 <span class="normal">220</span>
-<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIView</span><span class="p">:</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIView</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1382,12 +1394,18 @@
 
         <span class="k">return</span> <span class="n">decorator</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span>
+            <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register the API views with the given OpenAPI app.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            app: An instance of the OpenAPI app.</span>
+<span class="sd">            url_prefix: A path to prepend to all the APIView&#39;s urls</span>
 <span class="sd">            view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1406,6 +1424,12 @@
                     <span class="n">view_class</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
                     <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span>
                 <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+                    <span class="n">rule</span> <span class="o">=</span> <span class="n">url_prefix</span> <span class="o">+</span> <span class="n">rule</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+                    <span class="n">rule</span> <span class="o">=</span> <span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">rule</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
                 <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s2">&quot;endpoint&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
                     <span class="s2">&quot;methods&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
@@ -2029,7 +2053,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 
 <h3 id="flask_openapi3.view.APIView.register" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">register</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.view.APIView.register" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
@@ -2064,6 +2088,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
             </td>
             <td>
                 <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>url_prefix</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[str]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A path to prepend to all the APIView's urls</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -2115,12 +2155,30 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">218</span>
 <span class="normal">219</span>
 <span class="normal">220</span>
-<span class="normal">221</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">app</span><span class="p">:</span> <span class="s2">&quot;OpenAPI&quot;</span><span class="p">,</span>
+        <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register the API views with the given OpenAPI app.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        app: An instance of the OpenAPI app.</span>
+<span class="sd">        url_prefix: A path to prepend to all the APIView&#39;s urls</span>
 <span class="sd">        view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2139,6 +2197,12 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
                 <span class="n">view_class</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
                 <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span>
             <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+                <span class="n">rule</span> <span class="o">=</span> <span class="n">url_prefix</span> <span class="o">+</span> <span class="n">rule</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+                <span class="n">rule</span> <span class="o">=</span> <span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">rule</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
             <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;endpoint&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
                 <span class="s2">&quot;methods&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>

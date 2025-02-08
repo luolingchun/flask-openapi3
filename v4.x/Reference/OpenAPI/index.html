@@ -1440,7 +1440,28 @@
 <span class="normal">431</span>
 <span class="normal">432</span>
 <span class="normal">433</span>
-<span class="normal">434</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Flask</span><span class="p">):</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">APIScaffold</span><span class="p">,</span> <span class="n">Flask</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">import_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1675,12 +1696,18 @@
                     <span class="p">}</span>
                 <span class="p">}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register an APIBlueprint.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            api: The APIBlueprint instance to register.</span>
+
+<span class="sd">            options: Additional keyword arguments are passed to :class:`~flask.blueprints.BlueprintSetupState`.</span>
+<span class="sd">            They can be accessed in :meth:`~flask.Blueprint.record` callbacks.</span>
+<span class="sd">            url_prefix, Blueprint routes will be prefixed with this.</span>
+<span class="sd">            subdomain, Blueprint routes will match on this subdomain.</span>
+<span class="sd">            url_defaults, Blueprint routes will use these default values for view arguments.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
@@ -1692,20 +1719,31 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Update paths with the APIBlueprint&#39;s paths</span>
+        <span class="n">url_prefix</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url_prefix&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+            <span class="n">api</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+            <span class="n">api</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
         <span class="c1"># Update component schemas with the APIBlueprint&#39;s component schemas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
         <span class="c1"># Register the APIBlueprint with the current instance</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_api_view</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span>
+            <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Register APIView</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            api_view: The APIView instance to register.</span>
+<span class="sd">            url_prefix: A path to prepend to all the APIView&#39;s urls</span>
 <span class="sd">            view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">view_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1721,13 +1759,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Update paths with the APIView&#39;s paths</span>
+        <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+            <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+            <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
         <span class="c1"># Update component schemas with the APIView&#39;s component schemas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api_view</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
         <span class="c1"># Register the APIView with the current instance</span>
-        <span class="n">api_view</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span><span class="p">)</span>
+        <span class="n">api_view</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_add_url_rule</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -2636,28 +2678,7 @@ Defaults to "/openapi.json".</p>
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span>
-<span class="normal">359</span>
-<span class="normal">360</span>
-<span class="normal">361</span>
-<span class="normal">362</span>
-<span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">368</span>
 <span class="normal">369</span>
 <span class="normal">370</span>
 <span class="normal">371</span>
@@ -2723,7 +2744,28 @@ Defaults to "/openapi.json".</p>
 <span class="normal">431</span>
 <span class="normal">432</span>
 <span class="normal">433</span>
-<span class="normal">434</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
@@ -2951,7 +2993,7 @@ Defaults to "/openapi.json".</p>
 
 
 <h3 id="flask_openapi3.OpenAPI.register_api" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">register_api</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.OpenAPI.register_api" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
@@ -2988,6 +3030,38 @@ Defaults to "/openapi.json".</p>
                 <em>required</em>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>options</code>
+            </td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional keyword arguments are passed to :class:<code>~flask.blueprints.BlueprintSetupState</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>They</code>
+            </td>
+            <td>
+                  <code>can be accessed in </code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>meth:<code>~flask.Blueprint.record</code> callbacks.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -3016,12 +3090,29 @@ Defaults to "/openapi.json".</p>
 <span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
-<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIBlueprint</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register an APIBlueprint.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        api: The APIBlueprint instance to register.</span>
+
+<span class="sd">        options: Additional keyword arguments are passed to :class:`~flask.blueprints.BlueprintSetupState`.</span>
+<span class="sd">        They can be accessed in :meth:`~flask.Blueprint.record` callbacks.</span>
+<span class="sd">        url_prefix, Blueprint routes will be prefixed with this.</span>
+<span class="sd">        subdomain, Blueprint routes will match on this subdomain.</span>
+<span class="sd">        url_defaults, Blueprint routes will use these default values for view arguments.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
@@ -3033,13 +3124,18 @@ Defaults to "/openapi.json".</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1"># Update paths with the APIBlueprint&#39;s paths</span>
+    <span class="n">url_prefix</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url_prefix&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+        <span class="n">api</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+        <span class="n">api</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
     <span class="c1"># Update component schemas with the APIBlueprint&#39;s component schemas</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
     <span class="c1"># Register the APIBlueprint with the current instance</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3050,7 +3146,7 @@ Defaults to "/openapi.json".</p>
 
 
 <h3 id="flask_openapi3.OpenAPI.register_api_view" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">register_api_view</span><span class="p">(</span><span class="n">api_view</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">register_api_view</span><span class="p">(</span><span class="n">api_view</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 <a href="#flask_openapi3.OpenAPI.register_api_view" class="headerlink" title="Permanent link">⚓︎</a></h3>
 
@@ -3089,6 +3185,22 @@ Defaults to "/openapi.json".</p>
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>url_prefix</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[str]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A path to prepend to all the APIView's urls</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>view_kwargs</code>
             </td>
             <td>
@@ -3108,18 +3220,7 @@ Defaults to "/openapi.json".</p>
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">319</span>
 <span class="normal">320</span>
 <span class="normal">321</span>
 <span class="normal">322</span>
@@ -3135,12 +3236,39 @@ Defaults to "/openapi.json".</p>
 <span class="normal">332</span>
 <span class="normal">333</span>
 <span class="normal">334</span>
-<span class="normal">335</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_api_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_api_view</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_view</span><span class="p">:</span> <span class="n">APIView</span><span class="p">,</span>
+        <span class="n">url_prefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">view_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register APIView</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        api_view: The APIView instance to register.</span>
+<span class="sd">        url_prefix: A path to prepend to all the APIView&#39;s urls</span>
 <span class="sd">        view_kwargs: Additional keyword arguments to pass to the API views.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">view_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3156,13 +3284,17 @@ Defaults to "/openapi.json".</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1"># Update paths with the APIView&#39;s paths</span>
+    <span class="k">if</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span> <span class="ow">and</span> <span class="n">url_prefix</span> <span class="o">!=</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+        <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">elif</span> <span class="n">url_prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">api_view</span><span class="o">.</span><span class="n">url_prefix</span><span class="p">:</span>
+        <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="p">{</span><span class="n">url_prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api_view</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
     <span class="c1"># Update component schemas with the APIView&#39;s component schemas</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">api_view</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">)</span>
 
     <span class="c1"># Register the APIView with the current instance</span>
-    <span class="n">api_view</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span><span class="p">)</span>
+    <span class="n">api_view</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url_prefix</span><span class="o">=</span><span class="n">url_prefix</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="o">=</span><span class="n">view_kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
