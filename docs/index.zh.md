@@ -32,7 +32,7 @@
 
 ## 依赖
 
-Python 3.8+
+Python 3.9+
 
 flask-openapi3 依赖以下库：
 
