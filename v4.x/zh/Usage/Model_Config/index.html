@@ -1186,7 +1186,7 @@ so we can use the <code>openapi_extra</code> to extend OpenAPI Specification.</p
 <span class="normal">6</span>
 <span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MessageResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message&quot;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;metadata_&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;metadata_&quot;</span><span class="p">)</span>
 
     <span class="n">model_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">by_alias</span><span class="o">=</span><span class="kc">False</span>
