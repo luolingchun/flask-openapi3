@@ -53,3 +53,8 @@ class Schema(BaseModel):
     externalDocs: Optional[ExternalDocumentation] = None
     example: Optional[Any] = None
     deprecated: Optional[bool] = None
+
+    model_config = {
+        "extra": "allow",
+        "populate_by_name": True
+    }

@@ -12,5 +12,6 @@ class Reference(BaseModel):
     ref: str = Field(..., alias="$ref")
 
     model_config = {
-        "extra": "allow"
+        "extra": "allow",
+        "populate_by_name": True
     }
