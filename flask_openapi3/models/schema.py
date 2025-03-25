@@ -55,6 +55,5 @@ class Schema(BaseModel):
     deprecated: Optional[bool] = None
 
     model_config = {
-        "extra": "allow",
         "populate_by_name": True
     }
