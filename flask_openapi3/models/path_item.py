@@ -33,5 +33,6 @@ class PathItem(BaseModel):
     parameters: Optional[list[Union[Parameter, Reference]]] = None
 
     model_config = {
-        "extra": "allow"
+        "extra": "allow",
+        "populate_by_name": True
     }

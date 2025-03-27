@@ -22,5 +22,6 @@ class MediaType(BaseModel):
     encoding: Optional[dict[str, Encoding]] = None
 
     model_config = {
-        "extra": "allow"
+        "extra": "allow",
+        "populate_by_name": True
     }

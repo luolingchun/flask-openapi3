@@ -32,5 +32,6 @@ class Parameter(BaseModel):
     content: Optional[dict[str, MediaType]] = None
 
     model_config = {
-        "extra": "allow"
+        "extra": "allow",
+        "populate_by_name": True
     }

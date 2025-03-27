@@ -24,5 +24,6 @@ class SecurityScheme(BaseModel):
     openIdConnectUrl: Optional[str] = None
 
     model_config = {
-        "extra": "allow"
+        "extra": "allow",
+        "populate_by_name": True
     }
