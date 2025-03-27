@@ -2,14 +2,16 @@
 # @Author  : llc
 # @Time    : 2023/7/9 15:25
 from http import HTTPStatus
-from typing import Union, Type, Any, Optional
+from typing import Union, Type, Any, Optional, TypeVar
 
 from pydantic import BaseModel
 
 from .models import RawModel
 from .models import SecurityScheme
 
-_ResponseDictValue = Union[Type[BaseModel], dict[Any, Any], None]
+_MultiBaseModel = TypeVar("_MultiBaseModel", bound=Type[BaseModel])
+
+_ResponseDictValue = Union[Type[BaseModel], _MultiBaseModel, dict[Any, Any], None]
 
 ResponseDict = dict[Union[str, int, HTTPStatus], _ResponseDictValue]
 
