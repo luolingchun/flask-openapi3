@@ -5,7 +5,7 @@ import json
 from json import JSONDecodeError
 from typing import Any, Type, Optional
 
-from flask import request, current_app, abort
+from flask import request
 from pydantic import ValidationError, BaseModel
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
@@ -155,7 +155,7 @@ def _validate_request(
         body: Optional[Type[BaseModel]] = None,
         raw: Optional[Type[BaseModel]] = None,
         path_kwargs: Optional[dict[Any, Any]] = None
-) -> dict:
+) -> tuple[dict, Any | None]:
     """
     Validate requests and responses.
 
@@ -170,13 +170,12 @@ def _validate_request(
 
     Returns:
         dict: Request kwargs.
-
-    Raises:
-        ValidationError: If validation fails.
+        error: ValidationError
     """
 
     # Dictionary to store func kwargs
     func_kwargs: dict = {}
+    error = None
 
     try:
         # Validate header, cookie, path, and query parameters
@@ -195,8 +194,6 @@ def _validate_request(
         if raw:
             func_kwargs["raw"] = request
     except ValidationError as e:
-        # Create a response with validation error details
-        validation_error_callback = getattr(current_app, "validation_error_callback")
-        abort(validation_error_callback(e))
+        error = e
 
-    return func_kwargs
+    return func_kwargs, error

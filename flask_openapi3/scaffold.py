@@ -5,7 +5,7 @@ import inspect
 from functools import wraps
 from typing import Callable, Optional, Any
 
-from flask.wrappers import Response as FlaskResponse
+from flask import abort, current_app
 
 from .models import ExternalDocumentation
 from .models import Server
@@ -35,10 +35,10 @@ class APIScaffold:
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def register_api(self, api) -> None:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def _add_url_rule(
             self,
@@ -48,7 +48,7 @@ class APIScaffold:
             provide_automatic_options=None,
             **options,
     ) -> None:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     @staticmethod
     def create_view_func(
@@ -66,8 +66,8 @@ class APIScaffold:
         is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
             @wraps(func)
-            async def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _validate_request(
+            async def view_func(**kwargs) -> Any | None:
+                func_kwargs, error = _validate_request(
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -77,23 +77,30 @@ class APIScaffold:
                     raw=raw,
                     path_kwargs=kwargs
                 )
-
-                # handle async request
-                if view_class:
-                    signature = inspect.signature(view_class.__init__)
-                    parameters = signature.parameters
-                    if parameters.get("view_kwargs"):
-                        view_object = view_class(view_kwargs=view_kwargs)
+                try:
+                    # handle async request
+                    if view_class:
+                        signature = inspect.signature(view_class.__init__)
+                        parameters = signature.parameters
+                        if parameters.get("view_kwargs"):
+                            view_object = view_class(view_kwargs=view_kwargs)
+                        else:
+                            view_object = view_class()
+                        response = await func(view_object, **func_kwargs)
                     else:
-                        view_object = view_class()
-                    response = await func(view_object, **func_kwargs)
-                else:
-                    response = await func(**func_kwargs)
-                return response
+                        response = await func(**func_kwargs)
+                    return response
+                except TypeError as e:
+                    if error:
+                        # Create a response with validation error details
+                        validation_error_callback = getattr(current_app, "validation_error_callback")
+                        abort(validation_error_callback(error))
+                    else:
+                        raise e
         else:
             @wraps(func)
-            def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _validate_request(
+            def view_func(**kwargs) -> Any | None:
+                func_kwargs, error = _validate_request(
                     header=header,
                     cookie=cookie,
                     path=path,
@@ -103,19 +110,26 @@ class APIScaffold:
                     raw=raw,
                     path_kwargs=kwargs
                 )
-
-                # handle request
-                if view_class:
-                    signature = inspect.signature(view_class.__init__)
-                    parameters = signature.parameters
-                    if parameters.get("view_kwargs"):
-                        view_object = view_class(view_kwargs=view_kwargs)
+                try:
+                    # handle request
+                    if view_class:
+                        signature = inspect.signature(view_class.__init__)
+                        parameters = signature.parameters
+                        if parameters.get("view_kwargs"):
+                            view_object = view_class(view_kwargs=view_kwargs)
+                        else:
+                            view_object = view_class()
+                        response = func(view_object, **func_kwargs)
                     else:
-                        view_object = view_class()
-                    response = func(view_object, **func_kwargs)
-                else:
-                    response = func(**func_kwargs)
-                return response
+                        response = func(**func_kwargs)
+                    return response
+                except TypeError as e:
+                    if error:
+                        # Create a response with validation error details
+                        validation_error_callback = getattr(current_app, "validation_error_callback")
+                        abort(validation_error_callback(error))
+                    else:
+                        raise e
 
         if not hasattr(func, "view"):
             func.view = view_func
