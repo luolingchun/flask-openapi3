@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
+from __future__ import annotations
+
 import json
 from json import JSONDecodeError
 from typing import Any, Type, Optional

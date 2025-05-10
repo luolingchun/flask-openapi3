@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/8/30 9:40
+from __future__ import annotations
+
 import inspect
 from functools import wraps
 from typing import Callable, Optional, Any
