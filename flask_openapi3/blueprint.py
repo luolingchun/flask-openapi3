@@ -163,7 +163,7 @@ class APIBlueprint(APIScaffold, Blueprint):
 
             # Unique string used to identify the operation.
             operation.operationId = operation_id or self.operation_id_callback(
-                name=self.name, path=rule, method=method
+                name=f"{self.name}&{func.__name__}", path=rule, method=method
             )
 
             # Only set `deprecated` if True, otherwise leave it as None

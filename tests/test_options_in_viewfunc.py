@@ -49,7 +49,7 @@ def test_openapi(client):
     assert resp.status_code == 200
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/book"]["get"]["operationId"] == "get_book_book_get"  # Default operation_id generator
-    assert resp.json["paths"]["/api/book"]["post"]["operationId"] == "/book"  # Custom callback operation_id
+    assert resp.json["paths"]["/api/book"]["post"]["operationId"] == "/book&create_book"  # Custom callback operation_id
 
 
 def test_get(client):
