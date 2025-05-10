@@ -63,6 +63,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_ui: bool = True,
             doc_prefix: str = "/openapi",
             doc_url: str = "/openapi.json",
+            validate_response: Optional[bool] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -143,6 +144,8 @@ class OpenAPI(APIScaffold, Flask):
 
         # Add the OpenAPI command
         self.cli.add_command(openapi_command)  # type: ignore
+
+        self.app_validate_response: Optional[bool] = validate_response
 
         # Initialize specification JSON
         self.spec_json: dict = {}

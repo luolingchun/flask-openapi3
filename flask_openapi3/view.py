@@ -112,7 +112,8 @@ class APIView:
             security: Optional[list[dict[str, list[Any]]]] = None,
             servers: Optional[list[Server]] = None,
             openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True
+            doc_ui: bool = True,
+            validate_response: Optional[bool] = None,
     ) -> Callable:
         """
         Decorator for view method.
@@ -132,11 +133,15 @@ class APIView:
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
+        # import ipdb; ipdb.set_trace()
         new_responses = convert_responses_key_to_string(responses or {})
         security = security or []
         tags = tags + self.view_tags if tags else self.view_tags
 
         def decorator(func):
+            func.validate_response = validate_response
+            func.responses = responses
+
             if self.doc_ui is False or doc_ui is False:
                 return func
 
@@ -186,6 +191,10 @@ class APIView:
             get_responses(combine_responses, self.components_schemas, operation)
             func.operation = operation
 
+            # NOTE: combite_responses instead of responses here? or is above enough?
+            # func.responses = responses
+            # func.responses = combite_responses
+
             return func
 
         return decorator
@@ -194,7 +203,7 @@ class APIView:
             self,
             app: "OpenAPI",
             url_prefix: Optional[str] = None,
-            view_kwargs: Optional[dict[Any, Any]] = None
+            view_kwargs: Optional[dict[Any, Any]] = None,
     ) -> None:
         """
         Register the API views with the given OpenAPI app.
@@ -204,9 +213,21 @@ class APIView:
             url_prefix: A path to prepend to all the APIView's urls
             view_kwargs: Additional keyword arguments to pass to the API views.
         """
+
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
+
+                if isinstance(func.responses, dict):
+                    responses = func.responses.copy()
+                else:
+                    responses = func.responses
+
+                validate_response = func.validate_response
+
+                del func.responses
+                del func.validate_response
+
                 header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
                 view_func = app.create_view_func(
                     func,
@@ -217,8 +238,12 @@ class APIView:
                     form,
                     body,
                     raw,
+                    responses=responses,
                     view_class=cls,
-                    view_kwargs=view_kwargs
+                    view_kwargs=view_kwargs,
+                    parent_validate_response=app.app_validate_response,
+                    # NOTE: do we support this at APIView definition time or do we want it at each class/route? or not at all?
+                    api_validate_response=validate_response,
                 )
 
                 if url_prefix and self.url_prefix and url_prefix != self.url_prefix:

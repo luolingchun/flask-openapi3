@@ -33,6 +33,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             abp_responses: Optional[ResponseDict] = None,
             doc_ui: bool = True,
             operation_id_callback: Callable = get_operation_id_for_path,
+            validate_response: Optional[bool] = None,
             **kwargs: Any
     ) -> None:
         """
@@ -70,6 +71,8 @@ class APIBlueprint(APIScaffold, Blueprint):
 
         # Set the operation ID callback function
         self.operation_id_callback: Callable = operation_id_callback
+
+        self.abp_validate_response: Optional[bool] = validate_response
 
     def register_api(self, api: "APIBlueprint") -> None:
         """Register a nested APIBlueprint"""
