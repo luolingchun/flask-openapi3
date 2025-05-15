@@ -4,13 +4,16 @@
 from __future__ import annotations
 
 import json
+from functools import wraps
 from json import JSONDecodeError
-from typing import Any, Type, Optional
+from typing import Any, Callable, Optional, Type
 
-from flask import request
-from pydantic import ValidationError, BaseModel
+from flask import abort, current_app, request
+from pydantic import BaseModel, ValidationError
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
+
+from flask_openapi3.utils import parse_parameters
 
 
 def _get_list_value(model: Type[BaseModel], args: MultiDict, model_field_key: str, model_field_value: FieldInfo):
@@ -149,14 +152,14 @@ def _validate_body(body: Type[BaseModel], func_kwargs: dict):
 
 
 def _validate_request(
-        header: Optional[Type[BaseModel]] = None,
-        cookie: Optional[Type[BaseModel]] = None,
-        path: Optional[Type[BaseModel]] = None,
-        query: Optional[Type[BaseModel]] = None,
-        form: Optional[Type[BaseModel]] = None,
-        body: Optional[Type[BaseModel]] = None,
-        raw: Optional[Type[BaseModel]] = None,
-        path_kwargs: Optional[dict[Any, Any]] = None
+    header: Optional[Type[BaseModel]] = None,
+    cookie: Optional[Type[BaseModel]] = None,
+    path: Optional[Type[BaseModel]] = None,
+    query: Optional[Type[BaseModel]] = None,
+    form: Optional[Type[BaseModel]] = None,
+    body: Optional[Type[BaseModel]] = None,
+    raw: Optional[Type[BaseModel]] = None,
+    path_kwargs: Optional[dict[Any, Any]] = None,
 ) -> tuple[dict, Any | None]:
     """
     Validate requests and responses.
@@ -199,3 +202,36 @@ def _validate_request(
         error = e
 
     return func_kwargs, error
+
+
+def validate(
+    on_success_status: int = 200,
+    exclude_none: bool = False,
+    response_many: bool = False,
+    request_body_many: bool = False,
+    response_by_alias: bool = False,
+    get_json_params: Optional[dict] = None,
+):
+    """
+    Decorator for route methods which will validate query, body and form parameters
+    as well as serialize the response (if it derives from pydantic's BaseModel
+    class).
+
+    """
+
+    def decorate(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            func_kwargs = {}
+
+            header, cookie, path, query, form, body, raw = parse_parameters(func)
+
+            func_kwargs, error = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+            if error:
+                validation_error_callback = getattr(current_app, "validation_error_callback")
+                abort(validation_error_callback(error))
+            return func(*args, **func_kwargs)
+
+        return wrapper
+
+    return decorate

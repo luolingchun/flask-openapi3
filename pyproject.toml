@@ -1,69 +1,67 @@
 [project]
-name = "flask-openapi3"
-description = "Generate REST API and OpenAPI documentation for your Flask project."
-readme = "README.md"
-license = { text = "MIT" }
-maintainers = [{ name = "llc", email = "luolingchun@outlook.com" }]
 classifiers = [
-    # "Development Status :: 1 - Planning",
-    # "Development Status :: 2 - Pre-Alpha",
-    # "Development Status :: 3 - Alpha",
-    # "Development Status :: 4 - Beta",
-    "Development Status :: 5 - Production/Stable",
-    # "Development Status :: 6 - Mature",
-    # "Development Status :: 7 - Inactive",
-    "Environment :: Web Environment",
-    "Framework :: Flask",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  # "Development Status :: 1 - Planning",
+  # "Development Status :: 2 - Pre-Alpha",
+  # "Development Status :: 3 - Alpha",
+  # "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable", # "Development Status :: 6 - Mature",
+  # "Development Status :: 7 - Inactive",
+  "Environment :: Web Environment",
+  "Framework :: Flask",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.9"
 dependencies = ["Flask>=2.0", "pydantic>=2.4"]
+description = "Generate REST API and OpenAPI documentation for your Flask project."
 dynamic = ["version"]
+license = {text = "MIT"}
+maintainers = [{name = "llc", email = "luolingchun@outlook.com"}]
+name = "flask-openapi3"
+readme = "README.md"
+requires-python = ">=3.9"
 
 [project.urls]
-Homepage = "https://github.com/luolingchun/flask-openapi3"
 Documentation = "https://luolingchun.github.io/flask-openapi3"
+Homepage = "https://github.com/luolingchun/flask-openapi3"
 
 [project.optional-dependencies]
-yaml = ["pyyaml"]
 async = ["asgiref >= 3.2"]
 dotenv = ["python-dotenv"]
 email = ["email-validator"]
+yaml = ["pyyaml"]
 # ui templates
-swagger = ["flask-openapi3-swagger"]
-redoc = ["flask-openapi3-redoc"]
+elements = ["flask-openapi3-elements"]
 rapidoc = ["flask-openapi3-rapidoc"]
 rapipdf = ["flask-openapi3-rapipdf"]
+redoc = ["flask-openapi3-redoc"]
 scalar = ["flask-openapi3-scalar"]
-elements = ["flask-openapi3-elements"]
-
+swagger = ["flask-openapi3-swagger"]
 
 [build-system]
-requires = ["hatchling"]
 build-backend = "hatchling.build"
+requires = ["hatchling"]
 
 [tool.hatch.version]
 path = "flask_openapi3/__version__.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "/flask_openapi3",
-    "/examples",
-    "/requirements",
-    "/tests",
-    "/CHANGELOG.md",
-    "/CONTRIBUTING.md",
-    "/LICENSE.rst"
+  "/flask_openapi3",
+  "/examples",
+  "/requirements",
+  "/tests",
+  "/CHANGELOG.md",
+  "/CONTRIBUTING.md",
+  "/LICENSE.rst",
 ]
 
 [tool.ruff]
@@ -72,12 +70,14 @@ line-length = 120
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 
+[tool.ruff.format]
+quote-style = "double"
+
 [tool.mypy]
 files = "src"
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["pydantic_core.*", "devtools.*"]
 follow_imports = "skip"
 ignore_missing_imports = true
-
+module = ["pydantic_core.*", "devtools.*"]
