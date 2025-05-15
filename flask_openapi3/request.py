@@ -204,19 +204,9 @@ def _validate_request(
     return func_kwargs, error
 
 
-def validate(
-    on_success_status: int = 200,
-    exclude_none: bool = False,
-    response_many: bool = False,
-    request_body_many: bool = False,
-    response_by_alias: bool = False,
-    get_json_params: Optional[dict] = None,
-):
+def validate():
     """
-    Decorator for route methods which will validate query, body and form parameters
-    as well as serialize the response (if it derives from pydantic's BaseModel
-    class).
-
+    Decorator to validate the annotated parts of the function and throw and error if applicable.
     """
 
     def decorate(func: Callable) -> Callable:
