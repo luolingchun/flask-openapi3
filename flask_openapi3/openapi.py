@@ -96,6 +96,7 @@ class OpenAPI(APIScaffold, Flask):
                 Defaults to "/openapi".
             doc_url: URL for accessing the OpenAPI specification document in JSON format.
                 Defaults to "/openapi.json".
+            validate_response: Verify the response body.
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -145,7 +146,8 @@ class OpenAPI(APIScaffold, Flask):
         # Add the OpenAPI command
         self.cli.add_command(openapi_command)  # type: ignore
 
-        self.app_validate_response: Optional[bool] = validate_response
+        # Verify the response body
+        self.validate_response = validate_response
 
         # Initialize specification JSON
         self.spec_json: dict = {}
