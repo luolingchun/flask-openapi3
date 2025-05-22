@@ -42,6 +42,7 @@ from .utils import make_validation_error_response
 from .utils import parse_and_store_tags
 from .utils import parse_method
 from .utils import parse_parameters
+from .utils import run_validate_response
 from .view import APIView
 
 
@@ -64,6 +65,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_prefix: str = "/openapi",
             doc_url: str = "/openapi.json",
             validate_response: Optional[bool] = None,
+            validate_response_callback: Callable = run_validate_response,
             **kwargs: Any
     ) -> None:
         """
@@ -97,6 +99,7 @@ class OpenAPI(APIScaffold, Flask):
             doc_url: URL for accessing the OpenAPI specification document in JSON format.
                 Defaults to "/openapi.json".
             validate_response: Verify the response body.
+            validate_response_callback: Validation and return response.
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -148,6 +151,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Verify the response body
         self.validate_response = validate_response
+        self.validate_response_callback = validate_response_callback
 
         # Initialize specification JSON
         self.spec_json: dict = {}

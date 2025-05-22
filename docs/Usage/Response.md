@@ -80,6 +80,19 @@ def endpoint_test(body: BaseRequest):
     ...
 ```
 
+You can also customize the default behavior of response validation by using a custom `validate_response_callback`.
+
+```python
+
+def validate_response_callback(response: Any, responses: Optional[ResponseDict] = None) -> Any:
+    
+    # do something
+    
+    return response
+
+app = OpenAPI(__name__, validate_response=True, validate_response_callback=validate_response_callback)
+```
+
 ## More information about OpenAPI responses
 
 - [OpenAPI Responses Object](https://spec.openapis.org/oas/v3.1.0#responses-object), it includes the Response Object.

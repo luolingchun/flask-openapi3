@@ -15,7 +15,6 @@ from .request import _validate_request
 from .types import ParametersTuple
 from .types import ResponseDict
 from .utils import HTTPMethod
-from .utils import run_validate_response
 
 
 class APIScaffold:
@@ -105,7 +104,8 @@ class APIScaffold:
                     _validate_response = validate_response
 
                 if _validate_response and responses:
-                    run_validate_response(response, responses)
+                    validate_response_callback = getattr(current_app, "validate_response_callback")
+                    return validate_response_callback(response, responses)
 
                 return response
         else:
@@ -141,9 +141,10 @@ class APIScaffold:
                         _validate_response = validate_response
                 else:
                     _validate_response = validate_response
-                
+
                 if _validate_response and responses:
-                    run_validate_response(response, responses)
+                    validate_response_callback = getattr(current_app, "validate_response_callback")
+                    return validate_response_callback(response, responses)
 
                 return response
 

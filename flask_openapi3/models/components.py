@@ -3,7 +3,7 @@
 # @Time    : 2023/7/4 9:36
 from typing import Optional, Union, Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from .callback import Callback
 from .example import Example
@@ -23,7 +23,7 @@ class Components(BaseModel):
     https://spec.openapis.org/oas/v3.1.0#components-object
     """
 
-    schemas: Optional[dict[str, Union[Reference, Schema]]] = Field(None)
+    schemas: Optional[dict[str, Union[Reference, Schema]]] = None
     responses: Optional[dict[str, Union[Response, Reference]]] = None
     parameters: Optional[dict[str, Union[Parameter, Reference]]] = None
     examples: Optional[dict[str, Union[Example, Reference]]] = None
