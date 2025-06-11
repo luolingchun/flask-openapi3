@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/6/30 10:12
+import logging
+
 from pydantic import BaseModel, Field
 import pytest
 
 from flask_openapi3 import FileStorage, OpenAPI
 
-import logging
 
 logger = logging.getLogger(__name__)
 app = OpenAPI(__name__)

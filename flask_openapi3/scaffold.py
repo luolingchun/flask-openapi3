@@ -7,10 +7,7 @@ from functools import wraps
 import inspect
 from typing import Any, Callable, Optional
 
-from flask import abort, current_app
-
 from .models import ExternalDocumentation, Server, Tag
-from .request import _validate_request
 from .types import ParametersTuple, ResponseDict
 from .utils import HTTPMethod
 
