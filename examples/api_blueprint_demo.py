@@ -6,21 +6,17 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3 import Tag, Info
+from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
 
-info = Info(title='book API', version='1.0.0')
 
-jwt = {
-    "type": "http",
-    "scheme": "bearer",
-    "bearerFormat": "JWT"
-}
+info = Info(title="book API", version="1.0.0")
+
+jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
 security_schemes = {"jwt": jwt}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 
-tag = Tag(name='book', description="Some Book")
+tag = Tag(name="book", description="Some Book")
 security = [{"jwt": []}]
 
 
@@ -30,38 +26,38 @@ class Unauthorized(BaseModel):
 
 
 api = APIBlueprint(
-    '/book',
+    "/book",
     __name__,
-    url_prefix='/api',
+    url_prefix="/api",
     abp_tags=[tag],
     abp_security=security,
     abp_responses={"401": Unauthorized},
     # disable openapi UI
-    doc_ui=True
+    doc_ui=True,
 )
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
-    author: str = Field(None, min_length=2, max_length=4, description='Author')
+    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 class Path(BaseModel):
-    bid: int = Field(..., description='book id')
+    bid: int = Field(..., description="book id")
 
 
-@api.get('/book', doc_ui=False)
+@api.get("/book", doc_ui=False)
 def get_book():
     return {"code": 0, "message": "ok"}
 
 
-@api.post('/book', responses={200: {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@api.post("/book", responses={200: {"content": {"text/csv": {"schema": {"type": "string"}}}}})
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.put('/book/<int:bid>', operation_id='update')
+@api.put("/book/<int:bid>", operation_id="update")
 def update_book(path: Path, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
@@ -71,5 +67,5 @@ def update_book(path: Path, body: BookBody):
 # register api
 app.register_api(api)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

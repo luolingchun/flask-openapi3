@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/5/31 14:32
+import logging
+
 import pytest
 
-from flask_openapi3 import OpenAPI, APIBlueprint, APIView
+from flask_openapi3 import APIBlueprint, APIView, OpenAPI
 
-app = OpenAPI(__name__, openapi_extensions={
-    "x-google-endpoints": [
-        {
-            "name": "my-cool-api.endpoints.my-project-id.cloud.goog",
-            "allowCors": True
-        }
-    ]
-})
 
-openapi_extensions = {
-    "x-google-backend": {
-        "address": "https://<NODE_SERVICE_ID>-<HASH>.a.run.app",
-        "protocol": "h2"
-    }
-}
+logger = logging.getLogger(__name__)
+
+
+app = OpenAPI(__name__, openapi_extensions={"x-google-endpoints": [{"name": "my-cool-api.endpoints.my-project-id.cloud.goog", "allowCors": True}]})
+
+openapi_extensions = {"x-google-backend": {"address": "https://<NODE_SERVICE_ID>-<HASH>.a.run.app", "protocol": "h2"}}
 
 app.config["TESTING"] = True
 
@@ -40,7 +34,7 @@ def hello():
 api = APIBlueprint("book", __name__, url_prefix="/api")
 
 
-@api.get('/book', openapi_extensions=openapi_extensions)
+@api.get("/book", openapi_extensions=openapi_extensions)
 def get_book():
     return {"code": 0, "message": "ok"}  # pragma: no cover
 
@@ -53,7 +47,6 @@ api_view = APIView()
 
 @api_view.route("/view/book")
 class BookListAPIView:
-
     @api_view.doc(openapi_extensions=openapi_extensions)
     def post(self):
         return "ok"  # pragma: no cover

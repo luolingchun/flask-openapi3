@@ -2,10 +2,14 @@
 # @Author  : llc
 # @Time    : 2022/12/19 10:34
 
+import logging
+
 import pytest
 
-from flask_openapi3 import Info, Tag
-from flask_openapi3 import OpenAPI, APIBlueprint
+from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
+
+
+logger = logging.getLogger(__name__)
 
 info = Info(title="book API", version="1.0.0")
 
@@ -22,17 +26,15 @@ def client():
 api1 = APIBlueprint("book1", __name__)
 
 
-@api1.get('/book', tags=[Tag(name="book")])
-def get_book():
-    ...  # pragma: no cover
+@api1.get("/book", tags=[Tag(name="book")])
+def get_book(): ...  # pragma: no cover
 
 
 api2 = APIBlueprint("book2", __name__)
 
 
-@api2.get('/book2', tags=[Tag(name="book")])
-def get_book2():
-    ...  # pragma: no cover
+@api2.get("/book2", tags=[Tag(name="book")])
+def get_book2(): ...  # pragma: no cover
 
 
 app.register_api(api1)

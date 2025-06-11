@@ -3,6 +3,7 @@
 # @Time    : 2023/7/4 9:35
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:  # pragma: no cover
     from .path_item import PathItem
 else:

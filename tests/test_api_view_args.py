@@ -2,11 +2,16 @@
 # @Author  : llc
 # @Time    : 2022/11/4 14:41
 
-import pytest
-from pydantic import BaseModel, Field
+import logging
 
-from flask_openapi3 import APIView
-from flask_openapi3 import OpenAPI
+from pydantic import BaseModel, Field
+import pytest
+
+from flask_openapi3 import APIView, OpenAPI
+from flask_openapi3.request import validate_request
+
+
+logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -24,6 +29,7 @@ class BookListAPIView:
         self.a = view_kwargs.get("a")
 
     @api_view.doc(summary="get book list")
+    @validate_request()
     def get(self):
         return {"a": self.a}
 
@@ -34,18 +40,13 @@ class BookAPIView:
         self.b = view_kwargs.get("b")
 
     @api_view.doc(summary="get book list")
+    @validate_request()
     async def get(self, path: BookPath):
-        print(path)
+        logger.info(path)
         return {"b": self.b}
 
 
-app.register_api_view(
-    api_view,
-    view_kwargs={
-        "a": 1,
-        "b": 2
-    }
-)
+app.register_api_view(api_view, view_kwargs={"a": 1, "b": 2})
 
 
 @pytest.fixture

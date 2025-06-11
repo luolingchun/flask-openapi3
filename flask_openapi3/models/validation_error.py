@@ -12,9 +12,7 @@ class ValidationErrorModel(BaseModel):
     msg: Optional[str] = Field(None, title="Message", description="a computer-readable identifier of the error type.")
     type_: Optional[str] = Field(None, title="Error Type", description="a human readable explanation of the error.")
     ctx: Optional[dict[str, Any]] = Field(
-        None,
-        title="Error context",
-        description="an optional object which contains values required to render the error message."
+        None, title="Error context", description="an optional object which contains values required to render the error message."
     )
 
 

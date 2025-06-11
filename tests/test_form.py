@@ -2,12 +2,17 @@
 # @Author  : llc
 # @Time    : 2023/8/6 13:47
 from enum import Enum
-from typing import Union, Any
+import logging
+from typing import Any, Union
 
-import pytest
 from pydantic import BaseModel
+import pytest
 
 from flask_openapi3 import FileStorage, OpenAPI
+from flask_openapi3.request import validate_request
+
+
+logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -62,39 +67,33 @@ class FormParameter(BaseModel):
     model_config = dict(
         openapi_extra={
             "encoding": {
-                "historyMetadata": {
-                    "contentType": "application/xml; charset=utf-8"
-                },
+                "historyMetadata": {"contentType": "application/xml; charset=utf-8"},
                 "profileImage": {
                     "contentType": "image/png, image/jpeg",
-                    "headers": {
-                        "X-Rate-Limit-Limit": {
-                            "description": "The number of allowed requests in the current period",
-                            "schema": {
-                                "type": "integer"
-                            }
-                        }
-                    }
-                }
+                    "headers": {"X-Rate-Limit-Limit": {"description": "The number of allowed requests in the current period", "schema": {"type": "integer"}}},
+                },
             }
         }
     )
 
 
 @app.post("/example")
+@validate_request()
 def complex_form_example(form: FormParameters):
-    print(form.model_dump())
+    logger.info(form.model_dump())
     return "ok"
 
 
 @app.post("/example2")
+@validate_request()
 def invalid_json_in_form_example(form: FormParameter):
-    print(form.model_dump())
+    logger.info(form.model_dump())
     return "ok"
 
 
 def test_openapi(client):
     from io import BytesIO
+
     data = {
         "boolean": "true",
         "boolean_list": [True, False],
@@ -108,30 +107,25 @@ def test_openapi(client):
         "number_list": ["3.4", "5.6"],
         "obj": '{"a": 2}',
         "parameter": '{"tag": "string"}',
-        "parameter_dict": '{"additionalProp1": {"tag": "string"}, "additionalProp2": {"tag": "string"},'
-                          '"additionalProp3": {"tag": "string"}}',
+        "parameter_dict": '{"additionalProp1": {"tag": "string"}, "additionalProp2": {"tag": "string"},"additionalProp3": {"tag": "string"}}',
         "parameter_list": ['{"tag": "string"}', '{"tag": "string"}'],
         "parameter_list_union": ["ok", '{"tag": "string"}', "7.8"],
         "parameter_union": '{"tag2": "string"}',
         "union_all": "true",
         "string": "a",
-        "string_list": ["a", "b", "c"]
+        "string_list": ["a", "b", "c"],
     }
     resp = client.post("/example", data=data, content_type="multipart/form-data")
-    print(resp.text)
+    logger.info(resp.text)
     assert resp.status_code == 200
 
 
 def test_invalid_json_in_form_example(client):
-    data = {
-        "obj": "{a: 2}"
-    }
+    data = {"obj": "{a: 2}"}
     resp = client.post("/example2", data=data, content_type="multipart/form-data")
     assert resp.status_code == 422
 
-    data = {
-        "obj": '{"a": 2}'
-    }
+    data = {"obj": '{"a": 2}'}
 
     resp = client.post("/example2", data=data, content_type="multipart/form-data")
     assert resp.status_code == 200

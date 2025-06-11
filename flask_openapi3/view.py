@@ -7,16 +7,17 @@ from typing import Any, Callable, Optional
 from .models import ExternalDocumentation, Server, Tag
 from .types import ResponseDict
 from .utils import (
-    HTTPMethod,
     convert_responses_key_to_string,
     get_operation,
     get_operation_id_for_path,
     get_responses,
+    HTTPMethod,
     parse_and_store_tags,
     parse_method,
     parse_parameters,
     parse_rule,
 )
+
 
 if typing.TYPE_CHECKING:  # pragma: no cover
     from .openapi import OpenAPI
@@ -31,7 +32,6 @@ class APIView:
         view_responses: Optional[ResponseDict] = None,
         doc_ui: bool = True,
         operation_id_callback: Callable = get_operation_id_for_path,
-        delegated_validation: bool = False,
     ):
         """
         Create a class-based view
@@ -61,7 +61,6 @@ class APIView:
         self.components_schemas: dict = dict()
         self.tags: list[Tag] = []
         self.tag_names: list[str] = []
-        self.delegated_validation = delegated_validation
 
     def route(self, rule: str):
         """Decorator for view class"""
@@ -87,9 +86,7 @@ class APIView:
                 parse_method(uri, method, self.paths, cls_method.operation)
                 # Update operation_id
                 if not cls_method.operation.operationId:
-                    cls_method.operation.operationId = self.operation_id_callback(
-                        name=cls_method.__qualname__, path=rule, method=method
-                    )
+                    cls_method.operation.operationId = self.operation_id_callback(name=cls_method.__qualname__, path=rule, method=method)
 
             # Convert route parameters from {param} to <param>
             _rule = uri.replace("{", "<").replace("}", ">")
@@ -144,9 +141,7 @@ class APIView:
             combine_responses = {**self.view_responses, **new_responses}
 
             # Create operation
-            operation = get_operation(
-                func, summary=summary, description=description, openapi_extensions=openapi_extensions
-            )
+            operation = get_operation(func, summary=summary, description=description, openapi_extensions=openapi_extensions)
 
             # Set external docs
             if external_docs:
@@ -183,9 +178,7 @@ class APIView:
 
         return decorator
 
-    def register(
-        self, app: "OpenAPI", url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None
-    ) -> None:
+    def register(self, app: "OpenAPI", url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None) -> None:
         """
         Register the API views with the given OpenAPI app.
 
@@ -209,7 +202,6 @@ class APIView:
                     raw,
                     view_class=cls,
                     view_kwargs=view_kwargs,
-                    delegated_validation=self.delegated_validation,
                 )
 
                 if url_prefix and self.url_prefix and url_prefix != self.url_prefix:

@@ -7,6 +7,9 @@ import pytest
 
 from flask_openapi3 import OpenAPI
 from flask_openapi3.commands import openapi_command
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/2/27 16:53
+import logging
 from typing import Any
 
-import pytest
 from pydantic import BaseModel, RootModel
+import pytest
 
 from flask_openapi3 import OpenAPI, Tag
+from flask_openapi3.request import validate_request
 
+
+logger = logging.getLogger(__name__)
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
 
@@ -42,37 +46,31 @@ def client():
     return client
 
 
-@app.post('/api/v1/sellouts',
-          tags=[Tag(name='Sellout', description='Loren.')],
-          responses={'200': SelloutList}
-          )
+@app.post("/api/v1/sellouts", tags=[Tag(name="Sellout", description="Loren.")], responses={"200": SelloutList})
+@validate_request()
 def post_sellout(body: SelloutList):
-    print(body)
+    logger.info(body)
     return body.model_dump_json()
 
 
-@app.post('/api/v2/sellouts',
-          tags=[Tag(name='Sellout', description='Loren.')],
-          responses={'200': SelloutDict}
-          )
+@app.post("/api/v2/sellouts", tags=[Tag(name="Sellout", description="Loren.")], responses={"200": SelloutDict})
+@validate_request()
 def post_sellout2(body: SelloutDict):
-    print(body)
+    logger.info(body)
     return body.model_dump_json()
 
 
-@app.post('/api/v3/sellouts',
-          tags=[Tag(name='Sellout', description='Loren.')]
-          )
+@app.post("/api/v3/sellouts", tags=[Tag(name="Sellout", description="Loren.")])
+@validate_request()
 def post_sellout3(body: SelloutDict2):
-    print(body)
+    logger.info(body)
     return body.model_dump_json()
 
 
-@app.post('/api/v4/sellouts',
-          tags=[Tag(name='Sellout', description='Loren.')]
-          )
+@app.post("/api/v4/sellouts", tags=[Tag(name="Sellout", description="Loren.")])
+@validate_request()
 def post_sellout4(body: SelloutDict3):
-    print(body)
+    logger.info(body)
     return body.model_dump_json()
 
 

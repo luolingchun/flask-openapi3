@@ -3,8 +3,8 @@
 # @Time    : 2022/8/30 9:40
 from __future__ import annotations
 
-import inspect
 from functools import wraps
+import inspect
 from typing import Any, Callable, Optional
 
 from flask import abort, current_app
@@ -50,96 +50,40 @@ class APIScaffold:
         raise NotImplementedError  # pragma: no cover
 
     @staticmethod
-    def create_view_func(
-        func,
-        header,
-        cookie,
-        path,
-        query,
-        form,
-        body,
-        raw,
-        view_class=None,
-        view_kwargs=None,
-        delegated_validation=False,
-    ):
+    def create_view_func(func, header, cookie, path, query, form, body, raw, view_class=None, view_kwargs=None):
         is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
 
             @wraps(func)
             async def view_func(**kwargs) -> Any | None:
-                error = None
-                if view_class and getattr(view_class, "delegated_validation", None) or delegated_validation:
-                    func_kwargs = kwargs
+                # handle async request
+                if view_class:
+                    signature = inspect.signature(view_class.__init__)
+                    parameters = signature.parameters
+                    if parameters.get("view_kwargs"):
+                        view_object = view_class(view_kwargs=view_kwargs)
+                    else:
+                        view_object = view_class()
+                    response = await func(view_object, **kwargs)
                 else:
-                    func_kwargs, error = _validate_request(
-                        header=header,
-                        cookie=cookie,
-                        path=path,
-                        query=query,
-                        form=form,
-                        body=body,
-                        raw=raw,
-                        path_kwargs=kwargs,
-                    )
-                try:
-                    # handle async request
-                    if view_class:
-                        signature = inspect.signature(view_class.__init__)
-                        parameters = signature.parameters
-                        if parameters.get("view_kwargs"):
-                            view_object = view_class(view_kwargs=view_kwargs)
-                        else:
-                            view_object = view_class()
-                        response = await func(view_object, **func_kwargs)
-                    else:
-                        response = await func(**func_kwargs)
-                    return response
-                except TypeError as e:
-                    if error:
-                        # Create a response with validation error details
-                        validation_error_callback = getattr(current_app, "validation_error_callback")
-                        abort(validation_error_callback(error))
-                    else:
-                        raise e
+                    response = await func(**kwargs)
+                return response
         else:
 
             @wraps(func)
             def view_func(**kwargs) -> Any | None:
-                error = None
-                if view_class and getattr(view_class, "delegated_validation", False) or delegated_validation:
-                    func_kwargs = kwargs
+                # handle request
+                if view_class:
+                    signature = inspect.signature(view_class.__init__)
+                    parameters = signature.parameters
+                    if parameters.get("view_kwargs"):
+                        view_object = view_class(view_kwargs=view_kwargs)
+                    else:
+                        view_object = view_class()
+                    response = func(view_object, **kwargs)
                 else:
-                    func_kwargs, error = _validate_request(
-                        header=header,
-                        cookie=cookie,
-                        path=path,
-                        query=query,
-                        form=form,
-                        body=body,
-                        raw=raw,
-                        path_kwargs=kwargs,
-                    )
-                try:
-                    # handle request
-                    if view_class:
-                        signature = inspect.signature(view_class.__init__)
-                        parameters = signature.parameters
-                        if parameters.get("view_kwargs"):
-                            view_object = view_class(view_kwargs=view_kwargs)
-                        else:
-                            view_object = view_class()
-                        response = func(view_object, **func_kwargs)
-                    else:
-                        response = func(**func_kwargs)
-                    return response
-                except TypeError as e:
-                    if error:
-                        # Create a response with validation error details
-                        validation_error_callback = getattr(current_app, "validation_error_callback")
-                        abort(validation_error_callback(error))
-                    else:
-                        raise e
+                    response = func(**kwargs)
+                return response
 
         if not hasattr(func, "view"):
             func.view = view_func
@@ -161,7 +105,6 @@ class APIScaffold:
         servers: Optional[list[Server]] = None,
         openapi_extensions: Optional[dict[str, Any]] = None,
         doc_ui: bool = True,
-        delegated_validation: bool = False,
         **options: Any,
     ) -> Callable:
         """
@@ -201,9 +144,7 @@ class APIScaffold:
                 method=HTTPMethod.GET,
             )
 
-            view_func = self.create_view_func(
-                func, header, cookie, path, query, form, body, raw, delegated_validation=delegated_validation
-            )
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.GET]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -226,7 +167,6 @@ class APIScaffold:
         servers: Optional[list[Server]] = None,
         openapi_extensions: Optional[dict[str, Any]] = None,
         doc_ui: bool = True,
-        delegated_validation: bool = False,
         **options: Any,
     ) -> Callable:
         """
@@ -266,9 +206,7 @@ class APIScaffold:
                 method=HTTPMethod.POST,
             )
 
-            view_func = self.create_view_func(
-                func, header, cookie, path, query, form, body, raw, delegated_validation=delegated_validation
-            )
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.POST]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -291,7 +229,6 @@ class APIScaffold:
         servers: Optional[list[Server]] = None,
         openapi_extensions: Optional[dict[str, Any]] = None,
         doc_ui: bool = True,
-        delegated_validation: bool = False,
         **options: Any,
     ) -> Callable:
         """
@@ -331,9 +268,7 @@ class APIScaffold:
                 method=HTTPMethod.PUT,
             )
 
-            view_func = self.create_view_func(
-                func, header, cookie, path, query, form, body, raw, delegated_validation=delegated_validation
-            )
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PUT]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -356,7 +291,6 @@ class APIScaffold:
         servers: Optional[list[Server]] = None,
         openapi_extensions: Optional[dict[str, Any]] = None,
         doc_ui: bool = True,
-        delegated_validation: bool = False,
         **options: Any,
     ) -> Callable:
         """
@@ -396,9 +330,7 @@ class APIScaffold:
                 method=HTTPMethod.DELETE,
             )
 
-            view_func = self.create_view_func(
-                func, header, cookie, path, query, form, body, raw, delegated_validation=delegated_validation
-            )
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.DELETE]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -421,7 +353,6 @@ class APIScaffold:
         servers: Optional[list[Server]] = None,
         openapi_extensions: Optional[dict[str, Any]] = None,
         doc_ui: bool = True,
-        delegated_validation: bool = False,
         **options: Any,
     ) -> Callable:
         """
@@ -461,9 +392,7 @@ class APIScaffold:
                 method=HTTPMethod.PATCH,
             )
 
-            view_func = self.create_view_func(
-                func, header, cookie, path, query, form, body, raw, delegated_validation=delegated_validation
-            )
+            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PATCH]})
             self._add_url_rule(rule, view_func=view_func, **options)
 

@@ -2,13 +2,17 @@
 # @Author  : llc
 # @Time    : 2022/11/4 14:41
 
+import logging
 from typing import Optional
 
-import pytest
 from pydantic import BaseModel, Field
+import pytest
 
 from flask_openapi3 import APIView, Info, OpenAPI, Tag
-from flask_openapi3.request import validate
+from flask_openapi3.request import validate_request
+
+
+logger = logging.getLogger(__name__)
 
 info = Info(title="book API", version="1.0.0")
 jwt = {
@@ -22,9 +26,7 @@ app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 security = [{"jwt": []}]
 
-api_view = APIView(
-    url_prefix="/api/v1/<name>", view_tags=[Tag(name="book")], view_security=security, delegated_validation=True
-)
+api_view = APIView(url_prefix="/api/v1/<name>", view_tags=[Tag(name="book")], view_security=security)
 api_view2 = APIView(doc_ui=False)
 
 
@@ -47,13 +49,13 @@ class BookListAPIView:
     a = 1
 
     @api_view.doc(summary="get book list", responses={204: None}, doc_ui=False)
-    @validate()
+    @validate_request()
     def get(self, query: BookQuery):
-        print(self.a)
+        logger.info(self.a)
         return query.model_dump_json()
 
     @api_view.doc(summary="create book")
-    @validate()
+    @validate_request()
     def post(self, body: BookBody):
         """description for a created book"""
         return body.model_dump_json()
@@ -62,27 +64,28 @@ class BookListAPIView:
 @api_view.route("/book/<id>")
 class BookAPIView:
     @api_view.doc(summary="get book")
-    @validate()
+    @validate_request()
     def get(self, path: BookPath):
-        print(path)
+        logger.info(path)
         return "get"
 
     @api_view.doc(summary="update book", operation_id="update")
-    @validate()
+    @validate_request()
     def put(self, path: BookPath):
-        print(path)
+        logger.info(path)
         return "put"
 
     @api_view.doc(summary="delete book", deprecated=True)
-    @validate()
+    @validate_request()
     def delete(self, path: BookPath):
-        print(path)
+        logger.info(path)
         return "delete"
 
 
 @api_view2.route("/<name>/book2/<id>")
 class BookAPIView2:
     @api_view2.doc(summary="get book")
+    @validate_request()
     def get(self, path: BookPath):
         return path.model_dump()
 
@@ -103,9 +106,7 @@ def test_openapi(client):
     assert resp.status_code == 200
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["put"]["operationId"] == "update"
-    assert (
-        resp.json["paths"]["/api/v1/{name}/book/{id}"]["delete"]["operationId"] == "BookAPIView_delete_book__id__delete"
-    )
+    assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["delete"]["operationId"] == "BookAPIView_delete_book__id__delete"
 
 
 def test_get_list(client):

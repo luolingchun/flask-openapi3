@@ -2,7 +2,12 @@
 # @Author  : llc
 # @Time    : 2022/12/19 10:34
 
+import logging
+
 from flask_openapi3.utils import normalize_name
+
+
+logger = logging.getLogger(__name__)
 
 
 def test_normalize_name():

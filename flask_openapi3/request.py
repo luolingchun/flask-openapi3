@@ -3,8 +3,9 @@
 # @Time    : 2022/4/1 16:54
 from __future__ import annotations
 
-import json
 from functools import wraps
+import inspect
+import json
 from json import JSONDecodeError
 from typing import Any, Callable, Optional, Type
 
@@ -180,7 +181,6 @@ def _validate_request(
 
     # Dictionary to store func kwargs
     func_kwargs: dict = {}
-    error = None
 
     try:
         # Validate header, cookie, path, and query parameters
@@ -198,30 +198,46 @@ def _validate_request(
             _validate_body(body, func_kwargs)
         if raw:
             func_kwargs["raw"] = request
-    except ValidationError as e:
-        error = e
+    except ValidationError as error:
+        validation_error_callback = getattr(current_app, "validation_error_callback")
+        abort(validation_error_callback(error))
 
-    return func_kwargs, error
+    return func_kwargs
 
 
-def validate():
+def validate_request():
     """
     Decorator to validate the annotated parts of the function and throw and error if applicable.
     """
 
     def decorate(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            func_kwargs = {}
+        is_coroutine_function = inspect.iscoroutinefunction(func)
 
-            header, cookie, path, query, form, body, raw = parse_parameters(func)
+        if is_coroutine_function:
 
-            func_kwargs, error = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
-            if error:
-                validation_error_callback = getattr(current_app, "validation_error_callback")
-                abort(validation_error_callback(error))
-            return func(*args, **func_kwargs)
+            @wraps(func)
+            async def wrapper(*args, **kwargs):
+                func_kwargs = {}
 
-        return wrapper
+                header, cookie, path, query, form, body, raw = parse_parameters(func)
+
+                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+
+                return await func(*args, **func_kwargs)
+
+            return wrapper
+        else:
+
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                func_kwargs = {}
+
+                header, cookie, path, query, form, body, raw = parse_parameters(func)
+
+                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+
+                return func(*args, **func_kwargs)
+
+            return wrapper
 
     return decorate

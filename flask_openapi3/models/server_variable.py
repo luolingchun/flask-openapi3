@@ -15,6 +15,4 @@ class ServerVariable(BaseModel):
     default: str
     description: Optional[str] = None
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

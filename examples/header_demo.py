@@ -2,29 +2,32 @@
 # @Author  : llc
 # @Time    : 2021/12/26 15:07
 
+import logging
+
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import Info, Tag
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import Info, OpenAPI, Tag
 
-info = Info(title='header API', version='1.0.0')
+
+logger = logging.getLogger(__name__)
+info = Info(title="header API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 
-book_tag = Tag(name='book', description='Some Book')
+book_tag = Tag(name="book", description="Some Book")
 
 
 class Headers(BaseModel):
-    hello: str = Field("what's up", max_length=12, description='sds')
+    hello: str = Field("what's up", max_length=12, description="sds")
     # required
     # hello: str = Field(..., max_length=12, description='sds')
-    x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
+    x_hello: str = Field(..., max_length=12, description="Header with alias to support dash", alias="x-hello")
 
 
-@app.get('/book', tags=[book_tag])
+@app.get("/book", tags=[book_tag])
 def get_book(header: Headers):
-    print(header)
+    logger.info(header)
     return header.hello
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

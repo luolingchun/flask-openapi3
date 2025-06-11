@@ -16,6 +16,7 @@ class Schema(BaseModel):
     """
     https://spec.openapis.org/oas/v3.1.0#schema-object
     """
+
     ref: Optional[str] = Field(alias="$ref", default=None)
     title: Optional[str] = None
     multipleOf: Optional[float] = Field(default=None, gt=0.0)
@@ -54,6 +55,4 @@ class Schema(BaseModel):
     example: Optional[Any] = None
     deprecated: Optional[bool] = None
 
-    model_config = {
-        "populate_by_name": True
-    }
+    model_config = {"populate_by_name": True}

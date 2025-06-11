@@ -3,14 +3,17 @@
 # @Time    : 2021/12/1 9:39
 
 from functools import wraps
+import logging
 
-import pytest
 from flask import jsonify, request
 from pydantic import BaseModel
+import pytest
 
 from flask_openapi3 import Info, OpenAPI
-from flask_openapi3.request import validate
+from flask_openapi3.request import validate_request
 
+
+logger = logging.getLogger(__name__)
 info = Info(title="book API", version="1.0.0")
 
 app = OpenAPI(__name__, info=info)
@@ -37,8 +40,9 @@ def client():
 
 
 @app.post("/book")
+@validate_request()
 def create_book(body: CreateBookBody):
-    print(body.model_dump())
+    logger.info(body.model_dump())
     return {"code": 0, "message": "ok"}
 
 
@@ -52,35 +56,36 @@ def check_header(func):
     return wrapper
 
 
-@app.post("/book2", delegated_validation=True)
+@app.post("/book2")
 @check_header
-@validate()
+@validate_request()
 def create_book_validate(body: BookBody):
-    print(body.model_dump())
+    logger.info(body.model_dump())
     return {"code": 0, "message": "ok"}
 
 
 @app.post("/book3")
 @check_header
+@validate_request()
 def create_book_validate_alt(body: BookBody):
-    print(body.model_dump())
+    logger.info(body.model_dump())
     return {"code": 0, "message": "ok"}
 
 
 def test_post(client):
     resp = client.post("/book", json={"aaa": 111, "bbb": 222})
-    print(resp.json)
+    logger.info(resp.json)
     assert resp.status_code == 200
 
 
 def test_post_auth_check(client):
     resp = client.post("/book2", json={"bla": 111}, headers={"nope": "nope"})
-    print(resp.json)
+    logger.info(resp.json)
     assert resp.status_code == 400
     assert resp.json == {"error": "Access Denied"}
 
     resp = client.post("/book2", json={"bla": 111}, headers={"foo": "bar"})
-    print(resp.json)
+    logger.info(resp.json)
     assert resp.status_code == 422
     assert resp.json == [
         {

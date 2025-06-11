@@ -1,39 +1,38 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
-from typing import Optional, Any, Callable
+from typing import Any, Callable, Optional
 
 from flask import Blueprint
 
-from .models import ExternalDocumentation
-from .models import Server
-from .models import Tag
+from .models import ExternalDocumentation, Server, Tag
 from .scaffold import APIScaffold
-from .types import ParametersTuple
-from .types import ResponseDict
-from .utils import HTTPMethod
-from .utils import convert_responses_key_to_string
-from .utils import get_operation
-from .utils import get_operation_id_for_path
-from .utils import get_responses
-from .utils import parse_and_store_tags
-from .utils import parse_method
-from .utils import parse_parameters
-from .utils import parse_rule
+from .types import ParametersTuple, ResponseDict
+from .utils import (
+    convert_responses_key_to_string,
+    get_operation,
+    get_operation_id_for_path,
+    get_responses,
+    HTTPMethod,
+    parse_and_store_tags,
+    parse_method,
+    parse_parameters,
+    parse_rule,
+)
 
 
 class APIBlueprint(APIScaffold, Blueprint):
     def __init__(
-            self,
-            name: str,
-            import_name: str,
-            *,
-            abp_tags: Optional[list[Tag]] = None,
-            abp_security: Optional[list[dict[str, list[str]]]] = None,
-            abp_responses: Optional[ResponseDict] = None,
-            doc_ui: bool = True,
-            operation_id_callback: Callable = get_operation_id_for_path,
-            **kwargs: Any
+        self,
+        name: str,
+        import_name: str,
+        *,
+        abp_tags: Optional[list[Tag]] = None,
+        abp_security: Optional[list[dict[str, list[str]]]] = None,
+        abp_responses: Optional[ResponseDict] = None,
+        doc_ui: bool = True,
+        operation_id_callback: Callable = get_operation_id_for_path,
+        **kwargs: Any,
     ) -> None:
         """
         Based on Flask Blueprint
@@ -97,32 +96,32 @@ class APIBlueprint(APIScaffold, Blueprint):
         self.register_blueprint(api)
 
     def _add_url_rule(
-            self,
-            rule,
-            endpoint=None,
-            view_func=None,
-            provide_automatic_options=None,
-            **options,
+        self,
+        rule,
+        endpoint=None,
+        view_func=None,
+        provide_automatic_options=None,
+        **options,
     ) -> None:
         self.add_url_rule(rule, endpoint, view_func, provide_automatic_options, **options)
 
     def _collect_openapi_info(
-            self,
-            rule: str,
-            func: Callable,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            method: str = HTTPMethod.GET
+        self,
+        rule: str,
+        func: Callable,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
@@ -150,21 +149,14 @@ class APIBlueprint(APIScaffold, Blueprint):
             combine_responses = {**self.abp_responses, **new_responses}
 
             # Create operation
-            operation = get_operation(
-                func,
-                summary=summary,
-                description=description,
-                openapi_extensions=openapi_extensions
-            )
+            operation = get_operation(func, summary=summary, description=description, openapi_extensions=openapi_extensions)
 
             # Set external docs
             if external_docs:
                 operation.externalDocs = external_docs
 
             # Unique string used to identify the operation.
-            operation.operationId = operation_id or self.operation_id_callback(
-                name=self.name, path=rule, method=method
-            )
+            operation.operationId = operation_id or self.operation_id_callback(name=self.name, path=rule, method=method)
 
             # Only set `deprecated` if True, otherwise leave it as None
             if deprecated is not None:

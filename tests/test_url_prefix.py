@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2025/1/15 9:58
+import logging
+
 import pytest
 
-from flask_openapi3 import APIBlueprint, OpenAPI, APIView
+from flask_openapi3 import APIBlueprint, APIView, OpenAPI
 
-app = OpenAPI(__name__, )
+
+logger = logging.getLogger(__name__)
+app = OpenAPI(__name__)
 app.config["TESTING"] = True
 
 
@@ -47,7 +51,9 @@ class BookAPIView:
 @api_view2.route("/book")
 class BookAPIView2:
     @api_view2.doc(summary="get book")
-    def get(self, ):
+    def get(
+        self,
+    ):
         return "ok"
 
 

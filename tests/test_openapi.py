@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar, Optional, Literal
+import logging
+from typing import Generic, Literal, Optional, TypeVar
 
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, Schema
+from flask_openapi3.request import validate_request
+
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -15,31 +20,20 @@ def test_responses_are_replicated_in_open_api(request):
 
     class BaseResponse(BaseModel):
         """Base description"""
+
         test: int
 
         model_config = dict(
             openapi_extra={
                 "description": "Custom description",
-                "headers": {
-                    "location": {
-                        "description": "URL of the new resource",
-                        "schema": {"type": "string"}
-                    }
-                },
-                "content": {
-                    "text/plain": {
-                        "schema": {"type": "string"}
-                    }
-                },
-                "links": {
-                    "dummy": {
-                        "description": "dummy link"
-                    }
-                }
+                "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+                "content": {"text/plain": {"schema": {"type": "string"}}},
+                "links": {"dummy": {"description": "dummy link"}},
             }
         )
 
     @test_app.get("/test", responses={"201": BaseResponse})
+    @validate_request()
     def endpoint_test():
         return b"", 201  # pragma: no cover
 
@@ -48,27 +42,14 @@ def test_responses_are_replicated_in_open_api(request):
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
-            "headers": {
-                "location": {
-                    "description": "URL of the new resource",
-                    "schema": {"type": "string"}
-                }
-            },
+            "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
             "content": {
                 # This content is coming from responses
-                "application/json": {
-                    "schema": {"$ref": "#/components/schemas/BaseResponse"}
-                },
+                "application/json": {"schema": {"$ref": "#/components/schemas/BaseResponse"}},
                 # While this one comes from responses
-                "text/plain": {
-                    "schema": {"type": "string"}
-                }
+                "text/plain": {"schema": {"type": "string"}},
             },
-            "links": {
-                "dummy": {
-                    "description": "dummy link"
-                }
-            }
+            "links": {"dummy": {"description": "dummy link"}},
         }
 
 
@@ -81,25 +62,13 @@ def test_none_responses_are_replicated_in_open_api(request):
         responses={
             "204": {
                 "description": "Custom description",
-                "headers": {
-                    "x-my-special-header": {
-                        "description": "Custom header",
-                        "schema": {"type": "string"}
-                    }
-                },
-                "content": {
-                    "text/plain": {
-                        "schema": {"type": "string"}
-                    }
-                },
-                "links": {
-                    "dummy": {
-                        "description": "dummy link"
-                    }
-                }
+                "headers": {"x-my-special-header": {"description": "Custom header", "schema": {"type": "string"}}},
+                "content": {"text/plain": {"schema": {"type": "string"}}},
+                "links": {"dummy": {"description": "dummy link"}},
             }
-        }
+        },
     )
+    @validate_request()
     def endpoint_test():
         return b"", 204  # pragma: no cover
 
@@ -108,22 +77,9 @@ def test_none_responses_are_replicated_in_open_api(request):
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["get"]["responses"]["204"] == {
             "description": "Custom description",
-            "headers": {
-                "x-my-special-header": {
-                    "description": "Custom header",
-                    "schema": {"type": "string"}
-                }
-            },
-            "content": {
-                "text/plain": {
-                    "schema": {"type": "string"}
-                }
-            },
-            "links": {
-                "dummy": {
-                    "description": "dummy link"
-                }
-            }
+            "headers": {"x-my-special-header": {"description": "Custom header", "schema": {"type": "string"}}},
+            "content": {"text/plain": {"schema": {"type": "string"}}},
+            "links": {"dummy": {"description": "dummy link"}},
         }
 
 
@@ -136,25 +92,13 @@ def test_responses_are_replicated_in_open_api2(request):
         responses={
             "201": {
                 "description": "Custom description",
-                "headers": {
-                    "location": {
-                        "description": "URL of the new resource",
-                        "schema": {"type": "string"}
-                    }
-                },
-                "content": {
-                    "text/plain": {
-                        "schema": {"type": "string"}
-                    }
-                },
-                "links": {
-                    "dummy": {
-                        "description": "dummy link"
-                    }
-                }
+                "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+                "content": {"text/plain": {"schema": {"type": "string"}}},
+                "links": {"dummy": {"description": "dummy link"}},
             }
-        }
+        },
     )
+    @validate_request()
     def endpoint_test():
         return b"", 201  # pragma: no cover
 
@@ -163,22 +107,9 @@ def test_responses_are_replicated_in_open_api2(request):
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
-            "headers": {
-                "location": {
-                    "description": "URL of the new resource",
-                    "schema": {"type": "string"}
-                }
-            },
-            "content": {
-                "text/plain": {
-                    "schema": {"type": "string"}
-                }
-            },
-            "links": {
-                "dummy": {
-                    "description": "dummy link"
-                }
-            }
+            "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+            "content": {"text/plain": {"schema": {"type": "string"}}},
+            "links": {"dummy": {"description": "dummy link"}},
         }
 
 
@@ -191,20 +122,12 @@ def test_responses_without_content_are_replicated_in_open_api(request):
         responses={
             "201": {
                 "description": "Custom description",
-                "headers": {
-                    "location": {
-                        "description": "URL of the new resource",
-                        "schema": {"type": "string"}
-                    }
-                },
-                "links": {
-                    "dummy": {
-                        "description": "dummy link"
-                    }
-                }
+                "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+                "links": {"dummy": {"description": "dummy link"}},
             }
-        }
+        },
     )
+    @validate_request()
     def endpoint_test():
         return b"", 201  # pragma: no cover
 
@@ -213,22 +136,14 @@ def test_responses_without_content_are_replicated_in_open_api(request):
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
-            "headers": {
-                "location": {
-                    "description": "URL of the new resource",
-                    "schema": {"type": "string"}
-                }
-            },
-            "links": {
-                "dummy": {
-                    "description": "dummy link"
-                }
-            }
+            "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+            "links": {"dummy": {"description": "dummy link"}},
         }
 
 
 class BaseRequest(BaseModel):
     """Base description"""
+
     test_int: int
     test_str: str
 
@@ -244,14 +159,10 @@ class BaseRequestGeneric(BaseModel, Generic[T]):
                     "value": {
                         "test_int": -1,
                         "test_str": "negative",
-                    }
+                    },
                 },
-                "Example 02": {
-                    "externalValue": "https://example.org/examples/second-example.xml"
-                },
-                "Example 03": {
-                    "$ref": "#/components/examples/third-example"
-                }
+                "Example 02": {"externalValue": "https://example.org/examples/second-example.xml"},
+                "Example 03": {"$ref": "#/components/examples/third-example"},
             }
         }
     )
@@ -262,6 +173,7 @@ def test_body_examples_are_replicated_in_open_api(request):
     test_app.config["TESTING"] = True
 
     @test_app.post("/test")
+    @validate_request()
     def endpoint_test(body: BaseRequestGeneric[BaseRequest]):
         return body.model_dump(), 200
 
@@ -275,12 +187,12 @@ def test_body_examples_are_replicated_in_open_api(request):
                     "examples": {
                         "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}},
                         "Example 02": {"externalValue": "https://example.org/examples/second-example.xml"},
-                        "Example 03": {"$ref": "#/components/examples/third-example"}
+                        "Example 03": {"$ref": "#/components/examples/third-example"},
                     },
-                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"}
+                    "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"},
                 }
             },
-            "required": True
+            "required": True,
         }
         assert resp.json["components"]["schemas"]["BaseRequestGeneric_BaseRequest_"] == {
             "properties": {"detail": {"$ref": "#/components/schemas/BaseRequest"}},
@@ -302,7 +214,7 @@ def test_form_examples(request):
                     "value": {
                         "test_int": -1,
                         "test_str": "negative",
-                    }
+                    },
                 }
             }
         }
@@ -310,6 +222,7 @@ def test_form_examples(request):
     BaseRequestGeneric[BaseRequest].model_config = model_config
 
     @test_app.post("/test")
+    @validate_request()
     def endpoint_test(form: BaseRequestGeneric[BaseRequest]):
         return form.model_dump(), 200  # pragma: no cover
 
@@ -320,12 +233,10 @@ def test_form_examples(request):
             "content": {
                 "multipart/form-data": {
                     "schema": {"$ref": "#/components/schemas/BaseRequestGeneric_BaseRequest_"},
-                    "examples": {
-                        "Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}
-                    }
+                    "examples": {"Example 01": {"summary": "An example", "value": {"test_int": -1, "test_str": "negative"}}},
                 }
             },
-            "required": True
+            "required": True,
         }
         assert resp.json["components"]["schemas"]["BaseRequestGeneric_BaseRequest_"] == {
             "properties": {"detail": {"$ref": "#/components/schemas/BaseRequest"}},
@@ -344,14 +255,14 @@ def test_body_with_complex_object(request):
     test_app.config["TESTING"] = True
 
     @test_app.post("/test")
+    @validate_request()
     def endpoint_test(body: BaseRequestBody):
         return body.model_dump(), 200  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
-        assert {"properties", "required", "title", "type"} == set(
-            resp.json["components"]["schemas"]["BaseRequestBody"].keys())
+        assert {"properties", "required", "title", "type"} == set(resp.json["components"]["schemas"]["BaseRequestBody"].keys())
 
 
 class Detail(BaseModel):
@@ -371,6 +282,7 @@ def test_responses_with_generics(request):
     test_app.config["TESTING"] = True
 
     @test_app.get("/test", responses={"201": ListGenericResponse[Detail]})
+    @validate_request()
     def endpoint_test():
         return b"", 201  # pragma: no cover
 
@@ -380,9 +292,7 @@ def test_responses_with_generics(request):
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Created",
             "content": {
-                "application/json": {
-                    "schema": {"$ref": "#/components/schemas/ListGenericResponse_Detail_"}
-                },
+                "application/json": {"schema": {"$ref": "#/components/schemas/ListGenericResponse_Detail_"}},
             },
         }
 
@@ -394,8 +304,7 @@ def test_responses_with_generics(request):
 
 
 class PathParam(BaseModel):
-    type_name: str = Field(..., description="id for path", max_length=300,
-                           json_schema_extra={"deprecated": False, "example": "42"})
+    type_name: str = Field(..., description="id for path", max_length=300, json_schema_extra={"deprecated": False, "example": "42"})
 
 
 def test_path_parameter_object(request):
@@ -403,6 +312,7 @@ def test_path_parameter_object(request):
     test_app.config["TESTING"] = True
 
     @test_app.post("/test")
+    @validate_request()
     def endpoint_test(path: PathParam):
         return path.model_dump(), 200  # pragma: no cover
 
@@ -428,8 +338,7 @@ def test_path_parameter_object(request):
 
 
 class QueryParam(BaseModel):
-    count: int = Field(..., description="count of param", le=1000.0,
-                       json_schema_extra={"deprecated": True, "example": 100})
+    count: int = Field(..., description="count of param", le=1000.0, json_schema_extra={"deprecated": True, "example": 100})
 
 
 def test_query_parameter_object(request):
@@ -437,6 +346,7 @@ def test_query_parameter_object(request):
     test_app.config["TESTING"] = True
 
     @test_app.post("/test")
+    @validate_request()
     def endpoint_test(query: QueryParam):
         return query.model_dump(), 200  # pragma: no cover
 
@@ -475,7 +385,7 @@ def test_header_parameter_object(request):
 
     @test_app.post("/test")
     def endpoint_test(header: HeaderParam, cookie: CookieParam):
-        print(header, cookie)  # pragma: no cover
+        logger.info(header, cookie)  # pragma: no cover
 
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
@@ -485,7 +395,7 @@ def test_header_parameter_object(request):
             "in": "header",
             "name": "app_name",
             "required": False,
-            "schema": {"description": "app name", "title": "App Name", "type": "string", "default": None}
+            "schema": {"description": "app name", "title": "App Name", "type": "string", "default": None},
         }
         assert resp.json["paths"]["/test"]["post"]["parameters"][1] == {
             "description": "app name",
@@ -493,8 +403,7 @@ def test_header_parameter_object(request):
             "example": "aaa",
             "name": "app_name",
             "required": False,
-            "schema": {"description": "app name", "example": "aaa", "title": "App Name", "type": "string",
-                       "default": None}
+            "schema": {"description": "app name", "example": "aaa", "title": "App Name", "type": "string", "default": None},
         }
 
 
@@ -509,7 +418,7 @@ def test_default_none(request):
 
     @test_app.post("/test")
     def endpoint_test(body: Model):
-        print([])  # pragma: no cover
+        logger.info([])  # pragma: no cover
 
     works = Model.model_json_schema()["properties"]
     assert works["one"]["default"] is None
@@ -525,7 +434,7 @@ def test_parameters_none(request):
 
     @test_app.post("/test")
     def endpoint_test():
-        print([])  # pragma: no cover
+        logger.info([])  # pragma: no cover
 
     data = test_app.api_doc["paths"]["/test"]["post"]
 
@@ -538,7 +447,7 @@ def test_deprecated_none(request):
 
     @test_app.post("/test")
     def endpoint_test():
-        print([])  # pragma: no cover
+        logger.info([])  # pragma: no cover
 
     data = test_app.api_doc["paths"]["/test"]["post"]
 
@@ -555,22 +464,25 @@ def test_prefix_items(request):
 
     @test_app.post("/test")
     def endpoint_test(body: TupleModel):
-        print([])  # pragma: no cover
+        logger.info([])  # pragma: no cover
 
     schema = test_app.api_doc["paths"]["/test"]["post"]["requestBody"]["content"]["application/json"]["schema"]
-    assert schema == {'$ref': '#/components/schemas/TupleModel'}
+    assert schema == {"$ref": "#/components/schemas/TupleModel"}
     components = test_app.api_doc["components"]["schemas"]
-    assert components["TupleModel"] == {'properties': {'my_tuple': {'maxItems': 2,
-                             'minItems': 2,
-                             'prefixItems': [{'enum': ['a', 'b'],
-                                              'type': 'string'},
-                                             {'enum': ['c', 'd'],
-                                              'type': 'string'}],
-                             'title': 'My Tuple',
-                             'type': 'array'}},
- 'required': ['my_tuple'],
- 'title': 'TupleModel',
- 'type': 'object'}
+    assert components["TupleModel"] == {
+        "properties": {
+            "my_tuple": {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [{"enum": ["a", "b"], "type": "string"}, {"enum": ["c", "d"], "type": "string"}],
+                "title": "My Tuple",
+                "type": "array",
+            }
+        },
+        "required": ["my_tuple"],
+        "title": "TupleModel",
+        "type": "object",
+    }
 
 
 def test_schema_bigint(request):

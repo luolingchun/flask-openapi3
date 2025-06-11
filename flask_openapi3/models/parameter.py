@@ -31,7 +31,4 @@ class Parameter(BaseModel):
     examples: Optional[dict[str, Union[Example, Reference]]] = None
     content: Optional[dict[str, MediaType]] = None
 
-    model_config = {
-        "extra": "allow",
-        "populate_by_name": True
-    }
+    model_config = {"extra": "allow", "populate_by_name": True}
