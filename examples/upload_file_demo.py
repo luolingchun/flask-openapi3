@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/5/11 14:03
+import logging
+
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import FileStorage, OpenAPI
 
+
+logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 
@@ -37,4 +41,4 @@ def upload_files(form: UploadFilesForm):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

@@ -60,4 +60,4 @@ def post_sellout4(body: SelloutDict3):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

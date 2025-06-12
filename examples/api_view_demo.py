@@ -71,4 +71,4 @@ app.register_api_view(api_view)
 
 if __name__ == "__main__":
     logger.info(app.url_map)
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

@@ -16,6 +16,8 @@ if sys.version_info >= (3, 10):
 else:  # pragma: no cover
     from importlib_metadata import entry_points  # type: ignore
 
+import logging
+
 from .blueprint import APIBlueprint
 from .commands import openapi_command
 from .models import APISpec, Components, ExternalDocumentation, Info, OPENAPI3_REF_PREFIX, Schema, Server, Tag, ValidationErrorModel
@@ -36,6 +38,9 @@ from .utils import (
     parse_parameters,
 )
 from .view import APIView
+
+
+logger = logging.getLogger(__name__)
 
 
 class OpenAPI(APIScaffold, Flask):

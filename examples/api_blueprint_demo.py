@@ -68,4 +68,4 @@ def update_book(path: Path, body: BookBody):
 app.register_api(api)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

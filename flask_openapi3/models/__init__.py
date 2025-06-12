@@ -92,3 +92,46 @@ class RawModel(Request):
 Encoding.model_rebuild()
 Operation.model_rebuild()
 PathItem.model_rebuild()
+
+
+# ...existing code...
+
+__all__ = [
+    "Callback",
+    "Components",
+    "Contact",
+    "Discriminator",
+    "Encoding",
+    "Example",
+    "ExternalDocumentation",
+    "FileStorage",
+    "Header",
+    "Info",
+    "License",
+    "Link",
+    "MediaType",
+    "OAuthConfig",
+    "OAuthFlow",
+    "OAuthFlows",
+    "Operation",
+    "Parameter",
+    "ParameterInType",
+    "PathItem",
+    "Paths",
+    "Reference",
+    "RequestBody",
+    "Response",
+    "Responses",
+    "Schema",
+    "SecurityRequirement",
+    "SecurityScheme",
+    "Server",
+    "ServerVariable",
+    "StyleValues",
+    "Tag",
+    "UnprocessableEntity",
+    "ValidationErrorModel",
+    "XML",
+    "APISpec",
+    "RawModel",
+]

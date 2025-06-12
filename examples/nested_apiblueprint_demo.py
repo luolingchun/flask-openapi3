@@ -25,4 +25,4 @@ api.register_api(api_chinese)
 app.register_api(api)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

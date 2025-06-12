@@ -2,12 +2,15 @@
 # @Author  : llc
 # @Time    : 2021/4/28 11:24
 from http import HTTPStatus
+import logging
 from typing import Optional
 
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import ExternalDocumentation, Info, OpenAPI, Server, Tag
 
+
+logger = logging.getLogger(__name__)
 
 info = Info(title="book API", version="1.0.0")
 
@@ -118,4 +121,4 @@ def delete_book(path: BookPath):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

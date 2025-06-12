@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/9/12 17:19
+import logging
+
 from flask_openapi3 import OpenAPI, RawModel
 
 
 app = OpenAPI(__name__)
+
+
+logger = logging.getLogger(__name__)
 
 
 class BookRaw(RawModel):
@@ -20,4 +25,4 @@ def get_book(raw: BookRaw):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec

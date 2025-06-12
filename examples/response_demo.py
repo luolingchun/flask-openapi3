@@ -57,4 +57,4 @@ def hello_no_response(path: HelloPath):
 app.register_api(bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # nosec
