@@ -102,7 +102,7 @@ def get_operation(
     return operation
 
 
-def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
+def get_operation_id_for_path(*, bp_name: str = None, name: str, path: str, method: str) -> str:
     """
     Generate a unique operation ID based on the name, path, and method.
 
@@ -110,12 +110,14 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
         name: The name or identifier for the operation.
         path: The URL path for the operation.
         method: The HTTP method for the operation.
+        bp_name: The Blueprint name
 
     Returns:
         A unique operation ID generated based on the provided name, path, and method.
 
     """
-
+    if bp_name:
+        name = bp_name + "_" + name
     return re.sub(r"\W", "_", name + path) + "_" + method.lower()
 
 
