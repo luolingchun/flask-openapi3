@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
+import inspect
 import json
+from functools import wraps
 from json import JSONDecodeError
 from typing import Any, Type, Optional
 
@@ -9,6 +11,8 @@ from flask import request, current_app, abort
 from pydantic import ValidationError, BaseModel
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
+
+from .utils import parse_parameters
 
 
 def _get_list_value(model: Type[BaseModel], args: MultiDict, model_field_key: str, model_field_value: FieldInfo):
@@ -200,3 +204,38 @@ def _validate_request(
         abort(validation_error_callback(e))
 
     return func_kwargs
+
+
+def validate_request():
+    """
+    Decorator to validate the annotated parts of the function and throw and error if applicable.
+    """
+
+    def decorator(func):
+
+        setattr(func, "__delay_validate_request__", True)
+
+        is_coroutine_function = inspect.iscoroutinefunction(func)
+
+        if is_coroutine_function:
+
+            @wraps(func)
+            async def wrapper(*args, **kwargs):
+                header, cookie, path, query, form, body, raw = parse_parameters(func)
+                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+
+                return await func(*args, **func_kwargs)
+
+            return wrapper
+        else:
+
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                header, cookie, path, query, form, body, raw = parse_parameters(func)
+                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+
+                return func(*args, **func_kwargs)
+
+            return wrapper
+
+    return decorator
