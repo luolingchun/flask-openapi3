@@ -102,7 +102,7 @@ def get_operation(
     return operation
 
 
-def get_operation_id_for_path(*, bp_name: str = None, name: str, path: str, method: str) -> str:
+def get_operation_id_for_path(*, bp_name: Optional[str] = None, name: str, path: str, method: str) -> str:
     """
     Generate a unique operation ID based on the name, path, and method.
 
