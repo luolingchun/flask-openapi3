@@ -2,12 +2,12 @@
 # @Author  : llc
 # @Time    : 2023/7/9 15:25
 from http import HTTPStatus
-from typing import Any, Optional, Type, Union
+from typing import Union, Type, Any, Optional
 
 from pydantic import BaseModel
 
-from .models import RawModel, SecurityScheme
-
+from .models import RawModel
+from .models import SecurityScheme
 
 _ResponseDictValue = Union[Type[BaseModel], dict[Any, Any], None]
 
@@ -24,5 +24,5 @@ ParametersTuple = tuple[
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
     Optional[Type[BaseModel]],
-    Optional[Type[RawModel]],
+    Optional[Type[RawModel]]
 ]

@@ -2,15 +2,12 @@
 # @Author  : llc
 # @Time    : 2023/7/9 11:23
 from http import HTTPStatus
-import logging
 
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, OpenAPI
+from flask_openapi3 import OpenAPI, APIBlueprint
 
-
-logger = logging.getLogger(__name__)
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
 api = APIBlueprint("/api", __name__, url_prefix="/api")
@@ -39,14 +36,17 @@ def client():
         "201": BookResponse,
         202: {"content": {"text/html": {"schema": {"type": "string"}}}},
         204: None,
-        "422": {"description": "validation error"},
-    },
+        "422": {"description": "validation error"}
+    }
 )
 def get_book(path: BookPath):
-    logger.info(path)  # pragma: no cover
+    print(path)  # pragma: no cover
 
 
-@api.get("/book", responses={HTTPStatus.OK: BookResponse, "201": BookResponse, 204: None})
+@api.get("/book", responses={
+    HTTPStatus.OK: BookResponse,
+    "201": BookResponse, 204: None
+})
 def get_api_book():
     return {"code": 0, "message": "ok"}  # pragma: no cover
 

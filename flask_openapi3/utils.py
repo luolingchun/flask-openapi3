@@ -2,36 +2,35 @@
 # @Author  : llc
 # @Time    : 2021/5/1 21:34
 
-from enum import Enum
-from http import HTTPStatus
 import inspect
 import re
 import sys
-from typing import Any, Callable, DefaultDict, get_type_hints, Optional, Type
+from enum import Enum
+from http import HTTPStatus
+from typing import get_type_hints, Type, Callable, Optional, Any, DefaultDict
 
-from flask import current_app, make_response
+from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
 from pydantic.json_schema import JsonSchemaMode
 
-from .models import (
-    Encoding,
-    MediaType,
-    OPENAPI3_REF_PREFIX,
-    OPENAPI3_REF_TEMPLATE,
-    Operation,
-    Parameter,
-    ParameterInType,
-    PathItem,
-    RawModel,
-    RequestBody,
-    Response,
-    Schema,
-    Tag,
-)
+from .models import Encoding
+from .models import MediaType
+from .models import OPENAPI3_REF_PREFIX
+from .models import OPENAPI3_REF_TEMPLATE
+from .models import Operation
+from .models import Parameter
+from .models import ParameterInType
+from .models import PathItem
+from .models import RawModel
+from .models import RequestBody
+from .models import Response
+from .models import Schema
+from .models import Tag
 from .models.data_type import DataType
-from .types import ParametersTuple, ResponseDict, ResponseStrKeyDict
-
+from .types import ParametersTuple
+from .types import ResponseDict
+from .types import ResponseStrKeyDict
 
 HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
 
@@ -52,11 +51,10 @@ else:
 
 
 def get_operation(
-    func: Callable,
-    *,
-    summary: Optional[str] = None,
-    description: Optional[str] = None,
-    openapi_extensions: Optional[dict[str, Any]] = None,
+        func: Callable, *,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
 ) -> Operation:
     """
     Return an Operation object with the specified summary and description.
@@ -124,7 +122,8 @@ def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
 def get_model_schema(model: Type[BaseModel], mode: JsonSchemaMode = "validation") -> dict:
     """Converts a Pydantic model to an OpenAPI schema."""
 
-    assert inspect.isclass(model) and issubclass(model, BaseModel), f"{model} is invalid `pydantic.BaseModel`"
+    assert inspect.isclass(model) and issubclass(model, BaseModel), \
+        f"{model} is invalid `pydantic.BaseModel`"
 
     model_config = model.model_config
     by_alias = bool(model_config.get("by_alias", True))
@@ -140,7 +139,12 @@ def parse_header(header: Type[BaseModel]) -> tuple[list[Parameter], dict]:
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
-        data = {"name": name, "in": ParameterInType.HEADER, "required": name in schema.get("required", []), "schema": Schema(**value)}
+        data = {
+            "name": name,
+            "in": ParameterInType.HEADER,
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
         # Parse extra values
         if "description" in value.keys():
             data["description"] = value.get("description")
@@ -168,7 +172,12 @@ def parse_cookie(cookie: Type[BaseModel]) -> tuple[list[Parameter], dict]:
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
-        data = {"name": name, "in": ParameterInType.COOKIE, "required": name in schema.get("required", []), "schema": Schema(**value)}
+        data = {
+            "name": name,
+            "in": ParameterInType.COOKIE,
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
         # Parse extra values
         if "description" in value.keys():
             data["description"] = value.get("description")
@@ -196,7 +205,12 @@ def parse_path(path: Type[BaseModel]) -> tuple[list[Parameter], dict]:
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
-        data = {"name": name, "in": ParameterInType.PATH, "required": True, "schema": Schema(**value)}
+        data = {
+            "name": name,
+            "in": ParameterInType.PATH,
+            "required": True,
+            "schema": Schema(**value)
+        }
         # Parse extra values
         if "description" in value.keys():
             data["description"] = value.get("description")
@@ -224,7 +238,12 @@ def parse_query(query: Type[BaseModel]) -> tuple[list[Parameter], dict]:
     properties = schema.get("properties", {})
 
     for name, value in properties.items():
-        data = {"name": name, "in": ParameterInType.QUERY, "required": name in schema.get("required", []), "schema": Schema(**value)}
+        data = {
+            "name": name,
+            "in": ParameterInType.QUERY,
+            "required": name in schema.get("required", []),
+            "schema": Schema(**value)
+        }
         # Parse extra values
         if "description" in value.keys():
             data["description"] = value.get("description")
@@ -245,7 +264,7 @@ def parse_query(query: Type[BaseModel]) -> tuple[list[Parameter], dict]:
 
 
 def parse_form(
-    form: Type[BaseModel],
+        form: Type[BaseModel],
 ) -> tuple[dict[str, MediaType], dict]:
     """Parses a form model and returns a list of parameters and component schemas."""
     schema = get_model_schema(form)
@@ -278,7 +297,7 @@ def parse_form(
 
 
 def parse_body(
-    body: Type[BaseModel],
+        body: Type[BaseModel],
 ) -> tuple[dict[str, MediaType], dict]:
     """Parses a body model and returns a list of parameters and component schemas."""
     schema = get_model_schema(body)
@@ -287,7 +306,11 @@ def parse_body(
     original_title = schema.get("title") or body.__name__
     title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
-    content = {"application/json": MediaType(schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}))}
+    content = {
+        "application/json": MediaType(
+            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"})
+        )
+    }
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -297,7 +320,11 @@ def parse_body(
     return content, components_schemas
 
 
-def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, operation: Operation) -> None:
+def get_responses(
+        responses: ResponseStrKeyDict,
+        components_schemas: dict,
+        operation: Operation
+) -> None:
     _responses = {}
     _schemas = {}
 
@@ -314,8 +341,11 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
             original_title = schema.get("title") or response.__name__
             name = normalize_name(original_title)
             _responses[key] = Response(
-                description=HTTP_STATUS.get(key, ""), content={"application/json": MediaType(schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"}))}
-            )
+                description=HTTP_STATUS.get(key, ""),
+                content={
+                    "application/json": MediaType(
+                        schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"})
+                    )})
 
             model_config: DefaultDict[str, Any] = response.model_config  # type: ignore
             openapi_extra = model_config.get("openapi_extra", {})
@@ -348,7 +378,12 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
     operation.responses = _responses
 
 
-def parse_and_store_tags(new_tags: list[Tag], old_tags: list[Tag], old_tag_names: list[str], operation: Operation) -> None:
+def parse_and_store_tags(
+        new_tags: list[Tag],
+        old_tags: list[Tag],
+        old_tag_names: list[str],
+        operation: Operation
+) -> None:
     """
     Parses new tags, stores them in an old_tags list if they are not already present,
     and updates the tags attribute of the operation object.
@@ -374,11 +409,11 @@ def parse_and_store_tags(new_tags: list[Tag], old_tags: list[Tag], old_tag_names
 
 
 def parse_parameters(
-    func: Callable,
-    *,
-    components_schemas: Optional[dict] = None,
-    operation: Optional[Operation] = None,
-    doc_ui: bool = True,
+        func: Callable,
+        *,
+        components_schemas: Optional[dict] = None,
+        operation: Optional[Operation] = None,
+        doc_ui: bool = True,
 ) -> ParametersTuple:
     """
     Parses the parameters of a given function and returns the types for header, cookie, path,
@@ -483,9 +518,13 @@ def parse_parameters(
         _content = {}
         for mimetype in raw.mimetypes:
             if mimetype.startswith("application/json"):
-                _content[mimetype] = MediaType(schema=Schema(type=DataType.OBJECT))
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.OBJECT)
+                )
             else:
-                _content[mimetype] = MediaType(schema=Schema(type=DataType.STRING))
+                _content[mimetype] = MediaType(
+                    schema=Schema(type=DataType.STRING)
+                )
         request_body = RequestBody(content=_content)
         operation.requestBody = request_body
 

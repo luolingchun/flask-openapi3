@@ -34,4 +34,6 @@ class Operation(BaseModel):
     security: Optional[list[SecurityRequirement]] = None
     servers: Optional[list[Server]] = None
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }

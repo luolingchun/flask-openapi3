@@ -16,4 +16,6 @@ class OAuthFlow(BaseModel):
     refreshUrl: Optional[str] = None
     scopes: dict[str, str]
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }

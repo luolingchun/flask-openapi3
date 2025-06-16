@@ -2,15 +2,12 @@
 # @Author  : llc
 # @Time    : 2022/1/1 16:54
 
-import logging
-
 import pytest
 
-from flask_openapi3 import Info, OpenAPI
+from flask_openapi3 import Info
+from flask_openapi3 import OpenAPI
 
-
-logger = logging.getLogger(__name__)
-info = Info(title="book API", version="1.0.0")
+info = Info(title='book API', version='1.0.0')
 
 app = OpenAPI(__name__, info=info)
 app.config["TESTING"] = True
@@ -23,7 +20,7 @@ def client():
     return client
 
 
-@app.get("/book", summary="new summary", description="new description")
+@app.get('/book', summary='new summary', description='new description')
 def get_book():
     """Get a book
     to get some book by id, like:
@@ -32,7 +29,7 @@ def get_book():
     return {"code": 0, "message": "ok"}  # pragma: no cover
 
 
-@app.get("/book2", description="new description")
+@app.get('/book2', description='new description')
 def get_book2():
     """Get a book
     to get some book by id, like:
@@ -45,7 +42,7 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
-    assert _json["paths"]["/book"]["get"]["summary"] == "new summary"
-    assert _json["paths"]["/book"]["get"]["description"] == "new description"
-    assert _json["paths"]["/book2"]["get"]["summary"] == "Get a book"
-    assert _json["paths"]["/book2"]["get"]["description"] == "new description"
+    assert _json['paths']['/book']['get']['summary'] == 'new summary'
+    assert _json['paths']['/book']['get']['description'] == 'new description'
+    assert _json['paths']['/book2']['get']['summary'] == 'Get a book'
+    assert _json['paths']['/book2']['get']['description'] == 'new description'

@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2024/8/31 15:35
-import logging
 from typing import Sequence
 
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI
-from flask_openapi3.request import validate_request
-
-
-logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -32,12 +27,11 @@ class BookQuery(BaseModel):
 
 
 @app.get("/book", summary="get books")
-@validate_request()
 def get_book(query: BookQuery):
     """
     get all books
     """
-    logger.info(query)
+    print(query)
     return "ok"
 
 
@@ -48,7 +42,6 @@ class QueryModel(BaseModel):
 
 
 @app.get("/query-alias-test")
-@validate_request()
 def query_alias_test(query: QueryModel):
     assert query.aliased_field == "test"
     return "ok"
@@ -61,7 +54,6 @@ class HeaderModel(BaseModel):
 
 
 @app.get("/header")
-@validate_request()
 def get_book_header(header: HeaderModel):
     return header.model_dump(by_alias=True)
 
@@ -74,7 +66,6 @@ class TupleModel(BaseModel):
 
 
 @app.get("/tuple-test")
-@validate_request()
 def tuple_test(query: TupleModel):
     assert query.values == (2, 2)
     return b"", 200
@@ -85,7 +76,6 @@ class AliasModel(BaseModel):
 
 
 @app.post("/form-alias-test")
-@validate_request()
 def alias_test(form: AliasModel):
     assert form.aliased_field == "test"
     return b"", 200
@@ -94,7 +84,7 @@ def alias_test(form: AliasModel):
 def test_header(client):
     headers = {"Hello2": "111"}
     resp = client.get("/header", headers=headers)
-    logger.info(resp.json)
+    print(resp.json)
     assert resp.status_code == 200
     assert resp.json == headers
 

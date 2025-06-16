@@ -67,48 +67,17 @@ include = [
 ]
 
 [tool.ruff]
-line-length = 160
-exclude = ["migrations"]
+line-length = 120
 
-[tool.ruff.lint]
-select = ["E", "F", "T", "I001"]
-extend-ignore = ["E203"]
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
 
-[tool.ruff.lint.isort]
-known-first-party = ["xs2event_common", "test"]
-combine-as-imports = true
-force-sort-within-sections = true
-lines-after-imports = 2
-order-by-type = false
+[tool.mypy]
+files = "src"
+plugins = ["pydantic.mypy"]
 
-[tool.ruff.lint.extend-per-file-ignores]
-"wsgi.py" = ["E402"]
-"run.py" = ["E402"]
-"version.py" = ["T201"]
+[[tool.mypy.overrides]]
+module = ["pydantic_core.*", "devtools.*"]
+follow_imports = "skip"
+ignore_missing_imports = true
 
-[tool.ruff.format]
-# Like Black, use double quotes for strings.
-quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
-indent-style = "space"
-
-# Like Black, respect magic trailing commas.
-skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
-line-ending = "auto"
-
-# Enable auto-formatting of code examples in docstrings. Markdown,
-# reStructuredText code/literal blocks and doctests are all supported.
-#
-# This is currently disabled by default, but it is planned for this
-# to be opt-out in the future.
-docstring-code-format = false
-
-# Set the line length limit used when formatting code snippets in
-# docstrings.
-#
-# This only has an effect when the `docstring-code-format` setting is
-# enabled.
-docstring-code-line-length = "dynamic"

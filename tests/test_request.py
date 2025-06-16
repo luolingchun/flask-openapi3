@@ -3,17 +3,12 @@
 # @Time    : 2022/9/2 15:35
 from enum import Enum
 from functools import wraps
-import logging
 from typing import Optional
 
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
-from flask_openapi3 import FileStorage, OpenAPI, RawModel
-from flask_openapi3.request import validate_request
-
-
-logger = logging.getLogger(__name__)
+from flask_openapi3 import OpenAPI, FileStorage, RawModel
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -58,7 +53,7 @@ class BookHeader(BaseModel):
     hello2: str = Field(..., max_length=12, description="sds")
     api_key: str = Field(..., description="API Key")
     api_type: Optional[TypeEnum] = None
-    x_hello: str = Field(..., max_length=12, description="Header with alias to support dash", alias="x-hello")
+    x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
 
 
 def decorator(func):
@@ -71,35 +66,30 @@ def decorator(func):
 
 @app.get("/query")
 @decorator
-@validate_request()
 def api_query(query: BookQuery):
-    logger.info(query)
+    print(query)
     return {"code": 0, "message": "ok"}
 
 
 @app.post("/form")
-@validate_request()
 def api_form(form: BookForm):
-    logger.info(form)
+    print(form)
     return {"code": 0, "message": "ok"}
 
 
 @app.post("/body")
-@validate_request()
 def api_error_json(body: BookBody):
-    logger.info(body)  # pragma: no cover
+    print(body)  # pragma: no cover
 
 
 @app.get("/header")
-@validate_request()
 def get_book(header: BookHeader):
     return header.model_dump(by_alias=True)
 
 
 @app.post("/cookie")
-@validate_request()
 def api_cookie(cookie: BookCookie):
-    logger.info(cookie)
+    print(cookie)
     return {"code": 0, "message": "ok"}
 
 
@@ -108,7 +98,6 @@ class BookRaw(RawModel):
 
 
 @app.post("/raw")
-@validate_request()
 def api_raw(raw: BookRaw):
     # raw equals to flask.request
     assert raw.data == b"raw"
@@ -118,18 +107,17 @@ def api_raw(raw: BookRaw):
 
 def test_query(client):
     r = client.get("/query?age=1")
-    logger.info(r.json)
+    print(r.json)
     assert r.status_code == 200
 
 
 def test_form(client):
     from io import BytesIO
-
     data = {
         "file": (BytesIO(b"post-data"), "filename"),
         "files": [(BytesIO(b"post-data"), "filename"), (BytesIO(b"post-data"), "filename")],
         "string": "a",
-        "string_list": ["a", "b", "c"],
+        "string_list": ["a", "b", "c"]
     }
     r = client.post("/form", data=data, content_type="multipart/form-data")
     assert r.status_code == 200
@@ -142,14 +130,14 @@ def test_error_json(client):
 
 def test_cookie(client):
     r = client.post("/cookie")
-    logger.info(r.json)
+    print(r.json)
     assert r.status_code == 200
 
 
 def test_header(client):
     headers = {"Hello1": "111", "hello2": "222", "api_key": "333", "api_type": "A", "x-hello": "444"}
     resp = client.get("/header", headers=headers)
-    logger.info(resp.json)
+    print(resp.json)
     assert resp.status_code == 200
     assert resp.json == headers
 

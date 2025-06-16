@@ -3,18 +3,19 @@
 # @Time    : 2021/5/6 16:38
 from __future__ import annotations
 
-import logging
-
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
-from flask_openapi3 import Info, OpenAPI
+from flask_openapi3 import Info
+from flask_openapi3 import OpenAPI
 
+info = Info(title='book API', version='1.0.0')
 
-logger = logging.getLogger(__name__)
-info = Info(title="book API", version="1.0.0")
-
-jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
 security_schemes = {"jwt": jwt}
 
 
@@ -23,8 +24,14 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-doc_prefix = "/v1/openapi"
-app = OpenAPI(__name__, info=info, doc_prefix=doc_prefix, security_schemes=security_schemes, responses={"404": NotFoundResponse})
+doc_prefix = '/v1/openapi'
+app = OpenAPI(
+    __name__,
+    info=info,
+    doc_prefix=doc_prefix,
+    security_schemes=security_schemes,
+    responses={"404": NotFoundResponse}
+)
 app.config["TESTING"] = True
 
 

@@ -2,17 +2,13 @@
 # @Author  : llc
 # @Time    : 2022/12/5 10:27
 
-import logging
 from typing import Optional
 
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIView, OpenAPI
-from flask_openapi3.request import validate_request
+from flask_openapi3 import OpenAPI, APIView
 
-
-logger = logging.getLogger(__name__)
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
 api_view = APIView(url_prefix="/api/v1")
@@ -32,28 +28,25 @@ class BookBody(BaseModel):
 
 
 @app.get("/open/api")
-@validate_request()
 async def get_openapi(query: Query):
-    logger.info(query)
+    print(query)
     return "GET, OpenAPI!"
 
 
 @app.post("/open/api")
-@validate_request()
 async def post_openapi(body: Query):
-    logger.info(body)
+    print(body)
     return "POST, OpenAPI!"
 
 
 @api_view.route("/book")
 class BookListAPIView:
+
     @api_view.doc(summary="get book list")
-    @validate_request()
     async def get(self, query: BookQuery):
         return query.model_dump_json()
 
     @api_view.doc(summary="create book")
-    @validate_request()
     async def post(self, body: BookBody):
         """description for a created book"""
         return body.model_dump_json()

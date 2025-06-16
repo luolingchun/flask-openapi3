@@ -4,7 +4,8 @@
 import json
 
 from flask import current_app
-from flask.cli import click, with_appcontext
+from flask.cli import click
+from flask.cli import with_appcontext
 
 
 @click.command(name="openapi")

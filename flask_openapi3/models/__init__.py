@@ -45,9 +45,9 @@ from .server import Server
 from .server_variable import ServerVariable
 from .style_values import StyleValues
 from .tag import Tag
-from .validation_error import UnprocessableEntity, ValidationErrorModel
+from .validation_error import UnprocessableEntity
+from .validation_error import ValidationErrorModel
 from .xml import XML
-
 
 OPENAPI3_REF_PREFIX = "#/components/schemas"
 OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + "/{model}"
@@ -55,7 +55,6 @@ OPENAPI3_REF_TEMPLATE = OPENAPI3_REF_PREFIX + "/{model}"
 
 class APISpec(BaseModel):
     """https://spec.openapis.org/oas/v3.1.0#openapi-object"""
-
     openapi: str
     info: Info
     servers: Optional[list[Server]] = None
@@ -66,14 +65,15 @@ class APISpec(BaseModel):
     externalDocs: Optional[ExternalDocumentation] = None
     webhooks: Optional[dict[str, Union[PathItem, Reference]]] = None
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }
 
 
 class OAuthConfig(BaseModel):
     """
     https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md#oauth-20-configuration
     """
-
     clientId: Optional[str] = None
     clientSecret: Optional[str] = None
     realm: Optional[str] = None
@@ -92,46 +92,3 @@ class RawModel(Request):
 Encoding.model_rebuild()
 Operation.model_rebuild()
 PathItem.model_rebuild()
-
-
-# ...existing code...
-
-__all__ = [
-    "Callback",
-    "Components",
-    "Contact",
-    "Discriminator",
-    "Encoding",
-    "Example",
-    "ExternalDocumentation",
-    "FileStorage",
-    "Header",
-    "Info",
-    "License",
-    "Link",
-    "MediaType",
-    "OAuthConfig",
-    "OAuthFlow",
-    "OAuthFlows",
-    "Operation",
-    "Parameter",
-    "ParameterInType",
-    "PathItem",
-    "Paths",
-    "Reference",
-    "RequestBody",
-    "Response",
-    "Responses",
-    "Schema",
-    "SecurityRequirement",
-    "SecurityScheme",
-    "Server",
-    "ServerVariable",
-    "StyleValues",
-    "Tag",
-    "UnprocessableEntity",
-    "ValidationErrorModel",
-    "XML",
-    "APISpec",
-    "RawModel",
-]

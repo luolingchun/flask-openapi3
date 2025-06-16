@@ -4,14 +4,13 @@
 
 from flask_openapi3 import OpenAPI
 
-
 app = OpenAPI(__name__)
 
 
-@app.route("/")
+@app.route('/')
 def hello_world():
-    return "Hello, World!"
+    return 'Hello, World!'
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()

@@ -2,22 +2,21 @@
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
 import typing
-from typing import Any, Callable, Optional
+from typing import Optional, Any, Callable
 
-from .models import ExternalDocumentation, Server, Tag
+from .models import ExternalDocumentation
+from .models import Server
+from .models import Tag
 from .types import ResponseDict
-from .utils import (
-    convert_responses_key_to_string,
-    get_operation,
-    get_operation_id_for_path,
-    get_responses,
-    HTTPMethod,
-    parse_and_store_tags,
-    parse_method,
-    parse_parameters,
-    parse_rule,
-)
-
+from .utils import HTTPMethod
+from .utils import convert_responses_key_to_string
+from .utils import get_operation
+from .utils import get_operation_id_for_path
+from .utils import get_responses
+from .utils import parse_and_store_tags
+from .utils import parse_method
+from .utils import parse_parameters
+from .utils import parse_rule
 
 if typing.TYPE_CHECKING:  # pragma: no cover
     from .openapi import OpenAPI
@@ -25,13 +24,13 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 
 class APIView:
     def __init__(
-        self,
-        url_prefix: Optional[str] = None,
-        view_tags: Optional[list[Tag]] = None,
-        view_security: Optional[list[dict[str, list[str]]]] = None,
-        view_responses: Optional[ResponseDict] = None,
-        doc_ui: bool = True,
-        operation_id_callback: Callable = get_operation_id_for_path,
+            self,
+            url_prefix: Optional[str] = None,
+            view_tags: Optional[list[Tag]] = None,
+            view_security: Optional[list[dict[str, list[str]]]] = None,
+            view_responses: Optional[ResponseDict] = None,
+            doc_ui: bool = True,
+            operation_id_callback: Callable = get_operation_id_for_path,
     ):
         """
         Create a class-based view
@@ -86,7 +85,11 @@ class APIView:
                 parse_method(uri, method, self.paths, cls_method.operation)
                 # Update operation_id
                 if not cls_method.operation.operationId:
-                    cls_method.operation.operationId = self.operation_id_callback(name=cls_method.__qualname__, path=rule, method=method)
+                    cls_method.operation.operationId = self.operation_id_callback(
+                        name=cls_method.__qualname__,
+                        path=rule,
+                        method=method
+                    )
 
             # Convert route parameters from {param} to <param>
             _rule = uri.replace("{", "<").replace("}", ">")
@@ -97,19 +100,19 @@ class APIView:
         return wrapper
 
     def doc(
-        self,
-        *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
-        doc_ui: bool = True,
+            self,
+            *,
+            tags: Optional[list[Tag]] = None,
+            summary: Optional[str] = None,
+            description: Optional[str] = None,
+            external_docs: Optional[ExternalDocumentation] = None,
+            operation_id: Optional[str] = None,
+            responses: Optional[ResponseDict] = None,
+            deprecated: Optional[bool] = None,
+            security: Optional[list[dict[str, list[Any]]]] = None,
+            servers: Optional[list[Server]] = None,
+            openapi_extensions: Optional[dict[str, Any]] = None,
+            doc_ui: bool = True
     ) -> Callable:
         """
         Decorator for view method.
@@ -141,7 +144,12 @@ class APIView:
             combine_responses = {**self.view_responses, **new_responses}
 
             # Create operation
-            operation = get_operation(func, summary=summary, description=description, openapi_extensions=openapi_extensions)
+            operation = get_operation(
+                func,
+                summary=summary,
+                description=description,
+                openapi_extensions=openapi_extensions
+            )
 
             # Set external docs
             if external_docs:
@@ -168,7 +176,11 @@ class APIView:
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
             # Parse parameters
-            parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation
+            )
 
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
@@ -178,7 +190,12 @@ class APIView:
 
         return decorator
 
-    def register(self, app: "OpenAPI", url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None) -> None:
+    def register(
+            self,
+            app: "OpenAPI",
+            url_prefix: Optional[str] = None,
+            view_kwargs: Optional[dict[Any, Any]] = None
+    ) -> None:
         """
         Register the API views with the given OpenAPI app.
 
@@ -201,7 +218,7 @@ class APIView:
                     body,
                     raw,
                     view_class=cls,
-                    view_kwargs=view_kwargs,
+                    view_kwargs=view_kwargs
                 )
 
                 if url_prefix and self.url_prefix and url_prefix != self.url_prefix:
@@ -209,5 +226,8 @@ class APIView:
                 elif url_prefix and not self.url_prefix:
                     rule = url_prefix.rstrip("/") + "/" + rule.lstrip("/")
 
-                options = {"endpoint": cls.__name__ + "." + method.lower(), "methods": [method.upper()]}
+                options = {
+                    "endpoint": cls.__name__ + "." + method.lower(),
+                    "methods": [method.upper()]
+                }
                 app.add_url_rule(rule, view_func=view_func, **options)

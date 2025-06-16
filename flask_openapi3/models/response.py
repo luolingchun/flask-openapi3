@@ -21,4 +21,6 @@ class Response(BaseModel):
     content: Optional[dict[str, MediaType]] = None
     links: Optional[dict[str, Union[Link, Reference]]] = None
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }

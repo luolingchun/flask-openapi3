@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2024/11/20 14:45
-import logging
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
 import pytest
+from pydantic import BaseModel, Field, ConfigDict
 
 from flask_openapi3 import OpenAPI
-from flask_openapi3.request import validate_request
-
-
-logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -43,7 +38,6 @@ def client():
 
 
 @app.get("/book")
-@validate_request()
 def get_books(query: BookQuery):
     """get books
     to get all books
@@ -54,16 +48,9 @@ def get_books(query: BookQuery):
 
 
 @app.post("/form")
-@validate_request()
 def api_form(form: BookForm):
-    logger.info(form)
+    print(form)
     return {"code": 0, "message": "ok"}
-
-
-@app.get("/header")
-@validate_request()
-def get_book(header: BookHeader):
-    return header.model_dump(by_alias=True)
 
 
 def test_query(client):
@@ -71,8 +58,16 @@ def test_query(client):
     assert resp.status_code == 200
 
 
+@app.get("/header")
+def get_book(header: BookHeader):
+    return header.model_dump(by_alias=True)
+
+
 def test_form(client):
-    data = {"string": "a", "string_list": ["a", "b", "c"]}
+    data = {
+        "string": "a",
+        "string_list": ["a", "b", "c"]
+    }
     r = client.post("/form", data=data, content_type="multipart/form-data")
     assert r.status_code == 422
 

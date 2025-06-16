@@ -17,4 +17,6 @@ class Server(BaseModel):
     description: Optional[str] = None
     variables: Optional[dict[str, ServerVariable]] = None
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }

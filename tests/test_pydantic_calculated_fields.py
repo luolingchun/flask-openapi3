@@ -2,15 +2,11 @@
 # @Author  : llc
 # @Time    : 2024/1/28 16:38
 from functools import cached_property
-import logging
 
-from pydantic import BaseModel, computed_field, Field
 import pytest
+from pydantic import BaseModel, Field, computed_field
 
 from flask_openapi3 import OpenAPI
-
-
-logger = logging.getLogger(__name__)
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -40,6 +36,6 @@ def get_book():
 
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
-
-    logger.info(resp.json)
+    import pprint
+    pprint.pprint(resp.json)
     assert resp.json["components"]["schemas"]["User"]["properties"].get("display_name") is not None

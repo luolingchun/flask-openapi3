@@ -2,27 +2,27 @@
 # @Author  : llc
 # @Time    : 2021/5/17 15:25
 
-import logging
 from typing import Optional
 
-from pydantic import BaseModel, Field
 import pytest
+from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
-from flask_openapi3.request import validate_request
+from flask_openapi3 import APIBlueprint, OpenAPI
+from flask_openapi3 import Tag, Info
 
+info = Info(title='book API', version='1.0.0')
 
-logger = logging.getLogger(__name__)
-
-info = Info(title="book API", version="1.0.0")
-
-jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
+jwt = {
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
+}
 security_schemes = {"jwt": jwt}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 
-tag = Tag(name="book", description="Book")
+tag = Tag(name='book', description="Book")
 security = [{"jwt": []}]
 
 
@@ -31,7 +31,14 @@ class Unauthorized(BaseModel):
     message: str = Field("Unauthorized!", description="Exception Information")
 
 
-api = APIBlueprint("/book", __name__, url_prefix="/api", abp_tags=[tag], abp_security=security, abp_responses={"401": Unauthorized})
+api = APIBlueprint(
+    '/book',
+    __name__,
+    url_prefix='/api',
+    abp_tags=[tag],
+    abp_security=security,
+    abp_responses={"401": Unauthorized}
+)
 
 try:
     api.register_api(api)
@@ -47,47 +54,42 @@ def client():
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
-    author: str = Field(None, min_length=2, max_length=4, description="Author")
+    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
 class BookPath(BaseModel):
-    bid: int = Field(..., description="book id")
+    bid: int = Field(..., description='book id')
 
 
-@api.post("/book", doc_ui=False)
-@validate_request()
+@api.post('/book', doc_ui=False)
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.put("/book/<int:bid>", operation_id="update")
-@validate_request()
+@api.put('/book/<int:bid>', operation_id='update')
 def update_book(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.patch("/book/<int:bid>")
-@validate_request()
+@api.patch('/book/<int:bid>')
 def update_book1(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.patch("/v2/book/<int:bid>")
-@validate_request()
+@api.patch('/v2/book/<int:bid>')
 def update_book1_v2(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.delete("/book/<int:bid>")
-@validate_request()
+@api.delete('/book/<int:bid>')
 def delete_book(path: BookPath):
     assert path.bid == 1
     return {"code": 0, "message": "ok"}

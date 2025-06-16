@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
-from __future__ import annotations
-
-from functools import wraps
-import inspect
 import json
 from json import JSONDecodeError
-from typing import Any, Callable, Optional, Type
+from typing import Any, Type, Optional
 
-from flask import abort, current_app, request
-from pydantic import BaseModel, ValidationError
+from flask import request, current_app, abort
+from pydantic import ValidationError, BaseModel
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
-
-from flask_openapi3.utils import parse_parameters
 
 
 def _get_list_value(model: Type[BaseModel], args: MultiDict, model_field_key: str, model_field_value: FieldInfo):
@@ -153,15 +147,15 @@ def _validate_body(body: Type[BaseModel], func_kwargs: dict):
 
 
 def _validate_request(
-    header: Optional[Type[BaseModel]] = None,
-    cookie: Optional[Type[BaseModel]] = None,
-    path: Optional[Type[BaseModel]] = None,
-    query: Optional[Type[BaseModel]] = None,
-    form: Optional[Type[BaseModel]] = None,
-    body: Optional[Type[BaseModel]] = None,
-    raw: Optional[Type[BaseModel]] = None,
-    path_kwargs: Optional[dict[Any, Any]] = None,
-) -> tuple[dict, Any | None]:
+        header: Optional[Type[BaseModel]] = None,
+        cookie: Optional[Type[BaseModel]] = None,
+        path: Optional[Type[BaseModel]] = None,
+        query: Optional[Type[BaseModel]] = None,
+        form: Optional[Type[BaseModel]] = None,
+        body: Optional[Type[BaseModel]] = None,
+        raw: Optional[Type[BaseModel]] = None,
+        path_kwargs: Optional[dict[Any, Any]] = None
+) -> dict:
     """
     Validate requests and responses.
 
@@ -176,7 +170,9 @@ def _validate_request(
 
     Returns:
         dict: Request kwargs.
-        error: ValidationError
+
+    Raises:
+        ValidationError: If validation fails.
     """
 
     # Dictionary to store func kwargs
@@ -198,46 +194,9 @@ def _validate_request(
             _validate_body(body, func_kwargs)
         if raw:
             func_kwargs["raw"] = request
-    except ValidationError as error:
+    except ValidationError as e:
+        # Create a response with validation error details
         validation_error_callback = getattr(current_app, "validation_error_callback")
-        abort(validation_error_callback(error))
+        abort(validation_error_callback(e))
 
     return func_kwargs
-
-
-def validate_request():
-    """
-    Decorator to validate the annotated parts of the function and throw and error if applicable.
-    """
-
-    def decorate(func: Callable) -> Callable:
-        is_coroutine_function = inspect.iscoroutinefunction(func)
-
-        if is_coroutine_function:
-
-            @wraps(func)
-            async def wrapper(*args, **kwargs):
-                func_kwargs = {}
-
-                header, cookie, path, query, form, body, raw = parse_parameters(func)
-
-                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
-
-                return await func(*args, **func_kwargs)
-
-            return wrapper
-        else:
-
-            @wraps(func)
-            def wrapper(*args, **kwargs):
-                func_kwargs = {}
-
-                header, cookie, path, query, form, body, raw = parse_parameters(func)
-
-                func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
-
-                return func(*args, **func_kwargs)
-
-            return wrapper
-
-    return decorate

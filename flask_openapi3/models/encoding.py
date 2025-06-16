@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:41
-from typing import Optional, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from pydantic import BaseModel
 
 from .reference import Reference
-
 
 if TYPE_CHECKING:  # pragma: no cover
     from .header import Header
@@ -25,4 +24,6 @@ class Encoding(BaseModel):
     explode: Optional[bool] = None
     allowReserved: bool = False
 
-    model_config = {"extra": "allow"}
+    model_config = {
+        "extra": "allow"
+    }

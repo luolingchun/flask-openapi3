@@ -23,4 +23,7 @@ class SecurityScheme(BaseModel):
     flows: Optional[OAuthFlows] = None
     openIdConnectUrl: Optional[str] = None
 
-    model_config = {"extra": "allow", "populate_by_name": True}
+    model_config = {
+        "extra": "allow",
+        "populate_by_name": True
+    }
