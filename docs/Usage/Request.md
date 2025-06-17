@@ -103,6 +103,30 @@ def get_book(raw: BookRaw):
     return "ok"
 ```
 
+## @validate_request
+
+Sometimes you want to delay the verification request parameters, such as after login verification:
+
+```python
+from flask_openapi3 import validate_request
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print("login_required ...")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@app.get("/book")
+@login_required
+@validate_request()
+def get_book(query: BookQuery):
+    ...
+```
+
 ## Request model
 
 First, you need to define a [pydantic](https://github.com/pydantic/pydantic) model:
@@ -132,27 +156,3 @@ Magic:
 ![](../assets/Snipaste_2022-09-04_10-10-03.png)
 
 More available fields to see [Parameter Object Fixed Fields](https://spec.openapis.org/oas/v3.1.0#fixed-fields-9).
-
-## @validate_request
-
-Sometimes you want to delay the verification request parameters, such as after login verification:
-
-```python
-from flask_openapi3 import validate_request
-
-
-def login_required(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print("login_required ...")
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-@app.get("/book")
-@login_required
-@validate_request()
-def get_book(query: BookQuery):
-    ...
-```
