@@ -35,7 +35,8 @@ def create_book(body: BookBody):
 
 ## summary and description
 
-You need to add docs to the view-func. The first line is the **summary**, and the rest is the **description**. Like this:
+You need to add docs to the view-func. The first line is the **summary**, and the rest is the **description**. Like
+this:
 
 ```python hl_lines="3 4 5 6"
 @app.get('/book/<int:bid>', tags=[book_tag], responses={200: BookResponse}, security=security)
@@ -67,7 +68,8 @@ def get_book(path: BookPath, query: BookBody):
 
 Allows referencing an external resource for extended documentation.
 
-More information to see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
+More information to
+see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
 
 ```python hl_lines="10"
 from flask_openapi3 import OpenAPI, ExternalDocumentation
@@ -110,7 +112,7 @@ Just add a `operation_id_callback` param to the constructor of  `OpenAPI` or `AP
 The example shows setting the default `operation_id` to be the function name, in this case `create_book`.
 
 ```python hl_lines="6"
-def get_operation_id_for_path(*, name: str, path: str, method: str) -> str:
+def get_operation_id_for_path(*, bp_name: str = None, name: str, path: str, method: str) -> str:
     return name
 
 api = APIBlueprint('book', __name__, url_prefix='/api', operation_id_callback=get_operation_id_for_path)
@@ -212,7 +214,8 @@ def create_book(body: BookBody):
 
 ## servers
 
-An array of Server Objects, which provide connectivity information to a target server. If the server's property is not provided, or is an empty array, the default value would be a Server Object with an url value of /.
+An array of Server Objects, which provide connectivity information to a target server. If the server's property is not
+provided, or is an empty array, the default value would be a Server Object with an url value of /.
 
 ```python
 from flask_openapi3 import OpenAPI, Server
@@ -232,10 +235,9 @@ def get_book(path: BookPath):
 
 ## openapi_extensions
 
-While the OpenAPI Specification tries to accommodate most use cases, 
+While the OpenAPI Specification tries to accommodate most use cases,
 additional data can be added to extend the specification at certain points.
 See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
-
 
 ```python  hl_lines="3 12 19 28 42"
 from flask_openapi3 import OpenAPI, APIBlueprint, APIView

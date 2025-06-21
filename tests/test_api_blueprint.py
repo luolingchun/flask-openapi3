@@ -19,6 +19,12 @@ jwt = {
 }
 security_schemes = {"jwt": jwt}
 
+
+def operation_id_callback(*, bp_name: str = None, name: str, path: str, method: str) -> str:
+    assert bp_name == "/book"
+    return name
+
+
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 
@@ -37,7 +43,8 @@ api = APIBlueprint(
     url_prefix='/api',
     abp_tags=[tag],
     abp_security=security,
-    abp_responses={"401": Unauthorized}
+    abp_responses={"401": Unauthorized},
+    operation_id_callback=operation_id_callback
 )
 
 try:
@@ -104,7 +111,7 @@ def test_openapi(client):
     assert resp.status_code == 200
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/api/book/{bid}"]["put"]["operationId"] == "update"
-    assert resp.json["paths"]["/api/book/{bid}"]["delete"]["operationId"] == "_book_book__int_bid__delete"
+    assert resp.json["paths"]["/api/book/{bid}"]["delete"]["operationId"] == "delete_book"
 
 
 def test_post(client):

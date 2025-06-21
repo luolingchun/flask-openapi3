@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
+import inspect
 from typing import Optional, Any, Callable
 
 from flask import Blueprint
@@ -162,9 +163,10 @@ class APIBlueprint(APIScaffold, Blueprint):
                 operation.externalDocs = external_docs
 
             # Unique string used to identify the operation.
-            operation.operationId = operation_id or self.operation_id_callback(
-                name=self.name, path=rule, method=method
-            )
+            operation_id_kwargs = {"name": func.__name__, "path": rule, "method": method}
+            if "bp_name" in list(inspect.signature(self.operation_id_callback).parameters.keys()):
+                operation_id_kwargs["bp_name"] = self.name
+            operation.operationId = operation_id or self.operation_id_callback(**operation_id_kwargs)
 
             # Only set `deprecated` if True, otherwise leave it as None
             if deprecated is not None:
