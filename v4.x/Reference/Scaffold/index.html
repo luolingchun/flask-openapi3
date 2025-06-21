@@ -1481,7 +1481,13 @@
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIScaffold</span><span class="p">:</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIScaffold</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1500,10 +1506,10 @@
             <span class="n">doc_ui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
             <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">HTTPMethod</span><span class="o">.</span><span class="n">GET</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParametersTuple</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_add_url_rule</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -1513,7 +1519,7 @@
             <span class="n">provide_automatic_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="o">**</span><span class="n">options</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>   <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_view_func</span><span class="p">(</span>
@@ -1532,16 +1538,19 @@
         <span class="k">if</span> <span class="n">is_coroutine_function</span><span class="p">:</span>
             <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
             <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
-                <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
-                    <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
-                    <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
-                    <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
-                    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
-                    <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
-                    <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
-                    <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span>
-                    <span class="n">path_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__delay_validate_request__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">func</span><span class="o">.</span><span class="n">__delay_validate_request__</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
+                        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                        <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
+                        <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                        <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                        <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
+                        <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+                        <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span>
+                        <span class="n">path_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+                    <span class="p">)</span>
 
                 <span class="c1"># handle async request</span>
                 <span class="k">if</span> <span class="n">view_class</span><span class="p">:</span>
@@ -1558,16 +1567,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">view_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FlaskResponse</span><span class="p">:</span>
-                <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
-                    <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
-                    <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
-                    <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
-                    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
-                    <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
-                    <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
-                    <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span>
-                    <span class="n">path_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__delay_validate_request__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">func</span><span class="o">.</span><span class="n">__delay_validate_request__</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">func_kwargs</span> <span class="o">=</span> <span class="n">_validate_request</span><span class="p">(</span>
+                        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                        <span class="n">cookie</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span>
+                        <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                        <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                        <span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span>
+                        <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+                        <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span>
+                        <span class="n">path_kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+                    <span class="p">)</span>
 
                 <span class="c1"># handle request</span>
                 <span class="k">if</span> <span class="n">view_class</span><span class="p">:</span>
@@ -2140,13 +2152,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/scaffold.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">320</span>
 <span class="normal">321</span>
 <span class="normal">322</span>
 <span class="normal">323</span>
@@ -2201,7 +2207,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">372</span>
 <span class="normal">373</span>
 <span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2493,13 +2505,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/scaffold.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
@@ -2554,7 +2560,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
-<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2846,13 +2858,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/scaffold.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">377</span>
-<span class="normal">378</span>
-<span class="normal">379</span>
-<span class="normal">380</span>
-<span class="normal">381</span>
-<span class="normal">382</span>
-<span class="normal">383</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">383</span>
 <span class="normal">384</span>
 <span class="normal">385</span>
 <span class="normal">386</span>
@@ -2907,7 +2913,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">435</span>
 <span class="normal">436</span>
 <span class="normal">437</span>
-<span class="normal">438</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -3199,13 +3211,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/scaffold.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span>
-<span class="normal">192</span>
-<span class="normal">193</span>
-<span class="normal">194</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">194</span>
 <span class="normal">195</span>
 <span class="normal">196</span>
 <span class="normal">197</span>
@@ -3260,7 +3266,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">246</span>
 <span class="normal">247</span>
 <span class="normal">248</span>
-<span class="normal">249</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -3552,13 +3564,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="quote">
               <summary>Source code in <code>flask_openapi3/scaffold.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">257</span>
 <span class="normal">258</span>
 <span class="normal">259</span>
 <span class="normal">260</span>
@@ -3613,7 +3619,13 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
-<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>

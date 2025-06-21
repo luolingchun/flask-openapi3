@@ -541,6 +541,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#validate_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      @validate_request
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#request-model" class="md-nav__link">
     <span class="md-ellipsis">
       Request model
@@ -1054,6 +1063,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#validate_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      @validate_request
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#request-model" class="md-nav__link">
     <span class="md-ellipsis">
       Request model
@@ -1209,6 +1227,42 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">mimetype</span><span class="p">)</span>
     <span class="k">return</span> <span class="s2">&quot;ok&quot;</span>
 </code></pre></div></td></tr></table></div>
+<h2 id="validate_request">@validate_request<a class="headerlink" href="#validate_request" title="Permanent link">⚓︎</a></h2>
+<p>Sometimes you want to delay the verification request parameters, such as after login verification:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask_openapi3</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_request</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">login_required</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;login_required ...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/book&quot;</span><span class="p">)</span>
+<span class="nd">@login_required</span>
+<span class="nd">@validate_request</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
 <h2 id="request-model">Request model<a class="headerlink" href="#request-model" title="Permanent link">⚓︎</a></h2>
 <p>First, you need to define a <a href="https://github.com/pydantic/pydantic">pydantic</a> model:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1217,8 +1271,10 @@
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Author&#39;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-<p>More information to see <a href="https://docs.pydantic.dev/latest/usage/models/">BaseModel</a>, and you can <a href="https://docs.pydantic.dev/latest/usage/fields/">Customize the Field</a>.</p>
-<p>However, you can also use <strong>Field</strong> to extend <a href="https://spec.openapis.org/oas/v3.1.0#parameter-object">Parameter Object</a>. Here is an example:</p>
+<p>More information to see <a href="https://docs.pydantic.dev/latest/usage/models/">BaseModel</a>, and you
+can <a href="https://docs.pydantic.dev/latest/usage/fields/">Customize the Field</a>.</p>
+<p>However, you can also use <strong>Field</strong> to extend <a href="https://spec.openapis.org/oas/v3.1.0#parameter-object">Parameter Object</a>.
+Here is an example:</p>
 <p><code>age</code> with <strong><code>example</code></strong> and <code>author</code> with <strong><code>deprecated</code></strong>.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
