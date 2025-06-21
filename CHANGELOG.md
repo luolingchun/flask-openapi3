@@ -1,3 +1,10 @@
+## v4.2.0 2025-06-21
+
+- fix(models): enable 'populate_by_name' to alias fields correctly by @omikader in #221
+- operation_id_callback with blueprint name and func name by @luolingchun in #224
+- Delay throwing validation error by @luolingchun in #223
+
+
 ## v4.1.0 2025-02-08
 
 - Support for Python 3.13 by @luolingchun in #200
