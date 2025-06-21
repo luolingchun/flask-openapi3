@@ -38,4 +38,5 @@ from .models import UnprocessableEntity
 from .models import ValidationErrorModel
 from .models import XML
 from .openapi import OpenAPI
+from .request import validate_request
 from .view import APIView

@@ -35,10 +35,10 @@ class APIScaffold:
             doc_ui: bool = True,
             method: str = HTTPMethod.GET
     ) -> ParametersTuple:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def register_api(self, api) -> None:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     def _add_url_rule(
             self,
@@ -48,7 +48,7 @@ class APIScaffold:
             provide_automatic_options=None,
             **options,
     ) -> None:
-        raise NotImplementedError   # pragma: no cover
+        raise NotImplementedError  # pragma: no cover
 
     @staticmethod
     def create_view_func(
@@ -67,16 +67,19 @@ class APIScaffold:
         if is_coroutine_function:
             @wraps(func)
             async def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _validate_request(
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    raw=raw,
-                    path_kwargs=kwargs
-                )
+                if hasattr(func, "__delay_validate_request__") and func.__delay_validate_request__ is True:
+                    func_kwargs = kwargs
+                else:
+                    func_kwargs = _validate_request(
+                        header=header,
+                        cookie=cookie,
+                        path=path,
+                        query=query,
+                        form=form,
+                        body=body,
+                        raw=raw,
+                        path_kwargs=kwargs
+                    )
 
                 # handle async request
                 if view_class:
@@ -93,16 +96,19 @@ class APIScaffold:
         else:
             @wraps(func)
             def view_func(**kwargs) -> FlaskResponse:
-                func_kwargs = _validate_request(
-                    header=header,
-                    cookie=cookie,
-                    path=path,
-                    query=query,
-                    form=form,
-                    body=body,
-                    raw=raw,
-                    path_kwargs=kwargs
-                )
+                if hasattr(func, "__delay_validate_request__") and func.__delay_validate_request__ is True:
+                    func_kwargs = kwargs
+                else:
+                    func_kwargs = _validate_request(
+                        header=header,
+                        cookie=cookie,
+                        path=path,
+                        query=query,
+                        form=form,
+                        body=body,
+                        raw=raw,
+                        path_kwargs=kwargs
+                    )
 
                 # handle request
                 if view_class:

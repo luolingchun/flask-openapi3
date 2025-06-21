@@ -103,6 +103,30 @@ def get_book(raw: BookRaw):
     return "ok"
 ```
 
+## @validate_request
+
+Sometimes you want to delay the verification request parameters, such as after login verification:
+
+```python
+from flask_openapi3 import validate_request
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print("login_required ...")
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@app.get("/book")
+@login_required
+@validate_request()
+def get_book(query: BookQuery):
+    ...
+```
+
 ## Request model
 
 First, you need to define a [pydantic](https://github.com/pydantic/pydantic) model:
@@ -113,9 +137,11 @@ class BookQuery(BaseModel):
     author: str = Field(None, description='Author')
 ```
 
-More information to see [BaseModel](https://docs.pydantic.dev/latest/usage/models/), and you can [Customize the Field](https://docs.pydantic.dev/latest/usage/fields/).
+More information to see [BaseModel](https://docs.pydantic.dev/latest/usage/models/), and you
+can [Customize the Field](https://docs.pydantic.dev/latest/usage/fields/).
 
-However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.1.0#parameter-object). Here is an example:
+However, you can also use **Field** to extend [Parameter Object](https://spec.openapis.org/oas/v3.1.0#parameter-object).
+Here is an example:
 
 `age` with **`example`** and `author` with **`deprecated`**.
 
