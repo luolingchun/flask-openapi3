@@ -80,9 +80,9 @@ def _validate_cookie(cookie: Type[BaseModel], func_kwargs: dict):
 def _validate_path(path: Type[BaseModel], path_kwargs: dict, func_kwargs: dict):
     path_obj = path.model_validate(obj=path_kwargs)
     func_kwargs["path"] = path_obj
-    # Consume path paramaeters to prevent from being passed to the function
+    # Consume path parameters to prevent from being passed to the function
     for field_name, _ in path_obj:
-        path_kwargs.pop(field_name, None)  # Remove path parameters from func_kwargs
+        path_kwargs.pop(field_name, None)
 
 
 def _validate_query(query: Type[BaseModel], func_kwargs: dict):
