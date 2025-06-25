@@ -5,10 +5,10 @@ import inspect
 import json
 from functools import wraps
 from json import JSONDecodeError
-from typing import Any, Type, Optional
+from typing import Any, Optional, Type
 
-from flask import request, current_app, abort
-from pydantic import ValidationError, BaseModel
+from flask import abort, current_app, request
+from pydantic import BaseModel, ValidationError
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
 
@@ -78,7 +78,11 @@ def _validate_cookie(cookie: Type[BaseModel], func_kwargs: dict):
 
 
 def _validate_path(path: Type[BaseModel], path_kwargs: dict, func_kwargs: dict):
-    func_kwargs["path"] = path.model_validate(obj=path_kwargs)
+    path_obj = path.model_validate(obj=path_kwargs)
+    func_kwargs["path"] = path_obj
+    # Consume path parameters to prevent from being passed to the function
+    for field_name, _ in path_obj:
+        path_kwargs.pop(field_name, None)
 
 
 def _validate_query(query: Type[BaseModel], func_kwargs: dict):
@@ -151,14 +155,14 @@ def _validate_body(body: Type[BaseModel], func_kwargs: dict):
 
 
 def _validate_request(
-        header: Optional[Type[BaseModel]] = None,
-        cookie: Optional[Type[BaseModel]] = None,
-        path: Optional[Type[BaseModel]] = None,
-        query: Optional[Type[BaseModel]] = None,
-        form: Optional[Type[BaseModel]] = None,
-        body: Optional[Type[BaseModel]] = None,
-        raw: Optional[Type[BaseModel]] = None,
-        path_kwargs: Optional[dict[Any, Any]] = None
+    header: Optional[Type[BaseModel]] = None,
+    cookie: Optional[Type[BaseModel]] = None,
+    path: Optional[Type[BaseModel]] = None,
+    query: Optional[Type[BaseModel]] = None,
+    form: Optional[Type[BaseModel]] = None,
+    body: Optional[Type[BaseModel]] = None,
+    raw: Optional[Type[BaseModel]] = None,
+    path_kwargs: Optional[dict[Any, Any]] = None,
 ) -> dict:
     """
     Validate requests and responses.
@@ -212,7 +216,6 @@ def validate_request():
     """
 
     def decorator(func):
-
         setattr(func, "__delay_validate_request__", True)
 
         is_coroutine_function = inspect.iscoroutinefunction(func)
@@ -223,6 +226,8 @@ def validate_request():
             async def wrapper(*args, **kwargs):
                 header, cookie, path, query, form, body, raw = parse_parameters(func)
                 func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
+                # Update func_kwargs with any additional keyword arguments passed from other decorators or calls.
+                func_kwargs.update(kwargs)
 
                 return await func(*args, **func_kwargs)
 
@@ -233,7 +238,8 @@ def validate_request():
             def wrapper(*args, **kwargs):
                 header, cookie, path, query, form, body, raw = parse_parameters(func)
                 func_kwargs = _validate_request(header, cookie, path, query, form, body, raw, path_kwargs=kwargs)
-
+                # Update func_kwargs with any additional keyword arguments passed from other decorators or calls.
+                func_kwargs.update(kwargs)
                 return func(*args, **func_kwargs)
 
             return wrapper
