@@ -25,7 +25,7 @@ def login_required():
         def wrapper(*args, **kwargs):
             if not request.headers.get("Authorization"):
                 return {"error": "Unauthorized"}, 401
-            kwargs["client_id"] = "authorized_client"
+            kwargs["client_id"] = request.headers.get("Authorization").split("Bearer ")[-1]
             return func(*args, **kwargs)
 
         return wrapper
@@ -54,21 +54,22 @@ def app():
         @login_required()
         @validate_request()
         def get(self, client_id: str):
-            return {"books": ["book1", "book2"]}
+            return {"books": ["book1", "book2"], "client_id": client_id}
 
         @api_view.doc(summary="create book")
         @login_required()
         @validate_request()
-        def post(self, body: BookBody):
+        def post(self, body: BookBody, client_id):
             """description for a created book"""
             return body.model_dump_json()
 
     @api_view.route("/<name>")
     class BookNameAPIView:
         @api_view.doc(summary="get book by name")
+        @login_required()
         @validate_request()
-        def get(self, path: BookNamePath):
-            return {"name": path.name}
+        def get(self, path: BookNamePath, client_id):
+            return {"name": path.name, "client_id": client_id}
 
     app.register_api_view(api_view)
     return app
@@ -84,7 +85,7 @@ def client(app):
 def test_get_book_list_happy(app, client):
     response = client.get("/v1/books", headers={"Authorization": "Bearer sometoken"})
     assert response.status_code == 200
-    assert response.json == {"books": ["book1", "book2"]}
+    assert response.json == {"books": ["book1", "book2"], "client_id": "sometoken"}
 
 
 def test_get_book_list_not_auth(app, client):
@@ -93,7 +94,16 @@ def test_get_book_list_not_auth(app, client):
     assert response.json == {"error": "Unauthorized"}
 
 
-def test_get_book_detail(app, client):
-    response = client.get("/v1/books/some_book_name")
+def test_create_book_happy(app, client):
+    response = client.post(
+        "/v1/books",
+        json={"age": 3, "author": "John", "name": "some_book_name"},
+        headers={"Authorization": "Bearer sometoken"},
+    )
     assert response.status_code == 200
-    assert response.json == {"name": "some_book_name"}
+
+
+def test_get_book_detail_happy(app, client):
+    response = client.get("/v1/books/some_book_name", headers={"Authorization": "Bearer sometoken"})
+    assert response.status_code == 200
+    assert response.json == {"name": "some_book_name", "client_id": "sometoken"}
