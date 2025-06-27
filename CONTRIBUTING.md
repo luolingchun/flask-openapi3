@@ -10,7 +10,7 @@ Before submitting pr, you need to complete the following steps:
 1. Install requirements
 
     ```bash
-    pip install -U flask pydantic
+    pip install -U flask pydantic pyyaml pytest ruff mypy
     ```
 
 2. Running the tests
