@@ -135,3 +135,38 @@ def test_patch(client):
 def test_delete(client):
     resp = client.delete("/api/book/1")
     assert resp.status_code == 200
+
+
+# Create a second blueprint here to test when `url_prefix` is None
+author_api = APIBlueprint(
+    '/author',
+    __name__,
+    abp_tags=[tag],
+    abp_security=security,
+    abp_responses={"401": Unauthorized},
+)
+
+
+class AuthorBody(BaseModel):
+    age: Optional[int] = Field(..., ge=1, le=100, description='Age')
+
+
+@author_api.post('/<int:aid>')
+def get_author(body: AuthorBody):
+    pass
+
+
+def create_app():
+    app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
+    app.register_api(api, url_prefix='/1.0')
+    app.register_api(author_api, url_prefix='/1.0/author')
+
+
+# Invoke twice to ensure that call is idempotent
+create_app()
+create_app()
+
+
+def test_blueprint_path_and_prefix():
+    assert list(api.paths.keys()) == ['/1.0/book/{bid}', '/1.0/v2/book/{bid}']
+    assert list(author_api.paths.keys()) == ['/1.0/author/{aid}']
