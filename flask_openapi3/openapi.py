@@ -347,8 +347,10 @@ class OpenAPI(APIScaffold, Flask):
         # Update paths with the APIView's paths
         if url_prefix and api_view.url_prefix and url_prefix != api_view.url_prefix:
             api_view.paths = {url_prefix + k.removeprefix(api_view.url_prefix): v for k, v in api_view.paths.items()}
+            api_view.url_prefix = url_prefix
         elif url_prefix and not api_view.url_prefix:
             api_view.paths = {url_prefix.rstrip("/") + "/" + k.lstrip("/"): v for k, v in api_view.paths.items()}
+            api_view.url_prefix = url_prefix
         self.paths.update(**api_view.paths)
 
         # Update component schemas with the APIView's component schemas

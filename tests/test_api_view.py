@@ -24,6 +24,7 @@ security = [{"jwt": []}]
 
 api_view = APIView(url_prefix="/api/v1/<name>", view_tags=[Tag(name="book")], view_security=security)
 api_view2 = APIView(doc_ui=False)
+api_view_no_url = APIView(view_tags=[Tag(name="book")], view_security=security)
 
 
 class BookPath(BaseModel):
@@ -86,6 +87,13 @@ class BookAPIView2:
         return path.model_dump()
 
 
+@api_view_no_url.route("/book3")
+class BookAPIViewNoUrl:
+    @api_view_no_url.doc(summary="get book3")
+    def get(self, path: BookPath):
+        return path.model_dump()
+
+
 app.register_api_view(api_view)
 app.register_api_view(api_view2)
 
@@ -132,3 +140,19 @@ def test_get(client):
 def test_delete(client):
     resp = client.delete("/api/v1/name1/book/1")
     assert resp.status_code == 200
+
+
+def create_app():
+    app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
+    app.register_api_view(api_view, url_prefix='/api/1.0')
+    app.register_api_view(api_view_no_url, url_prefix='/api/1.0')
+
+
+# Invoke twice to ensure that call is idempotent
+create_app()
+create_app()
+
+
+def test_register_api_view_idempotency():
+    assert list(api_view.paths.keys()) == ['/api/1.0/api/v1/{name}/book', '/api/1.0/api/v1/{name}/book/{id}']
+    assert list(api_view_no_url.paths.keys()) == ['/api/1.0/book3']
