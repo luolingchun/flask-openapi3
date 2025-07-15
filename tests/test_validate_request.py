@@ -25,7 +25,7 @@ def login_required():
         def wrapper(*args, **kwargs):
             if not request.headers.get("Authorization"):
                 return {"error": "Unauthorized"}, 401
-            kwargs["client_id"] = request.headers.get("Authorization").split("Bearer ")[-1]
+            kwargs["client_id"] = "client1234565"
             return func(*args, **kwargs)
 
         return wrapper
@@ -85,7 +85,7 @@ def client(app):
 def test_get_book_list_happy(app, client):
     response = client.get("/v1/books", headers={"Authorization": "Bearer sometoken"})
     assert response.status_code == 200
-    assert response.json == {"books": ["book1", "book2"], "client_id": "sometoken"}
+    assert response.json == {"books": ["book1", "book2"], "client_id": "client1234565"}
 
 
 def test_get_book_list_not_auth(app, client):
@@ -106,4 +106,4 @@ def test_create_book_happy(app, client):
 def test_get_book_detail_happy(app, client):
     response = client.get("/v1/books/some_book_name", headers={"Authorization": "Bearer sometoken"})
     assert response.status_code == 200
-    assert response.json == {"name": "some_book_name", "client_id": "sometoken"}
+    assert response.json == {"name": "some_book_name", "client_id": "client1234565"}

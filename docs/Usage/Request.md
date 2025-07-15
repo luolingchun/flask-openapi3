@@ -111,19 +111,59 @@ Sometimes you want to delay the verification request parameters, such as after l
 from flask_openapi3 import validate_request
 
 
-def login_required(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print("login_required ...")
-        return func(*args, **kwargs)
+def login_required():
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not request.headers.get("Authorization"):
+                return {"error": "Unauthorized"}, 401
+            return func(*args, **kwargs)
 
-    return wrapper
+        return wrapper
+
+    return decorator
 
 
 @app.get("/book")
 @login_required
 @validate_request()
 def get_book(query: BookQuery):
+    ...
+```
+
+### Custom kwargs are maintained
+
+When your 'auth decorator' injects custom kwargs, these will be passed on to the final function for you to use.
+
+Any kwargs which are part of the 'path' will have been consumed at this point and can only be referenced using the `path`.
+
+So avoid using kwarg-names which overlap with the path.
+
+```python
+from flask_openapi3 import validate_request
+from functools import wraps
+
+
+def login_required():
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not request.headers.get("Authorization"):
+                return {"error": "Unauthorized"}, 401
+            kwargs["client_id"] = "client1234565"
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+
+@app.get("/book")
+@login_required()
+@validate_request()
+def get_book(query: BookQuery, client_id:str = None):
+    print(f"Current user identified as {client_id}")
     ...
 ```
 
