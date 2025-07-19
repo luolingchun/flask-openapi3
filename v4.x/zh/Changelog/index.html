@@ -93,7 +93,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v420-2025-06-21" class="md-skip">
+        <a href="#v421-2025-07-19" class="md-skip">
           跳转至
         </a>
       
@@ -833,6 +833,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v421-2025-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      v4.2.1 2025-07-19
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v420-2025-06-21" class="md-nav__link">
     <span class="md-ellipsis">
       v4.2.0 2025-06-21
@@ -1391,6 +1400,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v421-2025-07-19" class="md-nav__link">
+    <span class="md-ellipsis">
+      v4.2.1 2025-07-19
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v420-2025-06-21" class="md-nav__link">
     <span class="md-ellipsis">
       v4.2.0 2025-06-21
@@ -1928,6 +1946,11 @@
 
   <h1>更新日志</h1>
 
+<h2 id="v421-2025-07-19">v4.2.1 2025-07-19<a class="headerlink" href="#v421-2025-07-19" title="Permanent link">⚓︎</a></h2>
+<ul>
+<li>Fixes issue where register_api isn't idempotent by @zakmatik in #230</li>
+<li>Make validate_request pass on existing kwargs but remove those part of path by @puittenbroek in #227</li>
+</ul>
 <h2 id="v420-2025-06-21">v4.2.0 2025-06-21<a class="headerlink" href="#v420-2025-06-21" title="Permanent link">⚓︎</a></h2>
 <ul>
 <li>fix(models): enable 'populate_by_name' to alias fields correctly by @omikader in #221</li>
@@ -2043,7 +2066,8 @@
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/106">#106</a> Bugfix for parameter object. Thanks, @ota42y.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/107">#107</a> Bugfix for generics class. Thanks, @ota42y.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/114">#114</a> Support Flask 3.0.</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/118">#118</a> Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/118">#118</a> Fix missed components schemas in
+  ValidationErrorModel. Thanks, @SeFeX.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/122">#122</a> Skip 422 response non parameters. Thanks, @Danielsn1.</li>
 </ul>
 <h2 id="v300rc2-2023-10-03">v3.0.0rc2 2023-10-03<a class="headerlink" href="#v300rc2-2023-10-03" title="Permanent link">⚓︎</a></h2>
@@ -2067,7 +2091,8 @@
 </ul>
 <h2 id="v254-2023-10-22">v2.5.4 2023-10-22<a class="headerlink" href="#v254-2023-10-22" title="Permanent link">⚓︎</a></h2>
 <ul>
-<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/118">#118</a> Fix missed components schemas in ValidationErrorModel. Thanks, @SeFeX.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/118">#118</a> Fix missed components schemas in
+  ValidationErrorModel. Thanks, @SeFeX.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/122">#122</a> Skip 422 response non parameters. Thanks, @Danielsn1.</li>
 </ul>
 <h2 id="v253-2023-10-03">v2.5.3 2023-10-03<a class="headerlink" href="#v253-2023-10-03" title="Permanent link">⚓︎</a></h2>
@@ -2082,28 +2107,35 @@
 </ul>
 <h2 id="v251-2023-08-07">v2.5.1 2023-08-07<a class="headerlink" href="#v251-2023-08-07" title="Permanent link">⚓︎</a></h2>
 <ul>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/95">#95</a> Added ability to deserialize complex form parameter objects. Thanks, @BlackGad.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/95">#95</a> Added ability to deserialize complex form parameter
+  objects. Thanks, @BlackGad.</li>
 </ul>
 <h2 id="v250-2023-08-02">v2.5.0 2023-08-02<a class="headerlink" href="#v250-2023-08-02" title="Permanent link">⚓︎</a></h2>
 <ul>
-<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/79">#79</a> Support <code>by_alias</code> in Model Config. Thanks, @candleindark.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/discussions/79">#79</a> Support <code>by_alias</code> in Model Config. Thanks,
+  @candleindark.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/82">#82</a> Fix parameter in url_prefix. Thanks, @riedgar-ms.</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/83">#83</a> Be able to change 422 validation errors to other http response status. Thanks, @CostcoFanboy.</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/86">#86</a> Responses key supports both string, int, and HTTPStatus. Thanks, @CostcoFanboy.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/83">#83</a> Be able to change 422 validation errors to other http
+  response status. Thanks, @CostcoFanboy.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/86">#86</a> Responses key supports both string, int, and
+  HTTPStatus. Thanks, @CostcoFanboy.</li>
 </ul>
 <h2 id="v240-2023-06-04">v2.4.0 2023-06-04<a class="headerlink" href="#v240-2023-06-04" title="Permanent link">⚓︎</a></h2>
 <ul>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/72">#72</a> security_schemes(SecurityScheme) supports a json format.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/68">#68</a> feat: Add operation_id_callback. Thanks, @BoyanYK.</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/64">#64</a> Explains the usage of flask openapi command more clearly. Thanks, @candleindark.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/64">#64</a> Explains the usage of flask openapi command more clearly.
+  Thanks, @candleindark.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/75">#75</a> Init view_class and pass view_kwargs. Thanks, @stufisher.</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/70">#70</a> Support for Specification Extensions in OpenAPI Object and Operation Object. Thanks, @simonblund.</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/70">#70</a> Support for Specification Extensions in OpenAPI Object
+  and Operation Object. Thanks, @simonblund.</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/73">#73</a> BaseModel Config support openapi_extra.</li>
 <li>Merge <code>extra_responses</code> to <code>responses</code> and deprecate <code>extra_responses</code>.</li>
 </ul>
 <p><strong>DeprecationWarning:</strong></p>
 <ul>
-<li>Add DeprecationWarning to <code>APIKey</code>, <code>HTTPBase</code>, <code>OAuth2</code>, <code>OpenIdConnect</code>, <code>HTTPBearer</code> that will be deprecated in v3.0.</li>
+<li>Add DeprecationWarning to <code>APIKey</code>, <code>HTTPBase</code>, <code>OAuth2</code>, <code>OpenIdConnect</code>, <code>HTTPBearer</code> that will be deprecated in
+  v3.0.</li>
 <li>Add DeprecationWarning to <code>extra_form</code>, <code>extra_body</code> and <code>extra_responses</code> that will be deprecated in v3.0.</li>
 </ul>
 <h2 id="v232-2023-04-03">v2.3.2 2023-04-03<a class="headerlink" href="#v232-2023-04-03" title="Permanent link">⚓︎</a></h2>
@@ -2139,9 +2171,11 @@
 </ul>
 <h2 id="v211-2022-10-12">v2.1.1 2022-10-12<a class="headerlink" href="#v211-2022-10-12" title="Permanent link">⚓︎</a></h2>
 <ul>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/41">#41</a> Set the <code>requestBody required</code> default value to True. Thanks, @Colin-b</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/41">#41</a> Set the <code>requestBody required</code> default value to True.
+  Thanks, @Colin-b</li>
 <li>Fix multi decorator for api</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/42">#42</a> Fix required header is not found when <code>_</code> in header field. Thanks, @elirud</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/42">#42</a> Fix required header is not found when <code>_</code> in header
+  field. Thanks, @elirud</li>
 </ul>
 <h2 id="v210-2022-09-04">v2.1.0 2022-09-04<a class="headerlink" href="#v210-2022-09-04" title="Permanent link">⚓︎</a></h2>
 <ul>
@@ -2150,7 +2184,8 @@
 <li>Add external_docs for operation</li>
 <li>Add servers for operation</li>
 <li>Support to parse extra field in parameters</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/35">#35</a> Fixed extra_responses can now be used to set every field in Response. Thanks, @Colin-b</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/35">#35</a> Fixed extra_responses can now be used to set every
+  field in Response. Thanks, @Colin-b</li>
 <li>Upgrade Swagger UI 4.14.0</li>
 <li>Upgrade Redoc UI 2.0.0-rc.76</li>
 <li>Upgrade RapiDoc UI 9.3.3</li>
@@ -2165,10 +2200,13 @@
 </ul>
 <h2 id="v200-2022-06-26">v2.0.0 2022-06-26<a class="headerlink" href="#v200-2022-06-26" title="Permanent link">⚓︎</a></h2>
 <ul>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/26">#26</a> Fixed: Body throws exception when receiving str instead of dict. Thanks, @nor3th</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/26">#26</a> Fixed: Body throws exception when receiving str instead
+  of dict. Thanks, @nor3th</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/23">#23</a> Fixed externalDocs support. Thanks, @dvaerum</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/28">#28</a> Fixed to enable <code>__root__</code> property when validation responses. Thanks, @dvaerum</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/17">#17</a> Support for Nested APIBlueprint enhancement. Thanks, @dvaerum</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/28">#28</a> Fixed to enable <code>__root__</code> property when validation
+  responses. Thanks, @dvaerum</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/17">#17</a> Support for Nested APIBlueprint enhancement. Thanks,
+  @dvaerum</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/pull/29">#29</a> Support disable warnings. Thanks, @dvaerum</li>
 <li>Support for empty response body. Thanks, @dvaerum</li>
 <li>Support reload authorizations in Swagger UI</li>
@@ -2199,8 +2237,10 @@
 <h2 id="v110-2022-03-13">v1.1.0 2022-03-13<a class="headerlink" href="#v110-2022-03-13" title="Permanent link">⚓︎</a></h2>
 <ul>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/13">#13</a> drop support for flask 1.0.x. Thanks, @danmur</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/15">#15</a> Fix to enable BaseModel with <code>__root__</code> property. Thanks, @tarcisiojr</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/14">#14</a> Custom parameters: doc_prefix, api_doc_url, swagger_url, redoc_url, rapidoc_url. Thanks, @barryrobison</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/15">#15</a> Fix to enable BaseModel with <code>__root__</code> property. Thanks,
+  @tarcisiojr</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/14">#14</a> Custom parameters: doc_prefix, api_doc_url, swagger_url,
+  redoc_url, rapidoc_url. Thanks, @barryrobison</li>
 <li>Upgrade swagger UI v4.6.2</li>
 <li>Upgrade Redoc v2.0.0-rc.63</li>
 <li>Upgrade RapiDoc v9.2.0</li>
@@ -2213,7 +2253,8 @@
 <ul>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/10">#10</a> Fix: header's title case. Thanks, @rrr34</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/9">#9</a> Support for extra responses. Thanks, @blynn99</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/pull/12">#12</a> Support for path operation field deprecated. Thanks, @blynn99</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/pull/12">#12</a> Support for path operation field deprecated. Thanks,
+  @blynn99</li>
 <li>Add keyword parameters <code>summary</code> and <code>description</code></li>
 <li>Add servers for OpenAPI</li>
 <li>Upgrade swagger UI v4.1.3</li>
@@ -2254,7 +2295,8 @@
 <ul>
 <li>OpenAPI add responses and APIBlueprint add abp_responses</li>
 <li>fix: validate response error when responses is empty dict</li>
-<li><a href="https://github.com/luolingchun/flask-openapi3/issues/3">#3</a> endpoint and APIBlueprint add <code>doc_ui</code>. Thanks, @DerManoMann</li>
+<li><a href="https://github.com/luolingchun/flask-openapi3/issues/3">#3</a> endpoint and APIBlueprint add <code>doc_ui</code>. Thanks,
+  @DerManoMann</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/4">#4</a> fix: response description. Thanks, @DerManoMann</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/5">#5</a> add custom parameter <code>oauth_config</code>. Thanks, @DerManoMann</li>
 <li><a href="https://github.com/luolingchun/flask-openapi3/issues/6">#6</a> support validation Flask Response. Thanks, @DerManoMann</li>
