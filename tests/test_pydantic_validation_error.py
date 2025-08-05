@@ -23,7 +23,7 @@ def login(body: LoginRequest):
     return {"message": f"Login successful for {body.email}"}
 
 
-def test_pydantic_v2_schema(client):
+def test_pydantic_validation_error_schema(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
 
@@ -52,7 +52,7 @@ def test_pydantic_v2_schema(client):
     assert "ctx" not in required_fields
 
 
-def test_validation_error_format(client):
+def test_pydantic_validation_error_response(client):
     resp = client.post(
         "/login",
         json={"invalid_field": "test"},
@@ -77,7 +77,7 @@ def test_validation_error_format(client):
     assert error["type"] in ["missing", "string_type", "value_error", "extra_forbidden"]
 
 
-def test_missing_field_error(client):
+def test_pydantic_missing_field_error_response(client):
     resp = client.post(
         "/login",
         json={},
