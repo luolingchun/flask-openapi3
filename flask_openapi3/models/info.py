@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/28 10:58
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -15,11 +14,11 @@ class Info(BaseModel):
     """
 
     title: str
-    summary: Optional[str] = None
-    description: Optional[str] = None
-    termsOfService: Optional[str] = None
-    contact: Optional[Contact] = None
-    license: Optional[License] = None
+    summary: str | None = None
+    description: str | None = None
+    termsOfService: str | None = None
+    contact: Contact | None = None
+    license: License | None = None
     version: str
 
     model_config = {"extra": "allow"}
