@@ -37,7 +37,7 @@ The key features are:
 
 ## Requirements
 
-Python 3.9+
+Python 3.10+
 
 flask-openapi3 is dependent on the following libraries:
 
@@ -131,14 +131,12 @@ if __name__ == "__main__":
 <summary>Class-based API View Example</summary>
 
 ```python
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, Tag, Info, APIView
 
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 
 api_view = APIView(url_prefix="/api/v1", view_tags=[Tag(name="book")])
@@ -149,12 +147,12 @@ class BookPath(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description='Age')
+    age: int | None = Field(None, description="Age")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
-    author: str = Field(None, min_length=2, max_length=4, description='Author')
+    age: int | None = Field(..., ge=2, le=4, description="Age")
+    author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 @api_view.route("/book")

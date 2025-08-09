@@ -20,13 +20,12 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["Flask>=2.0", "pydantic>=2.4"]
 dynamic = ["version"]
 
@@ -88,7 +87,8 @@ select = [
     "E7", # Statement issues
     "E9", # Runtime errors
     "F", # Pyflakes rules
-    "Q"   # flake8-quotes
+    "Q", # flake8-quotes
+    "UP045", # Use X | None for type annotations
 ]
 
 [tool.ruff.lint.per-file-ignores]

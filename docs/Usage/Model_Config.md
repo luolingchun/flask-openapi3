@@ -11,7 +11,7 @@ The `openapi_extra` will be merged with the automatically generated OpenAPI sche
 ```python
 class UploadFilesForm(BaseModel):
     file: FileStorage
-    str_list: List[str]
+    str_list: list[str]
 
     model_config = dict(
         openapi_extra={
@@ -82,7 +82,7 @@ You can use `reqiured` in `openapi_extra` to mark the RequestBody as Optional.
 
 ```python
 class PingBody(BaseModel):
-        ping: Optional[str] = Field("ok", description="String to return, 'ok' when null.")
+        ping: str | None = Field("ok", description="String to return, 'ok' when null.")
 
         model_config = dict(
             openapi_extra = {

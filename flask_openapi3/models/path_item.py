@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/7/4 9:50
 import typing
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -19,9 +19,9 @@ class PathItem(BaseModel):
     https://spec.openapis.org/oas/v3.1.0#path-item-object
     """
 
-    ref: Optional[str] = Field(default=None, alias="$ref")
-    summary: Optional[str] = None
-    description: Optional[str] = None
+    ref: str | None = Field(default=None, alias="$ref")
+    summary: str | None = None
+    description: str | None = None
     get: Optional["Operation"] = None
     put: Optional["Operation"] = None
     post: Optional["Operation"] = None
@@ -30,7 +30,7 @@ class PathItem(BaseModel):
     head: Optional["Operation"] = None
     patch: Optional["Operation"] = None
     trace: Optional["Operation"] = None
-    servers: Optional[list[Server]] = None
-    parameters: Optional[list[Union[Parameter, Reference]]] = None
+    servers: list[Server] | None = None
+    parameters: list[Parameter | Reference] | None = None
 
     model_config = {"extra": "allow", "populate_by_name": True}

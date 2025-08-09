@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2024/11/20 14:45
-from typing import Optional
 
 import pytest
 from pydantic import BaseModel, ConfigDict, Field
@@ -13,7 +12,7 @@ app.config["TESTING"] = True
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description="Age")
+    age: int | None = Field(None, description="Age")
 
     model_config = ConfigDict(extra="allow")
 

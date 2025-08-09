@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2021/4/28 11:26
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -14,7 +13,7 @@ class Server(BaseModel):
     """
 
     url: str
-    description: Optional[str] = None
-    variables: Optional[dict[str, ServerVariable]] = None
+    description: str | None = None
+    variables: dict[str, ServerVariable] | None = None
 
     model_config = {"extra": "allow"}

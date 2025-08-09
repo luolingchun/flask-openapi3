@@ -5,7 +5,7 @@ If you want to generate **Schemas**, pass the **`responses`**.
 ```python hl_lines="13"
 class BookBodyWithID(BaseModel):
     bid: int = Field(..., description='book id')
-    age: Optional[int] = Field(None, ge=2, le=4, description='Age')
+    age: int | None = Field(None, ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 
