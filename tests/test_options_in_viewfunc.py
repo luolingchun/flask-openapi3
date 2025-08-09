@@ -16,9 +16,9 @@ def get_operation_id_for_path_callback(*, name: str, path: str, method: str) -> 
 
 
 api = APIBlueprint(
-    '/book',
+    "/book",
     __name__,
-    url_prefix='/api',
+    url_prefix="/api",
     operation_id_callback=get_operation_id_for_path_callback,
 )
 
@@ -30,14 +30,14 @@ def client():
     return client
 
 
-@app.get('/book', endpoint='endpoint_get_book')
+@app.get("/book", endpoint="endpoint_get_book")
 def get_book():
-    return 'app_book'
+    return "app_book"
 
 
-@api.post('/book', endpoint='endpoint_post_book')
+@api.post("/book", endpoint="endpoint_post_book")
 def create_book():
-    return 'api_book'
+    return "api_book"
 
 
 # register api
@@ -55,12 +55,12 @@ def test_openapi(client):
 def test_get(client):
     resp = client.get("/book")
 
-    assert resp.text == 'app_book'
-    assert 'endpoint_get_book' in app.view_functions.keys()
+    assert resp.text == "app_book"
+    assert "endpoint_get_book" in app.view_functions.keys()
 
 
 def test_post(client):
     resp = client.post("/api/book")
 
-    assert resp.text == 'api_book'
-    assert '/book.endpoint_post_book' in app.view_functions.keys()
+    assert resp.text == "api_book"
+    assert "/book.endpoint_post_book" in app.view_functions.keys()

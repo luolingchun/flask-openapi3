@@ -5,8 +5,7 @@
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIView
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import APIView, OpenAPI
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -39,13 +38,7 @@ class BookAPIView:
         return {"b": self.b}
 
 
-app.register_api_view(
-    api_view,
-    view_kwargs={
-        "a": 1,
-        "b": 2
-    }
-)
+app.register_api_view(api_view, view_kwargs={"a": 1, "b": 2})
 
 
 @pytest.fixture

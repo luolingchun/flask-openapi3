@@ -3,21 +3,16 @@
 # @Time    : 2023/5/31 14:24
 from flask_openapi3 import OpenAPI
 
-app = OpenAPI(__name__, openapi_extensions={
-    "x-google-endpoints": [
-        {
-            "name": "my-cool-api.endpoints.my-project-id.cloud.goog",
-            "allowCors": True
-        }
-    ]
-})
+app = OpenAPI(
+    __name__,
+    openapi_extensions={
+        "x-google-endpoints": [{"name": "my-cool-api.endpoints.my-project-id.cloud.goog", "allowCors": True}]
+    },
+)
 
 openapi_extensions = {
-    "x-google-backend": {
-        "address": "https://<NODE_SERVICE_ID>-<HASH>.a.run.app",
-        "protocol": "h2"
-    },
-    "x-aperture-labs-portal": "blue"
+    "x-google-backend": {"address": "https://<NODE_SERVICE_ID>-<HASH>.a.run.app", "protocol": "h2"},
+    "x-aperture-labs-portal": "blue",
 }
 
 

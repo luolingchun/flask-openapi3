@@ -4,7 +4,7 @@
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI, FileStorage
+from flask_openapi3 import FileStorage, OpenAPI
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -20,17 +20,9 @@ class UploadFilesForm(BaseModel):
             "examples": {
                 "Example 01": {
                     "summary": "An example",
-                    "value": {
-                        "file": "Example-01.jpg",
-                        "str_list": ["a", "b", "c"]
-                    }
+                    "value": {"file": "Example-01.jpg", "str_list": ["a", "b", "c"]},
                 },
-                "Example 02": {
-                    "summary": "Another example",
-                    "value": {
-                        "str_list": ["1", "2", "3"]
-                    }
-                }
+                "Example 02": {"summary": "Another example", "value": {"str_list": ["1", "2", "3"]}},
             }
         }
     )
@@ -48,21 +40,15 @@ class BookBody(BaseModel):
                 "example1": {
                     "summary": "example summary1",
                     "description": "example description1",
-                    "value": {
-                        "age": 24,
-                        "author": "author2"
-                    }
+                    "value": {"age": 24, "author": "author2"},
                 },
                 "example2": {
                     "summary": "example summary2",
                     "description": "example description2",
-                    "value": {
-                        "age": 48,
-                        "author": "author3"
-                    }
-                }
-
-            }}
+                    "value": {"age": 48, "author": "author3"},
+                },
+            },
+        }
     )
 
 
@@ -75,20 +61,10 @@ class MessageResponse(BaseModel):
         openapi_extra={
             # "example": {"message": "aaa"},
             "examples": {
-                "example1": {
-                    "summary": "example1 summary",
-                    "value": {
-                        "message": "bbb"
-                    }
-                },
-                "example2": {
-                    "summary": "example2 summary",
-                    "value": {
-                        "message": "ccc"
-                    }
-                }
+                "example1": {"summary": "example1 summary", "value": {"message": "bbb"}},
+                "example2": {"summary": "example2 summary", "value": {"message": "ccc"}},
             }
-        }
+        },
     )
 
 
@@ -113,38 +89,17 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
-    assert _json["paths"]["/form"]["post"]["requestBody"]["content"]["multipart/form-data"]["examples"] == \
-           {
-               "Example 01": {
-                   "summary": "An example",
-                   "value": {
-                       "file": "Example-01.jpg",
-                       "str_list": ["a", "b", "c"]
-                   }
-               },
-               "Example 02": {
-                   "summary": "Another example",
-                   "value": {
-                       "str_list": ["1", "2", "3"]
-                   }
-               }
-           }
+    assert _json["paths"]["/form"]["post"]["requestBody"]["content"]["multipart/form-data"]["examples"] == {
+        "Example 01": {"summary": "An example", "value": {"file": "Example-01.jpg", "str_list": ["a", "b", "c"]}},
+        "Example 02": {"summary": "Another example", "value": {"str_list": ["1", "2", "3"]}},
+    }
     assert _json["paths"]["/body"]["post"]["requestBody"]["description"] == "This is post RequestBody"
-    assert _json["paths"]["/body"]["post"]["requestBody"]["content"]["application/json"]["example"] == \
-           {"age": 12, "author": "author1"}
-    assert _json["paths"]["/body"]["post"]["responses"]["200"]["content"]["application/json"]["examples"] == \
-           {
-               "example1": {
-                   "summary": "example1 summary",
-                   "value": {
-                       "message": "bbb"
-                   }
-               },
-               "example2": {
-                   "summary": "example2 summary",
-                   "value": {
-                       "message": "ccc"
-                   }
-               }
-           }
+    assert _json["paths"]["/body"]["post"]["requestBody"]["content"]["application/json"]["example"] == {
+        "age": 12,
+        "author": "author1",
+    }
+    assert _json["paths"]["/body"]["post"]["responses"]["200"]["content"]["application/json"]["examples"] == {
+        "example1": {"summary": "example1 summary", "value": {"message": "bbb"}},
+        "example2": {"summary": "example2 summary", "value": {"message": "ccc"}},
+    }
     assert _json["components"]["schemas"]["MessageResponse"]["properties"].get("metadata") is not None

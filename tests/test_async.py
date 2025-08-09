@@ -7,7 +7,7 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI, APIView
+from flask_openapi3 import APIView, OpenAPI
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -41,7 +41,6 @@ async def post_openapi(body: Query):
 
 @api_view.route("/book")
 class BookListAPIView:
-
     @api_view.doc(summary="get book list")
     async def get(self, query: BookQuery):
         return query.model_dump_json()

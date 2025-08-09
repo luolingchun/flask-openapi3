@@ -21,7 +21,4 @@ class MediaType(BaseModel):
     examples: Optional[dict[str, Union[Example, Reference]]] = None
     encoding: Optional[dict[str, Encoding]] = None
 
-    model_config = {
-        "extra": "allow",
-        "populate_by_name": True
-    }
+    model_config = {"extra": "allow", "populate_by_name": True}

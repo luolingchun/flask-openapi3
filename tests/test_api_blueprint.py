@@ -7,16 +7,11 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, OpenAPI
-from flask_openapi3 import Tag, Info
+from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 
-jwt = {
-    "type": "http",
-    "scheme": "bearer",
-    "bearerFormat": "JWT"
-}
+jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
 security_schemes = {"jwt": jwt}
 
 
@@ -28,7 +23,7 @@ def operation_id_callback(*, bp_name: str = None, name: str, path: str, method: 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 app.config["TESTING"] = True
 
-tag = Tag(name='book', description="Book")
+tag = Tag(name="book", description="Book")
 security = [{"jwt": []}]
 
 
@@ -38,13 +33,13 @@ class Unauthorized(BaseModel):
 
 
 api = APIBlueprint(
-    '/book',
+    "/book",
     __name__,
-    url_prefix='/api',
+    url_prefix="/api",
     abp_tags=[tag],
     abp_security=security,
     abp_responses={"401": Unauthorized},
-    operation_id_callback=operation_id_callback
+    operation_id_callback=operation_id_callback,
 )
 
 try:
@@ -61,42 +56,42 @@ def client():
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
-    author: str = Field(None, min_length=2, max_length=4, description='Author')
+    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 class BookPath(BaseModel):
-    bid: int = Field(..., description='book id')
+    bid: int = Field(..., description="book id")
 
 
-@api.post('/book', doc_ui=False)
+@api.post("/book", doc_ui=False)
 def create_book(body: BookBody):
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.put('/book/<int:bid>', operation_id='update')
+@api.put("/book/<int:bid>", operation_id="update")
 def update_book(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.patch('/book/<int:bid>')
+@api.patch("/book/<int:bid>")
 def update_book1(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.patch('/v2/book/<int:bid>')
+@api.patch("/v2/book/<int:bid>")
 def update_book1_v2(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
     return {"code": 0, "message": "ok"}
 
 
-@api.delete('/book/<int:bid>')
+@api.delete("/book/<int:bid>")
 def delete_book(path: BookPath):
     assert path.bid == 1
     return {"code": 0, "message": "ok"}
@@ -139,7 +134,7 @@ def test_delete(client):
 
 # Create a second blueprint here to test when `url_prefix` is None
 author_api = APIBlueprint(
-    '/author',
+    "/author",
     __name__,
     abp_tags=[tag],
     abp_security=security,
@@ -148,18 +143,18 @@ author_api = APIBlueprint(
 
 
 class AuthorBody(BaseModel):
-    age: Optional[int] = Field(..., ge=1, le=100, description='Age')
+    age: Optional[int] = Field(..., ge=1, le=100, description="Age")
 
 
-@author_api.post('/<int:aid>')
+@author_api.post("/<int:aid>")
 def get_author(body: AuthorBody):
     pass
 
 
 def create_app():
     app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
-    app.register_api(api, url_prefix='/1.0')
-    app.register_api(author_api, url_prefix='/1.0/author')
+    app.register_api(api, url_prefix="/1.0")
+    app.register_api(author_api, url_prefix="/1.0/author")
 
 
 # Invoke twice to ensure that call is idempotent
@@ -168,5 +163,5 @@ create_app()
 
 
 def test_blueprint_path_and_prefix():
-    assert list(api.paths.keys()) == ['/1.0/book/{bid}', '/1.0/v2/book/{bid}']
-    assert list(author_api.paths.keys()) == ['/1.0/author/{aid}']
+    assert list(api.paths.keys()) == ["/1.0/book/{bid}", "/1.0/v2/book/{bid}"]
+    assert list(author_api.paths.keys()) == ["/1.0/author/{aid}"]

@@ -8,7 +8,7 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI, FileStorage, RawModel
+from flask_openapi3 import FileStorage, OpenAPI, RawModel
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -53,7 +53,7 @@ class BookHeader(BaseModel):
     hello2: str = Field(..., max_length=12, description="sds")
     api_key: str = Field(..., description="API Key")
     api_type: Optional[TypeEnum] = None
-    x_hello: str = Field(..., max_length=12, description='Header with alias to support dash', alias="x-hello")
+    x_hello: str = Field(..., max_length=12, description="Header with alias to support dash", alias="x-hello")
 
 
 def decorator(func):
@@ -113,11 +113,12 @@ def test_query(client):
 
 def test_form(client):
     from io import BytesIO
+
     data = {
         "file": (BytesIO(b"post-data"), "filename"),
         "files": [(BytesIO(b"post-data"), "filename"), (BytesIO(b"post-data"), "filename")],
         "string": "a",
-        "string_list": ["a", "b", "c"]
+        "string_list": ["a", "b", "c"],
     }
     r = client.post("/form", data=data, content_type="multipart/form-data")
     assert r.status_code == 200

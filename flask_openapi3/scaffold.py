@@ -3,37 +3,34 @@
 # @Time    : 2022/8/30 9:40
 import inspect
 from functools import wraps
-from typing import Callable, Optional, Any
+from typing import Any, Callable, Optional
 
 from flask.wrappers import Response as FlaskResponse
 
-from .models import ExternalDocumentation
-from .models import Server
-from .models import Tag
+from .models import ExternalDocumentation, Server, Tag
 from .request import _validate_request
-from .types import ParametersTuple
-from .types import ResponseDict
+from .types import ParametersTuple, ResponseDict
 from .utils import HTTPMethod
 
 
 class APIScaffold:
     def _collect_openapi_info(
-            self,
-            rule: str,
-            func: Callable,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            method: str = HTTPMethod.GET
+        self,
+        rule: str,
+        func: Callable,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
         raise NotImplementedError  # pragma: no cover
 
@@ -41,30 +38,20 @@ class APIScaffold:
         raise NotImplementedError  # pragma: no cover
 
     def _add_url_rule(
-            self,
-            rule,
-            endpoint=None,
-            view_func=None,
-            provide_automatic_options=None,
-            **options,
+        self,
+        rule,
+        endpoint=None,
+        view_func=None,
+        provide_automatic_options=None,
+        **options,
     ) -> None:
         raise NotImplementedError  # pragma: no cover
 
     @staticmethod
-    def create_view_func(
-            func,
-            header,
-            cookie,
-            path,
-            query,
-            form,
-            body,
-            raw,
-            view_class=None,
-            view_kwargs=None
-    ):
+    def create_view_func(func, header, cookie, path, query, form, body, raw, view_class=None, view_kwargs=None):
         is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
+
             @wraps(func)
             async def view_func(**kwargs) -> FlaskResponse:
                 if hasattr(func, "__delay_validate_request__") and func.__delay_validate_request__ is True:
@@ -78,7 +65,7 @@ class APIScaffold:
                         form=form,
                         body=body,
                         raw=raw,
-                        path_kwargs=kwargs
+                        path_kwargs=kwargs,
                     )
 
                 # handle async request
@@ -94,6 +81,7 @@ class APIScaffold:
                     response = await func(**func_kwargs)
                 return response
         else:
+
             @wraps(func)
             def view_func(**kwargs) -> FlaskResponse:
                 if hasattr(func, "__delay_validate_request__") and func.__delay_validate_request__ is True:
@@ -107,7 +95,7 @@ class APIScaffold:
                         form=form,
                         body=body,
                         raw=raw,
-                        path_kwargs=kwargs
+                        path_kwargs=kwargs,
                     )
 
                 # handle request
@@ -129,21 +117,21 @@ class APIScaffold:
         return func.view
 
     def get(
-            self,
-            rule: str,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            **options: Any
+        self,
+        rule: str,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        **options: Any,
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP GET method.
@@ -165,23 +153,22 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.GET
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                doc_ui=doc_ui,
+                method=HTTPMethod.GET,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.GET]})
@@ -192,21 +179,21 @@ class APIScaffold:
         return decorator
 
     def post(
-            self,
-            rule: str,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            **options: Any
+        self,
+        rule: str,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        **options: Any,
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP POST method.
@@ -228,23 +215,22 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.POST
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                doc_ui=doc_ui,
+                method=HTTPMethod.POST,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.POST]})
@@ -255,21 +241,21 @@ class APIScaffold:
         return decorator
 
     def put(
-            self,
-            rule: str,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            **options: Any
+        self,
+        rule: str,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        **options: Any,
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP PUT method.
@@ -291,23 +277,22 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PUT
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                doc_ui=doc_ui,
+                method=HTTPMethod.PUT,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PUT]})
@@ -318,21 +303,21 @@ class APIScaffold:
         return decorator
 
     def delete(
-            self,
-            rule: str,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            **options: Any
+        self,
+        rule: str,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        **options: Any,
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP DELETE method.
@@ -354,23 +339,22 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.DELETE
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                doc_ui=doc_ui,
+                method=HTTPMethod.DELETE,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.DELETE]})
@@ -381,21 +365,21 @@ class APIScaffold:
         return decorator
 
     def patch(
-            self,
-            rule: str,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            **options: Any
+        self,
+        rule: str,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        **options: Any,
     ) -> Callable:
         """
         Decorator for defining a REST API endpoint with the HTTP PATCH method.
@@ -417,23 +401,22 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PATCH
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                doc_ui=doc_ui,
+                method=HTTPMethod.PATCH,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PATCH]})

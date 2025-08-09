@@ -22,12 +22,12 @@ def client():
     return client
 
 
-@app.post('/path/')
+@app.post("/path/")
 def create_book1(body: MyModel):
     return body.text
 
 
 def test_post(client):
-    my_model = MyModel(text='1')
+    my_model = MyModel(text="1")
     resp = client.post("/path/", json=my_model.model_dump_json())
     assert resp.status_code == 200

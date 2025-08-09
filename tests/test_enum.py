@@ -7,27 +7,23 @@ from enum import Enum
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import Info
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import Info, OpenAPI
 
-app = OpenAPI(
-    __name__,
-    info=Info(title="Enum demo", version="1.0.0")
-)
+app = OpenAPI(__name__, info=Info(title="Enum demo", version="1.0.0"))
 
 app.config["TESTING"] = True
 
 
 class Language(str, Enum):
-    cn = 'Chinese'
-    en = 'English'
+    cn = "Chinese"
+    en = "English"
 
 
 class LanguagePath(BaseModel):
-    language: Language = Field(..., description='Language')
+    language: Language = Field(..., description="Language")
 
 
-@app.get('/<language>')
+@app.get("/<language>")
 def get_enum(path: LanguagePath):
     print(path)
     return {}

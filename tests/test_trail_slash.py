@@ -4,16 +4,15 @@
 
 import pytest
 
-from flask_openapi3 import Info
-from flask_openapi3 import OpenAPI, APIBlueprint
+from flask_openapi3 import APIBlueprint, Info, OpenAPI
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 
 app = OpenAPI(__name__, info=info)
 app.config["TESTING"] = True
 
-api1 = APIBlueprint('book1', __name__, url_prefix='/api/v1/book1')
-api2 = APIBlueprint('book2', __name__, url_prefix='/api/v1/book2')
+api1 = APIBlueprint("book1", __name__, url_prefix="/api/v1/book1")
+api2 = APIBlueprint("book2", __name__, url_prefix="/api/v1/book2")
 
 
 @pytest.fixture
@@ -23,14 +22,14 @@ def client():
     return client
 
 
-@api1.get('/')
+@api1.get("/")
 def get_book():
-    return 'with slash'
+    return "with slash"
 
 
-@api2.get('')
+@api2.get("")
 def get_book2():
-    return 'without slash'
+    return "without slash"
 
 
 app.register_api(api1)
@@ -60,5 +59,5 @@ def test_without_slash2(client):
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
-    assert _json['paths'].get('/api/v1/book1/') is not None
-    assert _json['paths'].get('/api/v1/book2') is not None
+    assert _json["paths"].get("/api/v1/book1/") is not None
+    assert _json["paths"].get("/api/v1/book2") is not None

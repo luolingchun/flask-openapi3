@@ -5,16 +5,11 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIView
-from flask_openapi3 import OpenAPI, Tag, Info
+from flask_openapi3 import APIView, Info, OpenAPI, Tag
 
-jwt = {
-    "type": "http",
-    "scheme": "bearer",
-    "bearerFormat": "JWT"
-}
+jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
 security_schemes = {"jwt": jwt}
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
 
 security = [{"jwt": []}]
@@ -27,12 +22,12 @@ class BookPath(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description='Age')
+    age: Optional[int] = Field(None, description="Age")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
-    author: str = Field(None, min_length=2, max_length=4, description='Author')
+    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 @api_view.route("/book")

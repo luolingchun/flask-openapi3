@@ -15,6 +15,4 @@ class License(BaseModel):
     identifier: Optional[str] = None
     url: Optional[str] = None
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

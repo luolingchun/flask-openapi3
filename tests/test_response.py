@@ -6,7 +6,7 @@ from http import HTTPStatus
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import OpenAPI, APIBlueprint
+from flask_openapi3 import APIBlueprint, OpenAPI
 
 app = OpenAPI(__name__)
 app.config["TESTING"] = True
@@ -36,17 +36,14 @@ def client():
         "201": BookResponse,
         202: {"content": {"text/html": {"schema": {"type": "string"}}}},
         204: None,
-        "422": {"description": "validation error"}
-    }
+        "422": {"description": "validation error"},
+    },
 )
 def get_book(path: BookPath):
     print(path)  # pragma: no cover
 
 
-@api.get("/book", responses={
-    HTTPStatus.OK: BookResponse,
-    "201": BookResponse, 204: None
-})
+@api.get("/book", responses={HTTPStatus.OK: BookResponse, "201": BookResponse, 204: None})
 def get_api_book():
     return {"code": 0, "message": "ok"}  # pragma: no cover
 

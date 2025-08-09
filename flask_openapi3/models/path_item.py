@@ -18,6 +18,7 @@ class PathItem(BaseModel):
     """
     https://spec.openapis.org/oas/v3.1.0#path-item-object
     """
+
     ref: Optional[str] = Field(default=None, alias="$ref")
     summary: Optional[str] = None
     description: Optional[str] = None
@@ -32,7 +33,4 @@ class PathItem(BaseModel):
     servers: Optional[list[Server]] = None
     parameters: Optional[list[Union[Parameter, Reference]]] = None
 
-    model_config = {
-        "extra": "allow",
-        "populate_by_name": True
-    }
+    model_config = {"extra": "allow", "populate_by_name": True}

@@ -3,8 +3,7 @@
 # @Time    : 2022/1/8 14:25
 from pydantic import BaseModel
 
-from flask_openapi3 import Info, Tag
-from flask_openapi3 import OpenAPI, Server
+from flask_openapi3 import Info, OpenAPI, Server, Tag
 
 info = Info(title="book API", version="1.0.0")
 servers = [
@@ -31,10 +30,10 @@ def get_book(query: BookQuery):
         "message": "ok",
         "data": [
             {"bid": 1, "age": query.age, "author": query.author},
-            {"bid": 2, "age": query.age, "author": query.author}
-        ]
+            {"bid": 2, "age": query.age, "author": query.author},
+        ],
     }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

@@ -9,21 +9,21 @@ from flask_openapi3 import APIBlueprint, OpenAPI, Tag
 
 app = OpenAPI(__name__)
 
-api = APIBlueprint('book', __name__, url_prefix='/api/book/<name>')
-api_english = APIBlueprint('english', __name__)
-api_chinese = APIBlueprint('chinese', __name__)
+api = APIBlueprint("book", __name__, url_prefix="/api/book/<name>")
+api_english = APIBlueprint("english", __name__)
+api_chinese = APIBlueprint("chinese", __name__)
 
 
 class BookPath(BaseModel):
     name: str
 
 
-@api_english.post('/english')
+@api_english.post("/english")
 def create_english_book(path: BookPath):
     return {"message": "english", "name": path.name}
 
 
-@api_chinese.post('/chinese', tags=[Tag(name="chinese")])
+@api_chinese.post("/chinese", tags=[Tag(name="chinese")])
 def create_chinese_book(path: BookPath):
     return {"message": "chinese", "name": path.name}
 

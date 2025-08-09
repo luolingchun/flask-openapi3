@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:36
-from typing import Optional, Union, Any
+from typing import Any, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -34,6 +34,4 @@ class Components(BaseModel):
     callbacks: Optional[dict[str, Union[Callback, Reference]]] = None
     pathItems: Optional[dict[str, Union[PathItem, Reference]]] = None
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

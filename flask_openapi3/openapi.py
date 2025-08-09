@@ -5,9 +5,9 @@ import os
 import re
 import sys
 from importlib import import_module
-from typing import Optional, Union, Any, Type, Callable
+from typing import Any, Callable, Optional, Type, Union
 
-from flask import Flask, Blueprint, render_template_string
+from flask import Blueprint, Flask, render_template_string
 from pydantic import BaseModel
 
 if sys.version_info >= (3, 10):
@@ -17,53 +17,55 @@ else:  # pragma: no cover
 
 from .blueprint import APIBlueprint
 from .commands import openapi_command
-from .models import APISpec
-from .models import Components
-from .models import ExternalDocumentation
-from .models import Info
-from .models import OPENAPI3_REF_PREFIX
-from .models import Schema
-from .models import Server
-from .models import Tag
-from .models import ValidationErrorModel
+from .models import (
+    OPENAPI3_REF_PREFIX,
+    APISpec,
+    Components,
+    ExternalDocumentation,
+    Info,
+    Schema,
+    Server,
+    Tag,
+    ValidationErrorModel,
+)
 from .scaffold import APIScaffold
 from .templates import openapi_html_string
-from .types import ParametersTuple
-from .types import ResponseDict
-from .types import SecuritySchemesDict
-from .utils import HTTPMethod
-from .utils import HTTP_STATUS
-from .utils import convert_responses_key_to_string
-from .utils import get_model_schema
-from .utils import get_operation
-from .utils import get_operation_id_for_path
-from .utils import get_responses
-from .utils import make_validation_error_response
-from .utils import parse_and_store_tags
-from .utils import parse_method
-from .utils import parse_parameters
+from .types import ParametersTuple, ResponseDict, SecuritySchemesDict
+from .utils import (
+    HTTP_STATUS,
+    HTTPMethod,
+    convert_responses_key_to_string,
+    get_model_schema,
+    get_operation,
+    get_operation_id_for_path,
+    get_responses,
+    make_validation_error_response,
+    parse_and_store_tags,
+    parse_method,
+    parse_parameters,
+)
 from .view import APIView
 
 
 class OpenAPI(APIScaffold, Flask):
     def __init__(
-            self,
-            import_name: str,
-            *,
-            info: Optional[Info] = None,
-            security_schemes: Optional[SecuritySchemesDict] = None,
-            responses: Optional[ResponseDict] = None,
-            servers: Optional[list[Server]] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id_callback: Callable = get_operation_id_for_path,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            validation_error_status: Union[str, int] = 422,
-            validation_error_model: Type[BaseModel] = ValidationErrorModel,
-            validation_error_callback: Callable = make_validation_error_response,
-            doc_ui: bool = True,
-            doc_prefix: str = "/openapi",
-            doc_url: str = "/openapi.json",
-            **kwargs: Any
+        self,
+        import_name: str,
+        *,
+        info: Optional[Info] = None,
+        security_schemes: Optional[SecuritySchemesDict] = None,
+        responses: Optional[ResponseDict] = None,
+        servers: Optional[list[Server]] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id_callback: Callable = get_operation_id_for_path,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        validation_error_status: Union[str, int] = 422,
+        validation_error_model: Type[BaseModel] = ValidationErrorModel,
+        validation_error_callback: Callable = make_validation_error_response,
+        doc_ui: bool = True,
+        doc_prefix: str = "/openapi",
+        doc_url: str = "/openapi.json",
+        **kwargs: Any,
     ) -> None:
         """
         OpenAPI class that provides REST API functionality along with Swagger UI and Redoc.
@@ -146,11 +148,7 @@ class OpenAPI(APIScaffold, Flask):
 
         # Initialize specification JSON
         self.spec_json: dict = {}
-        self.spec = APISpec(
-            openapi=self.openapi_version,
-            info=self.info,
-            paths=self.paths
-        )
+        self.spec = APISpec(openapi=self.openapi_version, info=self.info, paths=self.paths)
 
     def _init_doc(self) -> None:
         """
@@ -166,15 +164,11 @@ class OpenAPI(APIScaffold, Flask):
             __name__,
             url_prefix=self.doc_prefix,
             template_folder=template_folder,
-            static_folder=static_folder
+            static_folder=static_folder,
         )
 
         # Add the API documentation URL rule
-        blueprint.add_url_rule(
-            rule=self.doc_url,
-            endpoint="doc_url",
-            view_func=lambda: self.api_doc
-        )
+        blueprint.add_url_rule(rule=self.doc_url, endpoint="doc_url", view_func=lambda: self.api_doc)
 
         ui_templates = []
         # Iterate over all entry points in the "flask_openapi3.plugins" group
@@ -192,6 +186,7 @@ class OpenAPI(APIScaffold, Flask):
                 ui_templates.append({"name": plugin_name, "display_name": plugin_display_name})
             except (ModuleNotFoundError, AttributeError):  # pragma: no cover
                 import traceback
+
                 print(f"Warning: plugin '{entry_point.value}' registration failed.")
                 traceback.print_exc()
 
@@ -200,9 +195,8 @@ class OpenAPI(APIScaffold, Flask):
             rule="/",
             endpoint="openapi",
             view_func=lambda: render_template_string(
-                self.config.get("OPENAPI_HTML_STRING") or openapi_html_string,
-                ui_templates=ui_templates
-            )
+                self.config.get("OPENAPI_HTML_STRING") or openapi_html_string, ui_templates=ui_templates
+            ),
         )
 
         # Register the blueprint with the Flask application
@@ -274,10 +268,10 @@ class OpenAPI(APIScaffold, Flask):
                         "application/json": {
                             "schema": {
                                 "type": "array",
-                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{self.validation_error_model.__name__}"}
+                                "items": {"$ref": f"{OPENAPI3_REF_PREFIX}/{self.validation_error_model.__name__}"},
                             }
                         }
-                    }
+                    },
                 }
 
     def register_api(self, api: APIBlueprint, **options: Any) -> None:
@@ -319,10 +313,7 @@ class OpenAPI(APIScaffold, Flask):
         self.register_blueprint(api, **options)
 
     def register_api_view(
-            self,
-            api_view: APIView,
-            url_prefix: Optional[str] = None,
-            view_kwargs: Optional[dict[Any, Any]] = None
+        self, api_view: APIView, url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None
     ) -> None:
         """
         Register APIView
@@ -360,32 +351,32 @@ class OpenAPI(APIScaffold, Flask):
         api_view.register(self, url_prefix=url_prefix, view_kwargs=view_kwargs)
 
     def _add_url_rule(
-            self,
-            rule,
-            endpoint=None,
-            view_func=None,
-            provide_automatic_options=None,
-            **options,
+        self,
+        rule,
+        endpoint=None,
+        view_func=None,
+        provide_automatic_options=None,
+        **options,
     ) -> None:
         self.add_url_rule(rule, endpoint, view_func, provide_automatic_options, **options)
 
     def _collect_openapi_info(
-            self,
-            rule: str,
-            func: Callable,
-            *,
-            tags: Optional[list[Tag]] = None,
-            summary: Optional[str] = None,
-            description: Optional[str] = None,
-            external_docs: Optional[ExternalDocumentation] = None,
-            operation_id: Optional[str] = None,
-            responses: Optional[ResponseDict] = None,
-            deprecated: Optional[bool] = None,
-            security: Optional[list[dict[str, list[Any]]]] = None,
-            servers: Optional[list[Server]] = None,
-            openapi_extensions: Optional[dict[str, Any]] = None,
-            doc_ui: bool = True,
-            method: str = HTTPMethod.GET
+        self,
+        rule: str,
+        func: Callable,
+        *,
+        tags: Optional[list[Tag]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        external_docs: Optional[ExternalDocumentation] = None,
+        operation_id: Optional[str] = None,
+        responses: Optional[ResponseDict] = None,
+        deprecated: Optional[bool] = None,
+        security: Optional[list[dict[str, list[Any]]]] = None,
+        servers: Optional[list[Server]] = None,
+        openapi_extensions: Optional[dict[str, Any]] = None,
+        doc_ui: bool = True,
+        method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
         """
         Collects OpenAPI specification information for Flask routes and view functions.
@@ -415,10 +406,7 @@ class OpenAPI(APIScaffold, Flask):
 
             # Create operation
             operation = get_operation(
-                func,
-                summary=summary,
-                description=description,
-                openapi_extensions=openapi_extensions
+                func, summary=summary, description=description, openapi_extensions=openapi_extensions
             )
             # Set external docs
             if external_docs:

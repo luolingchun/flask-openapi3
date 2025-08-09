@@ -4,7 +4,7 @@
 from typing import Optional
 
 import pytest
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from flask_openapi3 import OpenAPI
 
@@ -64,10 +64,7 @@ def get_book(header: BookHeader):
 
 
 def test_form(client):
-    data = {
-        "string": "a",
-        "string_list": ["a", "b", "c"]
-    }
+    data = {"string": "a", "string_list": ["a", "b", "c"]}
     r = client.post("/form", data=data, content_type="multipart/form-data")
     assert r.status_code == 422
 

@@ -6,15 +6,15 @@ from pydantic import BaseModel, Field
 
 from flask_openapi3 import Info, OpenAPI
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 
 app = OpenAPI(__name__, info=info)
 app.config["TESTING"] = True
 
 
 class BookQuery(BaseModel):
-    page: int = Field(1, description='current page')
-    page_size: int = Field(15, description='size of per page')
+    page: int = Field(1, description="current page")
+    page_size: int = Field(15, description="size of per page")
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def client():
     return client
 
 
-@app.get('/book')
+@app.get("/book")
 def get_book(query: BookQuery):
     print(query)
     return {"code": 0, "message": "ok"}

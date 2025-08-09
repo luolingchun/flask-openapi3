@@ -14,6 +14,4 @@ class Tag(BaseModel):
     description: Optional[str] = None
     externalDocs: Optional[ExternalDocumentation] = None
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

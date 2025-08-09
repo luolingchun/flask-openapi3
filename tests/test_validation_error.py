@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/7/21 10:32
 import pytest
-from flask import make_response, current_app
+from flask import current_app, make_response
 from pydantic import BaseModel, Field, ValidationError
 
 from flask_openapi3 import OpenAPI
@@ -18,23 +18,25 @@ class GenericTracebackError(BaseModel):
 class ValidationErrorModel(BaseModel):
     code: str
     message: str
-    more_info: list[GenericTracebackError] = Field(..., json_schema_extra={"example": [GenericTracebackError(
-        location="GenericError.py",
-        line=1,
-        method="GenericError",
-        message="400:Bad Request")]})
+    more_info: list[GenericTracebackError] = Field(
+        ...,
+        json_schema_extra={
+            "example": [
+                GenericTracebackError(
+                    location="GenericError.py", line=1, method="GenericError", message="400:Bad Request"
+                )
+            ]
+        },
+    )
 
 
 def validation_error_callback(e: ValidationError):
     validation_error_object = ValidationErrorModel(
         code="400",
         message=e.json(),
-        more_info=[GenericTracebackError(
-            location="GenericError.py",
-            line=1,
-            method="GenericError",
-            message="400:Bad Request"
-        )]
+        more_info=[
+            GenericTracebackError(location="GenericError.py", line=1, method="GenericError", message="400:Bad Request")
+        ],
     )
     response = make_response(validation_error_object.model_dump_json())
     response.headers["Content-Type"] = "application/json"
@@ -46,7 +48,7 @@ app = OpenAPI(
     __name__,
     validation_error_status=400,
     validation_error_model=ValidationErrorModel,
-    validation_error_callback=validation_error_callback
+    validation_error_callback=validation_error_callback,
 )
 app.config["TESTING"] = True
 

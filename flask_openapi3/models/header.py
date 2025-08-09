@@ -15,6 +15,4 @@ class Header(Parameter):
     name: Optional[str] = None  # type:ignore
     param_in: Optional[ParameterInType] = None  # type:ignore
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

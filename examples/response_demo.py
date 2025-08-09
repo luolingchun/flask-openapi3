@@ -8,8 +8,7 @@ from http import HTTPStatus
 from flask import make_response
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import Info
-from flask_openapi3 import OpenAPI, APIBlueprint
+from flask_openapi3 import APIBlueprint, Info, OpenAPI
 
 app = OpenAPI(__name__, info=Info(title="Hello API", version="1.0.0"))
 
@@ -27,25 +26,17 @@ class Message(BaseModel):
         openapi_extra={
             # "example": {"message": "aaa"},
             "examples": {
-                "example1": {
-                    "summary": "example1 summary",
-                    "value": {
-                        "message": "bbb"
-                    }
-                },
-                "example2": {
-                    "summary": "example2 summary",
-                    "value": {
-                        "message": "ccc"
-                    }
-                }
+                "example1": {"summary": "example1 summary", "value": {"message": "bbb"}},
+                "example2": {"summary": "example2 summary", "value": {"message": "ccc"}},
             }
         }
     )
 
 
-@bp.get("/hello/<string:name>",
-        responses={HTTPStatus.OK: Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}})
+@bp.get(
+    "/hello/<string:name>",
+    responses={HTTPStatus.OK: Message, "201": {"content": {"text/csv": {"schema": {"type": "string"}}}}},
+)
 def hello(path: HelloPath):
     message = {"message": f"""Hello {path.name}!"""}
 

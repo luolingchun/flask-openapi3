@@ -22,6 +22,4 @@ class Info(BaseModel):
     license: Optional[License] = None
     version: str
 
-    model_config = {
-        "extra": "allow"
-    }
+    model_config = {"extra": "allow"}

@@ -69,8 +69,19 @@ include = [
 [tool.ruff]
 line-length = 120
 
+[tool.ruff.lint]
+select = [
+    "I", # Import related rules
+    "E4", # Import order
+    "E7", # Statement issues
+    "E9", # Runtime errors
+    "F", # Pyflakes rules
+    "Q"   # flake8-quotes
+]
+
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
+"flask_openapi3/__init__.py" = ["F401"]
+"flask_openapi3/models/__init__.py" = ["F401"]
 
 [tool.mypy]
 files = "src"

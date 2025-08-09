@@ -37,5 +37,6 @@ def get_book():
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     import pprint
+
     pprint.pprint(resp.json)
     assert resp.json["components"]["schemas"]["User"]["properties"].get("display_name") is not None

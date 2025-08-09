@@ -7,15 +7,10 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIView
-from flask_openapi3 import OpenAPI, Tag, Info
+from flask_openapi3 import APIView, Info, OpenAPI, Tag
 
-info = Info(title='book API', version='1.0.0')
-jwt = {
-    "type": "http",
-    "scheme": "bearer",
-    "bearerFormat": "JWT"
-}
+info = Info(title="book API", version="1.0.0")
+jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
 security_schemes = {"jwt": jwt}
 
 app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
@@ -33,25 +28,19 @@ class BookPath(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description='Age')
+    age: Optional[int] = Field(None, description="Age")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
-    author: str = Field(None, min_length=2, max_length=4, description='Author')
+    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 @api_view.route("/book")
 class BookListAPIView:
     a = 1
 
-    @api_view.doc(
-        summary="get book list",
-        responses={
-            204: None
-        },
-        doc_ui=False
-    )
+    @api_view.doc(summary="get book list", responses={204: None}, doc_ui=False)
     def get(self, query: BookQuery):
         print(self.a)
         return query.model_dump_json()
@@ -110,8 +99,9 @@ def test_openapi(client):
     assert resp.status_code == 200
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["put"]["operationId"] == "update"
-    assert resp.json["paths"]["/api/v1/{name}/book/{id}"]["delete"][
-               "operationId"] == "BookAPIView_delete_book__id__delete"
+    assert (
+        resp.json["paths"]["/api/v1/{name}/book/{id}"]["delete"]["operationId"] == "BookAPIView_delete_book__id__delete"
+    )
 
 
 def test_get_list(client):
@@ -144,8 +134,8 @@ def test_delete(client):
 
 def create_app():
     app = OpenAPI(__name__, info=info, security_schemes=security_schemes)
-    app.register_api_view(api_view, url_prefix='/api/1.0')
-    app.register_api_view(api_view_no_url, url_prefix='/api/1.0')
+    app.register_api_view(api_view, url_prefix="/api/1.0")
+    app.register_api_view(api_view_no_url, url_prefix="/api/1.0")
 
 
 # Invoke twice to ensure that call is idempotent
@@ -154,5 +144,5 @@ create_app()
 
 
 def test_register_api_view_idempotency():
-    assert list(api_view.paths.keys()) == ['/api/1.0/api/v1/{name}/book', '/api/1.0/api/v1/{name}/book/{id}']
-    assert list(api_view_no_url.paths.keys()) == ['/api/1.0/book3']
+    assert list(api_view.paths.keys()) == ["/api/1.0/api/v1/{name}/book", "/api/1.0/api/v1/{name}/book/{id}"]
+    assert list(api_view_no_url.paths.keys()) == ["/api/1.0/book3"]

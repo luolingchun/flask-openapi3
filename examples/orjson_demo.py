@@ -5,8 +5,7 @@
 import orjson
 from flask.json.provider import JSONProvider
 
-from flask_openapi3 import Info
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import Info, OpenAPI
 
 
 class OrJSONProvider(JSONProvider):
@@ -20,14 +19,14 @@ class OrJSONProvider(JSONProvider):
         return orjson.loads(s)
 
 
-info = Info(title='book API', version='1.0.0')
+info = Info(title="book API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 # use orjson
 orjson_provider = OrJSONProvider(app)
 app.json = orjson_provider
 
 
-@app.get('/book')
+@app.get("/book")
 def get_book():
     return {
         "code": 0,
@@ -35,10 +34,10 @@ def get_book():
         "data": [
             {"bid": 1, "age": 18, "author": "tom"},
             {"bid": 2, "age": 19, "author": "alice"},
-            {"bid": 3, "age": 20, "author": "中文测试"}
-        ]
+            {"bid": 3, "age": 20, "author": "中文测试"},
+        ],
     }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
