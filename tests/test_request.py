@@ -3,7 +3,6 @@
 # @Time    : 2022/9/2 15:35
 from enum import Enum
 from functools import wraps
-from typing import Optional
 
 import pytest
 from pydantic import BaseModel, Field
@@ -35,7 +34,7 @@ class BookForm(BaseModel):
 
 class BookQuery(BaseModel):
     age: list[int]
-    book_type: Optional[TypeEnum] = None
+    book_type: TypeEnum | None = None
 
 
 class BookBody(BaseModel):
@@ -43,8 +42,8 @@ class BookBody(BaseModel):
 
 
 class BookCookie(BaseModel):
-    token: Optional[str] = None
-    token_type: Optional[TypeEnum] = None
+    token: str | None = None
+    token_type: TypeEnum | None = None
 
 
 class BookHeader(BaseModel):
@@ -52,7 +51,7 @@ class BookHeader(BaseModel):
     # required
     hello2: str = Field(..., max_length=12, description="sds")
     api_key: str = Field(..., description="API Key")
-    api_type: Optional[TypeEnum] = None
+    api_type: TypeEnum | None = None
     x_hello: str = Field(..., max_length=12, description="Header with alias to support dash", alias="x-hello")
 
 
