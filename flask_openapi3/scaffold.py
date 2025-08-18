@@ -5,8 +5,9 @@ import inspect
 from functools import wraps
 from typing import Any, Callable
 
-from flask.wrappers import Response as FlaskResponse
 from flask import current_app
+from flask.wrappers import Response as FlaskResponse
+
 from .models import ExternalDocumentation, Server, Tag
 from .request import _validate_request
 from .types import ParametersTuple, ResponseDict
@@ -49,18 +50,18 @@ class APIScaffold:
 
     @staticmethod
     def create_view_func(
-            func,
-            header,
-            cookie,
-            path,
-            query,
-            form,
-            body,
-            raw,
-            view_class=None,
-            view_kwargs=None,
-            responses: ResponseDict | None = None,
-            validate_response: bool | None = None,
+        func,
+        header,
+        cookie,
+        path,
+        query,
+        form,
+        body,
+        raw,
+        view_class=None,
+        view_kwargs=None,
+        responses: ResponseDict | None = None,
+        validate_response: bool | None = None,
     ):
         is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
@@ -222,7 +223,7 @@ class APIScaffold:
                 body,
                 raw,
                 responses=responses,
-                validate_response=_validate_response
+                validate_response=_validate_response,
             )
 
             options.update({"methods": [HTTPMethod.GET]})
@@ -299,7 +300,7 @@ class APIScaffold:
                 body,
                 raw,
                 responses=responses,
-                validate_response=_validate_response
+                validate_response=_validate_response,
             )
 
             options.update({"methods": [HTTPMethod.POST]})
@@ -376,7 +377,7 @@ class APIScaffold:
                 body,
                 raw,
                 responses=responses,
-                validate_response=_validate_response
+                validate_response=_validate_response,
             )
 
             options.update({"methods": [HTTPMethod.PUT]})
@@ -453,7 +454,7 @@ class APIScaffold:
                 body,
                 raw,
                 responses=responses,
-                validate_response=_validate_response
+                validate_response=_validate_response,
             )
 
             options.update({"methods": [HTTPMethod.DELETE]})
@@ -530,7 +531,7 @@ class APIScaffold:
                 body,
                 raw,
                 responses=responses,
-                validate_response=_validate_response
+                validate_response=_validate_response,
             )
 
             options.update({"methods": [HTTPMethod.PATCH]})

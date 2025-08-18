@@ -572,7 +572,7 @@ def make_validation_error_response(e: ValidationError) -> FlaskResponse:
     return response
 
 
-def run_validate_response(response: Any, responses: Optional[ResponseDict] = None) -> Any:
+def run_validate_response(response: Any, responses: ResponseDict | None = None) -> Any:
     """Validate response"""
     if responses is None:
         return response
@@ -596,8 +596,9 @@ def run_validate_response(response: Any, responses: Optional[ResponseDict] = Non
     if resp_model is None:
         return response
 
-    assert inspect.isclass(resp_model) and \
-           issubclass(resp_model, BaseModel), f"{resp_model} is invalid `pydantic.BaseModel`"
+    assert inspect.isclass(resp_model) and issubclass(resp_model, BaseModel), (
+        f"{resp_model} is invalid `pydantic.BaseModel`"
+    )
 
     if isinstance(_resp, str):
         resp_model.model_validate_json(_resp)

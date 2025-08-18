@@ -3,12 +3,13 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from flask_openapi3 import OpenAPI, APIView
+from flask_openapi3 import APIView, OpenAPI
 from flask_openapi3.blueprint import APIBlueprint
 
 
 class BaseRequest(BaseModel):
     """Base description"""
+
     test_int: int
     test_str: str
 
