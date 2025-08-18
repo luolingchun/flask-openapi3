@@ -6,8 +6,7 @@
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIView, Server, ExternalDocumentation
-from flask_openapi3 import OpenAPI, Tag, Info
+from flask_openapi3 import APIView, ExternalDocumentation, Info, OpenAPI, Server, Tag
 
 info = Info(title="book API", version="1.0.0")
 jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
@@ -65,14 +64,11 @@ class BookAPIView:
 
     @api_view.doc(
         summary="delete book",
-        servers=[Server(
-            url="http://127.0.0.1:5000",
-            variables=None
-        )],
+        servers=[Server(url="http://127.0.0.1:5000", variables=None)],
         external_docs=ExternalDocumentation(
-            url="https://www.openapis.org/",
-            description="Something great got better, get excited!"),
-        deprecated=True
+            url="https://www.openapis.org/", description="Something great got better, get excited!"
+        ),
+        deprecated=True,
     )
     def delete(self, path: BookPath):
         print(path)

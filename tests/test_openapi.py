@@ -24,19 +24,10 @@ def test_responses_are_replicated_in_open_api(request):
             "201": {
                 "model": BaseResponse,
                 "description": "Custom description",
-                "headers": {
-                    "location": {
-                        "description": "URL of the new resource",
-                        "schema": {"type": "string"}
-                    }
-                },
-                "links": {
-                    "dummy": {
-                        "description": "dummy link"
-                    }
-                }
+                "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
+                "links": {"dummy": {"description": "dummy link"}},
             }
-        }
+        },
     )
     def endpoint_test():
         return b"", 201  # pragma: no cover
@@ -46,23 +37,12 @@ def test_responses_are_replicated_in_open_api(request):
         assert resp.status_code == 200
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
-            "headers": {
-                "location": {
-                    "description": "URL of the new resource",
-                    "schema": {"type": "string"}
-                }
-            },
+            "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
             "content": {
                 # This content is coming from responses
-                "application/json": {
-                    "schema": {"$ref": "#/components/schemas/BaseResponse"}
-                }
+                "application/json": {"schema": {"$ref": "#/components/schemas/BaseResponse"}}
             },
-            "links": {
-                "dummy": {
-                    "description": "dummy link"
-                }
-            }
+            "links": {"dummy": {"description": "dummy link"}},
         }
 
 
@@ -487,17 +467,20 @@ def test_prefix_items(request):
     schema = test_app.api_doc["paths"]["/test"]["post"]["requestBody"]["content"]["application/json"]["schema"]
     assert schema == {"$ref": "#/components/schemas/TupleModel"}
     components = test_app.api_doc["components"]["schemas"]
-    assert components["TupleModel"] == {'properties': {'my_tuple': {'maxItems': 2,
-                                                                    'minItems': 2,
-                                                                    'prefixItems': [{'enum': ['a', 'b'],
-                                                                                     'type': 'string'},
-                                                                                    {'enum': ['c', 'd'],
-                                                                                     'type': 'string'}],
-                                                                    'title': 'My Tuple',
-                                                                    'type': 'array'}},
-                                        'required': ['my_tuple'],
-                                        'title': 'TupleModel',
-                                        'type': 'object'}
+    assert components["TupleModel"] == {
+        "properties": {
+            "my_tuple": {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [{"enum": ["a", "b"], "type": "string"}, {"enum": ["c", "d"], "type": "string"}],
+                "title": "My Tuple",
+                "type": "array",
+            }
+        },
+        "required": ["my_tuple"],
+        "title": "TupleModel",
+        "type": "object",
+    }
 
 
 def test_schema_bigint(request):

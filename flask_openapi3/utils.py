@@ -7,16 +7,19 @@ import re
 import sys
 from enum import Enum
 from http import HTTPStatus
-from typing import Any, Callable, DefaultDict, Optional, Type, get_type_hints, Union
 from types import UnionType
-from typing import Any, Callable, DefaultDict, Type, get_type_hints, get_origin, get_args
+from typing import (
+    Any,
+    Callable,
+    DefaultDict,
+    Type,
+    Union,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 from flask import current_app, make_response
-from typing import Dict, Type, Callable, List, Tuple, Optional, Any, DefaultDict, Union
-from typing import get_args, get_origin, get_type_hints
-
-
-from flask import make_response, current_app
 from flask.wrappers import Response as FlaskResponse
 from pydantic import BaseModel, ValidationError
 from pydantic.json_schema import JsonSchemaMode
@@ -364,11 +367,7 @@ def parse_body(
     return content, components_schemas
 
 
-def get_responses(
-        responses: ResponseStrKeyDict,
-        components_schemas: dict,
-        operation: Operation
-) -> None:
+def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, operation: Operation) -> None:
     _responses: dict = {}
     _schemas: dict = {}
 
@@ -383,10 +382,7 @@ def get_responses(
             if _responses.get(_key):
                 _responses[_key].content[content_type] = media_type
             else:
-                _responses[_key] = Response(
-                    description=HTTP_STATUS.get(_key, ""),
-                    content={content_type: media_type}
-                )
+                _responses[_key] = Response(description=HTTP_STATUS.get(_key, ""), content={content_type: media_type})
             return
 
         schema = get_model_schema(_model, mode="serialization")
@@ -407,10 +403,7 @@ def get_responses(
         if _responses.get(_key):
             _responses[_key].content[content_type] = media_type
         else:
-            _responses[_key] = Response(
-                description=HTTP_STATUS.get(_key, ""),
-                content={content_type: media_type}
-            )
+            _responses[_key] = Response(description=HTTP_STATUS.get(_key, ""), content={content_type: media_type})
 
         _schemas[name] = Schema(**schema)
         definitions = schema.get("$defs")
@@ -455,10 +448,7 @@ def get_responses(
 
 
 def parse_and_store_tags(
-        new_tags: list[Tag],
-        old_tags: list[Tag],
-        old_tag_names: list[str],
-        operation: Operation
+    new_tags: list[Tag], old_tags: list[Tag], old_tag_names: list[str], operation: Operation
 ) -> None:
     """
     Parses new tags, stores them in an old_tags list if they are not already present,

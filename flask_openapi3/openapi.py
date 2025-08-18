@@ -446,7 +446,7 @@ class OpenAPI(APIScaffold, Flask):
                 components_schemas=self.components_schemas,
                 operation=operation,
                 request_body_description=request_body_description,
-                request_body_required=request_body_required
+                request_body_required=request_body_required,
             )
         else:
             return parse_parameters(func, doc_ui=False)

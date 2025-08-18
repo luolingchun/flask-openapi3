@@ -176,10 +176,11 @@ class APIView:
 
             # Parse parameters
             parse_parameters(
-                func, components_schemas=self.components_schemas,
+                func,
+                components_schemas=self.components_schemas,
                 operation=operation,
                 request_body_description=request_body_description,
-                request_body_required=request_body_required
+                request_body_required=request_body_required,
             )
 
             # Parse response

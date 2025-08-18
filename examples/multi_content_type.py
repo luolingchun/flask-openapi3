@@ -13,41 +13,25 @@ class DogBody(BaseModel):
     a: int = None
     b: str = None
 
-    model_config = {
-        "openapi_extra": {
-            "content_type": "application/vnd.dog+json"
-        }
-    }
+    model_config = {"openapi_extra": {"content_type": "application/vnd.dog+json"}}
 
 
 class CatBody(BaseModel):
     c: int = None
     d: str = None
 
-    model_config = {
-        "openapi_extra": {
-            "content_type": "application/vnd.cat+json"
-        }
-    }
+    model_config = {"openapi_extra": {"content_type": "application/vnd.cat+json"}}
 
 
 class BsonModel(BaseModel):
     e: int = None
     f: str = None
 
-    model_config = {
-        "openapi_extra": {
-            "content_type": "application/bson"
-        }
-    }
+    model_config = {"openapi_extra": {"content_type": "application/bson"}}
 
 
 class ContentTypeModel(BaseModel):
-    model_config = {
-        "openapi_extra": {
-            "content_type": "text/csv"
-        }
-    }
+    model_config = {"openapi_extra": {"content_type": "text/csv"}}
 
 
 @app.post("/a", responses={200: DogBody | CatBody | ContentTypeModel | BsonModel})
@@ -77,5 +61,5 @@ def index_a(body: DogBody | CatBody | ContentTypeModel | BsonModel):
     return {"hello": "world"}
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

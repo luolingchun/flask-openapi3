@@ -8,11 +8,9 @@ from http import HTTPStatus
 
 import pytest
 from flask import Response
-from pydantic import BaseModel, RootModel, Field
+from pydantic import BaseModel, Field, RootModel
 
-from flask_openapi3 import ExternalDocumentation, Server
-from flask_openapi3 import Info, Tag
-from flask_openapi3 import OpenAPI
+from flask_openapi3 import ExternalDocumentation, Info, OpenAPI, Server, Tag
 
 info = Info(title="book API", version="1.0.0")
 
@@ -99,12 +97,9 @@ def client():
     tags=[book_tag],
     operation_id="get_book_id",
     external_docs=ExternalDocumentation(
-        url="https://www.openapis.org/",
-        description="Something great got better, get excited!"),
-    servers=[Server(
-        url="http://127.0.0.1:5000",
-        variables=None
-    )],
+        url="https://www.openapis.org/", description="Something great got better, get excited!"
+    ),
+    servers=[Server(url="http://127.0.0.1:5000", variables=None)],
     responses={"200": BookResponse},
     security=security,
     deprecated=True,
@@ -118,7 +113,7 @@ def get_book(path: BookPath):
         return NotFoundResponse().model_dump(), 404
 
 
-@app.get('/book', tags=[book_tag], responses={"200": BookListResponseV1})
+@app.get("/book", tags=[book_tag], responses={"200": BookListResponseV1})
 def get_books(query: BookQuery):
     """get books
     to get all books

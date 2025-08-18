@@ -221,25 +221,24 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    request_body_description=request_body_description,
-                    request_body_required=request_body_required,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.POST,
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+                doc_ui=doc_ui,
+                method=HTTPMethod.POST,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.POST]})
@@ -290,25 +289,24 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    request_body_description=request_body_description,
-                    request_body_required=request_body_required,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PUT,
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+                doc_ui=doc_ui,
+                method=HTTPMethod.PUT,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PUT]})
@@ -359,25 +357,24 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    request_body_description=request_body_description,
-                    request_body_required=request_body_required,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.DELETE,
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+                doc_ui=doc_ui,
+                method=HTTPMethod.DELETE,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.DELETE]})
@@ -428,25 +425,24 @@ class APIScaffold:
         """
 
         def decorator(func) -> Callable:
-            header, cookie, path, query, form, body, raw = \
-                self._collect_openapi_info(
-                    rule,
-                    func,
-                    tags=tags,
-                    summary=summary,
-                    description=description,
-                    external_docs=external_docs,
-                    operation_id=operation_id,
-                    responses=responses,
-                    deprecated=deprecated,
-                    security=security,
-                    servers=servers,
-                    openapi_extensions=openapi_extensions,
-                    request_body_description=request_body_description,
-                    request_body_required=request_body_required,
-                    doc_ui=doc_ui,
-                    method=HTTPMethod.PATCH,
-                )
+            header, cookie, path, query, form, body, raw = self._collect_openapi_info(
+                rule,
+                func,
+                tags=tags,
+                summary=summary,
+                description=description,
+                external_docs=external_docs,
+                operation_id=operation_id,
+                responses=responses,
+                deprecated=deprecated,
+                security=security,
+                servers=servers,
+                openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+                doc_ui=doc_ui,
+                method=HTTPMethod.PATCH,
+            )
 
             view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
             options.update({"methods": [HTTPMethod.PATCH]})
