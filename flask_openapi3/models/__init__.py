@@ -9,8 +9,6 @@ The type orders are according to the contents of the specification:
 https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#table-of-contents
 """
 
-from typing import Optional, Union
-
 from flask import Request
 from pydantic import BaseModel
 
@@ -57,13 +55,13 @@ class APISpec(BaseModel):
 
     openapi: str
     info: Info
-    servers: Optional[list[Server]] = None
+    servers: list[Server] | None = None
     paths: Paths
-    components: Optional[Components] = None
-    security: Optional[list[SecurityRequirement]] = None
-    tags: Optional[list[Tag]] = None
-    externalDocs: Optional[ExternalDocumentation] = None
-    webhooks: Optional[dict[str, Union[PathItem, Reference]]] = None
+    components: Components | None = None
+    security: list[SecurityRequirement] | None = None
+    tags: list[Tag] | None = None
+    externalDocs: ExternalDocumentation | None = None
+    webhooks: dict[str, PathItem | Reference] | None = None
 
     model_config = {"extra": "allow"}
 
@@ -73,15 +71,15 @@ class OAuthConfig(BaseModel):
     https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/oauth2.md#oauth-20-configuration
     """
 
-    clientId: Optional[str] = None
-    clientSecret: Optional[str] = None
-    realm: Optional[str] = None
-    appName: Optional[str] = None
-    scopeSeparator: Optional[str] = None
-    scopes: Optional[str] = None
-    additionalQueryStringParams: Optional[dict[str, str]] = None
-    useBasicAuthenticationWithAccessCodeGrant: Optional[bool] = False
-    usePkceWithAuthorizationCodeGrant: Optional[bool] = False
+    clientId: str | None = None
+    clientSecret: str | None = None
+    realm: str | None = None
+    appName: str | None = None
+    scopeSeparator: str | None = None
+    scopes: str | None = None
+    additionalQueryStringParams: dict[str, str] | None = None
+    useBasicAuthenticationWithAccessCodeGrant: bool | None = False
+    usePkceWithAuthorizationCodeGrant: bool | None = False
 
 
 class RawModel(Request):
