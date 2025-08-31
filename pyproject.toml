@@ -47,6 +47,19 @@ rapipdf = ["flask-openapi3-rapipdf"]
 scalar = ["flask-openapi3-scalar"]
 elements = ["flask-openapi3-elements"]
 
+[dependency-groups]
+build = ["hatchling", "build", "twine"]
+doc = [
+    "mkdocs-static-i18n>=1.0",
+    "mkdocstrings[python]",
+    "mkdocs-material",
+    "mkdocs-glightbox",
+    "pyyaml",
+    "mike",
+]
+mypy = ["mypy"]
+ruff = ["ruff"]
+test = ["pytest", "asgiref", "pyyaml"]
 
 [build-system]
 requires = ["hatchling"]
@@ -59,7 +72,6 @@ path = "flask_openapi3/__version__.py"
 include = [
     "/flask_openapi3",
     "/examples",
-    "/requirements",
     "/tests",
     "/CHANGELOG.md",
     "/CONTRIBUTING.md",
