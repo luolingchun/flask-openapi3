@@ -93,6 +93,9 @@ def _validate_query(query: Type[BaseModel], func_kwargs: dict):
         model_field_schema = model_properties.get(model_field_value.alias or model_field_key)
         if model_field_schema.get("type") == "array":
             key, value = _get_list_value(query, request_args, model_field_key, model_field_value)
+        # To handle Optional[list]
+        elif any(m.get("type") == "array" for m in model_field_schema.get("anyOf", [])):
+            key, value = _get_list_value(query, request_args, model_field_key, model_field_value)
         else:
             key, value = _get_value(query, request_args, model_field_key, model_field_value)
         if value is not None and value != []:
