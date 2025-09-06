@@ -37,6 +37,7 @@ class BookQuery(BaseModel):
     age: list[int]
     book_type: Optional[TypeEnum] = None
 
+
 class BookQueryFilter(BaseModel):
     age: list[int]
     fields: Optional[list[str]] = None
@@ -121,11 +122,13 @@ def test_query(client):
     print(r.json)
     assert r.status_code == 200
 
+
 def test_query_list(client):
     r = client.get("/filter-query?age=1&fields=name&fields=age")
     print(r.json)
     assert r.status_code == 200
     assert r.json["fields"] == ["name", "age"]
+
 
 def test_query_list_no_fields(client):
     r = client.get("/filter-query?age=1")
@@ -133,11 +136,13 @@ def test_query_list_no_fields(client):
     assert r.status_code == 200
     assert r.json["fields"] is None
 
+
 def test_query_list_single_field(client):
     r = client.get("/filter-query?age=1&fields=age")
     print(r.json)
     assert r.status_code == 200
     assert r.json["fields"] == ["age"]
+
 
 def test_form(client):
     from io import BytesIO
