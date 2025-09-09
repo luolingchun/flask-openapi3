@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:54
-from typing import Optional, Union
 
 from pydantic import BaseModel
 
@@ -17,8 +16,8 @@ class Response(BaseModel):
     """
 
     description: str
-    headers: Optional[dict[str, Union[Header, Reference]]] = None
-    content: Optional[dict[str, MediaType]] = None
-    links: Optional[dict[str, Union[Link, Reference]]] = None
+    headers: dict[str, Header | Reference] | None = None
+    content: dict[str, MediaType] | None = None
+    links: dict[str, Link | Reference] | None = None
 
     model_config = {"extra": "allow"}

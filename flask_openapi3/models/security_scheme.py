@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:56
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -15,12 +14,12 @@ class SecurityScheme(BaseModel):
     """
 
     type: str
-    description: Optional[str] = None
-    name: Optional[str] = None
-    security_scheme_in: Optional[SecuritySchemeInType] = Field(default=None, alias="in")
-    scheme: Optional[str] = None
-    bearerFormat: Optional[str] = None
-    flows: Optional[OAuthFlows] = None
-    openIdConnectUrl: Optional[str] = None
+    description: str | None = None
+    name: str | None = None
+    security_scheme_in: SecuritySchemeInType | None = Field(default=None, alias="in")
+    scheme: str | None = None
+    bearerFormat: str | None = None
+    flows: OAuthFlows | None = None
+    openIdConnectUrl: str | None = None
 
     model_config = {"extra": "allow", "populate_by_name": True}
