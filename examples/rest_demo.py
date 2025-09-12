@@ -2,7 +2,6 @@
 # @Author  : llc
 # @Time    : 2021/4/28 11:24
 from http import HTTPStatus
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -45,25 +44,25 @@ class BookPath(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description="Age")
+    age: int | None = Field(None, description="Age")
     s_list: list[str] = Field(None, alias="s_list[]", description="some array")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    age: int | None = Field(..., ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 class BookBodyWithID(BaseModel):
     bid: int = Field(..., description="book id")
-    age: Optional[int] = Field(None, ge=2, le=4, description="Age")
+    age: int | None = Field(None, ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
 class BookResponse(BaseModel):
     code: int = Field(0, description="Status Code")
     message: str = Field("ok", description="Exception Information")
-    data: Optional[BookBodyWithID]
+    data: BookBodyWithID | None
 
 
 @app.get(
