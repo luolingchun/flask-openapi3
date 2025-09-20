@@ -97,6 +97,15 @@ def delete_book(path: BookPath):
     return {"code": 0, "message": "ok"}
 
 
+@api.get("/book/<int:bid>")
+def get_book(path: BookPath):
+    """Get Book
+    Here is a book
+    Here's another line in the description
+    """
+    return {"title": "test", "Author": "author"}
+
+
 # register api
 app.register_api(api)
 
@@ -107,6 +116,8 @@ def test_openapi(client):
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/api/book/{bid}"]["put"]["operationId"] == "update"
     assert resp.json["paths"]["/api/book/{bid}"]["delete"]["operationId"] == "delete_book"
+    expected_description = "Here is a book<br/>Here's another line in the description"
+    assert resp.json["paths"]["/api/book/{bid}"]["get"]["description"] == expected_description
 
 
 def test_post(client):
