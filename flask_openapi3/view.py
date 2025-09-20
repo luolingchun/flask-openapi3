@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
 import typing
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from .models import ExternalDocumentation, Server, Tag
 from .types import ResponseDict
@@ -25,12 +25,13 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 class APIView:
     def __init__(
         self,
-        url_prefix: Optional[str] = None,
-        view_tags: Optional[list[Tag]] = None,
-        view_security: Optional[list[dict[str, list[str]]]] = None,
-        view_responses: Optional[ResponseDict] = None,
+        url_prefix: str | None = None,
+        view_tags: list[Tag] | None = None,
+        view_security: list[dict[str, list[str]]] | None = None,
+        view_responses: ResponseDict | None = None,
         doc_ui: bool = True,
         operation_id_callback: Callable = get_operation_id_for_path,
+        validate_response: bool | None = None,
     ):
         """
         Create a class-based view
@@ -44,6 +45,7 @@ class APIView:
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
                                    Defaults to `get_operation_id_for_path` from utils
+            validate_response: Verify the response body.
         """
         self.url_prefix = url_prefix
         self.view_tags = view_tags or []
@@ -60,6 +62,8 @@ class APIView:
         self.components_schemas: dict = dict()
         self.tags: list[Tag] = []
         self.tag_names: list[str] = []
+
+        self.validate_response = validate_response
 
     def route(self, rule: str):
         """Decorator for view class"""
@@ -100,16 +104,17 @@ class APIView:
     def doc(
         self,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
     ) -> Callable:
         """
@@ -128,6 +133,7 @@ class APIView:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         new_responses = convert_responses_key_to_string(responses or {})
@@ -135,6 +141,9 @@ class APIView:
         tags = tags + self.view_tags if tags else self.view_tags
 
         def decorator(func):
+            func.validate_response = validate_response
+            func.responses = responses
+
             if self.doc_ui is False or doc_ui is False:
                 return func
 
@@ -182,7 +191,7 @@ class APIView:
         return decorator
 
     def register(
-        self, app: "OpenAPI", url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None
+        self, app: "OpenAPI", url_prefix: str | None = None, view_kwargs: dict[Any, Any] | None = None
     ) -> None:
         """
         Register the API views with the given OpenAPI app.
@@ -195,9 +204,24 @@ class APIView:
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
+                if func.validate_response is not None:
+                    _validate_response = func.validate_response
+                else:
+                    _validate_response = self.validate_response
                 header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
                 view_func = app.create_view_func(
-                    func, header, cookie, path, query, form, body, raw, view_class=cls, view_kwargs=view_kwargs
+                    func,
+                    header,
+                    cookie,
+                    path,
+                    query,
+                    form,
+                    body,
+                    raw,
+                    view_class=cls,
+                    view_kwargs=view_kwargs,
+                    responses=func.responses,
+                    validate_response=_validate_response,
                 )
 
                 if url_prefix and self.url_prefix and url_prefix != self.url_prefix:

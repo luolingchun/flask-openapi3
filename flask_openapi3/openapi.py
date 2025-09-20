@@ -3,17 +3,12 @@
 # @Time    : 2021/4/30 14:25
 import os
 import re
-import sys
 from importlib import import_module
-from typing import Any, Callable, Optional, Type, Union
+from importlib.metadata import entry_points
+from typing import Any, Callable, Type
 
 from flask import Blueprint, Flask, render_template_string
 from pydantic import BaseModel
-
-if sys.version_info >= (3, 10):
-    from importlib.metadata import entry_points
-else:  # pragma: no cover
-    from importlib_metadata import entry_points  # type: ignore
 
 from .blueprint import APIBlueprint
 from .commands import openapi_command
@@ -43,6 +38,7 @@ from .utils import (
     parse_and_store_tags,
     parse_method,
     parse_parameters,
+    run_validate_response,
 )
 from .view import APIView
 
@@ -52,19 +48,21 @@ class OpenAPI(APIScaffold, Flask):
         self,
         import_name: str,
         *,
-        info: Optional[Info] = None,
-        security_schemes: Optional[SecuritySchemesDict] = None,
-        responses: Optional[ResponseDict] = None,
-        servers: Optional[list[Server]] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
+        info: Info | None = None,
+        security_schemes: SecuritySchemesDict | None = None,
+        responses: ResponseDict | None = None,
+        servers: list[Server] | None = None,
+        external_docs: ExternalDocumentation | None = None,
         operation_id_callback: Callable = get_operation_id_for_path,
-        openapi_extensions: Optional[dict[str, Any]] = None,
-        validation_error_status: Union[str, int] = 422,
+        openapi_extensions: dict[str, Any] | None = None,
+        validation_error_status: str | int = 422,
         validation_error_model: Type[BaseModel] = ValidationErrorModel,
         validation_error_callback: Callable = make_validation_error_response,
         doc_ui: bool = True,
         doc_prefix: str = "/openapi",
         doc_url: str = "/openapi.json",
+        validate_response: bool | None = None,
+        validate_response_callback: Callable = run_validate_response,
         **kwargs: Any,
     ) -> None:
         """
@@ -97,6 +95,8 @@ class OpenAPI(APIScaffold, Flask):
                 Defaults to "/openapi".
             doc_url: URL for accessing the OpenAPI specification document in JSON format.
                 Defaults to "/openapi.json".
+            validate_response: Verify the response body.
+            validate_response_callback: Validation and return response.
             **kwargs: Additional kwargs to be passed to Flask.
         """
         super(OpenAPI, self).__init__(import_name, **kwargs)
@@ -145,6 +145,10 @@ class OpenAPI(APIScaffold, Flask):
 
         # Add the OpenAPI command
         self.cli.add_command(openapi_command)  # type: ignore
+
+        # Verify the response body
+        self.validate_response = validate_response
+        self.validate_response_callback = validate_response_callback
 
         # Initialize specification JSON
         self.spec_json: dict = {}
@@ -313,7 +317,7 @@ class OpenAPI(APIScaffold, Flask):
         self.register_blueprint(api, **options)
 
     def register_api_view(
-        self, api_view: APIView, url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None
+        self, api_view: APIView, url_prefix: str | None = None, view_kwargs: dict[Any, Any] | None = None
     ) -> None:
         """
         Register APIView
@@ -365,16 +369,16 @@ class OpenAPI(APIScaffold, Flask):
         rule: str,
         func: Callable,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:

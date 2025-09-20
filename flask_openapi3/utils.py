@@ -7,7 +7,7 @@ import re
 import sys
 from enum import Enum
 from http import HTTPStatus
-from typing import Any, Callable, DefaultDict, Optional, Type, get_type_hints
+from typing import Any, Callable, DefaultDict, Type, get_type_hints
 
 from flask import current_app, make_response
 from flask.wrappers import Response as FlaskResponse
@@ -53,9 +53,9 @@ else:
 def get_operation(
     func: Callable,
     *,
-    summary: Optional[str] = None,
-    description: Optional[str] = None,
-    openapi_extensions: Optional[dict[str, Any]] = None,
+    summary: str | None = None,
+    description: str | None = None,
+    openapi_extensions: dict[str, Any] | None = None,
 ) -> Operation:
     """
     Return an Operation object with the specified summary and description.
@@ -395,8 +395,8 @@ def parse_and_store_tags(
 def parse_parameters(
     func: Callable,
     *,
-    components_schemas: Optional[dict] = None,
-    operation: Optional[Operation] = None,
+    components_schemas: dict | None = None,
+    operation: Operation | None = None,
     doc_ui: bool = True,
 ) -> ParametersTuple:
     """
@@ -427,13 +427,13 @@ def parse_parameters(
     annotations = get_type_hints(func)
 
     # Get the types for header, cookie, path, query, form, and body parameters
-    header: Optional[Type[BaseModel]] = annotations.get("header")
-    cookie: Optional[Type[BaseModel]] = annotations.get("cookie")
-    path: Optional[Type[BaseModel]] = annotations.get("path")
-    query: Optional[Type[BaseModel]] = annotations.get("query")
-    form: Optional[Type[BaseModel]] = annotations.get("form")
-    body: Optional[Type[BaseModel]] = annotations.get("body")
-    raw: Optional[Type[RawModel]] = annotations.get("raw")
+    header: Type[BaseModel] | None = annotations.get("header")
+    cookie: Type[BaseModel] | None = annotations.get("cookie")
+    path: Type[BaseModel] | None = annotations.get("path")
+    query: Type[BaseModel] | None = annotations.get("query")
+    form: Type[BaseModel] | None = annotations.get("form")
+    body: Type[BaseModel] | None = annotations.get("body")
+    raw: Type[RawModel] | None = annotations.get("raw")
 
     # If doc_ui is False, return the types without further processing
     if doc_ui is False:
@@ -569,6 +569,42 @@ def make_validation_error_response(e: ValidationError) -> FlaskResponse:
     response = make_response(e.json())
     response.headers["Content-Type"] = "application/json"
     response.status_code = getattr(current_app, "validation_error_status", 422)
+    return response
+
+
+def run_validate_response(response: Any, responses: ResponseDict | None = None) -> Any:
+    """Validate response"""
+    if responses is None:
+        return response
+
+    if isinstance(response, tuple):  # noqa
+        _resp, status_code = response[:2]
+    elif isinstance(response, FlaskResponse):
+        if response.mimetype != "application/json":
+            # only application/json
+            return response
+        _resp, status_code = response.json, response.status_code  # noqa
+    else:
+        _resp, status_code = response, 200
+
+    # status_code is http.HTTPStatus
+    if isinstance(status_code, HTTPStatus):
+        status_code = status_code.value
+
+    resp_model = responses.get(status_code)
+
+    if resp_model is None:
+        return response
+
+    assert inspect.isclass(resp_model) and issubclass(resp_model, BaseModel), (
+        f"{resp_model} is invalid `pydantic.BaseModel`"
+    )
+
+    if isinstance(_resp, str):
+        resp_model.model_validate_json(_resp)
+    else:
+        resp_model.model_validate(_resp)
+
     return response
 
 
