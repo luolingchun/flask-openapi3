@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Generic, Literal, Optional, TypeVar
+from typing import Generic, Literal, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -18,16 +18,17 @@ def test_responses_are_replicated_in_open_api(request):
 
         test: int
 
-        model_config = dict(
-            openapi_extra={
+    @test_app.get(
+        "/test",
+        responses={
+            "201": {
+                "model": BaseResponse,
                 "description": "Custom description",
                 "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
-                "content": {"text/plain": {"schema": {"type": "string"}}},
                 "links": {"dummy": {"description": "dummy link"}},
             }
-        )
-
-    @test_app.get("/test", responses={"201": BaseResponse})
+        },
+    )
     def endpoint_test():
         return b"", 201  # pragma: no cover
 
@@ -39,9 +40,7 @@ def test_responses_are_replicated_in_open_api(request):
             "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
             "content": {
                 # This content is coming from responses
-                "application/json": {"schema": {"$ref": "#/components/schemas/BaseResponse"}},
-                # While this one comes from responses
-                "text/plain": {"schema": {"type": "string"}},
+                "application/json": {"schema": {"$ref": "#/components/schemas/BaseResponse"}}
             },
             "links": {"dummy": {"description": "dummy link"}},
         }
@@ -407,8 +406,8 @@ def test_header_parameter_object(request):
 
 
 class Model(BaseModel):
-    one: Optional[int] = Field(default=None)
-    two: Optional[int] = Field(default=2)
+    one: int | None = Field(default=None)
+    two: int | None = Field(default=2)
 
 
 def test_default_none(request):

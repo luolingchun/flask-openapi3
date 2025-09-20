@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2022/10/14 16:09
 import typing
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from .models import ExternalDocumentation, Server, Tag
 from .types import ResponseDict
@@ -25,10 +25,10 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 class APIView:
     def __init__(
         self,
-        url_prefix: Optional[str] = None,
-        view_tags: Optional[list[Tag]] = None,
-        view_security: Optional[list[dict[str, list[str]]]] = None,
-        view_responses: Optional[ResponseDict] = None,
+        url_prefix: str | None = None,
+        view_tags: list[Tag] | None = None,
+        view_security: list[dict[str, list[str]]] | None = None,
+        view_responses: ResponseDict | None = None,
         doc_ui: bool = True,
         operation_id_callback: Callable = get_operation_id_for_path,
     ):
@@ -100,16 +100,18 @@ class APIView:
     def doc(
         self,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
     ) -> Callable:
         """
@@ -127,6 +129,8 @@ class APIView:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -171,7 +175,13 @@ class APIView:
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
             # Parse parameters
-            parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+            )
 
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
@@ -182,7 +192,7 @@ class APIView:
         return decorator
 
     def register(
-        self, app: "OpenAPI", url_prefix: Optional[str] = None, view_kwargs: Optional[dict[Any, Any]] = None
+        self, app: "OpenAPI", url_prefix: str | None = None, view_kwargs: dict[Any, Any] | None = None
     ) -> None:
         """
         Register the API views with the given OpenAPI app.

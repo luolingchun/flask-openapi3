@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2022/4/1 16:54
 import inspect
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from flask import Blueprint
 
@@ -28,9 +28,9 @@ class APIBlueprint(APIScaffold, Blueprint):
         name: str,
         import_name: str,
         *,
-        abp_tags: Optional[list[Tag]] = None,
-        abp_security: Optional[list[dict[str, list[str]]]] = None,
-        abp_responses: Optional[ResponseDict] = None,
+        abp_tags: list[Tag] | None = None,
+        abp_security: list[dict[str, list[str]]] | None = None,
+        abp_responses: ResponseDict | None = None,
         doc_ui: bool = True,
         operation_id_callback: Callable = get_operation_id_for_path,
         **kwargs: Any,
@@ -111,16 +111,18 @@ class APIBlueprint(APIScaffold, Blueprint):
         rule: str,
         func: Callable,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
@@ -140,6 +142,8 @@ class APIBlueprint(APIScaffold, Blueprint):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
         if self.doc_ui is True and doc_ui is True:
@@ -191,6 +195,12 @@ class APIBlueprint(APIScaffold, Blueprint):
             parse_method(uri, method, self.paths, operation)
 
             # Parse parameters
-            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            return parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+            )
         else:
             return parse_parameters(func, doc_ui=False)

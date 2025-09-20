@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:49
-from typing import Any, Optional, Union
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -19,16 +19,16 @@ class Parameter(BaseModel):
 
     name: str
     param_in: ParameterInType = Field(alias="in")
-    description: Optional[str] = None
-    required: Optional[bool] = None
-    deprecated: Optional[bool] = None
-    allowEmptyValue: Optional[bool] = None
-    style: Optional[str] = None
-    explode: Optional[bool] = None
-    allowReserved: Optional[bool] = None
-    param_schema: Optional[Union[Reference, Schema]] = Field(default=None, alias="schema")
-    example: Optional[Any] = None
-    examples: Optional[dict[str, Union[Example, Reference]]] = None
-    content: Optional[dict[str, MediaType]] = None
+    description: str | None = None
+    required: bool | None = None
+    deprecated: bool | None = None
+    allowEmptyValue: bool | None = None
+    style: str | None = None
+    explode: bool | None = None
+    allowReserved: bool | None = None
+    param_schema: Reference | Schema | None = Field(default=None, alias="schema")
+    example: Any | None = None
+    examples: dict[str, Example | Reference] | None = None
+    content: dict[str, MediaType] | None = None
 
     model_config = {"extra": "allow", "populate_by_name": True}

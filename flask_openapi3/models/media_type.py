@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:46
-from typing import Any, Optional, Union
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -16,9 +16,9 @@ class MediaType(BaseModel):
     https://spec.openapis.org/oas/v3.1.0#media-type-object
     """
 
-    media_type_schema: Optional[Union[Reference, Schema]] = Field(default=None, alias="schema")
-    example: Optional[Any] = None
-    examples: Optional[dict[str, Union[Example, Reference]]] = None
-    encoding: Optional[dict[str, Encoding]] = None
+    media_type_schema: Reference | Schema | None = Field(default=None, alias="schema")
+    example: Any | None = None
+    examples: dict[str, Example | Reference] | None = None
+    encoding: dict[str, Encoding] | None = None
 
     model_config = {"extra": "allow", "populate_by_name": True}
