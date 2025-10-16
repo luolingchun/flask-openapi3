@@ -488,3 +488,24 @@ def test_schema_bigint(request):
     max_nr = 9223372036854775807
     obj = Schema(maximum=max_nr)
     assert obj.model_dump()["maximum"] == max_nr
+
+
+def test_convert_literal_with_single_value_to_const(request):
+    test_app = OpenAPI(request.node.name)
+    test_app.config["TESTING"] = True
+
+    class MyResponse(BaseModel):
+        foobar: Literal["baz"]
+
+
+    @test_app.post("/test", responses={
+        200: MyResponse
+    })
+    def endpoint_test():
+        print("do nothing")
+
+    with test_app.test_client() as client:
+        resp = client.get("/openapi/openapi.json")
+        assert resp.status_code == 200
+        print("###", resp.json)
+        assert resp.json["components"]["schemas"]["MyResponse"]["properties"]["foobar"] == {"const": "baz", "title": "Foobar", "type": "string"}
