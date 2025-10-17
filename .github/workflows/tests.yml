@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --all-extras --all-groups
+          uv sync --upgrade --all-extras --all-groups
           uv add "${{ matrix.flask-version }}"
 
       - name: Test with pytest

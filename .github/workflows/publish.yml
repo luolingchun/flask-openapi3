@@ -17,7 +17,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --group build --all-extras
+        run: uv sync --upgrade --group build --all-extras
 
       - name: Build and publish
         env:
