@@ -2,12 +2,11 @@
 # @Author  : llc
 # @Time    : 2021/5/17 15:25
 
-from typing import Optional
 
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
+from flask_openapi3 import APIBlueprint, ExternalDocumentation, Info, OpenAPI, Server, Tag
 
 info = Info(title="book API", version="1.0.0")
 
@@ -56,7 +55,7 @@ def client():
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    age: int | None = Field(..., ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
@@ -84,7 +83,14 @@ def update_book1(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@api.patch("/v2/book/<int:bid>")
+@api.patch(
+    "/v2/book/<int:bid>",
+    servers=[Server(url="http://127.0.0.1:5000", variables=None)],
+    external_docs=ExternalDocumentation(
+        url="https://www.openapis.org/", description="Something great got better, get excited!"
+    ),
+    deprecated=True,
+)
 def update_book1_v2(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3
@@ -154,7 +160,7 @@ author_api = APIBlueprint(
 
 
 class AuthorBody(BaseModel):
-    age: Optional[int] = Field(..., ge=1, le=100, description="Age")
+    age: int | None = Field(..., ge=1, le=100, description="Age")
 
 
 @author_api.post("/<int:aid>")

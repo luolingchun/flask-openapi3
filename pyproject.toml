@@ -20,13 +20,13 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["Flask>=2.0", "pydantic>=2.4"]
 dynamic = ["version"]
 
@@ -47,6 +47,19 @@ rapipdf = ["flask-openapi3-rapipdf"]
 scalar = ["flask-openapi3-scalar"]
 elements = ["flask-openapi3-elements"]
 
+[dependency-groups]
+build = ["hatchling", "build", "twine"]
+doc = [
+    "mkdocs-static-i18n>=1.0",
+    "mkdocstrings[python]",
+    "mkdocs-material",
+    "mkdocs-glightbox",
+    "pyyaml",
+    "mike",
+]
+mypy = ["mypy"]
+ruff = ["ruff"]
+test = ["pytest", "asgiref", "pyyaml"]
 
 [build-system]
 requires = ["hatchling"]
@@ -59,7 +72,6 @@ path = "flask_openapi3/__version__.py"
 include = [
     "/flask_openapi3",
     "/examples",
-    "/requirements",
     "/tests",
     "/CHANGELOG.md",
     "/CONTRIBUTING.md",
@@ -76,7 +88,8 @@ select = [
     "E7", # Statement issues
     "E9", # Runtime errors
     "F", # Pyflakes rules
-    "Q"   # flake8-quotes
+    "Q", # flake8-quotes
+    "UP045", # Use X | None for type annotations
 ]
 
 [tool.ruff.lint.per-file-ignores]

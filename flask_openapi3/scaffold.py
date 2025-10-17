@@ -3,7 +3,7 @@
 # @Time    : 2022/8/30 9:40
 import inspect
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from flask.wrappers import Response as FlaskResponse
 
@@ -19,16 +19,18 @@ class APIScaffold:
         rule: str,
         func: Callable,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
@@ -120,16 +122,16 @@ class APIScaffold:
         self,
         rule: str,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -182,16 +184,18 @@ class APIScaffold:
         self,
         rule: str,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -211,6 +215,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -228,6 +234,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.POST,
             )
@@ -244,16 +252,18 @@ class APIScaffold:
         self,
         rule: str,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -273,6 +283,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -290,6 +302,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PUT,
             )
@@ -306,16 +320,18 @@ class APIScaffold:
         self,
         rule: str,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -335,6 +351,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -352,6 +370,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.DELETE,
             )
@@ -368,16 +388,18 @@ class APIScaffold:
         self,
         rule: str,
         *,
-        tags: Optional[list[Tag]] = None,
-        summary: Optional[str] = None,
-        description: Optional[str] = None,
-        external_docs: Optional[ExternalDocumentation] = None,
-        operation_id: Optional[str] = None,
-        responses: Optional[ResponseDict] = None,
-        deprecated: Optional[bool] = None,
-        security: Optional[list[dict[str, list[Any]]]] = None,
-        servers: Optional[list[Server]] = None,
-        openapi_extensions: Optional[dict[str, Any]] = None,
+        tags: list[Tag] | None = None,
+        summary: str | None = None,
+        description: str | None = None,
+        external_docs: ExternalDocumentation | None = None,
+        operation_id: str | None = None,
+        responses: ResponseDict | None = None,
+        deprecated: bool | None = None,
+        security: list[dict[str, list[Any]]] | None = None,
+        servers: list[Server] | None = None,
+        openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -397,6 +419,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             doc_ui: Declares this operation to be shown. Default to True.
         """
 
@@ -414,6 +438,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PATCH,
             )
