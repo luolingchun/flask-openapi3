@@ -13,7 +13,6 @@ jobs:
 
       - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.x"
           enable-cache: true
 
       - name: Install dependencies
