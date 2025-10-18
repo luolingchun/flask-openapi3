@@ -497,10 +497,7 @@ def test_convert_literal_with_single_value_to_const(request):
     class MyResponse(BaseModel):
         foobar: Literal["baz"]
 
-
-    @test_app.post("/test", responses={
-        200: MyResponse
-    })
+    @test_app.post("/test", responses={200: MyResponse})
     def endpoint_test():
         print("do nothing")
 
@@ -508,4 +505,8 @@ def test_convert_literal_with_single_value_to_const(request):
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
         print("###", resp.json)
-        assert resp.json["components"]["schemas"]["MyResponse"]["properties"]["foobar"] == {"const": "baz", "title": "Foobar", "type": "string"}
+        assert resp.json["components"]["schemas"]["MyResponse"]["properties"]["foobar"] == {
+            "const": "baz",
+            "title": "Foobar",
+            "type": "string",
+        }
