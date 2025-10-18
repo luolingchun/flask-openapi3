@@ -1,3 +1,16 @@
+## v4.3.0 2025-10-18
+
+- Fix ValidationError schema to match Pydantic v2 format by @bastien-pruvost in #232
+- Bump actions/checkout from 4 to 5 by @dependabot[bot] in #234
+- Support optional lists by @Qblack in #237
+- Bump actions/stale from 9 to 10 by @dependabot[bot] in #239
+- Bump actions/setup-python from 5 to 6 by @dependabot[bot] in #238
+- [#240] Fix for br tag rendering by @zakmatik in #241
+- Use uv by @luolingchun in #235
+- Drop support for Python 3.9 and Support for Python 3.14 by @luolingchun in #233
+- ISSUE-220 allow for response validation by @mr-tabasco in #225
+- WIP Add support for const by @githubjakob in #243
+
 ## v4.2.1 2025-07-19
 
 - Fixes issue where register_api isn't idempotent by @zakmatik in #230
