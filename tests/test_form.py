@@ -2,7 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/8/6 13:47
 from enum import Enum
-from typing import Any, Union
+from typing import Any
 
 import pytest
 from pydantic import BaseModel
@@ -49,9 +49,9 @@ class FormParameters(BaseModel):
     parameter: MetadataParameter
     parameter_dict: dict[str, MetadataParameter]
     parameter_list: list[MetadataParameter]
-    parameter_list_union: list[Union[bool, float, str, int, FileType, MetadataParameter]]
-    parameter_union: Union[MetadataParameter, MetadataParameter2]
-    union_all: Union[str, int, float, bool, FileType, MetadataParameter]
+    parameter_list_union: list[bool | float | str | int | FileType | MetadataParameter]
+    parameter_union: MetadataParameter | MetadataParameter2
+    union_all: str | int | float | bool | FileType | MetadataParameter
     none: None = None
     default_value: str = "default_value"
 

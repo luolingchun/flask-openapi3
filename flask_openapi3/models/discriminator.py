@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:41
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -12,6 +11,6 @@ class Discriminator(BaseModel):
     """
 
     propertyName: str
-    mapping: Optional[dict[str, str]] = None
+    mapping: dict[str, str] | None = None
 
     model_config = {"extra": "allow"}

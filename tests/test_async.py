@@ -2,7 +2,6 @@
 # @Author  : llc
 # @Time    : 2022/12/5 10:27
 
-from typing import Optional
 
 import pytest
 from pydantic import BaseModel, Field
@@ -19,11 +18,11 @@ class Query(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description="Age")
+    age: int | None = Field(None, description="Age")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    age: int | None = Field(..., ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 

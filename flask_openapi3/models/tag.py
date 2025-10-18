@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 
 from .external_documentation import ExternalDocumentation
@@ -11,7 +9,7 @@ class Tag(BaseModel):
     """
 
     name: str
-    description: Optional[str] = None
-    externalDocs: Optional[ExternalDocumentation] = None
+    description: str | None = None
+    externalDocs: ExternalDocumentation | None = None
 
     model_config = {"extra": "allow"}

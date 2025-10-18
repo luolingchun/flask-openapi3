@@ -10,7 +10,7 @@ Before submitting pr, you need to complete the following steps:
 1. Install requirements
 
     ```bash
-    uv sync --all-extras --all-groups
+    uv sync --upgrade --all-extras --all-groups
     ```
 
 2. Running the tests

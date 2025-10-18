@@ -32,7 +32,7 @@
 
 ## 依赖
 
-Python 3.9+
+Python 3.10+
 
 flask-openapi3 依赖以下库：
 
@@ -126,8 +126,6 @@ if __name__ == "__main__":
 <summary>基于类的 API 视图示例</summary>
 
 ```python
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, Tag, Info, APIView
@@ -144,11 +142,11 @@ class BookPath(BaseModel):
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description='Age')
+    age: int | None = Field(None, description='Age')
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description='Age')
+    age: int | None = Field(..., ge=2, le=4, description='Age')
     author: str = Field(None, min_length=2, max_length=4, description='Author')
 
 

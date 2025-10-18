@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : llc
 # @Time    : 2023/7/4 9:55
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from pydantic import BaseModel, Field
 
@@ -17,42 +17,42 @@ class Schema(BaseModel):
     https://spec.openapis.org/oas/v3.1.0#schema-object
     """
 
-    ref: Optional[str] = Field(alias="$ref", default=None)
-    title: Optional[str] = None
-    multipleOf: Optional[float] = Field(default=None, gt=0.0)
-    maximum: Optional[Union[int, float]] = None
-    exclusiveMaximum: Optional[float] = None
-    minimum: Optional[float] = None
-    exclusiveMinimum: Optional[float] = None
-    maxLength: Optional[int] = Field(default=None, ge=0)
-    minLength: Optional[int] = Field(default=None, ge=0)
-    pattern: Optional[str] = None
-    maxItems: Optional[int] = Field(default=None, ge=0)
-    minItems: Optional[int] = Field(default=None, ge=0)
-    uniqueItems: Optional[bool] = None
-    maxProperties: Optional[int] = Field(default=None, ge=0)
-    minProperties: Optional[int] = Field(default=None, ge=0)
-    required: Optional[list[str]] = Field(default=None)
-    enum: Union[None, list[Any]] = Field(default=None)
-    type: Optional[DataType] = Field(default=None)
-    allOf: Optional[list[Union[Reference, "Schema"]]] = None
-    oneOf: Optional[list[Union[Reference, "Schema"]]] = None
-    anyOf: Optional[list[Union[Reference, "Schema"]]] = None
-    schema_not: Optional[Union[Reference, "Schema"]] = Field(default=None, alias="not")
-    items: Optional[Union[Reference, "Schema"]] = None
-    properties: Optional[dict[str, Union[Reference, "Schema"]]] = None
-    prefixItems: Optional[list[Union[Reference, "Schema"]]] = None
-    additionalProperties: Optional[Union[bool, Reference, "Schema"]] = None
-    description: Optional[str] = None
-    schema_format: Optional[str] = Field(default=None, alias="format")
-    default: Optional[Any] = None
-    nullable: Optional[bool] = None
-    discriminator: Optional[Discriminator] = None
-    readOnly: Optional[bool] = None
-    writeOnly: Optional[bool] = None
-    xml: Optional[XML] = None
-    externalDocs: Optional[ExternalDocumentation] = None
-    example: Optional[Any] = None
-    deprecated: Optional[bool] = None
+    ref: str | None = Field(alias="$ref", default=None)
+    title: str | None = None
+    multipleOf: float | None = Field(default=None, gt=0.0)
+    maximum: int | float | None = None
+    exclusiveMaximum: float | None = None
+    minimum: float | None = None
+    exclusiveMinimum: float | None = None
+    maxLength: int | None = Field(default=None, ge=0)
+    minLength: int | None = Field(default=None, ge=0)
+    pattern: str | None = None
+    maxItems: int | None = Field(default=None, ge=0)
+    minItems: int | None = Field(default=None, ge=0)
+    uniqueItems: bool | None = None
+    maxProperties: int | None = Field(default=None, ge=0)
+    minProperties: int | None = Field(default=None, ge=0)
+    required: list[str] | None = Field(default=None)
+    enum: None | list[Any] = Field(default=None)
+    type: DataType | None = Field(default=None)
+    allOf: list[Union[Reference, "Schema"]] | None = None
+    oneOf: list[Union[Reference, "Schema"]] | None = None
+    anyOf: list[Union[Reference, "Schema"]] | None = None
+    schema_not: Union[Reference, "Schema"] | None = Field(default=None, alias="not")
+    items: Union[Reference, "Schema"] | None = None
+    properties: dict[str, Union[Reference, "Schema"]] | None = None
+    prefixItems: list[Union[Reference, "Schema"]] | None = None
+    additionalProperties: Union[bool, Reference, "Schema"] | None = None
+    description: str | None = None
+    schema_format: str | None = Field(default=None, alias="format")
+    default: Any | None = None
+    nullable: bool | None = None
+    discriminator: Discriminator | None = None
+    readOnly: bool | None = None
+    writeOnly: bool | None = None
+    xml: XML | None = None
+    externalDocs: ExternalDocumentation | None = None
+    example: Any | None = None
+    deprecated: bool | None = None
 
     model_config = {"populate_by_name": True}

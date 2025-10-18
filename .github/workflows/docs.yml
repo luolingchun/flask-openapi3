@@ -13,11 +13,10 @@ jobs:
 
       - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.x"
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --group doc --all-extras
+        run: uv sync --upgrade --group doc --all-extras
 
       - name: Build docs
         run: |

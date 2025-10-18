@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Generic, Literal, Optional, TypeVar
+from typing import Generic, Literal, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -407,8 +407,8 @@ def test_header_parameter_object(request):
 
 
 class Model(BaseModel):
-    one: Optional[int] = Field(default=None)
-    two: Optional[int] = Field(default=2)
+    one: int | None = Field(default=None)
+    two: int | None = Field(default=2)
 
 
 def test_default_none(request):

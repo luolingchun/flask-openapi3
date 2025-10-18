@@ -2,7 +2,6 @@
 # @Author  : llc
 # @Time    : 2021/6/6 14:05
 
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -37,7 +36,7 @@ api = APIBlueprint(
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    age: int | None = Field(..., ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 

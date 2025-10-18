@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 from http import HTTPStatus
-from typing import Optional
 
 import pytest
 from flask import Response
@@ -43,11 +42,11 @@ book_tag = Tag(name="book", description="Book")
 
 
 class BookQuery(BaseModel):
-    age: Optional[int] = Field(None, description="Age")
+    age: int | None = Field(None, description="Age")
 
 
 class BookBody(BaseModel):
-    age: Optional[int] = Field(..., ge=2, le=4, description="Age")
+    age: int | None = Field(..., ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
@@ -57,7 +56,7 @@ class BookPath(BaseModel):
 
 class BookBodyWithID(BaseModel):
     bid: int = Field(..., description="book id")
-    age: Optional[int] = Field(None, ge=2, le=4, description="Age")
+    age: int | None = Field(None, ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
 
