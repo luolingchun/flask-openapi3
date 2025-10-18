@@ -493,6 +493,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#validate-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validate responses
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-information-about-openapi-responses" class="md-nav__link">
     <span class="md-ellipsis">
       More information about OpenAPI responses
@@ -914,6 +923,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#validate-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validate responses
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-information-about-openapi-responses" class="md-nav__link">
     <span class="md-ellipsis">
       More information about OpenAPI responses
@@ -1046,6 +1064,58 @@
     <span class="k">return</span> <span class="n">response</span>
 </code></pre></div></td></tr></tbody></table></div>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../assets/image-20210526104627124.png" data-desc-position="bottom"><img alt="image-20210526104627124" src="../../../assets/image-20210526104627124.png"></a></p>
+<h2 id="validate-responses">Validate responses<a class="headerlink" href="#validate-responses" title="Permanent link">⚓︎</a></h2>
+<p>By default, responses are not validated. If you need to validate responses, set validate_responses to True. Here are
+several ways to achieve this:</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># 1. APP level</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">validate_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 2. APIBlueprint level</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">APIBlueprint</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">validate_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 3. APIView level</span>
+<span class="nd">@api_view</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/test"</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestAPI</span><span class="p">:</span>
+    <span class="nd">@api_view</span><span class="o">.</span><span class="n">doc</span><span class="p">(</span><span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">201</span><span class="p">:</span> <span class="n">Response</span><span class="p">},</span> <span class="n">validate_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+
+<span class="c1"># 4. api level</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/test"</span><span class="p">,</span> <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">201</span><span class="p">:</span> <span class="n">Response</span><span class="p">},</span> <span class="n">validate_response</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">endpoint_test</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BaseRequest</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></tbody></table></div>
+<p>You can also customize the default behavior of response validation by using a custom <code>validate_response_callback</code>.</p>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_response_callback</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">responses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ResponseDict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+
+    <span class="c1"># do something</span>
+
+    <span class="k">return</span> <span class="n">response</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">validate_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validate_response_callback</span><span class="o">=</span><span class="n">validate_response_callback</span><span class="p">)</span>
+</code></pre></div></td></tr></tbody></table></div>
 <h2 id="more-information-about-openapi-responses">More information about OpenAPI responses<a class="headerlink" href="#more-information-about-openapi-responses" title="Permanent link">⚓︎</a></h2>
 <ul>
 <li><a href="https://spec.openapis.org/oas/v3.1.0#responses-object">OpenAPI Responses Object</a>, it includes the Response Object.</li>
