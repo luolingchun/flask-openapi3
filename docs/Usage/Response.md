@@ -53,8 +53,45 @@ def hello(path: HelloPath):
     return response
 ```
 
-
 ![image-20210526104627124](../assets/image-20210526104627124.png)
+
+## Validate responses
+
+By default, responses are not validated. If you need to validate responses, set validate_responses to True. Here are
+several ways to achieve this:
+
+```python
+# 1. APP level
+app = OpenAPI(__name__, validate_response=True)
+
+# 2. APIBlueprint level
+api = APIBlueprint(__name__, validate_response=True)
+
+# 3. APIView level
+@api_view.route("/test")
+class TestAPI:
+    @api_view.doc(responses={201: Response}, validate_response=True)
+    def post(self):
+        ...
+        
+# 4. api level
+@app.post("/test", responses={201: Response}, validate_response=True)
+def endpoint_test(body: BaseRequest):
+    ...
+```
+
+You can also customize the default behavior of response validation by using a custom `validate_response_callback`.
+
+```python
+
+def validate_response_callback(response: Any, responses: Optional[ResponseDict] = None) -> Any:
+    
+    # do something
+    
+    return response
+
+app = OpenAPI(__name__, validate_response=True, validate_response_callback=validate_response_callback)
+```
 
 ## More information about OpenAPI responses
 

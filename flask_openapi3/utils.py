@@ -572,6 +572,42 @@ def make_validation_error_response(e: ValidationError) -> FlaskResponse:
     return response
 
 
+def run_validate_response(response: Any, responses: ResponseDict | None = None) -> Any:
+    """Validate response"""
+    if responses is None:
+        return response
+
+    if isinstance(response, tuple):  # noqa
+        _resp, status_code = response[:2]
+    elif isinstance(response, FlaskResponse):
+        if response.mimetype != "application/json":
+            # only application/json
+            return response
+        _resp, status_code = response.json, response.status_code  # noqa
+    else:
+        _resp, status_code = response, 200
+
+    # status_code is http.HTTPStatus
+    if isinstance(status_code, HTTPStatus):
+        status_code = status_code.value
+
+    resp_model = responses.get(status_code)
+
+    if resp_model is None:
+        return response
+
+    assert inspect.isclass(resp_model) and issubclass(resp_model, BaseModel), (
+        f"{resp_model} is invalid `pydantic.BaseModel`"
+    )
+
+    if isinstance(_resp, str):
+        resp_model.model_validate_json(_resp)
+    else:
+        resp_model.model_validate(_resp)
+
+    return response
+
+
 def parse_rule(rule: str, url_prefix=None) -> str:
     trail_slash = rule.endswith("/")
 

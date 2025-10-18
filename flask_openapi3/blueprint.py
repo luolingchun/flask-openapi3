@@ -33,6 +33,7 @@ class APIBlueprint(APIScaffold, Blueprint):
         abp_responses: ResponseDict | None = None,
         doc_ui: bool = True,
         operation_id_callback: Callable = get_operation_id_for_path,
+        validate_response: bool | None = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -49,6 +50,7 @@ class APIBlueprint(APIScaffold, Blueprint):
             operation_id_callback: Callback function for custom operation_id generation.
                                    Receives name (str), path (str) and method (str) parameters.
                                    Defaults to `get_operation_id_for_path` from utils
+            validate_response: Verify the response body.
             **kwargs: Flask Blueprint kwargs
         """
         super(APIBlueprint, self).__init__(name, import_name, **kwargs)
@@ -70,6 +72,9 @@ class APIBlueprint(APIScaffold, Blueprint):
 
         # Set the operation ID callback function
         self.operation_id_callback: Callable = operation_id_callback
+
+        # Verify the response body
+        self.validate_response = validate_response
 
     def register_api(self, api: "APIBlueprint") -> None:
         """Register a nested APIBlueprint"""

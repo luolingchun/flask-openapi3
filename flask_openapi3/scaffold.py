@@ -5,6 +5,7 @@ import inspect
 from functools import wraps
 from typing import Any, Callable
 
+from flask import current_app
 from flask.wrappers import Response as FlaskResponse
 
 from .models import ExternalDocumentation, Server, Tag
@@ -48,7 +49,20 @@ class APIScaffold:
         raise NotImplementedError  # pragma: no cover
 
     @staticmethod
-    def create_view_func(func, header, cookie, path, query, form, body, raw, view_class=None, view_kwargs=None):
+    def create_view_func(
+        func,
+        header,
+        cookie,
+        path,
+        query,
+        form,
+        body,
+        raw,
+        view_class=None,
+        view_kwargs=None,
+        responses: ResponseDict | None = None,
+        validate_response: bool | None = None,
+    ):
         is_coroutine_function = inspect.iscoroutinefunction(func)
         if is_coroutine_function:
 
@@ -79,6 +93,19 @@ class APIScaffold:
                     response = await func(view_object, **func_kwargs)
                 else:
                     response = await func(**func_kwargs)
+
+                if hasattr(current_app, "validate_response"):
+                    if validate_response is None:
+                        _validate_response = current_app.validate_response
+                    else:
+                        _validate_response = validate_response
+                else:
+                    _validate_response = validate_response
+
+                if _validate_response and responses:
+                    validate_response_callback = getattr(current_app, "validate_response_callback")
+                    return validate_response_callback(response, responses)
+
                 return response
         else:
 
@@ -109,6 +136,19 @@ class APIScaffold:
                     response = func(view_object, **func_kwargs)
                 else:
                     response = func(**func_kwargs)
+
+                if hasattr(current_app, "validate_response"):
+                    if validate_response is None:
+                        _validate_response = current_app.validate_response
+                    else:
+                        _validate_response = validate_response
+                else:
+                    _validate_response = validate_response
+
+                if _validate_response and responses:
+                    validate_response_callback = getattr(current_app, "validate_response_callback")
+                    return validate_response_callback(response, responses)
+
                 return response
 
         if not hasattr(func, "view"):
@@ -130,6 +170,7 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -150,6 +191,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         def decorator(func) -> Callable:
@@ -170,7 +212,20 @@ class APIScaffold:
                 method=HTTPMethod.GET,
             )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
+            _validate_response = validate_response if validate_response is not None else self.get_validate_response()
+            view_func = self.create_view_func(
+                func,
+                header,
+                cookie,
+                path,
+                query,
+                form,
+                body,
+                raw,
+                responses=responses,
+                validate_response=_validate_response,
+            )
+
             options.update({"methods": [HTTPMethod.GET]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -192,6 +247,7 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -212,6 +268,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         def decorator(func) -> Callable:
@@ -232,7 +289,20 @@ class APIScaffold:
                 method=HTTPMethod.POST,
             )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
+            _validate_response = validate_response if validate_response is not None else self.get_validate_response()
+            view_func = self.create_view_func(
+                func,
+                header,
+                cookie,
+                path,
+                query,
+                form,
+                body,
+                raw,
+                responses=responses,
+                validate_response=_validate_response,
+            )
+
             options.update({"methods": [HTTPMethod.POST]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -254,6 +324,7 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -274,6 +345,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         def decorator(func) -> Callable:
@@ -294,7 +366,20 @@ class APIScaffold:
                 method=HTTPMethod.PUT,
             )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
+            _validate_response = validate_response if validate_response is not None else self.get_validate_response()
+            view_func = self.create_view_func(
+                func,
+                header,
+                cookie,
+                path,
+                query,
+                form,
+                body,
+                raw,
+                responses=responses,
+                validate_response=_validate_response,
+            )
+
             options.update({"methods": [HTTPMethod.PUT]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -316,6 +401,7 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -336,6 +422,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         def decorator(func) -> Callable:
@@ -356,7 +443,20 @@ class APIScaffold:
                 method=HTTPMethod.DELETE,
             )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
+            _validate_response = validate_response if validate_response is not None else self.get_validate_response()
+            view_func = self.create_view_func(
+                func,
+                header,
+                cookie,
+                path,
+                query,
+                form,
+                body,
+                raw,
+                responses=responses,
+                validate_response=_validate_response,
+            )
+
             options.update({"methods": [HTTPMethod.DELETE]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
@@ -378,6 +478,7 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
     ) -> Callable:
@@ -398,6 +499,7 @@ class APIScaffold:
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
             doc_ui: Declares this operation to be shown. Default to True.
+            validate_response: Verify the response body.
         """
 
         def decorator(func) -> Callable:
@@ -418,10 +520,28 @@ class APIScaffold:
                 method=HTTPMethod.PATCH,
             )
 
-            view_func = self.create_view_func(func, header, cookie, path, query, form, body, raw)
+            _validate_response = validate_response if validate_response is not None else self.get_validate_response()
+            view_func = self.create_view_func(
+                func,
+                header,
+                cookie,
+                path,
+                query,
+                form,
+                body,
+                raw,
+                responses=responses,
+                validate_response=_validate_response,
+            )
+
             options.update({"methods": [HTTPMethod.PATCH]})
             self._add_url_rule(rule, view_func=view_func, **options)
 
             return func
 
         return decorator
+
+    def get_validate_response(self):
+        if hasattr(self, "validate_response"):
+            if self.validate_response is not None:
+                return self.validate_response
