@@ -54,6 +54,6 @@ class Schema(BaseModel):
     externalDocs: ExternalDocumentation | None = None
     example: Any | None = None
     deprecated: bool | None = None
-    const: str | None = None
+    const: Any | None = None
 
     model_config = {"populate_by_name": True}
