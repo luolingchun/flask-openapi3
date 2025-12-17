@@ -114,6 +114,8 @@ class APIView:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         validate_response: bool | None = None,
         doc_ui: bool = True,
     ) -> Callable:
@@ -132,8 +134,10 @@ class APIView:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         new_responses = convert_responses_key_to_string(responses or {})
@@ -180,7 +184,13 @@ class APIView:
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
             # Parse parameters
-            parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
+            )
 
             # Parse response
             get_responses(combine_responses, self.components_schemas, operation)
@@ -204,10 +214,7 @@ class APIView:
         for rule, (cls, methods) in self.views.items():
             for method in methods:
                 func = getattr(cls, method.lower())
-                if func.validate_response is not None:
-                    _validate_response = func.validate_response
-                else:
-                    _validate_response = self.validate_response
+                _validate_response = getattr(func, "validate_response", None) or self.validate_response
                 header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
                 view_func = app.create_view_func(
                     func,

@@ -30,6 +30,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
@@ -190,8 +192,8 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         def decorator(func) -> Callable:
@@ -247,6 +249,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
@@ -267,8 +271,10 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         def decorator(func) -> Callable:
@@ -285,6 +291,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.POST,
             )
@@ -324,6 +332,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
@@ -344,8 +354,10 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         def decorator(func) -> Callable:
@@ -362,6 +374,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PUT,
             )
@@ -401,6 +415,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
@@ -421,8 +437,10 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         def decorator(func) -> Callable:
@@ -439,6 +457,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.DELETE,
             )
@@ -478,6 +498,8 @@ class APIScaffold:
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body_description: str | None = None,
+        request_body_required: bool | None = True,
         validate_response: bool | None = None,
         doc_ui: bool = True,
         **options: Any,
@@ -498,8 +520,10 @@ class APIScaffold:
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
-            doc_ui: Declares this operation to be shown. Default to True.
+            request_body_description: A brief description of the request body.
+            request_body_required: Determines if the request body is required in the request.
             validate_response: Verify the response body.
+            doc_ui: Declares this operation to be shown. Default to True.
         """
 
         def decorator(func) -> Callable:
@@ -516,6 +540,8 @@ class APIScaffold:
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body_description=request_body_description,
+                request_body_required=request_body_required,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PATCH,
             )
@@ -542,6 +568,5 @@ class APIScaffold:
         return decorator
 
     def get_validate_response(self):
-        if hasattr(self, "validate_response"):
-            if self.validate_response is not None:
-                return self.validate_response
+        if hasattr(self, "validate_response") and self.validate_response is not None:
+            return self.validate_response
