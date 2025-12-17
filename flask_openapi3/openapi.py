@@ -260,9 +260,7 @@ class OpenAPI(APIScaffold, Flask):
         # Handle validation error response
         for rule, path_item in self.spec_json["paths"].items():
             for http_method, operation in path_item.items():
-                if operation.get("parameters") is None and operation.get("requestBody") is None:
-                    continue
-                if not operation.get("responses"):
+                if operation.get("responses") is None:
                     operation["responses"] = {}
                 if operation["responses"].get(self.validation_error_status):
                     continue
