@@ -4,6 +4,8 @@
 
 import pytest
 
+from openapi_spec_validator import validate
+
 from flask_openapi3 import Info, OpenAPI
 
 info = Info(title="book API", version="1.0.0")
@@ -41,6 +43,7 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
+    validate(_json)
     assert _json["paths"]["/book"]["get"]["summary"] == "new summary"
     assert _json["paths"]["/book"]["get"]["description"] == "new description"
     assert _json["paths"]["/book2"]["get"]["summary"] == "Get a book"
