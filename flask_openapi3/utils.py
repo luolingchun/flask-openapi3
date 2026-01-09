@@ -362,7 +362,8 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
                     _schemas[normalize_name(name)] = Schema(**value)
 
     components_schemas.update(**_schemas)
-    operation.responses = _responses
+    if _responses:
+        operation.responses = _responses
 
 
 def parse_and_store_tags(
