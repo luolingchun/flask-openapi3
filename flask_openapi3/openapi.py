@@ -248,7 +248,8 @@ class OpenAPI(APIScaffold, Flask):
 
         # Set components
         self.components.schemas = self.components_schemas
-        self.components.securitySchemes = self.security_schemes
+        if self.security_schemes:
+            self.components.securitySchemes = self.security_schemes
         self.spec.components = self.components
 
         # Convert spec to JSON
