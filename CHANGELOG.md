@@ -1,3 +1,9 @@
+## v4.3.1 2026-01-12
+
+- Allow const to be Any type by @alchzh in #248
+- Fix no attribute 'validate_response' by @luolingchun in #251
+- Fix empty responses by @luolingchun in #252
+
 ## v4.3.0 2025-10-18
 
 - Fix ValidationError schema to match Pydantic v2 format by @bastien-pruvost in #232
