@@ -26,7 +26,7 @@
       
       
       <link rel="icon" href="../../images/logo-blue.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -34,7 +34,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1394,10 +1394,7 @@
 <span class="normal">227</span>
 <span class="normal">228</span>
 <span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIView</span><span class="p">:</span>
+<span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">APIView</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">url_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1579,10 +1576,7 @@
         <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
                 <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-                <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">validate_response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">_validate_response</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">validate_response</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">_validate_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_response</span>
+                <span class="n">_validate_response</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">"validate_response"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_response</span>
                 <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="n">view_func</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">create_view_func</span><span class="p">(</span>
                     <span class="n">func</span><span class="p">,</span>
@@ -2375,10 +2369,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">227</span>
 <span class="normal">228</span>
 <span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span>
+<span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">:</span> <span class="s2">"OpenAPI"</span><span class="p">,</span> <span class="n">url_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">view_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
@@ -2392,10 +2383,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
     <span class="k">for</span> <span class="n">rule</span><span class="p">,</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
             <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">validate_response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">_validate_response</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">validate_response</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">_validate_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_response</span>
+            <span class="n">_validate_response</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">"validate_response"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_response</span>
             <span class="n">header</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">parse_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">view_func</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">create_view_func</span><span class="p">(</span>
                 <span class="n">func</span><span class="p">,</span>
@@ -2618,10 +2606,10 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.footer", "navigation.top", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="../../js/db.js"></script>
       
