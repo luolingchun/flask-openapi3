@@ -59,7 +59,7 @@ doc = [
 ]
 mypy = ["mypy"]
 ruff = ["ruff"]
-test = ["pytest", "asgiref", "pyyaml"]
+test = ["pytest", "asgiref", "pyyaml", "openapi-spec-validator"]
 
 [build-system]
 requires = ["hatchling"]
@@ -75,7 +75,7 @@ include = [
     "/tests",
     "/CHANGELOG.md",
     "/CONTRIBUTING.md",
-    "/LICENSE.rst"
+    "/LICENSE.rst",
 ]
 
 [tool.ruff]
@@ -83,12 +83,12 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
-    "I", # Import related rules
-    "E4", # Import order
-    "E7", # Statement issues
-    "E9", # Runtime errors
-    "F", # Pyflakes rules
-    "Q", # flake8-quotes
+    "I",     # Import related rules
+    "E4",    # Import order
+    "E7",    # Statement issues
+    "E9",    # Runtime errors
+    "F",     # Pyflakes rules
+    "Q",     # flake8-quotes
     "UP045", # Use X | None for type annotations
 ]
 
@@ -104,4 +104,3 @@ plugins = ["pydantic.mypy"]
 module = ["pydantic_core.*", "devtools.*"]
 follow_imports = "skip"
 ignore_missing_imports = true
-

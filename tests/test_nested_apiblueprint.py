@@ -3,6 +3,7 @@
 # @Time    : 2022/4/2 9:09
 
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel
 
 from flask_openapi3 import APIBlueprint, OpenAPI, Tag
@@ -45,6 +46,10 @@ def client():
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json == app.api_doc
 
 

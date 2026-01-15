@@ -93,6 +93,9 @@ class APIView:
                         name=cls_method.__qualname__, path=rule, method=method
                     )
 
+                # Ensure all path parameters in URI are defined in operation parameters
+                self._ensure_path_parameters(uri, cls_method.operation)
+
             # Convert route parameters from {param} to <param>
             _rule = uri.replace("{", "<").replace("}", ">")
             self.views[_rule] = (cls, methods)
@@ -100,6 +103,40 @@ class APIView:
             return cls
 
         return wrapper
+
+    def _ensure_path_parameters(self, uri: str, operation):
+        """Ensure all path parameters in the URI are defined in the operation's parameters."""
+        import re
+
+        from .models import Parameter, ParameterInType, Schema
+        from .models.data_type import DataType
+
+        # Extract all path parameter names from URI
+        param_pattern = r"\{([^}]+)\}"
+        uri_params = set(re.findall(param_pattern, uri))
+
+        if not uri_params:
+            return
+
+        # Get existing path parameter names
+        existing_params = set()
+        if operation.parameters:
+            existing_params = {p.name for p in operation.parameters if p.param_in == ParameterInType.PATH}
+
+        # Add missing path parameters
+        missing_params = uri_params - existing_params
+        if missing_params:
+            if not operation.parameters:
+                operation.parameters = []
+            for param_name in sorted(missing_params):  # Sort for consistent ordering
+                operation.parameters.append(
+                    Parameter(
+                        name=param_name,
+                        param_in=ParameterInType.PATH,
+                        required=True,
+                        param_schema=Schema(type=DataType.STRING),
+                    )
+                )
 
     def doc(
         self,

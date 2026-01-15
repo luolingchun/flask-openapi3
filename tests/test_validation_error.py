@@ -3,6 +3,7 @@
 # @Time    : 2023/7/21 10:32
 import pytest
 from flask import current_app, make_response
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field, ValidationError
 
 from flask_openapi3 import OpenAPI
@@ -71,6 +72,10 @@ def api_query(query: BookQuery):
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json["components"]["schemas"].get("GenericTracebackError") is not None
 
 

@@ -3,6 +3,7 @@
 # @Time    : 2022/5/5 13:28
 
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import APIBlueprint, Info, OpenAPI
 
@@ -59,5 +60,9 @@ def test_without_slash2(client):
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     assert _json["paths"].get("/api/v1/book1/") is not None
     assert _json["paths"].get("/api/v1/book2") is not None

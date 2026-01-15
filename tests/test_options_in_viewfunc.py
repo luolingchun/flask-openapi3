@@ -3,6 +3,7 @@
 # @Time    : 2022/5/15 14:19
 
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import APIBlueprint, OpenAPI
 
@@ -47,6 +48,10 @@ app.register_api(api)
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/book"]["get"]["operationId"] == "get_book_book_get"  # Default operation_id generator
     assert resp.json["paths"]["/api/book"]["post"]["operationId"] == "create_book"  # Custom callback operation_id

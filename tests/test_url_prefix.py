@@ -2,6 +2,7 @@
 # @Author  : llc
 # @Time    : 2025/1/15 9:58
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import APIBlueprint, APIView, OpenAPI
 
@@ -62,6 +63,10 @@ app.register_api_view(api_view2, url_prefix="/api4")
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     assert "/api1/book" in _json["paths"].keys()
     assert "/api2/book" in _json["paths"].keys()
     assert "/api3/book" in _json["paths"].keys()

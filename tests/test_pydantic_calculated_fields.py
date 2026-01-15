@@ -4,6 +4,7 @@
 from functools import cached_property
 
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field, computed_field
 
 from flask_openapi3 import OpenAPI
@@ -39,4 +40,8 @@ def test_openapi(client):
     import pprint
 
     pprint.pprint(resp.json)
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json["components"]["schemas"]["User"]["properties"].get("display_name") is not None

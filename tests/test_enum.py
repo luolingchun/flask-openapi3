@@ -5,6 +5,7 @@
 from enum import Enum
 
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import Info, OpenAPI
@@ -40,6 +41,10 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     assert _json["components"]["schemas"].get("Language") is not None
 
     resp = client.get("/English")

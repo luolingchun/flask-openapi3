@@ -3,6 +3,7 @@
 # @Time    : 2022/12/19 10:34
 
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
 
@@ -40,6 +41,10 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     tags = _json["tags"]
     news_tags = []
     for tag in tags:

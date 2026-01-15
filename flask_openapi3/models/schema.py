@@ -3,7 +3,7 @@
 # @Time    : 2023/7/4 9:55
 from typing import Any, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_serializer
 
 from .data_type import DataType
 from .discriminator import Discriminator
@@ -57,3 +57,11 @@ class Schema(BaseModel):
     const: Any | None = None
 
     model_config = {"populate_by_name": True}
+
+    @model_serializer(mode="wrap", when_used="json")
+    def _serialize(self, serializer, info):
+        data = serializer(self)
+        # Remove 'default' key if it's None to maintain OpenAPI spec compliance
+        if data.get("default") is None:
+            data.pop("default", None)
+        return data
