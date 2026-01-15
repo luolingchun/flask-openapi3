@@ -2,6 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/6/30 10:12
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import FileStorage, OpenAPI
@@ -89,6 +90,9 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
     assert _json["paths"]["/form"]["post"]["requestBody"]["content"]["multipart/form-data"]["examples"] == {
         "Example 01": {"summary": "An example", "value": {"file": "Example-01.jpg", "str_list": ["a", "b", "c"]}},
         "Example 02": {"summary": "Another example", "value": {"str_list": ["1", "2", "3"]}},

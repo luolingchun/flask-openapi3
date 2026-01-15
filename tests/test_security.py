@@ -2,6 +2,7 @@
 # @Author  : llc
 # @Time    : 2022/9/2 15:20
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import OpenAPI
 
@@ -39,4 +40,8 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     print(resp.json)
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json == app.api_doc

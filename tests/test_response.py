@@ -4,6 +4,7 @@
 from http import HTTPStatus
 
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, OpenAPI
@@ -55,5 +56,9 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json = resp.json
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     assert _json["paths"]["/book/{bid}"]["get"]["responses"].keys() - ["200", "201", "202", "204"] == {"422"}
     assert _json["paths"]["/api/book"]["get"]["responses"].keys() - ["200", "201", "202", "204"] == {"422"}

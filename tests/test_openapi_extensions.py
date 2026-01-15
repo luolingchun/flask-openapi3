@@ -2,6 +2,7 @@
 # @Author  : llc
 # @Time    : 2023/5/31 14:32
 import pytest
+from openapi_spec_validator import validate
 
 from flask_openapi3 import APIBlueprint, APIView, OpenAPI
 
@@ -58,6 +59,10 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     _json: dict = resp.json
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(_json)
+
     assert _json.get("x-google-endpoints") is not None
     assert _json["paths"]["/"]["get"]["x-google-backend"] is not None
     assert _json["paths"]["/api/book"]["get"]["x-google-backend"] is not None

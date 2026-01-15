@@ -313,6 +313,24 @@ def parse_body(
     return content, components_schemas
 
 
+def validate_links(links: dict) -> dict:
+    """
+    Validates links and returns only valid ones.
+    Each link must have either operationRef or operationId.
+
+    Args:
+        links: Dictionary of link objects to validate.
+
+    Returns:
+        Dictionary containing only valid links.
+    """
+    valid_links = {}
+    for link_name, link_obj in links.items():
+        if isinstance(link_obj, dict) and ("operationRef" in link_obj or "operationId" in link_obj):
+            valid_links[link_name] = link_obj
+    return valid_links
+
+
 def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, operation: Operation) -> None:
     _responses = {}
     _schemas = {}
@@ -323,6 +341,14 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
             _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
         elif isinstance(response, dict):
             response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
+            # Validate links - each link must have either operationRef or operationId
+            if "links" in response:
+                valid_links = validate_links(response.get("links", {}))
+                # Only set links if there are valid ones, otherwise remove the key
+                if valid_links:
+                    response["links"] = valid_links
+                else:
+                    response.pop("links", None)
             _responses[key] = Response(**response)
         else:
             # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
@@ -344,7 +370,11 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
                 if "headers" in openapi_extra_keys:
                     _responses[key].headers = openapi_extra.get("headers")
                 if "links" in openapi_extra_keys:
-                    _responses[key].links = openapi_extra.get("links")
+                    # Validate links - each link must have either operationRef or operationId
+                    valid_links = validate_links(openapi_extra.get("links", {}))
+                    # Only set links if there are valid ones
+                    if valid_links:
+                        _responses[key].links = valid_links
                 _content = _responses[key].content
                 if "example" in openapi_extra_keys:
                     _content["application/json"].example = openapi_extra.get("example")  # type: ignore

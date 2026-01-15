@@ -1,4 +1,5 @@
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI
@@ -26,6 +27,9 @@ def login(body: LoginRequest):
 def test_pydantic_validation_error_schema(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
 
     schemas = resp.json["components"]["schemas"]
     assert "ValidationErrorModel" in schemas

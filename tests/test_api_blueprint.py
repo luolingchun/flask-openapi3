@@ -4,6 +4,7 @@
 
 
 import pytest
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
@@ -112,6 +113,10 @@ app.register_api(api)
 def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json == app.api_doc
     assert resp.json["paths"]["/api/book/{bid}"]["put"]["operationId"] == "update"
     assert resp.json["paths"]["/api/book/{bid}"]["delete"]["operationId"] == "delete_book"

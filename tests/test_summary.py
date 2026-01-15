@@ -3,7 +3,6 @@
 # @Time    : 2022/1/1 16:54
 
 import pytest
-
 from openapi_spec_validator import validate
 
 from flask_openapi3 import Info, OpenAPI

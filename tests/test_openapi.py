@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Generic, Literal, TypeVar
 
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field
 
 from flask_openapi3 import OpenAPI, Schema
@@ -34,6 +35,10 @@ def test_responses_are_replicated_in_open_api(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
             "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
@@ -43,7 +48,7 @@ def test_responses_are_replicated_in_open_api(request):
                 # While this one comes from responses
                 "text/plain": {"schema": {"type": "string"}},
             },
-            "links": {"dummy": {"description": "dummy link"}},
+            # Invalid links (missing operationRef/operationId) are filtered out for spec compliance
         }
 
 
@@ -68,11 +73,15 @@ def test_none_responses_are_replicated_in_open_api(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["get"]["responses"]["204"] == {
             "description": "Custom description",
             "headers": {"x-my-special-header": {"description": "Custom header", "schema": {"type": "string"}}},
             "content": {"text/plain": {"schema": {"type": "string"}}},
-            "links": {"dummy": {"description": "dummy link"}},
+            # Invalid links (missing operationRef/operationId) are filtered out for spec compliance
         }
 
 
@@ -97,11 +106,15 @@ def test_responses_are_replicated_in_open_api2(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
             "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
             "content": {"text/plain": {"schema": {"type": "string"}}},
-            "links": {"dummy": {"description": "dummy link"}},
+            # Invalid links (missing operationRef/operationId) are filtered out for spec compliance
         }
 
 
@@ -125,10 +138,14 @@ def test_responses_without_content_are_replicated_in_open_api(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Custom description",
             "headers": {"location": {"description": "URL of the new resource", "schema": {"type": "string"}}},
-            "links": {"dummy": {"description": "dummy link"}},
+            # Invalid links (missing operationRef/operationId) are filtered out for spec compliance
         }
 
 
@@ -171,6 +188,10 @@ def test_body_examples_are_replicated_in_open_api(request):
         client.post("/test", json={"detail": {"test_int": 1, "test_str": "s"}})
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
             "content": {
                 "application/json": {
@@ -218,6 +239,10 @@ def test_form_examples(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["post"]["requestBody"] == {
             "content": {
                 "multipart/form-data": {
@@ -252,6 +277,10 @@ def test_body_with_complex_object(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert {"properties", "required", "title", "type"} == set(
             resp.json["components"]["schemas"]["BaseRequestBody"].keys()
         )
@@ -280,6 +309,10 @@ def test_responses_with_generics(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["get"]["responses"]["201"] == {
             "description": "Created",
             "content": {
@@ -311,6 +344,10 @@ def test_path_parameter_object(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["post"]["parameters"][0] == {
             "deprecated": False,
             "description": "id for path",
@@ -346,6 +383,10 @@ def test_query_parameter_object(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["post"]["parameters"][0] == {
             "deprecated": True,
             "description": "count of param",
@@ -383,12 +424,16 @@ def test_header_parameter_object(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         assert resp.json["paths"]["/test"]["post"]["parameters"][0] == {
             "description": "app name",
             "in": "header",
             "name": "app_name",
             "required": False,
-            "schema": {"description": "app name", "title": "App Name", "type": "string", "default": None},
+            "schema": {"description": "app name", "title": "App Name", "type": "string"},
         }
         assert resp.json["paths"]["/test"]["post"]["parameters"][1] == {
             "description": "app name",
@@ -401,7 +446,6 @@ def test_header_parameter_object(request):
                 "example": "aaa",
                 "title": "App Name",
                 "type": "string",
-                "default": None,
             },
         }
 
@@ -424,7 +468,8 @@ def test_default_none(request):
     assert works["two"]["default"] == 2
     breaks = test_app.api_doc["components"]["schemas"]["Model"]["properties"]
     assert breaks["two"]["default"] == 2
-    assert breaks["one"]["default"] is None
+    # For spec compliance, default: None is omitted from the schema
+    assert "default" not in breaks["one"]
 
 
 def test_parameters_none(request):
@@ -504,6 +549,10 @@ def test_convert_literal_with_single_value_to_const(request):
     with test_app.test_client() as client:
         resp = client.get("/openapi/openapi.json")
         assert resp.status_code == 200
+
+        # Validate the spec against OpenAPI specification
+        validate(resp.json)
+
         print("###", resp.json)
         assert resp.json["components"]["schemas"]["MyResponse"]["properties"]["foobar"] == {
             "const": "baz",

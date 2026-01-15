@@ -8,6 +8,7 @@ from http import HTTPStatus
 
 import pytest
 from flask import Response
+from openapi_spec_validator import validate
 from pydantic import BaseModel, Field, RootModel
 
 from flask_openapi3 import ExternalDocumentation, Info, OpenAPI, Tag
@@ -183,6 +184,10 @@ def test_openapi(client):
     resp = client.get("/openapi/openapi.json")
     print(resp.json)
     assert resp.status_code == 200
+
+    # Validate the spec against OpenAPI specification
+    validate(resp.json)
+
     assert resp.json == app.api_doc
 
 
