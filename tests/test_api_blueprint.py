@@ -6,7 +6,7 @@
 import pytest
 from pydantic import BaseModel, Field
 
-from flask_openapi3 import APIBlueprint, Info, OpenAPI, Tag
+from flask_openapi3 import APIBlueprint, ExternalDocumentation, Info, OpenAPI, Server, Tag
 
 info = Info(title="book API", version="1.0.0")
 
@@ -83,7 +83,14 @@ def update_book1(path: BookPath, body: BookBody):
     return {"code": 0, "message": "ok"}
 
 
-@api.patch("/v2/book/<int:bid>")
+@api.patch(
+    "/v2/book/<int:bid>",
+    servers=[Server(url="http://127.0.0.1:5000", variables=None)],
+    external_docs=ExternalDocumentation(
+        url="https://www.openapis.org/", description="Something great got better, get excited!"
+    ),
+    deprecated=True,
+)
 def update_book1_v2(path: BookPath, body: BookBody):
     assert path.bid == 1
     assert body.age == 3

@@ -5,14 +5,15 @@ import inspect
 import json
 from functools import wraps
 from json import JSONDecodeError
-from typing import Any, Type
+from types import UnionType
+from typing import Any, Type, Union, get_args, get_origin
 
 from flask import abort, current_app, request
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, RootModel, ValidationError
 from pydantic.fields import FieldInfo
 from werkzeug.datastructures.structures import MultiDict
 
-from .utils import parse_parameters
+from flask_openapi3.utils import is_application_json, parse_parameters
 
 
 def _get_list_value(model: Type[BaseModel], args: MultiDict, model_field_key: str, model_field_value: FieldInfo):
@@ -60,7 +61,7 @@ def _validate_header(header: Type[BaseModel], func_kwargs: dict):
             value = request_headers.get(key_alias_title)
         else:
             key = model_field_key
-            value = request_headers[key_title]
+            value = request_headers.get(key_title)
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":
@@ -149,12 +150,20 @@ def _validate_form(form: Type[BaseModel], func_kwargs: dict):
 
 
 def _validate_body(body: Type[BaseModel], func_kwargs: dict):
-    obj = request.get_json(silent=True)
-    if isinstance(obj, str):
-        body_model = body.model_validate_json(json_data=obj)
+    if is_application_json(request.mimetype):
+        if get_origin(body) in (Union, UnionType):
+            root_model_list = [model for model in get_args(body)]
+            Body = RootModel[Union[tuple(root_model_list)]]  # type: ignore
+        else:
+            Body = body  # type: ignore
+        obj = request.get_json(silent=True)
+        if isinstance(obj, str):
+            body_model = Body.model_validate_json(json_data=obj)
+        else:
+            body_model = Body.model_validate(obj=obj)
+        func_kwargs["body"] = body_model
     else:
-        body_model = body.model_validate(obj=obj)
-    func_kwargs["body"] = body_model
+        func_kwargs["body"] = request
 
 
 def _validate_request(
