@@ -20,6 +20,7 @@ from .utils import (
     parse_parameters,
     parse_rule,
 )
+from .view import APIView
 
 
 class APIBlueprint(APIScaffold, Blueprint):
@@ -100,6 +101,75 @@ class APIBlueprint(APIScaffold, Blueprint):
 
         # Register the nested APIBlueprint as a blueprint
         self.register_blueprint(api)
+
+    def register_api_view(
+        self, api_view: APIView, url_prefix: str | None = None, view_kwargs: dict[Any, Any] | None = None
+    ) -> None:
+        """Register an APIView onto this APIBlueprint."""
+
+        if view_kwargs is None:
+            view_kwargs = {}
+
+        # Merge tags from the APIView
+        for tag in api_view.tags:
+            if tag.name not in self.tag_names:
+                self.tags.append(tag)
+                self.tag_names.append(tag.name)
+
+        # Merge paths with optional url_prefix adjustment
+        if url_prefix and api_view.url_prefix and url_prefix != api_view.url_prefix:
+            api_view.paths = {url_prefix + k.removeprefix(api_view.url_prefix): v for k, v in api_view.paths.items()}
+            api_view.url_prefix = url_prefix
+        elif url_prefix and not api_view.url_prefix:
+            api_view.paths = {url_prefix.rstrip("/") + "/" + k.lstrip("/"): v for k, v in api_view.paths.items()}
+            api_view.url_prefix = url_prefix
+
+        # Apply blueprint's url_prefix to the paths using parse_rule
+        for path_url, path_item in api_view.paths.items():
+            uri = parse_rule(path_url, url_prefix=self.url_prefix)
+            self.paths[uri] = path_item
+
+        # Merge component schemas
+        self.components_schemas.update(**api_view.components_schemas)
+
+        # Register URL rules onto the blueprint
+        for rule, (cls, methods) in api_view.views.items():
+            # Optionally adjust rule with a local url_prefix override
+            _rule = rule
+            if url_prefix and api_view.url_prefix and url_prefix != api_view.url_prefix:
+                _rule = url_prefix + rule.removeprefix(api_view.url_prefix)
+            elif url_prefix and not api_view.url_prefix:
+                _rule = url_prefix.rstrip("/") + "/" + rule.lstrip("/")
+
+            for method in methods:
+                func = getattr(cls, method.lower())
+                # Select validate_response: method override, else view default
+                _validate_response = (
+                    func.validate_response
+                    if getattr(func, "validate_response", None) is not None
+                    else api_view.validate_response
+                )
+                header, cookie, path, query, form, body, raw = parse_parameters(func, doc_ui=False)
+                view_func = self.create_view_func(
+                    func,
+                    header,
+                    cookie,
+                    path,
+                    query,
+                    form,
+                    body,
+                    raw,
+                    view_class=cls,
+                    view_kwargs=view_kwargs,
+                    responses=getattr(func, "responses", None),
+                    validate_response=_validate_response,
+                )
+
+                # Endpoint names for blueprints may NOT contain dots. Flask reserves '.' for
+                # namespacing: it automatically prefixes endpoints with "{blueprint_name}.".
+                options = {"endpoint": f"{cls.__name__}_{method.lower()}", "methods": [method.upper()]}
+                # Use the blueprint's add_url_rule method
+                self._add_url_rule(_rule, view_func=view_func, **options)
 
     def _add_url_rule(
         self,
